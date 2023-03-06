@@ -6,7 +6,7 @@ Before committing anything, set up gitignore and git LFS correctly for your proj
 Please update the [game teaser image](game_teaser.jpg) and the [game teaser text](game_teaser.txt) throughout the semester. Please don't rename, move or delete these files.
 
 ![teaser image](game_teaser.jpg){width=200px}
-# ENTER YOUR GAME TITLE HERE
+# Tomb of Anubis
 # :video_game: Game Programming Lab 2023 - House Winterhold - Team1
 
 ENTER DESCRIPTION HERE
