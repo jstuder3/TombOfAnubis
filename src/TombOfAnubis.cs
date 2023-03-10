@@ -4,16 +4,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Tomb_of_Anubis
 {
-    public class Game1 : Game
+    public class TombOfAnubis : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        GameScreenManager _screenManager;
 
-        public Game1()
+        public TombOfAnubis()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            //_graphics.PreferredBackBufferWidth = 1280;
+            //_graphics.PreferredBackBufferHeight = 720;
+
+            _screenManager = new GameScreenManager(this);
+            Components.Add(_screenManager);
+
         }
 
         protected override void Initialize()
@@ -21,11 +26,14 @@ namespace Tomb_of_Anubis
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            _screenManager.AddScreen(new GameplayScreen());
+
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            //_spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -42,7 +50,7 @@ namespace Tomb_of_Anubis
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            _graphics.GraphicsDevice.Clear(Color.Transparent);
 
             // TODO: Add your drawing code here
 

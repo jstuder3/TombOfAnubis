@@ -1,3 +1,3 @@
 ﻿
-using var game = new Tomb_of_Anubis.Game1();
+using var game = new Tomb_of_Anubis.TombOfAnubis();
 game.Run();
