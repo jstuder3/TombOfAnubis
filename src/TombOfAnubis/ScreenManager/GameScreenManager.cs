@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tomb_of_Anubis
+namespace TombOfAnubis
 {
     public class GameScreenManager : DrawableGameComponent
     {
@@ -38,7 +38,7 @@ namespace Tomb_of_Anubis
 
         public GameScreenManager(Game game) : base(game)
         {
-            
+
         }
         public override void Initialize()
         {

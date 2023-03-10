@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Tomb_of_Anubis
+namespace TombOfAnubis
 {
     public class TombOfAnubis : Game
     {

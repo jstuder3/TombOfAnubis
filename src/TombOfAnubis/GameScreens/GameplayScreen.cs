@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
-namespace Tomb_of_Anubis
+namespace TombOfAnubis
 {
     class GameplayScreen : GameScreen
     {
@@ -18,7 +17,7 @@ namespace Tomb_of_Anubis
         public GameplayScreen()
             : base()
         {
-            this.Exiting += new EventHandler(GameplayScreen_Exiting);
+            Exiting += new EventHandler(GameplayScreen_Exiting);
         }
 
 

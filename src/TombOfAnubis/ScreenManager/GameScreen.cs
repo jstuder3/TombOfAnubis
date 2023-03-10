@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tomb_of_Anubis
+namespace TombOfAnubis
 {
     /// <summary>
     /// Enum describes the screen transition state.
@@ -127,7 +127,7 @@ namespace Tomb_of_Anubis
             {
                 bool fireEvent = !isExiting && value;
                 isExiting = value;
-                if (fireEvent && (Exiting != null))
+                if (fireEvent && Exiting != null)
                 {
                     Exiting(this, EventArgs.Empty);
                 }
@@ -262,7 +262,7 @@ namespace Tomb_of_Anubis
             transitionPosition += transitionDelta * direction;
 
             // Did we reach the end of the transition?
-            if ((transitionPosition <= 0) || (transitionPosition >= 1))
+            if (transitionPosition <= 0 || transitionPosition >= 1)
             {
                 transitionPosition = MathHelper.Clamp(transitionPosition, 0, 1);
                 return false;

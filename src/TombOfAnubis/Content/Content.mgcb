@@ -1,0 +1,21 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+/reference:..\..\TombOfAnubisData\bin\Debug\net6.0\TombOfAnubisData.dll
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Maps/Map001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/Map001.xml
+
