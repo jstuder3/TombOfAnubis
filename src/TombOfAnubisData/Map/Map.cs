@@ -193,8 +193,9 @@ namespace TombOfAnubis
                     System.IO.Path.Combine(@"Textures\Maps",
                     map.TextureName));
                 map.tilesPerRow = map.texture.Width / map.TileSize.X;
+                map.BaseLayer = input.ReadObject<int[]>();
 
-               
+
 
                 return map;
             }

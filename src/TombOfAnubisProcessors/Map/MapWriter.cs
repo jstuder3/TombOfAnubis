@@ -64,7 +64,7 @@ namespace TombOfAnubisProcessors
             //output.Write(value.CombatTextureName);
             //output.Write(value.MusicCueName);
             //output.Write(value.CombatMusicCueName);
-            //output.WriteObject(value.BaseLayer);
+            output.WriteObject(value.BaseLayer);
             //output.WriteObject(value.FringeLayer);
             //output.WriteObject(value.ObjectLayer);
             //output.WriteObject(value.CollisionLayer);

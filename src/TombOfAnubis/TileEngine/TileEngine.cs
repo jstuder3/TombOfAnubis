@@ -155,8 +155,8 @@ namespace TombOfAnubis
 
                     // If the tile is inside the screen
                     if (CheckVisibility(destinationRectangle))
-                    {
-                        Point mapPosition = new Point(x, y);
+                        {
+                            Point mapPosition = new Point(x, y);
                         if (drawBase)
                         {
                             Rectangle sourceRectangle =

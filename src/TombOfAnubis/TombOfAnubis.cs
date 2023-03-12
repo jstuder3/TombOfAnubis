@@ -6,18 +6,18 @@ namespace TombOfAnubis
 {
     public class TombOfAnubis : Game
     {
-        private GraphicsDeviceManager _graphics;
-        GameScreenManager _screenManager;
+        private GraphicsDeviceManager graphics;
+        GameScreenManager screenManager;
 
         public TombOfAnubis()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             //_graphics.PreferredBackBufferWidth = 1280;
             //_graphics.PreferredBackBufferHeight = 720;
 
-            _screenManager = new GameScreenManager(this);
-            Components.Add(_screenManager);
+            screenManager = new GameScreenManager(this);
+            Components.Add(screenManager);
 
         }
 
@@ -26,8 +26,9 @@ namespace TombOfAnubis
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            TileEngine.Viewport = graphics.GraphicsDevice.Viewport;
 
-            _screenManager.AddScreen(new GameplayScreen());
+            screenManager.AddScreen(new GameplayScreen());
 
         }
 
@@ -50,7 +51,7 @@ namespace TombOfAnubis
 
         protected override void Draw(GameTime gameTime)
         {
-            _graphics.GraphicsDevice.Clear(Color.Transparent);
+            graphics.GraphicsDevice.Clear(Color.Transparent);
 
             // TODO: Add your drawing code here
 
