@@ -35,6 +35,9 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
+            GameStartDescription gameStartDescription = new GameStartDescription();
+            gameStartDescription.MapContentName = "Map001";
+            Session.StartNewSession(gameStartDescription, GameScreenManager, this);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -108,8 +111,7 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            //Session.Draw(gameTime);
-            var ii = 22;
+            Session.Draw(gameTime);
         }
     }
 }

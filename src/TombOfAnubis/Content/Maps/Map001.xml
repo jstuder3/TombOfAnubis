@@ -4,6 +4,7 @@
       <Name>Map001</Name>
       <MapDimensions>20 23</MapDimensions>
       <TileSize>64 64</TileSize>
+	  <SpawnMapPosition>9 7</SpawnMapPosition>
 	  <TextureName>ForestTiles</TextureName>
 	  <BaseLayer>
 		  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0

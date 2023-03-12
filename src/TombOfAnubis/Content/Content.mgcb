@@ -11,11 +11,36 @@
 #-------------------------------- References --------------------------------#
 
 /reference:..\..\TombOfAnubisData\bin\Debug\net6.0\TombOfAnubisData.dll
+/reference:..\..\TombOfAnubisProcessors\obj\Debug\net6.0\TombOfAnubisProcessors.dll
 
 #---------------------------------- Content ---------------------------------#
 
 #begin Maps/Map001.xml
 /importer:XmlImporter
-/processor:PassThroughProcessor
+/processor:MapProcessor
 /build:Maps/Map001.xml
+
+#begin Textures/Maps/DungeonTiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Maps/DungeonTiles.png
+
+#begin Textures/Maps/ForestTiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Maps/ForestTiles.png
 

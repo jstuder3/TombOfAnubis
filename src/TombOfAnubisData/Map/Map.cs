@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -66,6 +67,20 @@ namespace TombOfAnubis
         public int TilesPerRow
         {
             get { return tilesPerRow; }
+        }
+
+        /// <summary>
+        /// A valid spawn position for this map. 
+        /// </summary>
+        private Point spawnMapPosition;
+
+        /// <summary>
+        /// A valid spawn position for this map. 
+        /// </summary>
+        public Point SpawnMapPosition
+        {
+            get { return spawnMapPosition; }
+            set { spawnMapPosition = value; }
         }
 
         /// <summary>
@@ -146,136 +161,45 @@ namespace TombOfAnubis
                 tileSize.X, tileSize.Y);
         }
 
+        //public void Preprocess(ContentManager content)
+        //{
+        //    texture = content.Load<Texture2D>(
+        //            System.IO.Path.Combine(@"Textures\Maps",
+        //            TextureName));
+        //}
+
         /// <summary>
         /// Read a Map object from the content pipeline.
         /// </summary>
-    //    public class MapReader : ContentTypeReader<Map>
-    //    {
-    //        protected override Map Read(ContentReader input, Map existingInstance)
-    //        {
-    //            Map map = existingInstance;
-    //            if (map == null)
-    //            {
-    //                map = new Map();
-    //            }
+        public class MapReader : ContentTypeReader<Map>
+        {
+            protected override Map Read(ContentReader input, Map existingInstance)
+            {
+                Map map = existingInstance;
+                if (map == null)
+                {
+                    map = new Map();
+                }
 
-    //            map.AssetName = input.AssetName;
+                map.AssetName = input.AssetName;
 
-    //            map.Name = input.ReadString();
-    //            map.MapDimensions = input.ReadObject<Point>();
-    //            map.TileSize = input.ReadObject<Point>();
-    //            map.SpawnMapPosition = input.ReadObject<Point>();
+                map.Name = input.ReadString();
+                map.MapDimensions = input.ReadObject<Point>();
+                map.TileSize = input.ReadObject<Point>();
+                map.SpawnMapPosition = input.ReadObject<Point>();
 
-    //            map.TextureName = input.ReadString();
-    //            map.texture = input.ContentManager.Load<Texture2D>(
-    //                System.IO.Path.Combine(@"Textures\Maps\NonCombat",
-    //                map.TextureName));
-    //            map.tilesPerRow = map.texture.Width / map.TileSize.X;
+                map.TextureName = input.ReadString();
+                map.texture = input.ContentManager.Load<Texture2D>(
+                    System.IO.Path.Combine(@"Textures\Maps",
+                    map.TextureName));
+                map.tilesPerRow = map.texture.Width / map.TileSize.X;
 
-    //            map.CombatTextureName = input.ReadString();
-    //            map.combatTexture = input.ContentManager.Load<Texture2D>(
-    //                System.IO.Path.Combine(@"Textures\Maps\Combat",
-    //                map.CombatTextureName));
+               
 
-    //            map.MusicCueName = input.ReadString();
-    //            map.CombatMusicCueName = input.ReadString();
-
-    //            map.BaseLayer = input.ReadObject<int[]>();
-    //            map.FringeLayer = input.ReadObject<int[]>();
-    //            map.ObjectLayer = input.ReadObject<int[]>();
-    //            map.CollisionLayer = input.ReadObject<int[]>();
-    //            map.Portals.AddRange(input.ReadObject<List<Portal>>());
-
-    //            map.PortalEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<Portal>>>());
-    //            foreach (MapEntry<Portal> portalEntry in map.PortalEntries)
-    //            {
-    //                portalEntry.Content = map.Portals.Find(delegate (Portal portal)
-    //                {
-    //                    return (portal.Name == portalEntry.ContentName);
-    //                });
-    //            }
-
-    //            map.ChestEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<Chest>>>());
-    //            foreach (MapEntry<Chest> chestEntry in map.chestEntries)
-    //            {
-    //                chestEntry.Content = input.ContentManager.Load<Chest>(
-    //                    System.IO.Path.Combine(@"Maps\Chests",
-    //                    chestEntry.ContentName)).Clone() as Chest;
-    //            }
-
-    //            // load the fixed combat entries
-    //            Random random = new Random();
-    //            map.FixedCombatEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<FixedCombat>>>());
-    //            foreach (MapEntry<FixedCombat> fixedCombatEntry in
-    //                map.fixedCombatEntries)
-    //            {
-    //                fixedCombatEntry.Content =
-    //                    input.ContentManager.Load<FixedCombat>(
-    //                    System.IO.Path.Combine(@"Maps\FixedCombats",
-    //                    fixedCombatEntry.ContentName));
-    //                // clone the map sprite in the entry, as there may be many entries
-    //                // per FixedCombat
-    //                fixedCombatEntry.MapSprite =
-    //                    fixedCombatEntry.Content.Entries[0].Content.MapSprite.Clone()
-    //                    as AnimatingSprite;
-    //                // play the idle animation
-    //                fixedCombatEntry.MapSprite.PlayAnimation("Idle",
-    //                    fixedCombatEntry.Direction);
-    //                // advance in a random amount so the animations aren't synchronized
-    //                fixedCombatEntry.MapSprite.UpdateAnimation(
-    //                    4f * (float)random.NextDouble());
-    //            }
-
-    //            map.RandomCombat = input.ReadObject<RandomCombat>();
-
-    //            map.QuestNpcEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<QuestNpc>>>());
-    //            foreach (MapEntry<QuestNpc> questNpcEntry in
-    //                map.questNpcEntries)
-    //            {
-    //                questNpcEntry.Content = input.ContentManager.Load<QuestNpc>(
-    //                    System.IO.Path.Combine(@"Characters\QuestNpcs",
-    //                    questNpcEntry.ContentName));
-    //                questNpcEntry.Content.MapPosition = questNpcEntry.MapPosition;
-    //                questNpcEntry.Content.Direction = questNpcEntry.Direction;
-    //            }
-
-    //            map.PlayerNpcEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<Player>>>());
-    //            foreach (MapEntry<Player> playerNpcEntry in
-    //                map.playerNpcEntries)
-    //            {
-    //                playerNpcEntry.Content = input.ContentManager.Load<Player>(
-    //                System.IO.Path.Combine(@"Characters\Players",
-    //                    playerNpcEntry.ContentName)).Clone() as Player;
-    //                playerNpcEntry.Content.MapPosition = playerNpcEntry.MapPosition;
-    //                playerNpcEntry.Content.Direction = playerNpcEntry.Direction;
-    //            }
-
-    //            map.InnEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<Inn>>>());
-    //            foreach (MapEntry<Inn> innEntry in
-    //                map.innEntries)
-    //            {
-    //                innEntry.Content = input.ContentManager.Load<Inn>(
-    //                    System.IO.Path.Combine(@"Maps\Inns",
-    //                    innEntry.ContentName));
-    //            }
-    //            map.StoreEntries.AddRange(
-    //                input.ReadObject<List<MapEntry<Store>>>());
-    //            foreach (MapEntry<Store> storeEntry in
-    //                map.storeEntries)
-    //            {
-    //                storeEntry.Content = input.ContentManager.Load<Store>(
-    //                    System.IO.Path.Combine(@"Maps\Stores",
-    //                    storeEntry.ContentName));
-    //            }
-
-    //            return map;
-    //        }
-    //    }
+                return map;
+            }
+        }
     }
+    
 }
+

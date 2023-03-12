@@ -79,6 +79,55 @@ namespace TombOfAnubis
             //partyLeaderPosition.Direction = Direction.South;
 
         }
+
+        /// <summary>
+        /// Update the tile engine.
+        /// </summary>
+        public static void Update(GameTime gameTime)
+        {
+            // if there is no auto-movement, handle user controls
+            Vector2 userMovement = Vector2.Zero;
+
+            //userMovement = UpdateUserMovement(gameTime);
+            // calculate the desired position
+            //if (userMovement != Vector2.Zero)
+            //{
+            //    Point desiredTilePosition = partyLeaderPosition.TilePosition;
+            //    Vector2 desiredTileOffset = partyLeaderPosition.TileOffset;
+            //    PlayerPosition.CalculateMovement(
+            //        Vector2.Multiply(userMovement, 15f),
+            //        ref desiredTilePosition, ref desiredTileOffset);
+            //    // check for collisions or encounters in the new tile
+            //    if ((partyLeaderPosition.TilePosition != desiredTilePosition) &&
+            //        !MoveIntoTile(desiredTilePosition))
+            //    {
+            //        userMovement = Vector2.Zero;
+            //    }
+            //}
+            //}
+
+            // move the party
+
+            //Point oldPartyLeaderTilePosition = partyLeaderPosition.TilePosition;
+            //partyLeaderPosition.Move(autoMovement + userMovement);
+
+
+            // adjust the map origin so that the party is at the center of the viewport
+
+            //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition +
+            //    Session.Party.Players[0].MapSprite.SourceOffset);
+
+            // make sure the boundaries of the map are never inside the viewport
+
+            //mapOriginPosition.X = MathHelper.Min(mapOriginPosition.X, viewport.X);
+            //mapOriginPosition.Y = MathHelper.Min(mapOriginPosition.Y, viewport.Y);
+            //mapOriginPosition.X += MathHelper.Max(
+            //    (viewport.X + viewport.Width) -
+            //    (mapOriginPosition.X + map.MapDimensions.X * map.TileSize.X), 0f);
+            //mapOriginPosition.Y += MathHelper.Max(
+            //    (viewport.Y + viewport.Height - Hud.HudHeight) -
+                //(mapOriginPosition.Y + map.MapDimensions.Y * map.TileSize.Y), 0f);
+        }
         public static void DrawLayers(SpriteBatch spriteBatch, bool drawBase,
             bool drawFringe, bool drawObject)
         {

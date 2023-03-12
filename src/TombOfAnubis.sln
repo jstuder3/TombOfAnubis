@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TombOfAnubis", "TombOfAnubis\TombOfAnubis.csproj", "{1A4B8601-4424-465D-9271-C94CC08C9E03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TombOfAnubisData", "TombOfAnubisData\TombOfAnubisData.csproj", "{A2B0ACA8-180E-4281-A737-677F833DFFA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TombOfAnubisData", "TombOfAnubisData\TombOfAnubisData.csproj", "{A2B0ACA8-180E-4281-A737-677F833DFFA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TombOfAnubisProcessors", "TombOfAnubisProcessors\TombOfAnubisProcessors.csproj", "{B743D17D-7A35-47F7-B632-12BB9E0F2523}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A2B0ACA8-180E-4281-A737-677F833DFFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2B0ACA8-180E-4281-A737-677F833DFFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2B0ACA8-180E-4281-A737-677F833DFFA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B743D17D-7A35-47F7-B632-12BB9E0F2523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B743D17D-7A35-47F7-B632-12BB9E0F2523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B743D17D-7A35-47F7-B632-12BB9E0F2523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B743D17D-7A35-47F7-B632-12BB9E0F2523}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

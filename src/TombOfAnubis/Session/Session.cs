@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,16 +71,8 @@ namespace TombOfAnubis
             {
                 return;
             }
+            TileEngine.Update(gameTime);
 
-            //if (CombatEngine.IsActive)
-            //{
-            //    CombatEngine.Update(gameTime);
-            //}
-            //else
-            //{
-            //    singleton.UpdateQuest();
-            //    TileEngine.Update(gameTime);
-            //}
         }
 
         /// <summary>
@@ -88,28 +82,17 @@ namespace TombOfAnubis
         {
             SpriteBatch spriteBatch = singleton.gameScreenManager.SpriteBatch;
 
-            //if (CombatEngine.IsActive)
-            //{
-            //    // draw the combat background
-            //    if (TileEngine.Map.CombatTexture != null)
-            //    {
-            //        spriteBatch.Begin();
-            //        spriteBatch.Draw(TileEngine.Map.CombatTexture, Vector2.Zero,
-            //            Color.White);
-            //        spriteBatch.End();
-            //    }
 
-            //    // draw the combat itself
-            //    spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            //    CombatEngine.Draw(gameTime);
-            //    spriteBatch.End();
-            //}
-            //else
-            //{
-            //    singleton.DrawNonCombat(gameTime);
-            //}
-
-            //singleton.hud.Draw();
+            // draw the background
+            spriteBatch.Begin();
+            if (TileEngine.Map.Texture != null)
+            {
+                // draw the ground layer
+                TileEngine.DrawLayers(spriteBatch, true, true, false);
+                //// draw the character shadows
+                //DrawShadows(spriteBatch);
+            }
+            spriteBatch.End();
         }
 
         /// <summary>
@@ -139,7 +122,7 @@ namespace TombOfAnubis
             singleton = new Session(screenManager, gameplayScreen);
 
             //// set up the initial map
-            //ChangeMap(gameStartDescription.MapContentName, null);
+            ChangeMap(gameStartDescription.MapContentName);
 
             // set up the initial party
             //ContentManager content = singleton.screenManager.Game.Content;
@@ -159,9 +142,6 @@ namespace TombOfAnubis
                 GameplayScreen gameplayScreen = singleton.gameplayScreen;
                 singleton.gameplayScreen = null;
 
-                //// pop the music
-                //AudioManager.PopMusic();
-
                 // clear the singleton
                 singleton = null;
 
@@ -170,6 +150,28 @@ namespace TombOfAnubis
                     gameplayScreen.ExitScreen();
                 }
             }
+        }
+
+        /// <summary>
+        /// Change the current map, arriving at the given portal if any.
+        /// </summary>
+        /// <param name="contentName">The asset name of the new map.</param>
+        /// <param name="originalPortal">The portal from the previous map.</param>
+        public static void ChangeMap(string contentName)
+        {
+            // make sure the content name is valid
+            string mapContentName = contentName;
+            if (!mapContentName.StartsWith(@"Maps\"))
+            {
+                mapContentName = Path.Combine(@"Maps", mapContentName);
+            }
+
+            // load the map
+            ContentManager content = singleton.gameScreenManager.Game.Content;
+            Map map = content.Load<Map>(mapContentName);
+
+            // set the new map into the tile engine
+            TileEngine.SetMap(map);
         }
 
     }
