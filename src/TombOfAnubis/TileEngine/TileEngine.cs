@@ -71,6 +71,7 @@ namespace TombOfAnubis
 
             // reset the map origin, which will be recalculated on the first update
             mapOriginPosition = Vector2.Zero;
+            //mapOriginPosition = new Vector2(-32, 0);
 
             //// move the party to its initial position
 
@@ -114,8 +115,11 @@ namespace TombOfAnubis
 
             // adjust the map origin so that the party is at the center of the viewport
 
-            //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition +
-            //    Session.Party.Players[0].MapSprite.SourceOffset);
+            //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition + Session.Party.Players[0].MapSprite.SourceOffset);
+
+
+            mapOriginPosition += new Vector2(-1, -1); // Dummy code to showcase moving the map
+
 
             // make sure the boundaries of the map are never inside the viewport
 
@@ -126,7 +130,7 @@ namespace TombOfAnubis
             //    (mapOriginPosition.X + map.MapDimensions.X * map.TileSize.X), 0f);
             //mapOriginPosition.Y += MathHelper.Max(
             //    (viewport.Y + viewport.Height - Hud.HudHeight) -
-                //(mapOriginPosition.Y + map.MapDimensions.Y * map.TileSize.Y), 0f);
+            //(mapOriginPosition.Y + map.MapDimensions.Y * map.TileSize.Y), 0f);
         }
         public static void DrawLayers(SpriteBatch spriteBatch, bool drawBase,
             bool drawFringe, bool drawObject)

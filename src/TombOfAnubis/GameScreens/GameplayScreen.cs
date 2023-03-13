@@ -59,7 +59,7 @@ namespace TombOfAnubis
 
             if (IsActive && !coveredByOtherScreen)
             {
-                //Session.Update(gameTime);
+                Session.Update(gameTime);
             }
         }
 

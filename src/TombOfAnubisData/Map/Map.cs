@@ -119,10 +119,25 @@ namespace TombOfAnubis
         /// <summary>
         /// Spatial array for the ground tiles for this map.
         /// </summary>
+        [ContentSerializerIgnore]
         public int[] BaseLayer
         {
             get { return baseLayer; }
             set { baseLayer = value; }
+        }
+
+        /// <summary>
+        /// Spatial array for the collision tiles for this map.
+        /// </summary>
+        private int[] collisionLayer;
+
+        /// <summary>
+        /// Spatial array for the collision tiles for this map.
+        /// </summary>
+        public int[] CollisionLayer
+        {
+            get { return collisionLayer; }
+            set { collisionLayer = value; }
         }
 
         /// <summary>
@@ -161,12 +176,6 @@ namespace TombOfAnubis
                 tileSize.X, tileSize.Y);
         }
 
-        //public void Preprocess(ContentManager content)
-        //{
-        //    texture = content.Load<Texture2D>(
-        //            System.IO.Path.Combine(@"Textures\Maps",
-        //            TextureName));
-        //}
 
         /// <summary>
         /// Read a Map object from the content pipeline.
@@ -193,6 +202,7 @@ namespace TombOfAnubis
                     System.IO.Path.Combine(@"Textures\Maps",
                     map.TextureName));
                 map.tilesPerRow = map.texture.Width / map.TileSize.X;
+                map.CollisionLayer = input.ReadObject<int[]>();
                 map.BaseLayer = input.ReadObject<int[]>();
 
 
