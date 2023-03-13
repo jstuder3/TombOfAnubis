@@ -103,7 +103,7 @@ namespace TombOfAnubis.PlayerCharacter
             //remove up/down and left/right conflicts, as well as duplicate keys
             actions = HandleOpposingActions(actions);
 
-            return actions.ToArray(); //note that we can currently have duplicate keys and "opposing keys"
+            return actions.ToArray();
 
 
         }
@@ -152,7 +152,7 @@ namespace TombOfAnubis.PlayerCharacter
             //for all remaining actions, just append them to the list if they're not already contained
             foreach(PlayerActions action in actions)
             {
-                if(action != PlayerActions.WalkUp && action != PlayerActions.WalkDown && action != PlayerActions.WalkLeft && action != PlayerActions.WalkRight && !actions.Contains(action))
+                if(action != PlayerActions.WalkUp && action != PlayerActions.WalkDown && action != PlayerActions.WalkLeft && action != PlayerActions.WalkRight && !resolvedActions.Contains(action))
                 {
                     resolvedActions.Add(action);
                 }
