@@ -18,7 +18,7 @@ namespace TombOfAnubis.CollisionSystem
     internal class Collider
     {
         public ColliderType colliderType;
-        virtual public bool intersects(Collider other)
+        virtual public bool Intersects(Collider other)
         {
             throw new NotImplementedException();
         }

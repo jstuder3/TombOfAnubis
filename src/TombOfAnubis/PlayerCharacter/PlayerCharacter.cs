@@ -75,35 +75,31 @@ namespace TombOfAnubis.PlayerCharacter
             this.inputController = inputController;
         }
 
-        public void reduceHealth(float damage)
+        public void ReduceHealth(float damage)
         {
             Debug.Assert(damage > 0);
             health = MathF.Max(0, health - damage);
         }
 
-        public void increaseHealth(float healing)
+        public void IncreaseHealth(float healing)
         {
             Debug.Assert(healing > 0);
             health = MathF.Min(maxHealth, health + healing);
         }
 
-        public bool handleCollision(Collider otherCollider) { 
+        public bool HandleCollision(ICollidable other) { 
             throw new NotImplementedException();
         }
 
-        public void update(float deltaTime)
+        public void Update(float deltaTime)
         {
             throw new NotImplementedException();
         }
 
-        public void draw()
+        public void Draw()
         {
             throw new NotImplementedException();
         }
 
-        public void handleCollision(ICollidable other)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

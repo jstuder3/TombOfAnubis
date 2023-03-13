@@ -14,7 +14,6 @@ namespace TombOfAnubis.InventorySystem
     internal class InventorySlot
     {
 
-
         public Item item { get; set; }
         //public int quantity { get; set; }
         public int slotNumber = -1;
@@ -32,7 +31,7 @@ namespace TombOfAnubis.InventorySystem
 
         public void ClearItem()
         {
-            this.item = none;
+            this.item = null;
         }
     }
 }

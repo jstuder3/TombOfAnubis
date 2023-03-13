@@ -25,12 +25,12 @@ namespace TombOfAnubis.InventorySystem
         public bool isInInventory = false;
         public Item() { }
 
-        public void handleCollision(Collider other)
+        public void HandleCollision(Collider other)
         {
             throw new NotImplementedException();
         }
 
-        public void handleCollision(ICollidable other)
+        public void HandleCollision(ICollidable other)
         {
             throw new NotImplementedException();
         }

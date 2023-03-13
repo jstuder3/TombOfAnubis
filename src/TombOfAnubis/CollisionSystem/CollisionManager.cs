@@ -9,16 +9,16 @@ namespace TombOfAnubis.CollisionSystem
     internal class CollisionManager
     {
 
-        public void handleAllCollisions(List<ICollidable> collidables)
+        public void HandleAllCollisions(List<ICollidable> collidables)
         {
             for (int i = 0; i < collidables.Count; i++)
             {
                 for (int j = i + 1; j < collidables.Count; j++)
                 {
-                    if (collidables[i].collider.intersects(collidables[j].collider))
+                    if (collidables[i].collider.Intersects(collidables[j].collider))
                     {
-                        collidables[i].handleCollision(collidables[j]);
-                        collidables[j].handleCollision(collidables[i]);
+                        collidables[i].HandleCollision(collidables[j]);
+                        collidables[j].HandleCollision(collidables[i]);
                     }
                 }
             }

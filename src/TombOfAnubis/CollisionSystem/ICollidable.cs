@@ -9,7 +9,7 @@ namespace TombOfAnubis.CollisionSystem
     internal interface ICollidable
     {
         Collider collider { get; set; }
-        public void handleCollision(ICollidable other);
+        public void HandleCollision(ICollidable other);
 
     }
 }

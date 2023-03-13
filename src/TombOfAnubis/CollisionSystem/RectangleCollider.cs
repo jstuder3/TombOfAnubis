@@ -18,7 +18,7 @@ namespace TombOfAnubis.CollisionSystem
         Vector2 position; //center of the collision rectangle
         Vector2 shape { get; set; }
 
-        public override bool intersects(Collider other)
+        public override bool Intersects(Collider other)
         {
             if (other == this) return true;
             switch (other.colliderType)
