@@ -87,7 +87,8 @@ namespace TombOfAnubis.PlayerCharacter
             health = MathF.Min(maxHealth, health + healing);
         }
 
-        public bool HandleCollision(ICollidable other) { 
+        public void HandleCollision(ICollidable other)
+        {
             throw new NotImplementedException();
         }
 
