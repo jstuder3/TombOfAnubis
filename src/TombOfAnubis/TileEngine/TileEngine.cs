@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace TombOfAnubis
 {
     public class TileEngine
     {
+        private static bool showcaseStarted = false;
         /// <summary>
         /// The map being used by the tile engine.
         /// </summary>
@@ -116,9 +118,14 @@ namespace TombOfAnubis
             // adjust the map origin so that the party is at the center of the viewport
 
             //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition + Session.Party.Players[0].MapSprite.SourceOffset);
-
-
-            mapOriginPosition += new Vector2(-1, -1); // Dummy code to showcase moving the map
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                showcaseStarted = true;
+            }
+            if (showcaseStarted)
+            {
+                mapOriginPosition += new Vector2(-1, -1); // Dummy code to showcase moving the 
+            }
 
 
             // make sure the boundaries of the map are never inside the viewport
