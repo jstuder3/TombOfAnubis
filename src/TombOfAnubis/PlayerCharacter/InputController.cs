@@ -33,10 +33,10 @@ namespace TombOfAnubis.PlayerCharacter
 
             GamePadState gamepadState = GamePadState.Default;
 
-            if (player == 1) gamepadState = GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.One);
-            if (player == 2) gamepadState = GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.Two);
-            if (player == 3) gamepadState = GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.Three); 
-            if (player == 4) gamepadState = GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.Four);
+            if (player == 1) gamepadState = GamePad.GetState(PlayerIndex.One);
+            if (player == 2) gamepadState = GamePad.GetState(PlayerIndex.Two);
+            if (player == 3) gamepadState = GamePad.GetState(PlayerIndex.Three); 
+            if (player == 4) gamepadState = GamePad.GetState(PlayerIndex.Four);
 
             Buttons[] pressedButtons = GetPressedButtons(gamepadState);
 

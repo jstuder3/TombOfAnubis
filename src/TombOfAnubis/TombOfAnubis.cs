@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TombOfAnubis.PlayerCharacter;
 
 namespace TombOfAnubis
 {
@@ -8,6 +9,10 @@ namespace TombOfAnubis
     {
         private GraphicsDeviceManager graphics;
         GameScreenManager screenManager;
+
+        SpriteBatch spriteBatch;
+
+        Character player_1;
 
         public TombOfAnubis()
         {
@@ -34,7 +39,12 @@ namespace TombOfAnubis
 
         protected override void LoadContent()
         {
-            //_spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            InputController inputController = new InputController();
+
+            Texture2D plagiarized_explorer = Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer");
+            player_1 = new Character(PlayerType.Player, 100, 100, 0, 0, plagiarized_explorer, 1, inputController);
 
             // TODO: use this.Content to load your game content here
         }
@@ -46,6 +56,8 @@ namespace TombOfAnubis
 
             // TODO: Add your update logic here
 
+            player_1.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -53,8 +65,12 @@ namespace TombOfAnubis
         {
             graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
 
+            // TODO: Add your drawing code here
+            player_1.Draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

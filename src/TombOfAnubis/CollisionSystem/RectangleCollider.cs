@@ -11,6 +11,7 @@ namespace TombOfAnubis.CollisionSystem
     {
         public RectangleCollider(float posX, float posY,float width, float height)
         {
+            colliderType = ColliderType.Rectangle;
             this.position = new Vector2(posX, posY);
             this.shape = new Vector2(width, height);
         }

@@ -20,6 +20,18 @@
 /processor:MapProcessor
 /build:Maps/Map001.xml
 
+#begin Textures/Characters/plagiarized_explorer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Characters/plagiarized_explorer.png
+
 #begin Textures/Maps/DungeonTiles.png
 /importer:TextureImporter
 /processor:TextureProcessor

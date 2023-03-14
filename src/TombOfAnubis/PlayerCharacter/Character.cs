@@ -49,7 +49,7 @@ namespace TombOfAnubis.PlayerCharacter
         West
     }
 
-    internal class PlayerCharacter : ICollidable
+    internal class Character : ICollidable
     {
         PlayerType type;
         PlayerState state;
@@ -70,7 +70,7 @@ namespace TombOfAnubis.PlayerCharacter
         private Collider _collider; //this is fucking disgusting about C# interfaces: you need an extra variable to implement an interface property... wtf?
         public Collider collider { get => _collider; set => _collider = value; } 
 
-        public PlayerCharacter(PlayerType type, float maxHealth, float maxSpeed, float posX, float posY, Texture2D texture, int playerNumber, InputController inputController)
+        public Character(PlayerType type, float maxHealth, float maxSpeed, float posX, float posY, Texture2D texture, int playerNumber, InputController inputController)
         {
             this.type = type;
             this.state = PlayerState.Idle;
@@ -118,9 +118,10 @@ namespace TombOfAnubis.PlayerCharacter
             isTrapped = false;
         }
 
-        public void Update(float deltaTime)
+        public void Update(GameTime deltaTime)
         {
             isWalking = false;
+            float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
             if (!isTrapped)
             {
@@ -128,28 +129,28 @@ namespace TombOfAnubis.PlayerCharacter
 
                 if (currentActions.Contains(PlayerActions.WalkLeft))
                 {
-                    position.X -= speed * deltaTime;
+                    position.X -= maxSpeed * deltaTimeSeconds;
                     isWalking = true;
                     orientation = Orientation.West;
                 }
 
                 if (currentActions.Contains(PlayerActions.WalkRight))
                 {
-                    position.X += speed * deltaTime;
+                    position.X += maxSpeed * deltaTimeSeconds;
                     isWalking = true;
                     orientation = Orientation.East;
                 }
 
                 if (currentActions.Contains(PlayerActions.WalkUp))
                 {
-                    position.Y -= speed * deltaTime;
+                    position.Y -= maxSpeed * deltaTimeSeconds;
                     isWalking = true;
                     orientation = Orientation.North;
                 }
 
                 if (currentActions.Contains(PlayerActions.WalkDown))
                 {
-                    position.Y += speed * deltaTime;
+                    position.Y += maxSpeed * deltaTimeSeconds;
                     isWalking = true;
                     orientation = Orientation.South;
                 }
@@ -166,15 +167,23 @@ namespace TombOfAnubis.PlayerCharacter
                     //if a player: check if trapped/unconscious, then check if the current player can free/resurrect that player
 
                 }
+                Console.WriteLine("Position: " + position.X + ", " + position.Y);
+                Console.Write("Actions: ");
+                foreach(PlayerActions action in currentActions)
+                {
+                    Console.Write(action.ToString());
+                }
+                Console.Write("\n");
             }
+
 
         }
 
-        public void Draw()
+        public void Draw(GameTime deltaTime, SpriteBatch spriteBatch)
         {
             //draw the current player at its current position
             //the player is drawn based on its orientation, its walking state, its trapped state 
-            throw new NotImplementedException();
+            spriteBatch.Draw(texture, position, Color.White);
         }
 
     }
