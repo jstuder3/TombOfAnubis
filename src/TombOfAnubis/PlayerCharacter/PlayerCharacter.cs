@@ -41,6 +41,14 @@ namespace TombOfAnubis.PlayerCharacter
         Enemy
     }
 
+    enum Orientation
+    {
+        North,
+        East,
+        South,
+        West
+    }
+
     internal class PlayerCharacter : ICollidable
     {
         PlayerType type;
@@ -53,6 +61,9 @@ namespace TombOfAnubis.PlayerCharacter
         InventoryManager inventory;
         Texture2D texture;
         InputController inputController;
+        Orientation orientation = Orientation.South;
+        bool isWalking = false;
+        bool isTrapped = false;
 
         int playerNumber = -1;
 
@@ -92,13 +103,77 @@ namespace TombOfAnubis.PlayerCharacter
             throw new NotImplementedException();
         }
 
+        public bool GetIsTrapped()
+        {
+            return isTrapped;
+        }
+
+        public void PutInTrap()
+        {
+            isTrapped = true;
+        }
+
+        public void FreeFromTrap()
+        {
+            isTrapped = false;
+        }
+
         public void Update(float deltaTime)
         {
-            throw new NotImplementedException();
+            isWalking = false;
+
+            if (!isTrapped)
+            {
+                PlayerActions[] currentActions = inputController.GetActionsOfCurrentPlayer(playerNumber);
+
+                if (currentActions.Contains(PlayerActions.WalkLeft))
+                {
+                    position.X -= speed * deltaTime;
+                    isWalking = true;
+                    orientation = Orientation.West;
+                }
+
+                if (currentActions.Contains(PlayerActions.WalkRight))
+                {
+                    position.X += speed * deltaTime;
+                    isWalking = true;
+                    orientation = Orientation.East;
+                }
+
+                if (currentActions.Contains(PlayerActions.WalkUp))
+                {
+                    position.Y -= speed * deltaTime;
+                    isWalking = true;
+                    orientation = Orientation.North;
+                }
+
+                if (currentActions.Contains(PlayerActions.WalkDown))
+                {
+                    position.Y += speed * deltaTime;
+                    isWalking = true;
+                    orientation = Orientation.South;
+                }
+
+                if (currentActions.Contains(PlayerActions.UseObject))
+                {
+                    //check which objects are currently colliding with the player. then check that they are in the orientation the player is looking in
+                    // if the targeted object is iteractable (i.e. an artefact or an item dispenser, or anything else that can be interacted with), trigger the corresponding interaction
+
+                    //if item dispenser: give player an item of the type corresponding to the dispenser, assuming the player can carry such an item
+
+                    //if a button: trigger the interaction corresponding to that button
+
+                    //if a player: check if trapped/unconscious, then check if the current player can free/resurrect that player
+
+                }
+            }
+
         }
 
         public void Draw()
         {
+            //draw the current player at its current position
+            //the player is drawn based on its orientation, its walking state, its trapped state 
             throw new NotImplementedException();
         }
 

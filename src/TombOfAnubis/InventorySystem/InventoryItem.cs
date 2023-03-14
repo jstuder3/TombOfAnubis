@@ -13,7 +13,7 @@ namespace TombOfAnubis.InventorySystem
         Speedup
     }
 
-    internal class Item : ICollidable
+    internal class InventoryItem : ICollidable
     {
         ItemTypes itemType;
         public string Name { get; set; }
@@ -23,7 +23,7 @@ namespace TombOfAnubis.InventorySystem
 
         public bool isInWorld = false;
         public bool isInInventory = false;
-        public Item() { }
+        public InventoryItem() { }
 
         public void HandleCollision(Collider other)
         {
