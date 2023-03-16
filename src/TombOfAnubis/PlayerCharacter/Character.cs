@@ -55,7 +55,8 @@ namespace TombOfAnubis
         float maxHealth;
         float speed;
         float maxSpeed;
-        Vector2 position;
+        private Vector2 position;
+        public Vector2 Position { get { return position; } set {  position = value; } }
         InventoryManager inventory;
         Texture2D texture;
         Orientation orientation = Orientation.South;
@@ -175,11 +176,11 @@ namespace TombOfAnubis
 
         }
 
-        public void Draw(GameTime deltaTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Vector2 mapOriginPosition)
         {
             //draw the current player at its current position
             //the player is drawn based on its orientation, its walking state, its trapped state 
-            spriteBatch.Draw(texture, position, Color.White);
+            spriteBatch.Draw(texture, mapOriginPosition + position, null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), Vector2.One * 0.25f, SpriteEffects.None, 0f);
         }
 
     }

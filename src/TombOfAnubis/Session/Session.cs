@@ -97,7 +97,7 @@ namespace TombOfAnubis
             {
                 return;
             }
-            TileEngine.Update(gameTime);
+            TileEngine.Update(gameTime, singleton.characters[0].Position);
 
             foreach (Character character in singleton.characters)
             {
@@ -115,22 +115,11 @@ namespace TombOfAnubis
             SpriteBatch spriteBatch = singleton.gameScreenManager.SpriteBatch;
 
 
-            // draw the background
+            // draw the session content using the 2D tile enginge
             spriteBatch.Begin();
-            if (TileEngine.Map.Texture != null)
-            {
-                // draw the ground layer
-                TileEngine.DrawLayers(spriteBatch, true, true, false);
-
-                // draw the characters
-                foreach (Character character in singleton.characters)
-                {
-                    character.Draw(gameTime, spriteBatch);
-                }
-                //// draw the character shadows
-                //DrawShadows(spriteBatch);
-            }
+            TileEngine.Draw(spriteBatch);
             spriteBatch.End();
+
         }
 
         /// <summary>
@@ -158,6 +147,10 @@ namespace TombOfAnubis
 
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
+
+
+            // set the the session of the tile engine
+            TileEngine.SetSession(singleton);
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
@@ -215,9 +208,6 @@ namespace TombOfAnubis
             // load the map
             ContentManager content = singleton.gameScreenManager.Game.Content;
             singleton.Map = content.Load<Map>(mapContentName);
-
-            // set the new map into the tile engine
-            TileEngine.SetMap(singleton.Map);
         }
 
     }

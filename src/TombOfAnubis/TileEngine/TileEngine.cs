@@ -9,22 +9,10 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    public class TileEngine
+    static class TileEngine
     {
-        private static bool showcaseStarted = false;
-        /// <summary>
-        /// The map being used by the tile engine.
-        /// </summary>
-        private static Map map = null;
 
-        /// <summary>
-        /// The map being used by the tile engine.
-        /// </summary>
-        public static Map Map
-        {
-            get { return map; }
-        }
-
+        private static Session session = null;
         /// <summary>
         /// The position of the outside 0,0 corner of the map, in pixels.
         /// </summary>
@@ -60,16 +48,16 @@ namespace TombOfAnubis
         /// Set the map in use by the tile engine.
         /// </summary>
         /// <param name="map">The new map for the tile engine.</param>
-        public static void SetMap(Map newMap)
+        public static void SetSession(Session newSession)
         {
             // check the parameter
-            if (newMap == null)
+            if (newSession == null)
             {
-                throw new ArgumentNullException("newMap");
+                throw new ArgumentNullException("newSession");
             }
 
             // assign the new map
-            map = newMap;
+            session = newSession;
 
             // reset the map origin, which will be recalculated on the first update
             mapOriginPosition = Vector2.Zero;
@@ -86,7 +74,7 @@ namespace TombOfAnubis
         /// <summary>
         /// Update the tile engine.
         /// </summary>
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gameTime, Vector2 focusedPlayerLocation)
         {
             // if there is no auto-movement, handle user controls
             Vector2 userMovement = Vector2.Zero;
@@ -118,15 +106,7 @@ namespace TombOfAnubis
             // adjust the map origin so that the party is at the center of the viewport
 
             //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition + Session.Party.Players[0].MapSprite.SourceOffset);
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-            {
-                showcaseStarted = true;
-            }
-            if (showcaseStarted)
-            {
-                mapOriginPosition += new Vector2(-1, -1); // Dummy code to showcase moving the 
-            }
-
+            mapOriginPosition = viewportCenter - focusedPlayerLocation;
 
             // make sure the boundaries of the map are never inside the viewport
 
@@ -139,65 +119,49 @@ namespace TombOfAnubis
             //    (viewport.Y + viewport.Height - Hud.HudHeight) -
             //(mapOriginPosition.Y + map.MapDimensions.Y * map.TileSize.Y), 0f);
         }
-        public static void DrawLayers(SpriteBatch spriteBatch, bool drawBase,
-            bool drawFringe, bool drawObject)
+        public static void Draw(SpriteBatch spriteBatch)
+        {
+            DrawMapLayers(spriteBatch);
+
+            foreach (Character character in session.Characters)
+            {
+                character.Draw(spriteBatch, mapOriginPosition);
+            }
+        }
+        public static void DrawMapLayers(SpriteBatch spriteBatch)
         {
             // check the parameters
             if (spriteBatch == null)
             {
                 throw new ArgumentNullException("spriteBatch");
             }
-            if (!drawBase && !drawFringe && !drawObject)
-            {
-                return;
-            }
+
 
             Rectangle destinationRectangle =
-                new Rectangle(0, 0, map.TileSize.X, map.TileSize.Y);
+                new Rectangle(0, 0, session.Map.TileSize.X, session.Map.TileSize.Y);
 
-            for (int y = 0; y < map.MapDimensions.Y; y++)
+            for (int y = 0; y < session.Map.MapDimensions.Y; y++)
             {
-                for (int x = 0; x < map.MapDimensions.X; x++)
+                for (int x = 0; x < session.Map.MapDimensions.X; x++)
                 {
                     destinationRectangle.X =
-                        (int)mapOriginPosition.X + x * map.TileSize.X;
+                        (int)mapOriginPosition.X + x * session.Map.TileSize.X;
                     destinationRectangle.Y =
-                        (int)mapOriginPosition.Y + y * map.TileSize.Y;
+                        (int)mapOriginPosition.Y + y * session.Map.TileSize.Y;
 
                     // If the tile is inside the screen
                     if (CheckVisibility(destinationRectangle))
                         {
                             Point mapPosition = new Point(x, y);
-                        if (drawBase)
-                        {
-                            Rectangle sourceRectangle =
-                                map.GetBaseLayerSourceRectangle(mapPosition);
+
+                            Rectangle sourceRectangle = session.Map.GetBaseLayerSourceRectangle(mapPosition);
                             if (sourceRectangle != Rectangle.Empty)
                             {
-                                spriteBatch.Draw(map.Texture, destinationRectangle,
+                                spriteBatch.Draw(session.Map.Texture, destinationRectangle,
                                     sourceRectangle, Color.White);
                             }
-                        }
-                        //if (drawFringe)
-                        //{
-                        //    Rectangle sourceRectangle =
-                        //        map.GetFringeLayerSourceRectangle(mapPosition);
-                        //    if (sourceRectangle != Rectangle.Empty)
-                        //    {
-                        //        spriteBatch.Draw(map.Texture, destinationRectangle,
-                        //            sourceRectangle, Color.White);
-                        //    }
-                        //}
-                        //if (drawObject)
-                        //{
-                        //    Rectangle sourceRectangle =
-                        //        map.GetObjectLayerSourceRectangle(mapPosition);
-                        //    if (sourceRectangle != Rectangle.Empty)
-                        //    {
-                        //        spriteBatch.Draw(map.Texture, destinationRectangle,
-                        //            sourceRectangle, Color.White);
-                        //    }
-                        //}
+                        
+          
                     }
                 }
             }
