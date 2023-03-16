@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TombOfAnubis.CollisionSystem;
 
-namespace TombOfAnubis.WorldObjects
+namespace TombOfAnubis
 {
     internal class WorldObject
     {

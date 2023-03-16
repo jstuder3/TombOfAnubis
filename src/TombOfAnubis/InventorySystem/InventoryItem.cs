@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TombOfAnubis.CollisionSystem;
 
-namespace TombOfAnubis.InventorySystem
+namespace TombOfAnubis
 {
     enum ItemTypes
     {

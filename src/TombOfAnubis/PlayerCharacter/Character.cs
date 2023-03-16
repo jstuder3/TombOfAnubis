@@ -6,10 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TombOfAnubis.CollisionSystem;
-using TombOfAnubis.InventorySystem;
 
-namespace TombOfAnubis.PlayerCharacter
+namespace TombOfAnubis
 {
 
     enum PlayerState

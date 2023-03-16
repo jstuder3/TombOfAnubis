@@ -37,6 +37,32 @@ namespace TombOfAnubis
             get { return singleton != null; }
         }
 
+        /// <summary>
+        /// The list of characters such as players, anubis or other entities.
+        /// </summary>
+        /// <remarks>The first entry is the leader.</remarks>
+        private List<Character> characters = new List<Character>();
+
+        /// <summary>
+        /// The list of characters such as players, anubis or other entities.
+        /// </summary>
+        /// <remarks>The first entry is the leader.</remarks>
+        [ContentSerializerIgnore]
+        public List<Character> Characters
+        {
+            get { return characters; }
+            set { characters = value; }
+        }
+
+        private Map map;
+        [ContentSerializerIgnore]
+        public Map Map
+        {
+            get { return map; }
+            set { map = value; }
+        }
+
+
         // <summary>
         /// Private constructor of a Session object.
         /// </summary>
@@ -73,6 +99,12 @@ namespace TombOfAnubis
             }
             TileEngine.Update(gameTime);
 
+            foreach (Character character in singleton.characters)
+            {
+                character.Update(gameTime);
+            }
+
+
         }
 
         /// <summary>
@@ -89,6 +121,12 @@ namespace TombOfAnubis
             {
                 // draw the ground layer
                 TileEngine.DrawLayers(spriteBatch, true, true, false);
+
+                // draw the characters
+                foreach (Character character in singleton.characters)
+                {
+                    character.Draw(gameTime, spriteBatch);
+                }
                 //// draw the character shadows
                 //DrawShadows(spriteBatch);
             }
@@ -128,6 +166,15 @@ namespace TombOfAnubis
             //ContentManager content = singleton.screenManager.Game.Content;
             //singleton.party = new Party(gameStartDescription, content);
 
+            singleton.Characters.Add(new Character(
+                PlayerType.Player,
+                100,
+                100,
+                singleton.Map.SpawnMapPosition.X,
+                singleton.Map.SpawnMapPosition.Y,
+                singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                1,
+                 new InputController()));
         }
 
         // <summary>
@@ -168,10 +215,10 @@ namespace TombOfAnubis
 
             // load the map
             ContentManager content = singleton.gameScreenManager.Game.Content;
-            Map map = content.Load<Map>(mapContentName);
+            singleton.Map = content.Load<Map>(mapContentName);
 
             // set the new map into the tile engine
-            TileEngine.SetMap(map);
+            TileEngine.SetMap(singleton.Map);
         }
 
     }
