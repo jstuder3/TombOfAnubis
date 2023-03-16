@@ -173,8 +173,7 @@ namespace TombOfAnubis
                 singleton.Map.SpawnMapPosition.X,
                 singleton.Map.SpawnMapPosition.Y,
                 singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
-                1,
-                 new InputController()));
+                1));
         }
 
         // <summary>

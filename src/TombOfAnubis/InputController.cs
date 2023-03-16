@@ -8,25 +8,24 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    internal class InputController
+    public static class InputController
     {
 
-        Keys[] upKeys = new Keys[] { Keys.W};
-        Keys[] leftKeys = new Keys[] {Keys.A };
-        Keys[] downKeys = new Keys[] {Keys.S };
-        Keys[] rightKeys = new Keys[] {Keys.D };
-        Keys[] useKeys = new Keys[] {Keys.E };
+        public static Keys[] upKeys = new Keys[] { Keys.W};
+        public static Keys[] leftKeys = new Keys[] {Keys.A };
+        public static Keys[] downKeys = new Keys[] { Keys.S };
+        public static Keys[] rightKeys = new Keys[] { Keys.D };
+        public static Keys[] useKeys = new Keys[] { Keys.E };
 
-        Buttons[] upButtons = new Buttons[] { Buttons.DPadUp };
-        Buttons[] leftButtons = new Buttons[] { Buttons.DPadLeft };
-        Buttons[] downButtons = new Buttons[] { Buttons.DPadDown };
-        Buttons[] rightButtons = new Buttons[] { Buttons.DPadRight };
-        Buttons[] useButtons = new Buttons[] { Buttons.A };
+        public static Buttons[] upButtons = new Buttons[] { Buttons.DPadUp };
+        public static Buttons[] leftButtons = new Buttons[] { Buttons.DPadLeft };
+        public static Buttons[] downButtons = new Buttons[] { Buttons.DPadDown };
+        public static Buttons[] rightButtons = new Buttons[] { Buttons.DPadRight };
+        public static Buttons[] useButtons = new Buttons[] { Buttons.A };
 
-        public InputController() { }
 
         //convert key presses by the current player into actions (walking left, right, up down, use, ...)
-        public PlayerActions[] GetActionsOfCurrentPlayer(int player)
+        public static PlayerActions[] GetActionsOfCurrentPlayer(int player)
         {
             KeyboardState keyboardState = Keyboard.GetState();
             Keys[] pressedKeys = keyboardState.GetPressedKeys();
@@ -110,7 +109,7 @@ namespace TombOfAnubis
 
         //there is no equivalent to GetPressedKeys() of KeyboardState for GamePadState, so we have to implement it ourselves
         //(adapted from https://community.monogame.net/t/get-all-currently-pressed-gamepad-buttons-similar-to-keyboardstates-getpressedkeys/17966) 
-        public Buttons[] GetPressedButtons(GamePadState gamepadState)
+        public static Buttons[] GetPressedButtons(GamePadState gamepadState)
         {
             List<Buttons> pressedButtons = new List<Buttons>();
 
@@ -125,7 +124,7 @@ namespace TombOfAnubis
             return pressedButtons.ToArray();
         }
 
-        public List<PlayerActions> HandleOpposingActions(List<PlayerActions> actions)
+        public static List<PlayerActions> HandleOpposingActions(List<PlayerActions> actions)
         {
             List<PlayerActions> resolvedActions = new List<PlayerActions> ();
 

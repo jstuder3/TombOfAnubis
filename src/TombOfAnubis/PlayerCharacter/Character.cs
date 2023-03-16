@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TombOfAnubis
 {
 
-    enum PlayerState
+    public enum PlayerState
     {
         Idle,
         Walking,
@@ -23,7 +23,7 @@ namespace TombOfAnubis
         Trapped
     }
 
-    enum PlayerActions
+    public enum PlayerActions
     {
         WalkLeft,
         WalkRight,
@@ -32,14 +32,14 @@ namespace TombOfAnubis
         UseObject
     }
 
-    enum PlayerType
+    public enum PlayerType
     {
         Player,
         Anubis,
         Enemy
     }
 
-    enum Orientation
+    public enum Orientation
     {
         North,
         East,
@@ -58,7 +58,6 @@ namespace TombOfAnubis
         Vector2 position;
         InventoryManager inventory;
         Texture2D texture;
-        InputController inputController;
         Orientation orientation = Orientation.South;
         bool isWalking = false;
         bool isTrapped = false;
@@ -68,7 +67,7 @@ namespace TombOfAnubis
         private Collider _collider; //this is fucking disgusting about C# interfaces: you need an extra variable to implement an interface property... wtf?
         public Collider collider { get => _collider; set => _collider = value; } 
 
-        public Character(PlayerType type, float maxHealth, float maxSpeed, float posX, float posY, Texture2D texture, int playerNumber, InputController inputController)
+        public Character(PlayerType type, float maxHealth, float maxSpeed, float posX, float posY, Texture2D texture, int playerNumber)
         {
             this.type = type;
             this.state = PlayerState.Idle;
@@ -81,7 +80,6 @@ namespace TombOfAnubis
             this.texture = texture;
             this.collider = new RectangleCollider(position.X, position.Y, texture.Width, texture.Height);
             this.playerNumber = playerNumber;
-            this.inputController = inputController;
         }
 
         public void ReduceHealth(float damage)
@@ -123,7 +121,7 @@ namespace TombOfAnubis
 
             if (!isTrapped)
             {
-                PlayerActions[] currentActions = inputController.GetActionsOfCurrentPlayer(playerNumber);
+                PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(playerNumber);
 
                 if (currentActions.Contains(PlayerActions.WalkLeft))
                 {
