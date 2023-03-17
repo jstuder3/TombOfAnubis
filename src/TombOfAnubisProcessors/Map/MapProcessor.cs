@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TombOfAnubis;
 
-namespace TombOfAnubisProcessors
+namespace TombOfAnubis
 {
     [ContentProcessor(DisplayName = "Map Processor")]
     public class MapProcessor : ContentProcessor<Map, Map>

@@ -11,6 +11,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TombOfAnubisData\TombOfAnubisData.csproj" />
+    <ProjectReference Include="..\TombOfAnubis\TombOfAnubis.csproj" />
   </ItemGroup>
 </Project>

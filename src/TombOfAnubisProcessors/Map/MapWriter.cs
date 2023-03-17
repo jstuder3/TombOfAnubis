@@ -5,16 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TombOfAnubis;
 
-namespace TombOfAnubisProcessors
+namespace TombOfAnubis
 {
     [ContentTypeWriter]
-    public class MapWriter : ContentTypeWriter<TombOfAnubis.Map>
+    public class MapWriter : ContentTypeWriter<Map>
     {
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "TombOfAnubis.Map+MapReader, TombOfAnubisData";
+            return "TombOfAnubis.Map+MapReader, TombOfAnubis";
         }
 
         protected override void Write(ContentWriter output, Map value)

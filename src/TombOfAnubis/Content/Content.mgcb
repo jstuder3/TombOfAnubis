@@ -10,8 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\TombOfAnubisData\bin\Debug\net6.0\TombOfAnubisData.dll
-/reference:..\..\TombOfAnubisProcessors\obj\Debug\net6.0\TombOfAnubisProcessors.dll
+/reference:..\..\TombOfAnubisProcessors\bin\Debug\net6.0\TombOfAnubisProcessors.dll
 
 #---------------------------------- Content ---------------------------------#
 
