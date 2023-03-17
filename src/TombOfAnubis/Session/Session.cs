@@ -97,8 +97,6 @@ namespace TombOfAnubis
             {
                 return;
             }
-            TileEngine.Update(gameTime, singleton.characters[0].Position);
-
             foreach (Character character in singleton.characters)
             {
                 character.Update(gameTime);
@@ -110,15 +108,14 @@ namespace TombOfAnubis
         /// <summary>
         /// Draws the session environment to the screen
         /// </summary>
-        public static void Draw(GameTime gameTime)
+        public static void Draw(GameTime gameTime, int playerIndex)
         {
             SpriteBatch spriteBatch = singleton.gameScreenManager.SpriteBatch;
 
 
             // draw the session content using the 2D tile enginge
-            spriteBatch.Begin();
+            TileEngine.CenteredMapPosition = singleton.Characters[playerIndex].Position;
             TileEngine.Draw(spriteBatch);
-            spriteBatch.End();
 
         }
 
@@ -159,14 +156,19 @@ namespace TombOfAnubis
             //ContentManager content = singleton.screenManager.Game.Content;
             //singleton.party = new Party(gameStartDescription, content);
 
-            singleton.Characters.Add(new Character(
+            for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
+            {
+                singleton.Characters.Add(new Character(
                 PlayerType.Player,
                 100,
                 100,
-                singleton.Map.SpawnMapPosition.X,
-                singleton.Map.SpawnMapPosition.Y,
+                singleton.Map.SpawnMapPosition.X + 10 * i, // TODO: Remove + 10 * i ones every player has a spawn position
+                singleton.Map.SpawnMapPosition.Y + 10 * i,
                 singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
-                1));
+                i));
+            }
+
+            
         }
 
         // <summary>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace TombOfAnubis
         {
             GameStartDescription gameStartDescription = new GameStartDescription();
             gameStartDescription.MapContentName = "Map001";
+            gameStartDescription.NumberOfPlayers = 4;
+            SplitScreen.Initialize(GameScreenManager.GraphicsDevice, gameStartDescription.NumberOfPlayers);
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
 
 
@@ -111,7 +114,12 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            Session.Draw(gameTime);
+            for(int playerIdx = 0; playerIdx < SplitScreen.NumberOfPlayers; playerIdx++)
+            {
+                SplitScreen.SetViewport(playerIdx);
+                Session.Draw(gameTime, playerIdx);
+            }
+            SplitScreen.ResetViewport();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -18,6 +19,16 @@ namespace TombOfAnubis
         /// </summary>
         private static Vector2 mapOriginPosition;
 
+        private static Vector2 centeredMapPosition;
+        public static Vector2 CenteredMapPosition
+        {
+            get { return centeredMapPosition; }
+            set
+            {
+                centeredMapPosition = value;
+                mapOriginPosition = viewportCenter - centeredMapPosition;
+            }
+        }
 
         /// <summary>
         /// The viewport that the tile engine is rendering within.
@@ -34,8 +45,8 @@ namespace TombOfAnubis
             {
                 viewport = value;
                 viewportCenter = new Vector2(
-                    viewport.X + viewport.Width / 2f,
-                    viewport.Y + viewport.Height / 2f);
+                     viewport.Width / 2f,
+                     viewport.Height / 2f);
             }
         }
 
@@ -61,6 +72,7 @@ namespace TombOfAnubis
 
             // reset the map origin, which will be recalculated on the first update
             mapOriginPosition = Vector2.Zero;
+            centeredMapPosition = Vector2.Zero;
             //mapOriginPosition = new Vector2(-32, 0);
 
             //// move the party to its initial position
@@ -106,7 +118,6 @@ namespace TombOfAnubis
             // adjust the map origin so that the party is at the center of the viewport
 
             //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition + Session.Party.Players[0].MapSprite.SourceOffset);
-            mapOriginPosition = viewportCenter - focusedPlayerLocation;
 
             // make sure the boundaries of the map are never inside the viewport
 
@@ -121,12 +132,15 @@ namespace TombOfAnubis
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
+
             DrawMapLayers(spriteBatch);
 
             foreach (Character character in session.Characters)
             {
                 character.Draw(spriteBatch, mapOriginPosition);
             }
+            spriteBatch.End();
         }
         public static void DrawMapLayers(SpriteBatch spriteBatch)
         {
@@ -172,10 +186,10 @@ namespace TombOfAnubis
         /// </summary>
         public static bool CheckVisibility(Rectangle screenRectangle)
         {
-            return ((screenRectangle.X > viewport.X - screenRectangle.Width) &&
-                (screenRectangle.Y > viewport.Y - screenRectangle.Height) &&
-                (screenRectangle.X < viewport.X + viewport.Width) &&
-                (screenRectangle.Y < viewport.Y + viewport.Height));
+            return ((screenRectangle.X > - screenRectangle.Width) &&
+                (screenRectangle.Y > - screenRectangle.Height) &&
+                (screenRectangle.X <  viewport.Width) &&
+                (screenRectangle.Y <  viewport.Height));
         }
     }
 

@@ -11,17 +11,17 @@ namespace TombOfAnubis
     public static class InputController
     {
 
-        public static Keys[] upKeys = new Keys[] { Keys.W};
-        public static Keys[] leftKeys = new Keys[] {Keys.A };
-        public static Keys[] downKeys = new Keys[] { Keys.S };
-        public static Keys[] rightKeys = new Keys[] { Keys.D };
-        public static Keys[] useKeys = new Keys[] { Keys.E };
+        public static Keys[] upKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up};
+        public static Keys[] leftKeys = new Keys[] {Keys.A, Keys.F, Keys.J, Keys.Left };
+        public static Keys[] downKeys = new Keys[] { Keys.S, Keys.G, Keys.K, Keys.Down };
+        public static Keys[] rightKeys = new Keys[] { Keys.D, Keys.H, Keys.L, Keys.Right };
+        public static Keys[] useKeys = new Keys[] { Keys.E, Keys.E, Keys.E, Keys.E };
 
-        public static Buttons[] upButtons = new Buttons[] { Buttons.DPadUp };
-        public static Buttons[] leftButtons = new Buttons[] { Buttons.DPadLeft };
-        public static Buttons[] downButtons = new Buttons[] { Buttons.DPadDown };
-        public static Buttons[] rightButtons = new Buttons[] { Buttons.DPadRight };
-        public static Buttons[] useButtons = new Buttons[] { Buttons.A };
+        public static Buttons[] upButtons = new Buttons[] { Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp };
+        public static Buttons[] leftButtons = new Buttons[] {Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft };
+        public static Buttons[] downButtons = new Buttons[] {Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown };
+        public static Buttons[] rightButtons = new Buttons[] {Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight };
+        public static Buttons[] useButtons = new Buttons[] {Buttons.A, Buttons.A, Buttons.A, Buttons.A };
 
 
         //convert key presses by the current player into actions (walking left, right, up down, use, ...)
@@ -32,40 +32,39 @@ namespace TombOfAnubis
 
             GamePadState gamepadState = GamePadState.Default;
 
-            if (player == 1) gamepadState = GamePad.GetState(PlayerIndex.One);
-            if (player == 2) gamepadState = GamePad.GetState(PlayerIndex.Two);
-            if (player == 3) gamepadState = GamePad.GetState(PlayerIndex.Three); 
-            if (player == 4) gamepadState = GamePad.GetState(PlayerIndex.Four);
+            if (player == 0) gamepadState = GamePad.GetState(PlayerIndex.One);
+            if (player == 1) gamepadState = GamePad.GetState(PlayerIndex.Two);
+            if (player == 2) gamepadState = GamePad.GetState(PlayerIndex.Three); 
+            if (player == 3) gamepadState = GamePad.GetState(PlayerIndex.Four);
 
             Buttons[] pressedButtons = GetPressedButtons(gamepadState);
 
             List<PlayerActions> actions = new List<PlayerActions>();
 
-            int playerIndex = player - 1;
 
             foreach(Keys key in pressedKeys)
             {
-                if (key == upKeys[playerIndex])
+                if (key == upKeys[player])
                 {
                     actions.Add(PlayerActions.WalkUp);
                 }
 
-                if (key == leftKeys[playerIndex])
+                if (key == leftKeys[player])
                 {
                     actions.Add(PlayerActions.WalkLeft);
                 }
 
-                if (key == downKeys[playerIndex])
+                if (key == downKeys[player])
                 {
                     actions.Add(PlayerActions.WalkDown);
                 }
 
-                if (key == rightKeys[playerIndex])
+                if (key == rightKeys[player])
                 {
                     actions.Add(PlayerActions.WalkRight);
                 }
 
-                if (key == useKeys[playerIndex])
+                if (key == useKeys[player])
                 {
                     actions.Add(PlayerActions.UseObject);
                 }
@@ -73,27 +72,27 @@ namespace TombOfAnubis
 
             foreach(Buttons button in pressedButtons)
             {
-                if (button == upButtons[playerIndex])
+                if (button == upButtons[player])
                 {
                     actions.Add(PlayerActions.WalkUp);
                 }
 
-                if (button == leftButtons[playerIndex])
+                if (button == leftButtons[player])
                 {
                     actions.Add(PlayerActions.WalkLeft);
                 }
 
-                if (button == downButtons[playerIndex])
+                if (button == downButtons[player])
                 {
                     actions.Add(PlayerActions.WalkDown);
                 }
 
-                if (button == rightButtons[playerIndex])
+                if (button == rightButtons[player])
                 {
                     actions.Add(PlayerActions.WalkRight);
                 }
 
-                if (button == useButtons[playerIndex])
+                if (button == useButtons[player])
                 {
                     actions.Add(PlayerActions.UseObject);
                 }

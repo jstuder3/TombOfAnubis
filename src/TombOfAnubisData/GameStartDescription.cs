@@ -20,5 +20,12 @@ namespace TombOfAnubis
             set { mapContentName = value; }
         }
 
+        private int numberOfPlayers;
+        public int NumberOfPlayers
+        {
+            get { return numberOfPlayers; }
+            set { numberOfPlayers = value; }
+        }
+
     }
 }
