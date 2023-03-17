@@ -13,13 +13,19 @@ namespace TombOfAnubis
     static class TileEngine
     {
 
-        private static Session session = null;
         /// <summary>
         /// The position of the outside 0,0 corner of the map, in pixels.
         /// </summary>
         private static Vector2 mapOriginPosition;
 
+        /// <summary>
+        /// The position on the map in map coordinates that should be in the center of the viewport.
+        /// </summary>
         private static Vector2 centeredMapPosition;
+
+        /// <summary>
+        /// The position on the map in map coordinates that should be in the center of the viewport.
+        /// </summary>
         public static Vector2 CenteredMapPosition
         {
             get { return centeredMapPosition; }
@@ -56,9 +62,14 @@ namespace TombOfAnubis
         private static Vector2 viewportCenter;
 
         /// <summary>
-        /// Set the map in use by the tile engine.
+        /// The session whose content is rendered by the tile engine.
         /// </summary>
-        /// <param name="map">The new map for the tile engine.</param>
+        private static Session session = null;
+
+        /// <summary>
+        /// Set the Session in use by the tile engine.
+        /// </summary>
+        /// <param name="newSession">The new session for the tile engine.</param>
         public static void SetSession(Session newSession)
         {
             // check the parameter
@@ -67,69 +78,15 @@ namespace TombOfAnubis
                 throw new ArgumentNullException("newSession");
             }
 
-            // assign the new map
             session = newSession;
 
-            // reset the map origin, which will be recalculated on the first update
             mapOriginPosition = Vector2.Zero;
             centeredMapPosition = Vector2.Zero;
-            //mapOriginPosition = new Vector2(-32, 0);
-
-            //// move the party to its initial position
-
-            //partyLeaderPosition.TilePosition = map.SpawnMapPosition;
-            //partyLeaderPosition.TileOffset = Vector2.Zero;
-            //partyLeaderPosition.Direction = Direction.South;
-
         }
 
         /// <summary>
-        /// Update the tile engine.
+        /// Draws the contents of the current session using the sprite batch system.
         /// </summary>
-        public static void Update(GameTime gameTime, Vector2 focusedPlayerLocation)
-        {
-            // if there is no auto-movement, handle user controls
-            Vector2 userMovement = Vector2.Zero;
-
-            //userMovement = UpdateUserMovement(gameTime);
-            // calculate the desired position
-            //if (userMovement != Vector2.Zero)
-            //{
-            //    Point desiredTilePosition = partyLeaderPosition.TilePosition;
-            //    Vector2 desiredTileOffset = partyLeaderPosition.TileOffset;
-            //    PlayerPosition.CalculateMovement(
-            //        Vector2.Multiply(userMovement, 15f),
-            //        ref desiredTilePosition, ref desiredTileOffset);
-            //    // check for collisions or encounters in the new tile
-            //    if ((partyLeaderPosition.TilePosition != desiredTilePosition) &&
-            //        !MoveIntoTile(desiredTilePosition))
-            //    {
-            //        userMovement = Vector2.Zero;
-            //    }
-            //}
-            //}
-
-            // move the party
-
-            //Point oldPartyLeaderTilePosition = partyLeaderPosition.TilePosition;
-            //partyLeaderPosition.Move(autoMovement + userMovement);
-
-
-            // adjust the map origin so that the party is at the center of the viewport
-
-            //mapOriginPosition += viewportCenter - (partyLeaderPosition.ScreenPosition + Session.Party.Players[0].MapSprite.SourceOffset);
-
-            // make sure the boundaries of the map are never inside the viewport
-
-            //mapOriginPosition.X = MathHelper.Min(mapOriginPosition.X, viewport.X);
-            //mapOriginPosition.Y = MathHelper.Min(mapOriginPosition.Y, viewport.Y);
-            //mapOriginPosition.X += MathHelper.Max(
-            //    (viewport.X + viewport.Width) -
-            //    (mapOriginPosition.X + map.MapDimensions.X * map.TileSize.X), 0f);
-            //mapOriginPosition.Y += MathHelper.Max(
-            //    (viewport.Y + viewport.Height - Hud.HudHeight) -
-            //(mapOriginPosition.Y + map.MapDimensions.Y * map.TileSize.Y), 0f);
-        }
         public static void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();

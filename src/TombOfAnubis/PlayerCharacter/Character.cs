@@ -47,7 +47,7 @@ namespace TombOfAnubis
         West
     }
 
-    internal class Character : ICollidable
+    public class Character : ICollidable
     {
         PlayerType type;
         PlayerState state;
@@ -57,6 +57,9 @@ namespace TombOfAnubis
         float maxSpeed;
         private Vector2 position;
         public Vector2 Position { get { return position; } set {  position = value; } }
+
+        public Collider Collider { get; set; }
+
         InventoryManager inventory;
         Texture2D texture;
         Orientation orientation = Orientation.South;
@@ -64,9 +67,6 @@ namespace TombOfAnubis
         bool isTrapped = false;
 
         int playerNumber = -1;
-
-        private Collider _collider; //this is fucking disgusting about C# interfaces: you need an extra variable to implement an interface property... wtf?
-        public Collider collider { get => _collider; set => _collider = value; } 
 
         public Character(PlayerType type, float maxHealth, float maxSpeed, float posX, float posY, Texture2D texture, int playerNumber)
         {
@@ -79,7 +79,7 @@ namespace TombOfAnubis
             position = new Vector2(posX, posY);
             this.inventory = new InventoryManager();
             this.texture = texture;
-            this.collider = new RectangleCollider(position.X, position.Y, texture.Width, texture.Height);
+            this.Collider = new RectangleCollider(position.X, position.Y, texture.Width, texture.Height);
             this.playerNumber = playerNumber;
         }
 

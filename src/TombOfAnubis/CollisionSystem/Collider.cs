@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    enum ColliderType
+    public enum ColliderType
     {
         Rectangle,
         Box,
@@ -15,7 +15,7 @@ namespace TombOfAnubis
         Capsule
     }
 
-    internal class Collider
+    public class Collider
     {
         public ColliderType colliderType;
         virtual public bool Intersects(Collider other)

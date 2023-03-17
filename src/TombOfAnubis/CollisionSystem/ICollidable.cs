@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    internal interface ICollidable
-    {
-        Collider collider { get; set; }
-        public void HandleCollision(ICollidable other);
+    public interface ICollidable
+    { 
+        public Collider Collider { get; set; }
+        public abstract void HandleCollision(ICollidable other);
 
     }
 }
