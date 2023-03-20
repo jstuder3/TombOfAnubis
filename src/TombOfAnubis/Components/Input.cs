@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-
-    enum TrapType
+    public class Input : Component
     {
-        Spikes,
-        Hole,
-        LavaPit
-    }
-
-    internal class WorldTrap : WorldObject
-    {
+        public Input()
+        {
+            InputSystem.Register(this);
+        }
     }
 }

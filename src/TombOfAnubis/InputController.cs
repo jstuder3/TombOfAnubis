@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
+    public enum PlayerActions
+    {
+        WalkLeft,
+        WalkRight,
+        WalkUp,
+        WalkDown,
+        UseObject
+    }
     public static class InputController
     {
 

@@ -9,6 +9,9 @@ namespace TombOfAnubis
 {
     public class Transform : Component
     {
+        /// <summary>
+        /// Position of the top left corner of the entity relative to its parent
+        /// </summary>
         public Vector2 Position { get; set; }
 
         public Vector2 Scale { get; set; }
@@ -23,6 +26,10 @@ namespace TombOfAnubis
             Position = position;
             Scale = scale;
         }
+
+        /// <summary>
+        /// Transforms the position from relative to parent coordinates to world coordinates
+        /// </summary>
         public Transform ToWorld()
         {
             if(Entity.Parent != null && Entity.Parent.GetComponent<Transform>() != null)

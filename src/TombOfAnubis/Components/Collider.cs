@@ -6,23 +6,11 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    public enum ColliderType
-    {
-        Rectangle,
-        Box,
-        Circle,
-        Sphere,
-        Capsule
-    }
-
     public class Collider : Component
     {
-        public ColliderType colliderType;
-        public Collider() { CollisionSystem.Register(this); }
-
-        virtual public bool Intersects(Collider other)
+        public Collider()
         {
-            throw new NotImplementedException();
+            CollisionSystem.Register(this);
         }
     }
 }

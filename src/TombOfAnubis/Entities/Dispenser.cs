@@ -8,16 +8,26 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    public class Player : Entity
+    public enum DispenserType
     {
-        public Player(int playerID, Vector2 position, Vector2 scale, Texture2D texture)
+        BodyPowerup,
+        WisdomPowerup,
+        ResurrectionPowerup,
+        None
+    }
+    public class Dispenser : Entity
+    {
+        public Dispenser(Vector2 position, Vector2 scale, Texture2D texture)
         {
             Transform transform = new Transform(position, scale);
             AddComponent(transform);
+
             Sprite sprite = new Sprite(texture, 1);
             AddComponent(sprite);
-            PlayerInput playerInput = new PlayerInput(playerID);
-            AddComponent(playerInput);
+
+            // TODO: Add collider
+            //Collider collider = new Collider();
+            //AddComponent(collider);
         }
     }
 }

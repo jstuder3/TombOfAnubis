@@ -74,7 +74,7 @@ namespace TombOfAnubis
         private Vector2 viewportCenter;
         public SpriteSystem SpriteSystem { get; set; }
         public CollisionSystem CollisionSystem { get; set; }
-        public PlayerInputSystem PlayerInputSystem { get; set; }
+        public InputSystem PlayerInputSystem { get; set; }
 
         public Scene Scene { get; set; }
 
@@ -155,7 +155,7 @@ namespace TombOfAnubis
             singleton = new Session(screenManager, gameplayScreen);
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
-            singleton.PlayerInputSystem = new PlayerInputSystem();
+            singleton.PlayerInputSystem = new InputSystem();
 
             singleton.Scene = new Scene(Vector2.Zero);
 
@@ -165,11 +165,13 @@ namespace TombOfAnubis
 
             for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
-                Player player = new Player(i,
+                Character character = new Character(i,
                     new Vector2(singleton.Map.SpawnMapPosition.X + 10 * i, singleton.Map.SpawnMapPosition.Y + 10 * i),
                     new Vector2(0.25f, 0.25f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"));
-                singleton.Scene.AddChild(player);
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                    100
+                    );
+                singleton.Scene.AddChild(character);
             }
             List<Entity> mapEntities = singleton.Map.CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
@@ -221,11 +223,11 @@ namespace TombOfAnubis
         {
             singleton.Viewport = viewport;
 
-            foreach (PlayerInput playerInput in PlayerInputSystem.GetRegisteredComponents())
+            foreach (Input playerInput in InputSystem.GetRegisteredComponents())
             {
-                if(playerInput.PlayerID == playerIdx)
+                if(playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
-                    Player player = playerInput.Entity as Player;
+                    Character player = playerInput.Entity as Character;
                     Transform playerTransform= player.GetComponent<Transform>();
                     Vector2 playerPosition = playerTransform.Position;
                     Vector2 playerScale = playerTransform.Scale;

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    enum SlotType
+    public enum SlotType
     {
         ArtefactSlot,
         ItemSlot
     }
-    internal class InventorySlot
+    public class InventorySlot
     {
 
         public InventoryItem item { get; set; }

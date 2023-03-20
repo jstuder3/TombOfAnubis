@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    enum ItemTypes
+    public enum ItemType
     {
         None,
         Speedup
     }
 
-    internal class InventoryItem
+    public class InventoryItem
     {
-        ItemTypes itemType;
+        public ItemType ItemType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
