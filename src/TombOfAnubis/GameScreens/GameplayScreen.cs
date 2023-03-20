@@ -116,7 +116,9 @@ namespace TombOfAnubis
         {
             for(int playerIdx = 0; playerIdx < SplitScreen.NumberOfPlayers; playerIdx++)
             {
-                SplitScreen.SetViewport(playerIdx);
+                Viewport viewport = SplitScreen.SetViewport(playerIdx);
+
+                Session.SetFocusOnPlayer(playerIdx, viewport);
                 Session.Draw(gameTime, playerIdx);
             }
             SplitScreen.ResetViewport();

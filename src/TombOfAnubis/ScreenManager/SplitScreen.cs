@@ -57,9 +57,10 @@ namespace TombOfAnubis
 
         }
 
-        public static void SetViewport(int playerIndex) {
+        public static Viewport SetViewport(int playerIndex) {
             graphics.Viewport = playerViewports[playerIndex];
-            TileEngine.Viewport = graphics.Viewport;
+            //TileEngine.Viewport = graphics.Viewport;
+            return playerViewports[playerIndex];
         }
 
         public static void ResetViewport()

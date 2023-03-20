@@ -9,6 +9,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
 {
@@ -37,22 +38,6 @@ namespace TombOfAnubis
             get { return singleton != null; }
         }
 
-        /// <summary>
-        /// The list of characters such as players, anubis or other entities.
-        /// </summary>
-        /// <remarks>The first entry is the leader.</remarks>
-        private List<Character> characters = new List<Character>();
-
-        /// <summary>
-        /// The list of characters such as players, anubis or other entities.
-        /// </summary>
-        /// <remarks>The first entry is the leader.</remarks>
-        [ContentSerializerIgnore]
-        public List<Character> Characters
-        {
-            get { return characters; }
-            set { characters = value; }
-        }
 
         private Map map;
         [ContentSerializerIgnore]
@@ -61,6 +46,38 @@ namespace TombOfAnubis
             get { return map; }
             set { map = value; }
         }
+
+
+        /// <summary>
+        /// The viewport that the tile engine is rendering within.
+        /// </summary>
+        private Viewport viewport;
+
+        /// <summary>
+        /// The viewport that the tile engine is rendering within.
+        /// </summary>
+        public Viewport Viewport
+        {
+            get { return viewport; }
+            set
+            {
+                viewport = value;
+                viewportCenter = new Vector2(
+                     viewport.Width / 2f,
+                     viewport.Height / 2f);
+            }
+        }
+
+        /// <summary>
+        /// The center of the current viewport.
+        /// </summary>
+        private Vector2 viewportCenter;
+        public SpriteSystem SpriteSystem { get; set; }
+        public CollisionSystem CollisionSystem { get; set; }
+        public PlayerInputSystem PlayerInputSystem { get; set; }
+
+        public Scene Scene { get; set; }
+
 
 
         // <summary>
@@ -97,11 +114,8 @@ namespace TombOfAnubis
             {
                 return;
             }
-            foreach (Character character in singleton.characters)
-            {
-                character.Update(gameTime);
-            }
-
+           singleton.CollisionSystem.Update(gameTime);
+           singleton.PlayerInputSystem.Update(gameTime);
 
         }
 
@@ -110,13 +124,8 @@ namespace TombOfAnubis
         /// </summary>
         public static void Draw(GameTime gameTime, int playerIndex)
         {
-            SpriteBatch spriteBatch = singleton.gameScreenManager.SpriteBatch;
-
-
-            // draw the session content using the 2D tile enginge
-            TileEngine.CenteredMapPosition = singleton.Characters[playerIndex].Position;
-            TileEngine.Draw(spriteBatch);
-
+            singleton.SpriteSystem.Viewport = singleton.Viewport;
+            singleton.SpriteSystem.Draw(gameTime);
         }
 
         /// <summary>
@@ -144,31 +153,27 @@ namespace TombOfAnubis
 
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
+            singleton.CollisionSystem = new CollisionSystem();
+            singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
+            singleton.PlayerInputSystem = new PlayerInputSystem();
 
+            singleton.Scene = new Scene(Vector2.Zero);
 
-            // set the the session of the tile engine
-            TileEngine.SetSession(singleton);
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
 
-            // set up the initial party
-            //ContentManager content = singleton.screenManager.Game.Content;
-            //singleton.party = new Party(gameStartDescription, content);
-
             for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
-                singleton.Characters.Add(new Character(
-                PlayerType.Player,
-                100,
-                100,
-                singleton.Map.SpawnMapPosition.X + 10 * i, // TODO: Remove + 10 * i ones every player has a spawn position
-                singleton.Map.SpawnMapPosition.Y + 10 * i,
-                singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
-                i));
+                Player player = new Player(i,
+                    new Vector2(singleton.Map.SpawnMapPosition.X + 10 * i, singleton.Map.SpawnMapPosition.Y + 10 * i),
+                    new Vector2(0.25f, 0.25f),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"));
+                singleton.Scene.AddChild(player);
             }
+            List<Entity> mapEntities = singleton.Map.CreateMapEntities();
+            singleton.Scene.AddChildren(mapEntities);
 
-            
         }
 
         // <summary>
@@ -210,6 +215,26 @@ namespace TombOfAnubis
             // load the map
             ContentManager content = singleton.gameScreenManager.Game.Content;
             singleton.Map = content.Load<Map>(mapContentName);
+        }
+
+        public static void SetFocusOnPlayer(int playerIdx, Viewport viewport)
+        {
+            singleton.Viewport = viewport;
+
+            foreach (PlayerInput playerInput in PlayerInputSystem.GetRegisteredComponents())
+            {
+                if(playerInput.PlayerID == playerIdx)
+                {
+                    Player player = playerInput.Entity as Player;
+                    Transform playerTransform= player.GetComponent<Transform>();
+                    Vector2 playerPosition = playerTransform.Position;
+                    Vector2 playerScale = playerTransform.Scale;
+                    Texture2D texture = player.GetComponent<Sprite>().Texture;
+                    Vector2 playerCenter = new Vector2 (playerPosition.X + (texture.Width / 2) * playerScale.X, playerPosition.Y + (texture.Height / 2) * playerScale.Y);
+
+                    singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - playerCenter;
+                }
+            }
         }
 
     }

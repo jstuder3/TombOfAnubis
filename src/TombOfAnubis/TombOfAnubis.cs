@@ -9,16 +9,13 @@ namespace TombOfAnubis
         private GraphicsDeviceManager graphics;
         GameScreenManager screenManager;
 
-        SpriteBatch spriteBatch;
-
-        Character player_1;
 
         public TombOfAnubis()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
 
             screenManager = new GameScreenManager(this);
             Components.Add(screenManager);
@@ -30,7 +27,6 @@ namespace TombOfAnubis
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            TileEngine.Viewport = graphics.GraphicsDevice.Viewport;
 
             screenManager.AddScreen(new GameplayScreen());
 

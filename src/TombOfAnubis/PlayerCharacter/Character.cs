@@ -164,13 +164,13 @@ namespace TombOfAnubis
                     //if a player: check if trapped/unconscious, then check if the current player can free/resurrect that player
 
                 }
-                Console.WriteLine("Position: " + position.X + ", " + position.Y);
-                Console.Write("Actions: ");
-                foreach(PlayerActions action in currentActions)
-                {
-                    Console.Write(action.ToString());
-                }
-                Console.Write("\n");
+                //Console.WriteLine("Position: " + position.X + ", " + position.Y);
+                //Console.Write("Actions: ");
+                //foreach(PlayerActions action in currentActions)
+                //{
+                //    Console.Write(action.ToString());
+                //}
+                //Console.Write("\n");
             }
 
 

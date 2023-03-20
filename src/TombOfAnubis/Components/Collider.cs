@@ -15,9 +15,11 @@ namespace TombOfAnubis
         Capsule
     }
 
-    public class Collider
+    public class Collider : Component
     {
         public ColliderType colliderType;
+        public Collider() { CollisionSystem.Register(this); }
+
         virtual public bool Intersects(Collider other)
         {
             throw new NotImplementedException();

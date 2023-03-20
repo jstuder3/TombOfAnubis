@@ -8,7 +8,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 using static System.Formats.Asn1.AsnWriter;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
 {
@@ -155,6 +157,18 @@ namespace TombOfAnubis
             return baseLayer[mapPosition.Y * mapDimensions.X + mapPosition.X];
         }
 
+        public int GetCollisionLayerValue(Point mapPosition)
+        {
+            // check the parameter
+            if ((mapPosition.X < 0) || (mapPosition.X >= mapDimensions.X) ||
+                (mapPosition.Y < 0) || (mapPosition.Y >= mapDimensions.Y))
+            {
+                throw new ArgumentOutOfRangeException("mapPosition");
+            }
+
+            return collisionLayer[mapPosition.Y * mapDimensions.X + mapPosition.X];
+        }
+
         public Rectangle GetBaseLayerSourceRectangle(Point mapPosition)
         {
             // check the parameter, but out-of-bounds is nonfatal
@@ -174,6 +188,39 @@ namespace TombOfAnubis
                 (baseLayerValue % tilesPerRow) * tileSize.X,
                 (baseLayerValue / tilesPerRow) * tileSize.Y,
                 tileSize.X, tileSize.Y);
+        }
+
+        public List<Entity> CreateMapEntities()
+        {
+            List<Entity> entities = new List<Entity>();
+
+            for (int y = 0; y < MapDimensions.Y; y++)
+            {
+                for (int x = 0; x < MapDimensions.X; x++)
+                {
+
+                    Point mapPosition = new Point(x, y);
+                    bool wall = GetCollisionLayerValue(mapPosition) == 1;
+                    Rectangle sourceRectangle = GetBaseLayerSourceRectangle(mapPosition);
+                    Vector2 position = new Vector2(x * TileSize.X, y * TileSize.Y);
+
+                    if (sourceRectangle != Rectangle.Empty)
+                    {
+                        if (wall)
+                        {
+                            Wall newWall = new Wall(position, Texture, sourceRectangle);
+                            entities.Add(newWall);
+
+                        }
+                        else
+                        {
+                            Floor newFloor = new Floor(position, Texture, sourceRectangle);
+                            entities.Add(newFloor);
+                        }
+                    }
+                }
+            }
+            return entities;
         }
 
 
