@@ -17,6 +17,7 @@ namespace TombOfAnubis
                 Character character = (Character)input.Entity;
                 Transform transform = character.GetComponent<Transform>();
                 Movement movement = character.GetComponent<Movement>();
+                RectangleCollider collider = character.GetComponent<RectangleCollider>();
                 movement.IsWalking = false;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
@@ -25,32 +26,32 @@ namespace TombOfAnubis
                     PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(character.GetComponent<Player>().PlayerID);
                     Vector2 newPosition = transform.Position;
 
-                    if (currentActions.Contains(PlayerActions.WalkLeft))
+                    if (currentActions.Contains(PlayerActions.WalkLeft) && !collider.blockedDirections.Contains(BlockDirections.Left))
                     {
                         newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
-                        movement.Orientation = Orientation.West;
+                        movement.Orientation = Orientation.Left;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkRight))
+                    if (currentActions.Contains(PlayerActions.WalkRight) && !collider.blockedDirections.Contains(BlockDirections.Right))
                     {
                         newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
-                        movement.Orientation = Orientation.East;
+                        movement.Orientation = Orientation.Right;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkUp))
+                    if (currentActions.Contains(PlayerActions.WalkUp) && !collider.blockedDirections.Contains(BlockDirections.Up))
                     {
                         newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
-                        movement.Orientation = Orientation.North;
+                        movement.Orientation = Orientation.Up;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkDown))
+                    if (currentActions.Contains(PlayerActions.WalkDown) && !collider.blockedDirections.Contains(BlockDirections.Down))
                     {
                         newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
-                        movement.Orientation = Orientation.South;
+                        movement.Orientation = Orientation.Down;
                     }
 
                     //if (currentActions.Contains(PlayerActions.UseObject))

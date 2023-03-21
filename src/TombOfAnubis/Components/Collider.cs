@@ -12,5 +12,6 @@ namespace TombOfAnubis
         {
             CollisionSystem.Register(this);
         }
+
     }
 }

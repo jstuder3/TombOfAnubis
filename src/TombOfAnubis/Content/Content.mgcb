@@ -31,6 +31,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Characters/plagiarized_explorer.png
 
+#begin Textures/Debug/DebugBox.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Debug/DebugBox.png
+
+#begin Textures/Debug/DebugMarkerSmall.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Debug/DebugMarkerSmall.png
+
 #begin Textures/Maps/DungeonTiles.png
 /importer:TextureImporter
 /processor:TextureProcessor

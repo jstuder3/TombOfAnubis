@@ -10,6 +10,7 @@ namespace TombOfAnubis
 {
     public class Character : Entity
     {
+
         public Character(int playerID, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed)
         {
             Transform transform = new Transform(position, scale);
@@ -30,8 +31,17 @@ namespace TombOfAnubis
             Inventory inventory = new Inventory();
             AddComponent(inventory);
 
-            //RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width, texture.Height));
-            //AddComponent(collider);
+            //RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width * scale.X, texture.Height * scale.Y), debugTexture, this);// texture.Width * scale.X, texture.Height * scale.Y));
+            RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width * scale.X, texture.Height * scale.Y));// texture.Width * scale.X, texture.Height * scale.Y));
+            AddComponent(collider);
+
+        }
+        public Character(int playerID, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed, Texture2D debugTexture) 
+            : this(playerID, position, scale, texture, maxMovementSpeed)
+        {
+            Sprite debugSprite = new Sprite(debugTexture, new Rectangle(0, 0, texture.Width, texture.Height), 3);
+            AddComponent(debugSprite);
+
         }
     }
 }

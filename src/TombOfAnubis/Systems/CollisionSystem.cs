@@ -9,8 +9,16 @@ namespace TombOfAnubis
 {
     public class CollisionSystem : BaseSystem<Collider>
     {
+
         public override void Update(GameTime gameTime)
         {
+            GameLogic.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            foreach (Collider collider in components)
+            {
+                collider.Update(gameTime);
+            }
+
             HandleAllCollisions();
         }
         private static void HandleAllCollisions()
@@ -40,14 +48,29 @@ namespace TombOfAnubis
         }
         private static bool Intersect(RectangleCollider c1, RectangleCollider c2)
         {
-            if ((c2.Position.X - c1.Position.X) < c1.Size.X / 2f + c2.Size.X / 2f)
+
+            //Console.WriteLine("X: " + (c2.Position.X - c1.Position.X) + ", " + c1.Size.X + ", " + (c1.Position.X - c2.Position.X) + ", " + c2.Size.X);
+            //Console.WriteLine("Y: " + (c2.Position.Y - c1.Position.Y) + ", " + c1.Size.Y + ", " + (c1.Position.Y - c2.Position.Y) + ", " + c2.Size.Y + "\n");
+
+            //adapted from https://kishimotostudios.com/articles/aabb_collision/
+            bool AisToTheRightOfB = c1.GetLeft() > c2.GetRight();
+            bool AisToTheLeftOfB = c1.GetRight() < c2.GetLeft();
+            bool AisAboveB = c1.GetBottom() < c2.GetTop();
+            bool AisBelowB = c1.GetTop() > c2.GetBottom();
+
+            return !(AisToTheRightOfB || AisToTheLeftOfB || AisAboveB || AisBelowB);
+
+            /*
+            if ((c2.Position.X - c1.Position.X < c1.Size.X && c2.Position.X - c1.Position.X >= 0) || (c1.Position.X - c2.Position.X < c2.Size.X && c1.Position.X - c2.Position.X >= 0))
             {
-                if ((c2.Position.Y - c1.Position.Y) < c1.Size.Y / 2f + c2.Size.Y / 2f)
+                if ((c2.Position.Y - c1.Position.Y < c1.Size.Y && c2.Position.Y - c1.Position.Y >= 0) || (c1.Position.Y - c2.Position.Y < c2.Size.Y && c1.Position.Y - c2.Position.Y >= 0))
                 {
+                    //Console.WriteLine("X: " + (c1.Position.X - c2.Position.X) + ", " + c1.Size.X + ", " + (c2.Position.X - c1.Position.X) + ", " + c2.Size.X);
+                    //Console.WriteLine("Y: " + (c1.Position.Y - c2.Position.Y) + ", " + c1.Size.Y + ", " + (c2.Position.Y - c1.Position.Y) + ", " + c2.Size.Y);
                     return true;
                 }
             }
-            return false;
+            return false;*/
         }
         private static bool Intersect(BoxCollider c1, BoxCollider c2)
         {

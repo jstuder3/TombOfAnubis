@@ -166,10 +166,11 @@ namespace TombOfAnubis
             for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
                 Character character = new Character(i,
-                    new Vector2(singleton.Map.SpawnMapPosition.X + 10 * i, singleton.Map.SpawnMapPosition.Y + 10 * i),
+                    new Vector2(singleton.Map.SpawnMapPosition.X + 100 * i, singleton.Map.SpawnMapPosition.Y + 100 * i),
                     new Vector2(0.25f, 0.25f),
                     singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
                     100
+                    //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
                     );
                 singleton.Scene.AddChild(character);
             }

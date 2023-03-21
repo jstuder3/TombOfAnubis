@@ -8,10 +8,10 @@ namespace TombOfAnubis
 {
     public enum Orientation
     {
-        North,
-        East,
-        South,
-        West
+        Up,
+        Right,
+        Down,
+        Left
     }
     public class Movement : Component
     {
@@ -26,7 +26,7 @@ namespace TombOfAnubis
             MaxSpeed = maxSpeed;
             IsWalking = false;
             IsTrapped = false;
-            Orientation = Orientation.North;
+            Orientation = Orientation.Up;
         }
 
 

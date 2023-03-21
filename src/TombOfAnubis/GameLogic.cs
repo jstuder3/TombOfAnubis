@@ -1,14 +1,17 @@
 ﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
 {
     public static class GameLogic
     {
+        public static float deltaTime { get; set; }
         public static void OnCollision(Entity source, Entity target)
         {
             switch (source.GetType().Name, target.GetType().Name)
@@ -39,7 +42,19 @@ namespace TombOfAnubis
         public static void OnCollision(Character p1, Character p2)
         {
 
-            // TODO: Implement
+            Transform t1 = p1.GetComponent<Transform>();
+            Transform t2 = p2.GetComponent <Transform>();
+
+            Vector2 overlap_direction = new Vector2(t2.Position.X - t1.Position.X, t2.Position.Y - t1.Position.Y);
+            overlap_direction.Normalize();
+            //invert the values to push the players away faster/stronger if the overlap is bigger
+            //overlap_direction.X = 1 / overlap_direction.X;
+            //overlap_direction.Y = 1 / overlap_direction.Y;
+            //overlap_direction.Normalize();
+
+            t1.Position -= overlap_direction * deltaTime * 50;
+            t2.Position += overlap_direction * deltaTime * 50;
+            
         }
         public static void OnCollision(Character character, Wall wall)
         {
