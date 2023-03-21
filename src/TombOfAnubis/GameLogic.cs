@@ -58,7 +58,24 @@ namespace TombOfAnubis
         }
         public static void OnCollision(Character character, Wall wall)
         {
-            // TODO: Implement
+            Transform t1 = character.GetComponent<Transform>();
+            Transform t2 = wall.GetComponent<Transform>();
+
+            Vector2 overlap_direction = new Vector2(t2.Position.X - t1.Position.X, t2.Position.Y - t1.Position.Y);
+            while (overlap_direction.Length() == 0)
+            {
+                Random random = new Random();
+                overlap_direction.X = (float)random.NextDouble() - 0.5f;
+                overlap_direction.Y = (float)random.NextDouble() - 0.5f;
+            }
+            overlap_direction.Normalize();
+            //invert the values to push the players away faster/stronger if the overlap is bigger
+            //overlap_direction.X = 1 / overlap_direction.X;
+            //overlap_direction.Y = 1 / overlap_direction.Y;
+            //overlap_direction.Normalize();
+            //Console.WriteLine(overlap_direction.ToString() + " - " + t1.Position + " -- " + t2.Position);
+            t1.Position -= overlap_direction * deltaTime * 200;
+            //t2.Position += overlap_direction * deltaTime * 50;
         }
         public static void OnCollision(Character character, Artefact artefact)
         {

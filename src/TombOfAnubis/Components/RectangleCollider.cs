@@ -42,7 +42,7 @@ namespace TombOfAnubis
         }
         public float GetRight()
         {
-            return Position.X + Size.X;
+            return Position.X + Size.X * Entity.GetComponent<Transform>().Scale.X;
         }
 
         public float GetTop()
@@ -51,7 +51,7 @@ namespace TombOfAnubis
         }
         public float GetBottom()
         {
-            return Position.Y + Size.Y;
+            return Position.Y + Size.Y * Entity.GetComponent<Transform>().Scale.Y;
         }
     }
 }

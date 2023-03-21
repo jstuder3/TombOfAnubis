@@ -32,7 +32,8 @@ namespace TombOfAnubis
             AddComponent(inventory);
 
             //RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width * scale.X, texture.Height * scale.Y), debugTexture, this);// texture.Width * scale.X, texture.Height * scale.Y));
-            RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width * scale.X, texture.Height * scale.Y));// texture.Width * scale.X, texture.Height * scale.Y));
+            //RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width * scale.X, texture.Height * scale.Y));// texture.Width * scale.X, texture.Height * scale.Y));
+            RectangleCollider collider = new RectangleCollider(position, new Vector2(texture.Width, texture.Height));
             AddComponent(collider);
 
         }

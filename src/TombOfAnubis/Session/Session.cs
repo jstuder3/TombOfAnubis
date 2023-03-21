@@ -167,7 +167,7 @@ namespace TombOfAnubis
             {
                 Character character = new Character(i,
                     new Vector2(singleton.Map.SpawnMapPosition.X + 100 * i, singleton.Map.SpawnMapPosition.Y + 100 * i),
-                    new Vector2(0.25f, 0.25f),
+                    new Vector2(0.07f, 0.07f),
                     singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
                     100
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")

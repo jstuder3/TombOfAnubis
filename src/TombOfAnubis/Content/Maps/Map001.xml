@@ -4,7 +4,7 @@
       <Name>Map001</Name>
       <MapDimensions>20 23</MapDimensions>
       <TileSize>64 64</TileSize>
-	  <SpawnMapPosition>0 0</SpawnMapPosition>
+	  <SpawnMapPosition>384 384</SpawnMapPosition>
 	  <TextureName>SimpleTiles</TextureName>
 	  <CollisionLayer>
 		  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
