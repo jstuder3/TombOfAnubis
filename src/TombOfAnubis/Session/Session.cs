@@ -174,7 +174,7 @@ namespace TombOfAnubis
                     );
                 singleton.Scene.AddChild(character);
             }
-            List<Entity> mapEntities = singleton.Map.CreateMapEntities();
+            List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
 
         }
@@ -238,6 +238,39 @@ namespace TombOfAnubis
                     singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - playerCenter;
                 }
             }
+        }
+
+        public static List<Entity> CreateMapEntities()
+        {
+            List<Entity> entities = new List<Entity>();
+
+            for (int y = 0; y < singleton.Map.MapDimensions.Y; y++)
+            {
+                for (int x = 0; x < singleton.Map.MapDimensions.X; x++)
+                {
+
+                    Point mapPosition = new Point(x, y);
+                    bool wall = singleton.Map.GetCollisionLayerValue(mapPosition) == 1;
+                    Rectangle sourceRectangle = singleton.Map.GetBaseLayerSourceRectangle(mapPosition);
+                    Vector2 position = new Vector2(x * singleton.Map.TileSize.X, y * singleton.Map.TileSize.Y);
+
+                    if (sourceRectangle != Rectangle.Empty)
+                    {
+                        if (wall)
+                        {
+                            Wall newWall = new Wall(position, singleton.Map.Texture, sourceRectangle);
+                            entities.Add(newWall);
+
+                        }
+                        else
+                        {
+                            Floor newFloor = new Floor(position, singleton.Map.Texture, sourceRectangle);
+                            entities.Add(newFloor);
+                        }
+                    }
+                }
+            }
+            return entities;
         }
 
     }

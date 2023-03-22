@@ -13,7 +13,7 @@ namespace TombOfAnubis
     {
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "TombOfAnubis.Map+MapReader, TombOfAnubis";
+            return "TombOfAnubis.Map+MapReader, TombOfAnubisContentData";
         }
 
         protected override void Write(ContentWriter output, Map value)

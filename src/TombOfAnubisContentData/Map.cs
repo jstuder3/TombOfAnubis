@@ -190,39 +190,6 @@ namespace TombOfAnubis
                 tileSize.X, tileSize.Y);
         }
 
-        public List<Entity> CreateMapEntities()
-        {
-            List<Entity> entities = new List<Entity>();
-
-            for (int y = 0; y < MapDimensions.Y; y++)
-            {
-                for (int x = 0; x < MapDimensions.X; x++)
-                {
-
-                    Point mapPosition = new Point(x, y);
-                    bool wall = GetCollisionLayerValue(mapPosition) == 1;
-                    Rectangle sourceRectangle = GetBaseLayerSourceRectangle(mapPosition);
-                    Vector2 position = new Vector2(x * TileSize.X, y * TileSize.Y);
-
-                    if (sourceRectangle != Rectangle.Empty)
-                    {
-                        if (wall)
-                        {
-                            Wall newWall = new Wall(position, Texture, sourceRectangle);
-                            entities.Add(newWall);
-
-                        }
-                        else
-                        {
-                            Floor newFloor = new Floor(position, Texture, sourceRectangle);
-                            entities.Add(newFloor);
-                        }
-                    }
-                }
-            }
-            return entities;
-        }
-
 
         /// <summary>
         /// Read a Map object from the content pipeline.
