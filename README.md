@@ -6,6 +6,8 @@ Clone the project and open the solution with visual studio. Right click on Solut
 
 `dotnet publish -c Release -r win-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false --self-contained`
 
+The build can be found under \src\TombOfAnubis\bin\Release\net6.0\win-x64\publish. Select everything in the directory and add to zip file.
+
 # :grey_exclamation: FIRST STEPS
 Please update the [game teaser image](game_teaser.jpg) and the [game teaser text](game_teaser.txt) throughout the semester. Please don't rename, move or delete these files.
 
