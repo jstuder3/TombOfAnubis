@@ -1,4 +1,11 @@
 
+# Project build instructions
+Clone the project and open the solution with visual studio. Right click on Solution 'TombOfAnubis' and click Build solution.
+
+# Release
+
+`dotnet publish -c Release -r win-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false --self-contained`
+
 # :grey_exclamation: FIRST STEPS
 Please update the [game teaser image](game_teaser.jpg) and the [game teaser text](game_teaser.txt) throughout the semester. Please don't rename, move or delete these files.
 
