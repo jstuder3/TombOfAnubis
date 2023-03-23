@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    public class AISystem : BaseSystem<Input>
+    public class AISystem : BaseSystem<AI>
     {
-        public AISystem() { }
+        public Scene Scene {  get; set; }
+        public AISystem(Scene scene) { 
+            Scene = scene;
+        }
 
         public override void Update(GameTime deltaTime)
         {
@@ -17,17 +20,22 @@ namespace TombOfAnubis
             //Console.WriteLine("start update AnubisAISystem");
             Random rnd = new Random();
             
-            foreach (Input input in components)
+            foreach (AI ai in components)
             {
-                //Console.WriteLine("type: " + input.Entity.GetType());
-                if (!(input.Entity is Anubis))
-                {
-                    continue;
-                }
                 //Console.WriteLine("reached anubis section");
-                Anubis anubis = (Anubis)input.Entity;
-                Transform transform = anubis.GetComponent<Transform>();
-                Movement movement = anubis.GetComponent<Movement>();
+                Entity entity = ai.Entity;
+                Transform transform = entity.GetComponent<Transform>();
+                Movement movement = entity.GetComponent<Movement>();
+
+                MovementGraph movementGraph = ai.MovementGraph;
+                List<Character> characters = Scene.GetChildrenOfType<Character>();
+                List<Artefact> artefacts = Scene.GetChildrenOfType<Artefact>();
+
+                // Node anubis = movementGraph.GetNode(entity)
+                // Node c1 = movementGraph.GetNode(characters[0])
+                // List<Vector2> currentPath = movementGraph.CreatePath(anubis, c1)
+                // Vector2 currentTarget = currentPath[0]
+
                 movement.IsWalking = false;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 

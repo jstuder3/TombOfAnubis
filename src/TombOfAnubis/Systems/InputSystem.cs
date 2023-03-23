@@ -14,11 +14,6 @@ namespace TombOfAnubis
         public override void Update(GameTime deltaTime)
         {
             foreach(Input input in components) {
-                if (input.Entity is Anubis)
-                {
-                    continue;
-                }
-
                 Character character = (Character)input.Entity;
                 Transform transform = character.GetComponent<Transform>();
                 Movement movement = character.GetComponent<Movement>();

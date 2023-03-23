@@ -158,12 +158,13 @@ namespace TombOfAnubis
 
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
+            singleton.Scene = new Scene(Vector2.Zero);
+
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem();
-            singleton.AnubisAISystem = new AISystem();
+            singleton.AnubisAISystem = new AISystem(singleton.Scene);
 
-            singleton.Scene = new Scene(Vector2.Zero);
 
 
             //// set up the initial map
@@ -181,11 +182,12 @@ namespace TombOfAnubis
                 singleton.Scene.AddChild(character);
             }
 
-            Anubis anubis = new Anubis(5,
+            Anubis anubis = new Anubis(
                     new Vector2(singleton.Map.SpawnMapPosition.X + 100 * 1, singleton.Map.SpawnMapPosition.Y + 100 * 1),
                     new Vector2(0.04f, 0.1f),
                     singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
-                    100
+                    100,
+                    singleton.Map
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
                     );
             singleton.Scene.AddChild(anubis);
@@ -245,10 +247,6 @@ namespace TombOfAnubis
 
             foreach (Input playerInput in InputSystem.GetRegisteredComponents())
             {
-                if (playerInput.Entity is Anubis)
-                {
-                    continue;
-                }
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
                     Character player = playerInput.Entity as Character;

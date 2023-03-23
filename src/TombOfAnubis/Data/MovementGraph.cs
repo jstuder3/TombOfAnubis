@@ -1,17 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 //using QuickGraph;
-using TombOfAnubis;
-using System.Security.Cryptography.X509Certificates;
 
-namespace TombOfAnubisData.Graph
+namespace TombOfAnubis
 {
     public class MovementGraph
     {
@@ -24,7 +16,7 @@ namespace TombOfAnubisData.Graph
 
 
 
-        public MovementGraph(Map existingInstance, int playerNumber)
+        public MovementGraph(Map existingInstance)
         {
             
             if(existingInstance is null)
