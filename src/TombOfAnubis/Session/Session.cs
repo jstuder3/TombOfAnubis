@@ -252,9 +252,8 @@ namespace TombOfAnubis
                     Character player = playerInput.Entity as Character;
                     Transform playerTransform= player.GetComponent<Transform>();
                     Vector2 playerPosition = playerTransform.Position;
-                    Vector2 playerScale = playerTransform.Scale;
-                    Texture2D texture = player.GetComponent<Sprite>().Texture;
-                    Vector2 playerCenter = new Vector2 (playerPosition.X + (texture.Width / 2) * playerScale.X, playerPosition.Y + (texture.Height / 2) * playerScale.Y);
+                    Vector2 playerSize = player.Size();
+                    Vector2 playerCenter = new Vector2 (playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
 
                     singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - playerCenter;
                 }
@@ -279,13 +278,13 @@ namespace TombOfAnubis
                     {
                         if (wall)
                         {
-                            Wall newWall = new Wall(position, singleton.Map.Texture, sourceRectangle);
+                            Wall newWall = new Wall(position, Vector2.One, singleton.Map.Texture, sourceRectangle);
                             entities.Add(newWall);
 
                         }
                         else
                         {
-                            Floor newFloor = new Floor(position, singleton.Map.Texture, sourceRectangle);
+                            Floor newFloor = new Floor(position, Vector2.One, singleton.Map.Texture, sourceRectangle);
                             entities.Add(newFloor);
                         }
                     }

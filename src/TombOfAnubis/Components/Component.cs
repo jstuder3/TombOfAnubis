@@ -10,7 +10,5 @@ namespace TombOfAnubis
     public class Component
     {
         public Entity Entity { get; set; }
-
-        public virtual void Update(GameTime gameTime) { }
     }
 }

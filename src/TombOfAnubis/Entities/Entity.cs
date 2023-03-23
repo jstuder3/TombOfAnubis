@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,21 @@ namespace TombOfAnubis
             {
                 AddChild(entity);
             }
+        }
+
+        /// <summary>
+        /// Computes the size of the Entity in world coordinates.
+        /// Returns zero if the entity has no transform or no sprite component attached
+        /// </summary>
+        public Vector2 Size()
+        {
+            Vector2 size = Vector2.Zero;
+            Transform transform = GetComponent<Transform>().ToWorld();
+            Sprite sprite = GetComponent<Sprite>();
+            if(sprite != null && transform != null) { 
+                size = new Vector2(sprite.SourceRectangle.Width * transform.Scale.X, sprite.SourceRectangle.Height * transform.Scale.Y);
+            }
+            return size;
         }
     }
 }

@@ -23,14 +23,16 @@ namespace TombOfAnubis
             SpriteBatch.Begin();
             foreach(Sprite sprite in components)
             {
-                Transform transform = sprite.Entity.GetComponent<Transform>();
+                Entity entity = sprite.Entity;
+                Transform transform = entity.GetComponent<Transform>();
+                Vector2 entitySize = entity.Size();
                 Vector2 worldPosition = transform.ToWorld().Position;
                 Texture2D texture = sprite.Texture;
                 Rectangle destinationRectangle = new Rectangle(
                     (int)worldPosition.X, 
                     (int)worldPosition.Y, 
-                    (int)(sprite.SourceRectangle.Width * transform.Scale.X), 
-                    (int)(sprite.SourceRectangle.Height * transform.Scale.Y)
+                    (int)entitySize.X, 
+                    (int)entitySize.Y
                 );
                 if(CheckVisibility(destinationRectangle))
                 {

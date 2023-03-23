@@ -26,28 +26,28 @@ namespace TombOfAnubis
                     PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(character.GetComponent<Player>().PlayerID);
                     Vector2 newPosition = transform.Position;
 
-                    if (currentActions.Contains(PlayerActions.WalkLeft) && !collider.blockedDirections.Contains(BlockDirections.Left))
+                    if (currentActions.Contains(PlayerActions.WalkLeft) && !collider.BlockedDirections.Contains(BlockDirections.Left))
                     {
                         newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Left;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkRight) && !collider.blockedDirections.Contains(BlockDirections.Right))
+                    if (currentActions.Contains(PlayerActions.WalkRight) && !collider.BlockedDirections.Contains(BlockDirections.Right))
                     {
                         newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Right;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkUp) && !collider.blockedDirections.Contains(BlockDirections.Up))
+                    if (currentActions.Contains(PlayerActions.WalkUp) && !collider.BlockedDirections.Contains(BlockDirections.Up))
                     {
                         newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Up;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkDown) && !collider.blockedDirections.Contains(BlockDirections.Down))
+                    if (currentActions.Contains(PlayerActions.WalkDown) && !collider.BlockedDirections.Contains(BlockDirections.Down))
                     {
                         newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
