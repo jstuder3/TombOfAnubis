@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
+
 namespace TombOfAnubis
 {
     class Session
@@ -48,6 +49,7 @@ namespace TombOfAnubis
         }
 
 
+
         /// <summary>
         /// The viewport that the tile engine is rendering within.
         /// </summary>
@@ -75,6 +77,7 @@ namespace TombOfAnubis
         public SpriteSystem SpriteSystem { get; set; }
         public CollisionSystem CollisionSystem { get; set; }
         public InputSystem PlayerInputSystem { get; set; }
+        public AISystem AnubisAISystem { get; set; }
 
         public Scene Scene { get; set; }
 
@@ -114,8 +117,10 @@ namespace TombOfAnubis
             {
                 return;
             }
-           singleton.CollisionSystem.Update(gameTime);
-           singleton.PlayerInputSystem.Update(gameTime);
+            singleton.CollisionSystem.Update(gameTime);
+            singleton.PlayerInputSystem.Update(gameTime);
+            singleton.AnubisAISystem.Update(gameTime);
+            
 
         }
 
@@ -156,6 +161,7 @@ namespace TombOfAnubis
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem();
+            singleton.AnubisAISystem = new AISystem();
 
             singleton.Scene = new Scene(Vector2.Zero);
 
@@ -174,8 +180,21 @@ namespace TombOfAnubis
                     );
                 singleton.Scene.AddChild(character);
             }
+
+            Anubis anubis = new Anubis(5,
+                    new Vector2(singleton.Map.SpawnMapPosition.X + 100 * 1, singleton.Map.SpawnMapPosition.Y + 100 * 1),
+                    new Vector2(0.04f, 0.1f),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                    100
+                    //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
+                    );
+            singleton.Scene.AddChild(anubis);
+
+
             List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
+
+            
 
         }
 
@@ -226,7 +245,11 @@ namespace TombOfAnubis
 
             foreach (Input playerInput in InputSystem.GetRegisteredComponents())
             {
-                if(playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
+                if (playerInput.Entity is Anubis)
+                {
+                    continue;
+                }
+                if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
                     Character player = playerInput.Entity as Character;
                     Transform playerTransform= player.GetComponent<Transform>();

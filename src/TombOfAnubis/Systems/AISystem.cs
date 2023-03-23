@@ -7,56 +7,62 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
-    public class InputSystem : BaseSystem<Input>
+    public class AISystem : BaseSystem<Input>
     {
-        public InputSystem() { }
+        public AISystem() { }
 
         public override void Update(GameTime deltaTime)
         {
-            foreach(Input input in components) {
-                if (input.Entity is Anubis)
+
+            //Console.WriteLine("start update AnubisAISystem");
+            Random rnd = new Random();
+            
+            foreach (Input input in components)
+            {
+                //Console.WriteLine("type: " + input.Entity.GetType());
+                if (!(input.Entity is Anubis))
                 {
                     continue;
                 }
-
-                Character character = (Character)input.Entity;
-                Transform transform = character.GetComponent<Transform>();
-                Movement movement = character.GetComponent<Movement>();
-                RectangleCollider collider = character.GetComponent<RectangleCollider>();
+                //Console.WriteLine("reached anubis section");
+                Anubis anubis = (Anubis)input.Entity;
+                Transform transform = anubis.GetComponent<Transform>();
+                Movement movement = anubis.GetComponent<Movement>();
                 movement.IsWalking = false;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
-                if (!movement.IsTrapped)
+                int direc = rnd.Next(1, 5);
+                Console.WriteLine("direction: " + direc);
+                bool use_random_directions = true;
+
+                if(use_random_directions && !movement.IsTrapped)
                 {
-                    PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(character.GetComponent<Player>().PlayerID);
                     Vector2 newPosition = transform.Position;
 
-                    if (currentActions.Contains(PlayerActions.WalkLeft) && !collider.blockedDirections.Contains(BlockDirections.Left))
+                    if (direc == 3)
                     {
-                        newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
-                        movement.IsWalking = true;
-                        movement.Orientation = Orientation.Left;
-                    }
-
-                    if (currentActions.Contains(PlayerActions.WalkRight) && !collider.blockedDirections.Contains(BlockDirections.Right))
-                    {
-                        newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
-                        movement.IsWalking = true;
-                        movement.Orientation = Orientation.Right;
-                    }
-
-                    if (currentActions.Contains(PlayerActions.WalkUp) && !collider.blockedDirections.Contains(BlockDirections.Up))
-                    {
+                        //walk up
                         newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Up;
-                    }
 
-                    if (currentActions.Contains(PlayerActions.WalkDown) && !collider.blockedDirections.Contains(BlockDirections.Down))
+                    } else if (direc == 2) {
+                        // walk right
+                        newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
+                        movement.IsWalking = true;
+                        movement.Orientation = Orientation.Right;
+                    } else if (direc == 1)
                     {
+                        //walk down
                         newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Down;
+                    } else
+                    {
+                        //walk left
+                        newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
+                        movement.IsWalking = true;
+                        movement.Orientation = Orientation.Left;
                     }
 
                     //if (currentActions.Contains(PlayerActions.UseObject))
@@ -73,6 +79,8 @@ namespace TombOfAnubis
                     //}
 
                     transform.Position = newPosition;
+
+                    return;
 
                 }
             }
