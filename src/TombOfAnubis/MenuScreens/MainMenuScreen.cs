@@ -68,7 +68,7 @@ namespace TombOfAnubis
             // add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
             newGameMenuEntry.Description = "Start a New Game";
-            newGameMenuEntry.Font = Fonts.ArialFont;
+            newGameMenuEntry.Font = Fonts.ArcheologicapsFont;
             newGameMenuEntry.Position = new Vector2(715, 0f);
             newGameMenuEntry.Selected += NewGameMenuEntrySelected;
             MenuEntries.Add(newGameMenuEntry);
@@ -76,7 +76,7 @@ namespace TombOfAnubis
             // create the Exit menu entry
             exitGameMenuEntry = new MenuEntry("Exit");
             exitGameMenuEntry.Description = "Quit the Game";
-            exitGameMenuEntry.Font = Fonts.ArialFont;
+            exitGameMenuEntry.Font = Fonts.ArcheologicapsFont;
             exitGameMenuEntry.Position = new Vector2(720, 0f);
             exitGameMenuEntry.Selected += OnCancel;
             MenuEntries.Add(exitGameMenuEntry);
@@ -95,18 +95,18 @@ namespace TombOfAnubis
         {
             // load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>(@"Textures\MainMenu\MainMenu");
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/bg");
             descriptionAreaTexture = 
-                content.Load<Texture2D>(@"Textures\MainMenu\MainMenuInfoSpace");
-            iconTexture = content.Load<Texture2D>(@"Textures\MainMenu\GameLogo");
+                content.Load<Texture2D>("Textures/Menu/0");
+            iconTexture = content.Load<Texture2D>("Textures/Menu/1");
             plankTexture1 = 
-                content.Load<Texture2D>(@"Textures\MainMenu\MainMenuPlank");
+                content.Load<Texture2D>("Textures/Menu/2");
             plankTexture2 = 
-                content.Load<Texture2D>(@"Textures\MainMenu\MainMenuPlank02");
+                content.Load<Texture2D>("Textures/Menu/2");
             plankTexture3 = 
-                content.Load<Texture2D>(@"Textures\MainMenu\MainMenuPlank03");
-            backTexture = content.Load<Texture2D>(@"Textures\Buttons\BButton");
-            selectTexture = content.Load<Texture2D>(@"Textures\Buttons\AButton");
+                content.Load<Texture2D>("Textures/Menu/3");
+            backTexture = content.Load<Texture2D>("Textures/Menu/4");
+            selectTexture = content.Load<Texture2D>("Textures/Menu/4");
 
             // calculate the texture positions
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
@@ -235,26 +235,26 @@ namespace TombOfAnubis
                 !String.IsNullOrEmpty(selectedMenuEntry.Description))
             {
                 Vector2 textSize = 
-                    Fonts.ArialFont.MeasureString(selectedMenuEntry.Description);
+                    Fonts.ArcheologicapsFont.MeasureString(selectedMenuEntry.Description);
                 Vector2 textPosition = descriptionAreaTextPosition + new Vector2(
                     (float)Math.Floor((descriptionAreaTexture.Width - textSize.X) / 2),
                     0f);
-                spriteBatch.DrawString(Fonts.ArialFont, 
+                spriteBatch.DrawString(Fonts.ArcheologicapsFont, 
                     selectedMenuEntry.Description, textPosition, Color.White);
             }
 
             // draw the select instruction
             spriteBatch.Draw(selectTexture, selectPosition, Color.White);
-            spriteBatch.DrawString(Fonts.ArialFont, "Select",
+            spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Select",
                 new Vector2(
-                selectPosition.X - Fonts.ArialFont.MeasureString("Select").X - 5, 
+                selectPosition.X - Fonts.ArcheologicapsFont.MeasureString("Select").X - 5, 
                 selectPosition.Y + 5), Color.White);
 
             // if we are in-game, draw the back instruction
             if (Session.IsActive)
             {
                 spriteBatch.Draw(backTexture, backPosition, Color.White);
-                spriteBatch.DrawString(Fonts.ArialFont, "Resume",
+                spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Resume",
                     new Vector2(backPosition.X + 55, backPosition.Y + 5), Color.White);
             }
 

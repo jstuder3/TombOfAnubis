@@ -28,13 +28,13 @@ namespace TombOfAnubis
 
             base.Initialize();
 
-            screenManager.AddScreen(new GameplayScreen());
+            screenManager.AddScreen(new MainMenuScreen());
 
         }
 
         protected override void LoadContent()
         {
-
+            Fonts.LoadContent(Content);
             base.LoadContent();
         }
 

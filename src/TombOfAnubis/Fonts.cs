@@ -25,10 +25,10 @@ namespace TombOfAnubis
     {
         #region Fonts
 
-        private static SpriteFont arialFont;
-        public static SpriteFont ArialFont
+        private static SpriteFont archeologicapsFont;
+        public static SpriteFont ArcheologicapsFont
         {
-            get { return arialFont; }
+            get { return archeologicapsFont; }
         }
 
         /*
@@ -137,7 +137,7 @@ namespace TombOfAnubis
             }
 
             // load each font from the content pipeline
-            arialFont = contentManager.Load<SpriteFont>("Fonts/Arial");
+            archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Archeologicaps");
 
             /*
             buttonNamesFont = contentManager.Load<SpriteFont>("Fonts/ButtonNamesFont");
@@ -160,7 +160,7 @@ namespace TombOfAnubis
         /// </summary>
         public static void UnloadContent()
         {
-            arialFont = null;
+            archeologicapsFont = null;
             /*
             buttonNamesFont = null;
             captionFont = null;

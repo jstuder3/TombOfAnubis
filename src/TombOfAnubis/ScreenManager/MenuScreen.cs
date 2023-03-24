@@ -107,7 +107,7 @@ namespace TombOfAnubis
             }
 
             // Button pressed
-            if (currentActions.Contains(PlayerActions.WalkDown))
+            if (currentActions.Contains(PlayerActions.UseObject))
             {
                 // AudioManager.PlayCue("Continue");
                 OnSelectEntry(selectedEntry);

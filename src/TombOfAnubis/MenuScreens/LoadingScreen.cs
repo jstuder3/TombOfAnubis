@@ -99,9 +99,9 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             ContentManager content = GameScreenManager.Game.Content;
-            loadingTexture = content.Load<Texture2D>(@"Textures\MainMenu\LoadingPause");
+            loadingTexture = content.Load<Texture2D>("Textures/Menu/bg");
             loadingBlackTexture =
-                content.Load<Texture2D>(@"Textures\GameScreens\FadeScreen");
+                content.Load<Texture2D>("Textures/Menu/1");
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
             loadingBlackTextureDestination = new Rectangle(viewport.X, viewport.Y, 
                 viewport.Width, viewport.Height);

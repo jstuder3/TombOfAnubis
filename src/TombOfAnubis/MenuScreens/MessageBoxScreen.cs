@@ -12,6 +12,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 #endregion
 
 namespace TombOfAnubis
@@ -103,12 +104,12 @@ namespace TombOfAnubis
                 backgroundTexture.Width - 100, backgroundTexture.Height - 100);
 
             confirmPosition.X = backgroundPosition.X + (backgroundTexture.Width -
-                Fonts.ArialFont.MeasureString("Confirmation").X) / 2f;
+                Fonts.ArcheologicapsFont.MeasureString("Confirmation").X) / 2f;
             confirmPosition.Y = backgroundPosition.Y + 47;
 
             message = Fonts.BreakTextIntoLines(message, 36, 10);
             messagePosition.X = backgroundPosition.X + (int)((backgroundTexture.Width -
-                Fonts.ArialFont.MeasureString(message).X) / 2);
+                Fonts.ArcheologicapsFont.MeasureString(message).X) / 2);
             messagePosition.Y = (backgroundPosition.Y * 2) - 20;
         }
 
@@ -123,7 +124,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void HandleInput()
         {
-            if (InputManager.IsActionTriggered(InputManager.Action.Ok))
+            PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(0);
+            if (currentActions.Contains(PlayerActions.UseObject))
             {
                 // Raise the accepted event, then exit the message box.
                 if (Accepted != null)
@@ -131,7 +133,8 @@ namespace TombOfAnubis
 
                 ExitScreen();
             }
-            else if (InputManager.IsActionTriggered(InputManager.Action.Back))
+            /*
+             * else if (currentActions.Contains(PlayerActions.Back))
             {
                 // Raise the cancelled event, then exit the message box.
                 if (Cancelled != null)
@@ -139,6 +142,7 @@ namespace TombOfAnubis
 
                 ExitScreen();
             }
+            */
         }
 
 
@@ -161,16 +165,16 @@ namespace TombOfAnubis
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             spriteBatch.Draw(backTexture, backPosition, Color.White);
             spriteBatch.Draw(selectTexture, selectPosition, Color.White);
-            spriteBatch.DrawString(Fonts.ArialFont, "No",
+            spriteBatch.DrawString(Fonts.ArcheologicapsFont, "No",
                 new Vector2(backPosition.X + backTexture.Width + 5, backPosition.Y + 5),
                 Color.White);
-            spriteBatch.DrawString(Fonts.ArialFont, "Yes",
+            spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Yes",
                 new Vector2(
-                selectPosition.X - Fonts.ArialFont.MeasureString("Yes").X,
+                selectPosition.X - Fonts.ArcheologicapsFont.MeasureString("Yes").X,
                 selectPosition.Y + 5), Color.White);
-            spriteBatch.DrawString(Fonts.ArialFont, "Confirmation", confirmPosition,
+            spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Confirmation", confirmPosition,
                 Fonts.CountColor);
-            spriteBatch.DrawString(Fonts.ArialFont, message, messagePosition, 
+            spriteBatch.DrawString(Fonts.ArcheologicapsFont, message, messagePosition, 
                 Fonts.CountColor);
 
             spriteBatch.End();
