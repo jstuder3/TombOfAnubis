@@ -14,29 +14,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/Archeologicaps.bmp
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
+#begin Fonts/Archeologicaps.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/Archeologicaps.bmp
-
-#begin Fonts/Heroic.bmp
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/Heroic.bmp
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Archeologicaps.spritefont
 
 #begin Maps/Map001.xml
 /importer:XmlImporter
