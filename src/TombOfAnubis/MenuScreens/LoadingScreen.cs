@@ -8,10 +8,10 @@
 #endregion
 
 #region Using Statements
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 #endregion
 
 namespace TombOfAnubis
@@ -179,7 +179,7 @@ namespace TombOfAnubis
                 Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
                 Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
 
-                Color color = new Color(255, 255, 255, TransitionAlpha);
+                Color color = new Color(255, 255, 255, (int)TransitionAlpha);
 
                 spriteBatch.Begin();
                 spriteBatch.Draw(loadingBlackTexture, loadingBlackTextureDestination,

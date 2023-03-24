@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using static System.TimeZoneInfo;
+using System.Linq;
 #endregion
 
 namespace TombOfAnubis
@@ -90,35 +90,35 @@ namespace TombOfAnubis
         public override void HandleInput()
         {
             int oldSelectedEntry = selectedEntry;
+            PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(0);
 
-            // Move to the previous menu entry?
-            if (InputManager.IsActionTriggered(InputManager.Action.CursorUp))
+            // Move to the previous menu entry
+            if (currentActions.Contains(PlayerActions.WalkUp))
             {
                 selectedEntry--;
                 if (selectedEntry < 0)
                     selectedEntry = menuEntries.Count - 1;
             }
 
-            // Move to the next menu entry?
-            if (InputManager.IsActionTriggered(InputManager.Action.CursorDown))
+            // Move to the next menu entry
+            if (currentActions.Contains(PlayerActions.WalkDown))
             {
-                selectedEntry++;
-                if (selectedEntry >= menuEntries.Count)
-                    selectedEntry = 0;
+                selectedEntry = (selectedEntry+1) % menuEntries.Count;
             }
 
-            // Accept or cancel the menu?
-            if (InputManager.IsActionTriggered(InputManager.Action.Ok))
+            // Button pressed
+            if (currentActions.Contains(PlayerActions.WalkDown))
             {
-                //AudioManager.PlayCue("Continue");
+                // AudioManager.PlayCue("Continue");
                 OnSelectEntry(selectedEntry);
             }
-            else if (InputManager.IsActionTriggered(InputManager.Action.Back) ||
+            /*
+            else if (currentActions.Contains(PlayerActions.Back) ||
                 InputManager.IsActionTriggered(InputManager.Action.ExitGame))
             {
                 OnCancel();
             }
-            /*
+
             else if (selectedEntry != oldSelectedEntry)
             {
                 AudioManager.PlayCue("MenuMove");
