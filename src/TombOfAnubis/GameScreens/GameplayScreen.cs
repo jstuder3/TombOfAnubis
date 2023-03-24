@@ -11,6 +11,7 @@ namespace TombOfAnubis
     class GameplayScreen : GameScreen
     {
 
+        GameStartDescription gameStartDescription = null;
 
         /// <summary>
         /// Create a new GameplayScreen object.
@@ -21,6 +22,11 @@ namespace TombOfAnubis
             Exiting += new EventHandler(GameplayScreen_Exiting);
         }
 
+        public GameplayScreen(GameStartDescription gameStartDescription)
+            : this()
+        {
+            this.gameStartDescription = gameStartDescription;
+        }
 
         /// <summary>
         /// Handle the closing of this screen.
@@ -36,9 +42,12 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
-            GameStartDescription gameStartDescription = new GameStartDescription();
-            gameStartDescription.MapContentName = "Map001";
-            gameStartDescription.NumberOfPlayers = 4;
+            if (this.gameStartDescription == null) {
+                this.gameStartDescription = new GameStartDescription();
+                this.gameStartDescription.MapContentName = "Map001";
+                this.gameStartDescription.NumberOfPlayers = 4;
+
+            }
             SplitScreen.Initialize(GameScreenManager.GraphicsDevice, gameStartDescription.NumberOfPlayers);
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
 
