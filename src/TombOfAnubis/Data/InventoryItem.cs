@@ -9,7 +9,8 @@ namespace TombOfAnubis
     public enum ItemType
     {
         None,
-        Speedup
+        Speedup,
+        Artefact
     }
 
     public class InventoryItem
@@ -20,7 +21,9 @@ namespace TombOfAnubis
 
         public bool isInWorld = false;
         public bool isInInventory = false;
-        public InventoryItem() { }
+        public InventoryItem(ItemType itemType) {
+            ItemType = itemType;
+        }
 
     }
 }

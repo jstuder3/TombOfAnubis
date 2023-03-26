@@ -16,7 +16,7 @@ namespace TombOfAnubis
 
             foreach (Collider collider in components)
             {
-                collider.Update(gameTime);
+                if (collider.Active) collider.Update(gameTime);
             }
 
             HandleAllCollisions();

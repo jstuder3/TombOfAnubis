@@ -14,29 +14,45 @@ namespace TombOfAnubis
         public static float deltaTime { get; set; }
         public static void OnCollision(Entity source, Entity target)
         {
-            switch (source.GetType().Name, target.GetType().Name)
+            //check that the source and target still have a collider (they might have been destroyed)
+            if (source.HasComponent<RectangleCollider>() && target.HasComponent<RectangleCollider>())
             {
-                case (nameof(Character), nameof(Character)):
-                    OnCollision((Character)source, (Character)target);
-                    break;
-                case (nameof(Character), nameof(Wall)):
-                    OnCollision((Character)source, (Wall)target);
-                    break;
-                case (nameof(Wall), nameof(Character)):
-                    OnCollision((Character)target, (Wall)source);
-                    break;
-                case (nameof(Character), nameof(Artefact)):
-                    OnCollision((Character)target, (Artefact)source);
-                    break;
-                case (nameof(Artefact), nameof(Character)):
-                    OnCollision((Character)target, (Artefact)source);
-                    break;
-                case (nameof(Character), nameof(Dispenser)):
-                    OnCollision((Character)target, (Dispenser)source);
-                    break;
-                case (nameof(Dispenser), nameof(Character)):
-                    OnCollision((Character)target, (Dispenser)source);
-                    break;
+                switch (source.GetType().Name, target.GetType().Name)
+                {
+                    case (nameof(Character), nameof(Character)):
+                        OnCollision((Character)source, (Character)target);
+                        break;
+                    case (nameof(Character), nameof(Wall)):
+                        OnCollision((Character)source, (Wall)target);
+                        break;
+                    case (nameof(Wall), nameof(Character)):
+                        OnCollision((Character)target, (Wall)source);
+                        break;
+                    case (nameof(Character), nameof(Artefact)):
+                        OnCollision((Character)source, (Artefact)target);
+                        break;
+                    case (nameof(Artefact), nameof(Character)):
+                        OnCollision((Character)target, (Artefact)source);
+                        break;
+                    case (nameof(Character), nameof(Dispenser)):
+                        OnCollision((Character)source, (Dispenser)target);
+                        break;
+                    case (nameof(Dispenser), nameof(Character)):
+                        OnCollision((Character)target, (Dispenser)source);
+                        break;
+                    case (nameof(Character), nameof(Anubis)):
+                        OnCollision((Character)source, (Anubis)target);
+                        break;
+                    case (nameof(Anubis), nameof(Character)):
+                        OnCollision((Character)target, (Anubis)source);
+                        break;
+                    case (nameof(Anubis), nameof(Wall)):
+                        OnCollision((Anubis)source, (Wall)target);
+                        break;
+                    case (nameof(Wall), nameof(Anubis)):
+                        OnCollision((Wall)target, (Anubis)source);
+                        break;
+                }
             }
         }
         public static void OnCollision(Character p1, Character p2)
@@ -45,11 +61,8 @@ namespace TombOfAnubis
             Transform t1 = p1.GetComponent<Transform>();
             Transform t2 = p2.GetComponent<Transform>();
 
-            RectangleCollider c1 = p1.GetComponent<RectangleCollider>();
-            RectangleCollider c2 = p2.GetComponent<RectangleCollider>();
-
             Vector2 center1 = p1.GetComponent<RectangleCollider>().CenterPosition;
-            Vector2 center2 = p2.GetComponent <RectangleCollider>().CenterPosition;
+            Vector2 center2 = p2.GetComponent<RectangleCollider>().CenterPosition;
 
             Vector2 overlap_direction = center2 - center1;
             overlap_direction.Normalize();
@@ -61,17 +74,68 @@ namespace TombOfAnubis
         public static void OnCollision(Character character, Wall wall)
         {
             Transform t1 = character.GetComponent<Transform>();
-            Transform t2 = wall.GetComponent<Transform>();
 
             RectangleCollider c1 = character.GetComponent<RectangleCollider>();
             RectangleCollider c2 = wall.GetComponent<RectangleCollider>();
 
-            float sum_half_widths = c1.Size.X / 2f + c2.Size.X / 2f;
-            float sum_half_heights = c1.Size.Y / 2f + c2.Size.Y / 2f;
+            WallCollision(t1, c1, c2);
+        }
+        public static void OnCollision(Character character, Artefact artefact)
+        {
+
+            if (character.GetComponent<Player>().PlayerID == artefact.GetComponent<Player>().PlayerID) //if the player is the owner of the artefact, add it to the inventory and remove it from the map
+            {
+                character.GetComponent<Inventory>().AddArtefact();
+                artefact.DeleteEntity();
+                artefact = null;
+                return;
+            }
+
+            //else: collide with artefact
+
+            Transform t1 = character.GetComponent<Transform>();
+
+            RectangleCollider c1 = character.GetComponent<RectangleCollider>();
+            RectangleCollider c2 = artefact.GetComponent<RectangleCollider>();
+
+            WallCollision(t1, c1, c2);
+
+        }
+        public static void OnCollision(Character character, Dispenser dispenser)
+        {
+
+            // TODO: Implement
+        }
+
+        public static void OnCollision(Character character, Anubis anubis)
+        {
+
+            Transform t1 = character.GetComponent<Transform>();
+
+            RectangleCollider c1 = character.GetComponent<RectangleCollider>();
+            RectangleCollider c2 = anubis.GetComponent<RectangleCollider>();
+
+            WallCollision(t1, c1, c2); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
+        }
+
+        public static void OnCollision(Anubis anubis, Wall wall)
+        {
+            Transform t1 = anubis.GetComponent<Transform>();
+
+            RectangleCollider c1 = anubis.GetComponent<RectangleCollider>();
+            RectangleCollider c2 = wall.GetComponent<RectangleCollider>();
+
+            WallCollision(t1, c1, c2);
+        }
+
+        public static void WallCollision(Transform actorTransform, RectangleCollider actorCollider, RectangleCollider wallCollider)
+        {
+            float sum_half_widths = actorCollider.Size.X / 2f + wallCollider.Size.X / 2f;
+            float sum_half_heights = actorCollider.Size.Y / 2f + wallCollider.Size.Y / 2f;
 
             //Console.WriteLine("sum half widths: " + sum_half_widths + "; sum half heights: " + sum_half_heights); 
 
-            Vector2 overlap = c1.CenterPosition - c2.CenterPosition; //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
+            Vector2 overlap = actorCollider.CenterPosition - wallCollider.CenterPosition; //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
 
             while (overlap.Length() == 0) //prevent NaNs
             {
@@ -87,26 +151,16 @@ namespace TombOfAnubis
             {
                 overlap.X = MathF.Sign(overlap.X) * (sum_half_widths - MathF.Abs(overlap.X)); //push out so much that the overlap is zero
                 overlap.Y = 0;
-                t1.Position += overlap;
+                actorTransform.Position += overlap;
                 //Console.WriteLine("X was bigger. Overlap adjustment: " + overlap.ToString());
             }
             else
             {
                 overlap.X = 0;
                 overlap.Y = MathF.Sign(overlap.Y) * (sum_half_heights - MathF.Abs(overlap.Y)); //push out so much that the overlap is zero
-                t1.Position += overlap;
+                actorTransform.Position += overlap;
                 //Console.WriteLine("Y was bigger. Overlap adjustment: " + overlap.ToString());
             }
-        }
-        public static void OnCollision(Character character, Artefact artefact)
-        {
-
-            // TODO: Implement
-        }
-        public static void OnCollision(Character character, Dispenser dispenser)
-        {
-
-            // TODO: Implement
         }
     }
 }

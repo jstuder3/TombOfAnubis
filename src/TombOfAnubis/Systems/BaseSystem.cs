@@ -15,6 +15,10 @@ namespace TombOfAnubis
         {
             components.Add(component);
         }
+        public static void Deregister(T component)
+        {
+            Console.WriteLine(components.Remove(component));
+        }
 
         public static void SortComponents(Comparison<T> comparison)
         {
@@ -30,5 +34,6 @@ namespace TombOfAnubis
         public virtual void Draw(GameTime gameTime)
         {
         }
+
     }
 }

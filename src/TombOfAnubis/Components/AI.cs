@@ -13,5 +13,12 @@ namespace TombOfAnubis
             AISystem.Register(this);
             MovementGraph = new MovementGraph(map);
         }
+
+        public override void DeleteComponent()
+        {
+            base.DeleteComponent();
+            AISystem.Deregister(this);
+            MovementGraph = null;
+        }
     }
 }

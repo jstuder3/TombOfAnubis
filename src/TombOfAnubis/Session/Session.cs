@@ -19,7 +19,7 @@ namespace TombOfAnubis
         /// <summary>
         /// The single Session instance that can be active at a time.
         /// </summary>
-        private static Session singleton;
+        public static Session singleton;
 
         /// <summary>
         /// The GameplayScreen object that created this session.
@@ -170,12 +170,14 @@ namespace TombOfAnubis
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
 
+            List<String> colours = new List<String> { "red", "green", "blue", "purple" };
+
             for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
                 Character character = new Character(i,
                     new Vector2(singleton.Map.SpawnMapPosition.X + 75 * i, singleton.Map.SpawnMapPosition.Y + 75 * i),
                     new Vector2(0.07f, 0.07f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/" + colours[i] +"_plagiarized_explorer"),
                     100
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
                     );
@@ -192,11 +194,17 @@ namespace TombOfAnubis
                     );
             singleton.Scene.AddChild(anubis);
 
+            //hard coded artefact positions for now
+            List<Vector2> positions = new List<Vector2> { new Vector2(64, 64) , new Vector2(590, 64) , new Vector2(832, 1024) , new Vector2(1024, 128) };
+
+            for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++) {
+
+                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] +"_gear_icon"));
+                singleton.Scene.AddChild(artefact);
+            }
 
             List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
-
-            
 
         }
 

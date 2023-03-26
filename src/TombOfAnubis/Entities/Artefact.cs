@@ -22,8 +22,8 @@ namespace TombOfAnubis
             AddComponent(player);
 
             // TODO: Add collider
-            //Collider collider = new Collider();
-            //AddComponent(collider);
+            RectangleCollider collider = new RectangleCollider(position, Size());
+            AddComponent(collider);
         }
 
     }
