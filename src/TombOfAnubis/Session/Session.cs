@@ -186,8 +186,8 @@ namespace TombOfAnubis
 
             Anubis anubis = new Anubis(
                     new Vector2(singleton.Map.SpawnMapPosition.X + 100 * 1, singleton.Map.SpawnMapPosition.Y + 100 * 1),
-                    new Vector2(0.04f, 0.1f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                    new Vector2(0.3f, 0.3f),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/anubis_sprite"),
                     100,
                     singleton.Map
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")

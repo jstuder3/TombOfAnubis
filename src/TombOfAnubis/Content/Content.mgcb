@@ -19,6 +19,18 @@
 /processor:MapProcessor
 /build:Maps/Map001.xml
 
+#begin Textures/Characters/anubis_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Characters/anubis_sprite.png
+
 #begin Textures/Characters/blue_plagiarized_explorer.png
 /importer:TextureImporter
 /processor:TextureProcessor
