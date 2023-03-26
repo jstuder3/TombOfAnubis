@@ -40,7 +40,7 @@ namespace TombOfAnubis
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
                 int direc = rnd.Next(1, 5);
-                Console.WriteLine("direction: " + direc);
+                //Console.WriteLine("direction: " + direc);
                 bool use_random_directions = true;
 
                 if(use_random_directions && !movement.IsTrapped)

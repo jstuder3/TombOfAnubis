@@ -21,6 +21,9 @@ namespace TombOfAnubis
 
         public bool isInWorld = false;
         public bool isInInventory = false;
+        public InventoryItem() {
+            ItemType = ItemType.None;
+        }
         public InventoryItem(ItemType itemType) {
             ItemType = itemType;
         }

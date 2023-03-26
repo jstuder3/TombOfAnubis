@@ -14,6 +14,7 @@ namespace TombOfAnubis
             InventorySlots = new List<InventorySlot>();
 
             InventorySlots.Add(new InventorySlot(0, SlotType.ArtefactSlot));
+            //AddArtefact();
 
         }
 
@@ -26,6 +27,11 @@ namespace TombOfAnubis
         {
             base.DeleteComponent();
             InventorySlots = null;
+        }
+
+        public bool HasArtefact()
+        {
+            return InventorySlots[0].GetItem().ItemType == ItemType.Artefact;
         }
 
     }

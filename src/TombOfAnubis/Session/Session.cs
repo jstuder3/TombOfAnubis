@@ -19,7 +19,7 @@ namespace TombOfAnubis
         /// <summary>
         /// The single Session instance that can be active at a time.
         /// </summary>
-        public static Session singleton;
+        protected static Session singleton;
 
         /// <summary>
         /// The GameplayScreen object that created this session.
@@ -202,6 +202,14 @@ namespace TombOfAnubis
                 Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] +"_gear_icon"));
                 singleton.Scene.AddChild(artefact);
             }
+
+            Altar altar = new Altar(new Vector2(450, 400), new Vector2(0.1f, 0.1f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Altar/plagiarized_table"),
+                new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/red_gear_icon") ,
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/green_gear_icon"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/blue_gear_icon"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/purple_gear_icon")});
+
+            singleton.Scene.AddChild(altar);
 
             List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);

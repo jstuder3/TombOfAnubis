@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -52,6 +53,12 @@ namespace TombOfAnubis
                     case (nameof(Wall), nameof(Anubis)):
                         OnCollision((Wall)target, (Anubis)source);
                         break;
+                    case (nameof(Character), nameof(Altar)):
+                        OnCollision((Character)source, (Altar)target);
+                        break; 
+                    case (nameof(Altar), nameof(Character)):    
+                        OnCollision((Character)target, (Altar)source);
+                        break;
                 }
             }
         }
@@ -82,12 +89,12 @@ namespace TombOfAnubis
         }
         public static void OnCollision(Character character, Artefact artefact)
         {
-
-            if (character.GetComponent<Player>().PlayerID == artefact.GetComponent<Player>().PlayerID) //if the player is the owner of the artefact, add it to the inventory and remove it from the map
+            int playerID = character.GetComponent<Player>().PlayerID;
+            if (playerID == artefact.GetComponent<Player>().PlayerID) //if the player is the owner of the artefact, add it to the inventory and remove it from the map
             {
                 character.GetComponent<Inventory>().AddArtefact();
                 artefact.DeleteEntity();
-                artefact = null;
+                Console.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }
 
@@ -128,8 +135,25 @@ namespace TombOfAnubis
             WallCollision(t1, c1, c2);
         }
 
+        public static void OnCollision(Character character, Altar altar)
+        {
+            altar.PlaceArtefactIfPossible(character);
+
+            //could optionally treat the altar like a wall
+
+            Transform t1 = character.GetComponent<Transform>();
+
+            RectangleCollider c1 = character.GetComponent<RectangleCollider>();
+            RectangleCollider c2 = altar.GetComponent<RectangleCollider>();
+
+            WallCollision (t1, c1, c2);
+
+        }
+
         public static void WallCollision(Transform actorTransform, RectangleCollider actorCollider, RectangleCollider wallCollider)
         {
+            float epsilon = 1e-4f; //additional offset to ensure the actor is actually outside of the wall
+
             float sum_half_widths = actorCollider.Size.X / 2f + wallCollider.Size.X / 2f;
             float sum_half_heights = actorCollider.Size.Y / 2f + wallCollider.Size.Y / 2f;
 
@@ -149,7 +173,7 @@ namespace TombOfAnubis
 
             if (MathF.Abs(overlap.X / sum_half_widths) > MathF.Abs(overlap.Y / sum_half_heights))
             {
-                overlap.X = MathF.Sign(overlap.X) * (sum_half_widths - MathF.Abs(overlap.X)); //push out so much that the overlap is zero
+                overlap.X = MathF.Sign(overlap.X) * (sum_half_widths - MathF.Abs(overlap.X) + epsilon); //push out so much that the overlap is zero
                 overlap.Y = 0;
                 actorTransform.Position += overlap;
                 //Console.WriteLine("X was bigger. Overlap adjustment: " + overlap.ToString());
@@ -157,7 +181,7 @@ namespace TombOfAnubis
             else
             {
                 overlap.X = 0;
-                overlap.Y = MathF.Sign(overlap.Y) * (sum_half_heights - MathF.Abs(overlap.Y)); //push out so much that the overlap is zero
+                overlap.Y = MathF.Sign(overlap.Y) * (sum_half_heights - MathF.Abs(overlap.Y) + epsilon); //push out so much that the overlap is zero
                 actorTransform.Position += overlap;
                 //Console.WriteLine("Y was bigger. Overlap adjustment: " + overlap.ToString());
             }
