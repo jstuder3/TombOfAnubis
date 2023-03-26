@@ -137,7 +137,7 @@ namespace TombOfAnubis
             }
 
             // load each font from the content pipeline
-            archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Archeologicaps");
+            archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Pegypta-ALE6");
 
             // TODO: Add custom font
             // @Lukas: here the fonts are loaded

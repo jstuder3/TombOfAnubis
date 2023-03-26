@@ -21,6 +21,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Archeologicaps.spritefont
 
+#begin Fonts/Pegypta-ALE6.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Pegypta-ALE6.spritefont
+
 #begin Maps/Map001.xml
 /importer:XmlImporter
 /processor:MapProcessor
@@ -182,18 +189,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/0.png
 
-#begin Textures/Objects/Altar/plagiarized_table.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Altar/plagiarized_table.png
-
 #begin Textures/Menu/1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -205,18 +200,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/1.png
-
-#begin Textures/Objects/Artefacts/blue_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/blue_gear_icon.png
 
 #begin Textures/Menu/2.png
 /importer:TextureImporter
@@ -230,18 +213,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/2.png
 
-#begin Textures/Objects/Artefacts/green_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/green_gear_icon.png
-
 #begin Textures/Menu/3.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -253,18 +224,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/3.png
-
-#begin Textures/Objects/Artefacts/purple_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/purple_gear_icon.png
 
 #begin Textures/Menu/4.png
 /importer:TextureImporter
@@ -278,18 +237,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/4.png
 
-#begin Textures/Objects/Artefacts/red_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/red_gear_icon.png
-
 #begin Textures/Menu/bg.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -301,6 +248,66 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/bg.png
+
+#begin Textures/Objects/Altar/plagiarized_table.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Altar/plagiarized_table.png
+
+#begin Textures/Objects/Artefacts/blue_gear_icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Artefacts/blue_gear_icon.png
+
+#begin Textures/Objects/Artefacts/green_gear_icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Artefacts/green_gear_icon.png
+
+#begin Textures/Objects/Artefacts/purple_gear_icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Artefacts/purple_gear_icon.png
+
+#begin Textures/Objects/Artefacts/red_gear_icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Artefacts/red_gear_icon.png
 
 #begin Textures/Objects/Artefacts/white_gear_icon.png
 /importer:TextureImporter
@@ -337,3 +344,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/red_gear_icon.png
+
