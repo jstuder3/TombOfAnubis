@@ -93,6 +93,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
+
+            // TODO: Add actual textures
             // load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/bg");
@@ -211,6 +213,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
+            // TODO: Main Menu work in progress
+
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
             spriteBatch.Begin();

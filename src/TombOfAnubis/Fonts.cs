@@ -139,6 +139,9 @@ namespace TombOfAnubis
             // load each font from the content pipeline
             archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Archeologicaps");
 
+            // TODO: Add custom font
+            // @Lukas: here the fonts are loaded
+
             /*
             buttonNamesFont = contentManager.Load<SpriteFont>("Fonts/ButtonNamesFont");
             captionFont = contentManager.Load<SpriteFont>("Fonts/CaptionFont");
