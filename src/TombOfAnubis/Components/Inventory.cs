@@ -12,6 +12,27 @@ namespace TombOfAnubis
 
         public Inventory() {
             InventorySlots = new List<InventorySlot>();
+
+            InventorySlots.Add(new InventorySlot(0, SlotType.ArtefactSlot));
+            //AddArtefact();
+
         }
+
+        public void AddArtefact()
+        {
+            InventorySlots[0].SetItem(new InventoryItem(ItemType.Artefact));
+        }
+
+        public override void DeleteComponent()
+        {
+            base.DeleteComponent();
+            InventorySlots = null;
+        }
+
+        public bool HasArtefact()
+        {
+            return InventorySlots[0].GetItem().ItemType == ItemType.Artefact;
+        }
+
     }
 }

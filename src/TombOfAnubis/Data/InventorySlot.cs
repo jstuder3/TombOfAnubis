@@ -22,6 +22,7 @@ namespace TombOfAnubis
         {
             this.slotNumber = slotNumber;
             this.slotType = slotType;
+            this.item = new InventoryItem();
         }
 
         public void SetItem(InventoryItem item)
@@ -29,9 +30,14 @@ namespace TombOfAnubis
             this.item = item;
         }
 
+        public InventoryItem GetItem()
+        {
+            return this.item;
+        }
+
         public void ClearItem()
         {
-            this.item = null;
+            this.item.ItemType = ItemType.None;
         }
     }
 }

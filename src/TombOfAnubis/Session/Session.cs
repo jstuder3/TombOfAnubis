@@ -19,7 +19,7 @@ namespace TombOfAnubis
         /// <summary>
         /// The single Session instance that can be active at a time.
         /// </summary>
-        private static Session singleton;
+        protected static Session singleton;
 
         /// <summary>
         /// The GameplayScreen object that created this session.
@@ -170,12 +170,14 @@ namespace TombOfAnubis
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
 
+            List<String> colours = new List<String> { "red", "green", "blue", "purple" };
+
             for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
                 Character character = new Character(i,
-                    new Vector2(singleton.Map.SpawnMapPosition.X + 100 * i, singleton.Map.SpawnMapPosition.Y + 100 * i),
+                    new Vector2(singleton.Map.SpawnMapPosition.X + 75 * i, singleton.Map.SpawnMapPosition.Y + 75 * i),
                     new Vector2(0.07f, 0.07f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/" + colours[i] +"_plagiarized_explorer"),
                     100
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
                     );
@@ -184,19 +186,33 @@ namespace TombOfAnubis
 
             Anubis anubis = new Anubis(
                     new Vector2(singleton.Map.SpawnMapPosition.X + 100 * 1, singleton.Map.SpawnMapPosition.Y + 100 * 1),
-                    new Vector2(0.04f, 0.1f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/plagiarized_explorer"),
+                    new Vector2(0.3f, 0.3f),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/anubis_sprite"),
                     100,
                     singleton.Map
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
                     );
             singleton.Scene.AddChild(anubis);
 
+            //hard coded artefact positions for now
+            List<Vector2> positions = new List<Vector2> { new Vector2(64, 64) , new Vector2(590, 64) , new Vector2(832, 1024) , new Vector2(1024, 128) };
+
+            for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++) {
+
+                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] +"_gear_icon"));
+                singleton.Scene.AddChild(artefact);
+            }
+
+            Altar altar = new Altar(new Vector2(450, 400), new Vector2(0.1f, 0.1f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Altar/plagiarized_table"),
+                new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/red_gear_icon") ,
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/green_gear_icon"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/blue_gear_icon"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/purple_gear_icon")});
+
+            singleton.Scene.AddChild(altar);
 
             List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
-
-            
 
         }
 

@@ -12,5 +12,11 @@ namespace TombOfAnubis
         {
             InputSystem.Register(this);
         }
+
+        public override void DeleteComponent()
+        {
+            base.DeleteComponent();
+            InputSystem.Deregister(this);
+        }
     }
 }

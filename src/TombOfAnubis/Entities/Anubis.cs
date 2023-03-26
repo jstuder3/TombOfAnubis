@@ -24,8 +24,8 @@ namespace TombOfAnubis
             AI ai = new AI(map);
             AddComponent(ai);
 
-            //RectangleCollider collider = new RectangleCollider(position, Size());
-            //AddComponent(collider);
+            RectangleCollider collider = new RectangleCollider(position, Size());
+            AddComponent(collider);
         }
     }
 }

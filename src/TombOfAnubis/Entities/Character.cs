@@ -42,5 +42,10 @@ namespace TombOfAnubis
             AddComponent(debugSprite);
 
         }
+
+        public void GetTrapped()
+        {
+            Console.WriteLine("Player " + this.GetComponent<Player>().PlayerID + " was caught by Anubis!");
+        }
     }
 }

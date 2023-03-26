@@ -9,6 +9,14 @@ namespace TombOfAnubis
 {
     public class Component
     {
+        public bool Active { get; set; } = true;
         public Entity Entity { get; set; }
+
+        public virtual void DeleteComponent() {
+            Active = false;
+        } //removal of component (usually only entails deregisterring from the corresponding system, if there is one)
     }
+
+ 
+
 }
