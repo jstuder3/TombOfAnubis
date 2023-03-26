@@ -43,14 +43,16 @@ namespace TombOfAnubis
         {
 
             Transform t1 = p1.GetComponent<Transform>();
-            Transform t2 = p2.GetComponent <Transform>();
+            Transform t2 = p2.GetComponent<Transform>();
 
-            Vector2 overlap_direction = new Vector2(t2.Position.X - t1.Position.X, t2.Position.Y - t1.Position.Y);
+            RectangleCollider c1 = p1.GetComponent<RectangleCollider>();
+            RectangleCollider c2 = p2.GetComponent<RectangleCollider>();
+
+            Vector2 center1 = p1.GetComponent<RectangleCollider>().CenterPosition;
+            Vector2 center2 = p2.GetComponent <RectangleCollider>().CenterPosition;
+
+            Vector2 overlap_direction = center2 - center1;
             overlap_direction.Normalize();
-            //invert the values to push the players away faster/stronger if the overlap is bigger
-            //overlap_direction.X = 1 / overlap_direction.X;
-            //overlap_direction.Y = 1 / overlap_direction.Y;
-            //overlap_direction.Normalize();
 
             t1.Position -= overlap_direction * deltaTime * 50;
             t2.Position += overlap_direction * deltaTime * 50;
@@ -61,21 +63,40 @@ namespace TombOfAnubis
             Transform t1 = character.GetComponent<Transform>();
             Transform t2 = wall.GetComponent<Transform>();
 
-            Vector2 overlap_direction = new Vector2(t2.Position.X - t1.Position.X, t2.Position.Y - t1.Position.Y);
-            while (overlap_direction.Length() == 0)
+            RectangleCollider c1 = character.GetComponent<RectangleCollider>();
+            RectangleCollider c2 = wall.GetComponent<RectangleCollider>();
+
+            float sum_half_widths = c1.Size.X / 2f + c2.Size.X / 2f;
+            float sum_half_heights = c1.Size.Y / 2f + c2.Size.Y / 2f;
+
+            //Console.WriteLine("sum half widths: " + sum_half_widths + "; sum half heights: " + sum_half_heights); 
+
+            Vector2 overlap = c1.CenterPosition - c2.CenterPosition; //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
+
+            while (overlap.Length() == 0) //prevent NaNs
             {
                 Random random = new Random();
-                overlap_direction.X = (float)random.NextDouble() - 0.5f;
-                overlap_direction.Y = (float)random.NextDouble() - 0.5f;
+                overlap.X = (float)random.NextDouble() - 0.5f;
+                overlap.Y = (float)random.NextDouble() - 0.5f;
             }
-            overlap_direction.Normalize();
-            //invert the values to push the players away faster/stronger if the overlap is bigger
-            //overlap_direction.X = 1 / overlap_direction.X;
-            //overlap_direction.Y = 1 / overlap_direction.Y;
-            //overlap_direction.Normalize();
-            //Console.WriteLine(overlap_direction.ToString() + " - " + t1.Position + " -- " + t2.Position);
-            t1.Position -= overlap_direction * deltaTime * 200;
-            //t2.Position += overlap_direction * deltaTime * 50;
+
+            //String debug_out = "Overlap: " + overlap.ToString() + " - " + t1.Position + " -- " + t2.Position + " -- Collider sizes: Player: " + 2*c1_half_width + ", " + 2* c1_half_height + "; Wall: " + 2*c2_half_width + ", " + 2*c2_half_height+";";
+            //Console.WriteLine(debug_out);
+
+            if (MathF.Abs(overlap.X / sum_half_widths) > MathF.Abs(overlap.Y / sum_half_heights))
+            {
+                overlap.X = MathF.Sign(overlap.X) * (sum_half_widths - MathF.Abs(overlap.X)); //push out so much that the overlap is zero
+                overlap.Y = 0;
+                t1.Position += overlap;
+                //Console.WriteLine("X was bigger. Overlap adjustment: " + overlap.ToString());
+            }
+            else
+            {
+                overlap.X = 0;
+                overlap.Y = MathF.Sign(overlap.Y) * (sum_half_heights - MathF.Abs(overlap.Y)); //push out so much that the overlap is zero
+                t1.Position += overlap;
+                //Console.WriteLine("Y was bigger. Overlap adjustment: " + overlap.ToString());
+            }
         }
         public static void OnCollision(Character character, Artefact artefact)
         {
