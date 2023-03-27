@@ -16,8 +16,6 @@ namespace TombOfAnubis
         public static void OnCollision(Entity source, Entity target)
         {
             //check that the source and target still have a collider (they might have been destroyed)
-            if (source.HasComponent<RectangleCollider>() && target.HasComponent<RectangleCollider>())
-            {
                 switch (source.GetType().Name, target.GetType().Name)
                 {
                     case (nameof(Character), nameof(Character)):
@@ -60,7 +58,6 @@ namespace TombOfAnubis
                         OnCollision((Character)target, (Altar)source);
                         break;
                 }
-            }
         }
         public static void OnCollision(Character p1, Character p2)
         {
@@ -93,7 +90,7 @@ namespace TombOfAnubis
             if (playerID == artefact.GetComponent<Player>().PlayerID) //if the player is the owner of the artefact, add it to the inventory and remove it from the map
             {
                 character.GetComponent<Inventory>().AddArtefact();
-                artefact.DeleteEntity();
+                artefact.Delete();
                 Console.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }

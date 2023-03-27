@@ -9,12 +9,15 @@ namespace TombOfAnubis
 {
     public class Component
     {
-        public bool Active { get; set; } = true;
         public Entity Entity { get; set; }
 
-        public virtual void DeleteComponent() {
-            Active = false;
-        } //removal of component (usually only entails deregisterring from the corresponding system, if there is one)
+        public BaseSystem<Component> System { get; set; }
+
+        /// <summary>
+        /// Deletes the component. Override and call System.Deregister(this) on all registered systems.
+        /// </summary>
+        public virtual void Delete() {
+        }
     }
 
  

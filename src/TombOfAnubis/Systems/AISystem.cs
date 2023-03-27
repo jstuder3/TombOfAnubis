@@ -66,16 +66,16 @@ namespace TombOfAnubis
                 TimesUnchangedPosition = (PreviousPosition.Equals(transform.Position)) ? TimesUnchangedPosition+1 : 0;
                 PreviousPosition = transform.Position;
 
-                Console.Write("ANUBIS: ");
-                Console.WriteLine(TimesUnchangedPosition + "\t" + PreviousPosition + "\t" + transform.Position);
-                Console.WriteLine(NumStepsInSameDirection + "\t" + MaxStepsInSameDirection);
+                //Console.Write("ANUBIS: ");
+                //Console.WriteLine(TimesUnchangedPosition + "\t" + PreviousPosition + "\t" + transform.Position);
+                //Console.WriteLine(NumStepsInSameDirection + "\t" + MaxStepsInSameDirection);
 
                 // while (collider.BlockedDirections.Contains((BlockDirections)newDirection) && newDirection == MovingDirection)
                 if ((NumStepsInSameDirection == MaxStepsInSameDirection || TimesUnchangedPosition >= MaxTimesUnchangedPosition))
                 {
                     while (newDirection == MovingDirection)
                     {
-                        Console.WriteLine("Collision: Determining new direction...");
+                        //Console.WriteLine("Collision: Determining new direction...");
                         newDirection = rnd.Next(numDirections);
                     }
                     NumStepsInSameDirection = 0;

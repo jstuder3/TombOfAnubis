@@ -15,7 +15,7 @@ namespace TombOfAnubis
         /// </summary>
         public Vector2 Position { get; set; }
         /// <summary>
-        /// Scale of this entity relatie to its parent
+        /// Scale of this entity relative to its parent
         /// </summary>
         public Vector2 Scale { get; set; }
 
@@ -31,7 +31,7 @@ namespace TombOfAnubis
         }
 
         /// <summary>
-        /// Transforms the position from relative to parent coordinates to world coordinates
+        /// Transforms the position and scale from relative to parent coordinates to world coordinates
         /// </summary>
         public Transform ToWorld()
         {

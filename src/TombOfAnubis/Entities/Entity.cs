@@ -21,35 +21,25 @@ namespace TombOfAnubis
             component.Entity = this;
         }
 
-        //delete entity and all child entities
-        public virtual void DeleteEntity()
-        { 
-            //note that this is just a prototype implementation. If any additional systems/components exist, this method has to be extended or overwritten.
-          
-            //For correct removal, call .Deregister() on the respective systems.
-            
+        /// <summary>
+        /// Delete entity, its components and children. Removes this entity from its parent.children list.
+        /// </summary>
+        public void Delete()
+        {                       
             foreach(Component component in components)
             {
-                component.DeleteComponent();
+                component.Delete();
             }
 
-            components.Clear(); //let's hope C#'s garbage collector handles this correctly, otherwise it's MemoryLeak time :)
+            components.Clear();
             components = null;
 
             foreach (Entity child in children)
             {
-                child.DeleteEntity();
+                child.Delete();
             }
 
-            if (Parent != null)
-            {
-                Parent.children.Remove(this);
-            }
-        }
-
-        public void DeleteChild(Entity child)
-        {
-            child.DeleteEntity();
+            Parent?.children.Remove(this);
         }
 
         public T GetComponent<T>() where T : Component

@@ -15,9 +15,9 @@ namespace TombOfAnubis
         }
         public virtual void Update(GameTime gameTime) { }
 
-        public void Deregister()
+        public override void Delete()
         {
-            base.DeleteComponent();
+            base.Delete();
             CollisionSystem.Deregister(this);
         }
 

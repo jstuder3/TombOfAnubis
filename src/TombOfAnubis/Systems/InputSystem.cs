@@ -28,7 +28,7 @@ namespace TombOfAnubis
                     Vector2 newPosition = transform.Position;
                     Vector2 movementVector = Vector2.Zero;
 
-                    if (currentActions.Contains(PlayerActions.WalkLeft) && !collider.BlockedDirections.Contains(BlockDirections.Left))
+                    if (currentActions.Contains(PlayerActions.WalkLeft))
                     {
                         //newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
                         movementVector.X = -1f;
@@ -36,7 +36,7 @@ namespace TombOfAnubis
                         movement.Orientation = Orientation.Left;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkRight) && !collider.BlockedDirections.Contains(BlockDirections.Right))
+                    if (currentActions.Contains(PlayerActions.WalkRight))
                     {
                         //newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
                         movementVector.X = 1f;
@@ -44,7 +44,7 @@ namespace TombOfAnubis
                         movement.Orientation = Orientation.Right;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkUp) && !collider.BlockedDirections.Contains(BlockDirections.Up))
+                    if (currentActions.Contains(PlayerActions.WalkUp))
                     {
                         //newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
                         movementVector.Y = -1f;
@@ -52,7 +52,7 @@ namespace TombOfAnubis
                         movement.Orientation = Orientation.Up;
                     }
 
-                    if (currentActions.Contains(PlayerActions.WalkDown) && !collider.BlockedDirections.Contains(BlockDirections.Down))
+                    if (currentActions.Contains(PlayerActions.WalkDown))
                     {
                         //newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
                         movementVector.Y = 1f;

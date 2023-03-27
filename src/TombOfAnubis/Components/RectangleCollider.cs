@@ -17,7 +17,6 @@ namespace TombOfAnubis
     }
     public class RectangleCollider : Collider
     {
-        public List<BlockDirections> BlockedDirections { get; set; }
         public Vector2 Position { get; set; } //position is always top left of collider, but we separately keep the center position
         public Vector2 CenterPosition { get; set; }
         public Vector2 Size { get; set; } 
@@ -27,17 +26,14 @@ namespace TombOfAnubis
             Size = size;
             Position = position;
             CenterPosition = position + new Vector2(size.X / 2, size.Y / 2);
-            BlockedDirections = new List<BlockDirections>();
         }
 
         public override void Update(GameTime gameTime)
         {
-            BlockedDirections.Clear();
-
             //update location of collider based on owner
             Position = Entity.GetComponent<Transform>().Position;
-            CenterPosition = Position + new Vector2(Size.X / 2, Size.Y / 2);
             Size = Entity.Size();
+            CenterPosition = Position + new Vector2(Size.X / 2, Size.Y / 2);
         }
 
         public float GetLeft()

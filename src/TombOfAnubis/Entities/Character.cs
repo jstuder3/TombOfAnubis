@@ -35,17 +35,5 @@ namespace TombOfAnubis
             AddComponent(collider);
 
         }
-        public Character(int playerID, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed, Texture2D debugTexture) 
-            : this(playerID, position, scale, texture, maxMovementSpeed)
-        {
-            Sprite debugSprite = new Sprite(debugTexture, new Rectangle(0, 0, texture.Width, texture.Height), 3);
-            AddComponent(debugSprite);
-
-        }
-
-        public void GetTrapped()
-        {
-            Console.WriteLine("Player " + this.GetComponent<Player>().PlayerID + " was caught by Anubis!");
-        }
     }
 }

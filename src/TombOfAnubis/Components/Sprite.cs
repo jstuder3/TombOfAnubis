@@ -32,9 +32,9 @@ namespace TombOfAnubis
             SpriteSystem.SortComponents((x, y) => x.Layer.CompareTo(y.Layer));
         }
 
-        public override void DeleteComponent()
+        public override void Delete()
         {
-            base.DeleteComponent();
+            base.Delete();
             SpriteSystem.Deregister(this);
         }
 

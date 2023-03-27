@@ -23,9 +23,9 @@ namespace TombOfAnubis
             InventorySlots[0].SetItem(new InventoryItem(ItemType.Artefact));
         }
 
-        public override void DeleteComponent()
+        public override void Delete()
         {
-            base.DeleteComponent();
+            base.Delete();
             InventorySlots = null;
         }
 
