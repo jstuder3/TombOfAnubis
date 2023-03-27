@@ -15,6 +15,10 @@ Please update the [game teaser image](game_teaser.jpg) and the [game teaser text
 # Tomb of Anubis
 # :video_game: Game Programming Lab 2023 - House Winterhold - Team1
 
-ENTER DESCRIPTION HERE
+Tomb of Anubis is couch-coop game in which you play as explorers that
+discover a treasure inside a newly found opening in one of the Pyramids of Giza. By taking
+some of the treasure, you desecrate the grave and thereby unleash the wrath of Anubis, the
+protector of graves. Your goal is to find powerful artefacts which are able to entomb Anubis.
+While navigating through a labyrinth consisting of corridors and chambers, you will encounter traps and obstacles that require cooperation. Can you find all of the artefacts before Anubis finds you?
 
-Members: Joel Neuner-Jehle, Hrishikesh Ghodki, Justin Studer, Lukas Boesiger, and Noel Boos
+Members: Lukas Boesiger, Noel Boos, Hrishikesh Ghodki, Joel Neuner-Jehle and Justin Studer
