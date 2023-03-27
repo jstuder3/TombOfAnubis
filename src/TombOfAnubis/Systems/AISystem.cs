@@ -14,6 +14,23 @@ namespace TombOfAnubis
             Scene = scene;
         }
 
+        protected enum Directions {
+            Up,
+            Right,
+            Down,
+            Left
+        }
+
+        // Initialize direction to invalid direction
+        public int MovingDirection { get; set; } = -1;
+        public int NumStepsInSameDirection { get; set; } = 0;
+        public int MaxStepsInSameDirection { get; set; } = 0;
+
+        public Vector2 PreviousPosition { get; set; } = Vector2.Zero;
+
+        public int TimesUnchangedPosition { get; set; } = 0;
+        public const int MaxTimesUnchangedPosition = 3;
+
         public override void Update(GameTime deltaTime)
         {
 
@@ -31,46 +48,76 @@ namespace TombOfAnubis
                 List<Character> characters = Scene.GetChildrenOfType<Character>();
                 List<Artefact> artefacts = Scene.GetChildrenOfType<Artefact>();
 
+                RectangleCollider collider = entity.GetComponent<RectangleCollider>();
+
                 // Node anubis = movementGraph.GetNode(entity)
                 // Node c1 = movementGraph.GetNode(characters[0])
                 // List<Vector2> currentPath = movementGraph.CreatePath(anubis, c1)
                 // Vector2 currentTarget = currentPath[0]
 
-                movement.IsWalking = false;
+                // movement.IsWalking = false;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
+                int numDirections = Enum.GetNames(typeof(Directions)).Length;
 
-                int direc = rnd.Next(1, 5);
-                //Console.WriteLine("direction: " + direc);
-                bool use_random_directions = true;
+                // Initializes Anubis' first moving direction
+                int newDirection = (MovingDirection != -1) ? MovingDirection : rnd.Next(numDirections);
 
-                if(use_random_directions && !movement.IsTrapped)
+                PreviousPosition = (PreviousPosition.Equals(Vector2.Zero)) ? transform.Position : PreviousPosition;
+                TimesUnchangedPosition = (PreviousPosition.Equals(transform.Position)) ? TimesUnchangedPosition+1 : 0;
+                PreviousPosition = transform.Position;
+
+                Console.Write("ANUBIS: ");
+                Console.WriteLine(TimesUnchangedPosition + "\t" + PreviousPosition + "\t" + transform.Position);
+                Console.WriteLine(NumStepsInSameDirection + "\t" + MaxStepsInSameDirection);
+
+                // while (collider.BlockedDirections.Contains((BlockDirections)newDirection) && newDirection == MovingDirection)
+                if ((NumStepsInSameDirection == MaxStepsInSameDirection || TimesUnchangedPosition >= MaxTimesUnchangedPosition))
+                {
+                    while (newDirection == MovingDirection)
+                    {
+                        Console.WriteLine("Collision: Determining new direction...");
+                        newDirection = rnd.Next(numDirections);
+                    }
+                    NumStepsInSameDirection = 0;
+                    MaxStepsInSameDirection = rnd.Next(60, 100);
+
+                }
+
+                // Console.WriteLine("New direction is " + (Directions)newDirection);
+                MovingDirection = newDirection;
+
+                if (!movement.IsTrapped)
                 {
                     Vector2 newPosition = transform.Position;
 
-                    if (direc == 3)
+                    if (newDirection == (int)Directions.Up)
                     {
                         //walk up
                         newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Up;
 
-                    } else if (direc == 2) {
-                        // walk right
-                        newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
-                        movement.IsWalking = true;
-                        movement.Orientation = Orientation.Right;
-                    } else if (direc == 1)
-                    {
-                        //walk down
+                    } else if (newDirection == (int)Directions.Down) {
+                        // walk down 
                         newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Down;
-                    } else
+                    } else if (newDirection == (int)Directions.Left)
                     {
                         //walk left
-                        newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
+                        newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Left;
+                    } else if (newDirection == (int)Directions.Right)
+                    {
+                        //walk right 
+                        newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
+                        movement.IsWalking = true;
+                        movement.Orientation = Orientation.Left;
+                    } else
+                    {
+                        Console.WriteLine("Error: Unknown direction " + newDirection);
+                        movement.IsWalking = false;
                     }
 
                     //if (currentActions.Contains(PlayerActions.UseObject))
@@ -85,7 +132,7 @@ namespace TombOfAnubis
                     //    //if a player: check if trapped/unconscious, then check if the current player can free/resurrect that player
 
                     //}
-
+                    NumStepsInSameDirection += 1;
                     transform.Position = newPosition;
 
                     return;
