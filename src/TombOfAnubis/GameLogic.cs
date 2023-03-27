@@ -152,7 +152,7 @@ namespace TombOfAnubis
 
         public static void WallCollision(Transform actorTransform, RectangleCollider actorCollider, RectangleCollider wallCollider)
         {
-            float epsilon = 1e-4f; //additional offset to ensure the actor is actually outside of the wall
+            float epsilon = 1e0f; //additional offset to ensure the actor is actually outside of the wall
 
             float sum_half_widths = actorCollider.Size.X / 2f + wallCollider.Size.X / 2f;
             float sum_half_heights = actorCollider.Size.Y / 2f + wallCollider.Size.Y / 2f;
