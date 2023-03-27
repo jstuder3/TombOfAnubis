@@ -7,7 +7,7 @@ namespace TombOfAnubis
     {
 
 
-        public Artefact(int playerID, Vector2 position, Vector2 scale, Texture2D texture)
+        public Artefact(int playerID, Vector2 position, Vector2 scale, Texture2D texture, bool collidable)
         {
             Transform transform = new Transform(position, scale);
             AddComponent(transform);
@@ -15,12 +15,13 @@ namespace TombOfAnubis
             Player player = new Player(playerID);
             AddComponent(player);
 
-            Sprite sprite = new Sprite(texture, 1);
+            Sprite sprite = new Sprite(texture, 2);
             AddComponent(sprite);
-
-            RectangleCollider collider = new RectangleCollider(position, Size());
-            AddComponent(collider);
-
+            if (collidable)
+            {
+                RectangleCollider collider = new RectangleCollider(position, Size());
+                AddComponent(collider);
+            }
         }
 
     }

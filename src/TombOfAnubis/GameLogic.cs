@@ -127,7 +127,7 @@ namespace TombOfAnubis
 
         public static void OnCollision(Character character, Altar altar)
         {
-            altar.PlaceArtefactIfPossible(character);
+            PlaceArtefactIfPossible(character, altar);
 
             //could optionally treat the altar like a wall
 
@@ -175,6 +175,43 @@ namespace TombOfAnubis
                 actorTransform.Position += overlap;
                 //Console.WriteLine("Y was bigger. Overlap adjustment: " + overlap.ToString());
             }
+        }
+        public static void PlaceArtefactIfPossible(Character character, Altar altar)
+        {
+            if (character == null || altar == null) return;
+
+            int playerID = character.GetComponent<Player>().PlayerID;
+            Inventory characterInventory = character.GetComponent<Inventory>();
+            Inventory altarInventory = altar.GetComponent<Inventory>();
+
+
+            if (characterInventory.HasArtefact() && !altarInventory.HasArtefact(playerID))
+            {
+
+                characterInventory.ClearArtefactSlots();
+                altarInventory.AddArtefact(playerID);
+
+                float artefactScale = 0.075f;
+                float artefactWidth = Session.GetInstance().ArtefactTextures[playerID].Width * artefactScale * altar.GetComponent<Transform>().ToWorld().Scale.X;
+
+                Artefact artefact = new Artefact(playerID, new Vector2(playerID * artefactWidth, 0), Vector2.One * artefactScale, Session.GetInstance().ArtefactTextures[playerID], false);
+                altar.AddChild(artefact);
+                Console.WriteLine("Artefact of player " + playerID + " was placed!");
+            }
+            else
+            {
+                Console.WriteLine("Either player " + playerID + " doesn't have an artefact or their artefact is already placed!");
+            }
+
+            if (altarInventory.ArtefactSlotsFull())
+            {
+                Console.WriteLine("All artefacts placed! Anubis was defeated!");
+            }
+            else
+            {
+                Console.WriteLine("You need " + (Session.GetInstance().NumberOfPlayers - altarInventory.ArtefactCount()) + " more artefacts!");
+            }
+
         }
     }
 }

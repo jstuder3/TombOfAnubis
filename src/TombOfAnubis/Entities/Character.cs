@@ -23,7 +23,7 @@ namespace TombOfAnubis
             Movement movement = new Movement(maxMovementSpeed);
             AddComponent(movement);
 
-            Inventory inventory = new Inventory();
+            Inventory inventory = new Inventory(1, 0);
             AddComponent(inventory);
 
             RectangleCollider collider = new RectangleCollider(position, Size());

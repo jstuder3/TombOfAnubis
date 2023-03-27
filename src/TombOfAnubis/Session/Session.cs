@@ -34,6 +34,8 @@ namespace TombOfAnubis
             get { return singleton != null; }
         }
 
+        public static Session GetInstance() { return singleton; }
+
 
         private Map map;
         [ContentSerializerIgnore]
@@ -75,6 +77,10 @@ namespace TombOfAnubis
         public AISystem AnubisAISystem { get; set; }
 
         public Scene Scene { get; set; }
+
+        public List<Texture2D> ArtefactTextures { get; set; }
+
+        public int NumberOfPlayers { get; set; }
 
 
 
@@ -167,6 +173,7 @@ namespace TombOfAnubis
 
             List<String> colours = new List<String> { "red", "green", "blue", "purple" };
 
+            singleton.NumberOfPlayers = gameStartDescription.NumberOfPlayers;
             for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
                 Character character = new Character(i,
@@ -191,19 +198,19 @@ namespace TombOfAnubis
 
             //hard coded artefact positions for now
             List<Vector2> positions = new List<Vector2> { new Vector2(64, 64), new Vector2(590, 64), new Vector2(832, 1024), new Vector2(1024, 128) };
+            singleton.ArtefactTextures = new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/red_gear_icon") ,
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/green_gear_icon"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/blue_gear_icon"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/purple_gear_icon")};
 
             for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
 
-                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] + "_gear_icon"));
+                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] + "_gear_icon"), true);
                 singleton.Scene.AddChild(artefact);
             }
 
-            Altar altar = new Altar(new Vector2(450, 400), new Vector2(0.1f, 0.1f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Altar/plagiarized_table"),
-                new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/red_gear_icon") ,
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/green_gear_icon"),
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/blue_gear_icon"),
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/purple_gear_icon")});
+            Altar altar = new Altar(new Vector2(450, 400), new Vector2(0.1f, 0.1f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Altar/plagiarized_table"));
 
             singleton.Scene.AddChild(altar);
 
