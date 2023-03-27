@@ -18,8 +18,8 @@ namespace TombOfAnubis
 
         public MovementGraph(Map existingInstance)
         {
-            
-            if(existingInstance is null)
+
+            if (existingInstance is null)
             {
                 throw new ArgumentNullException("MapArgument");
             }
@@ -29,17 +29,17 @@ namespace TombOfAnubis
 
 
             Console.WriteLine("map name: " + map.Name);
-            Console.WriteLine("map dimensions: width: " + map.MapDimensions.X + ", height: "+ map.MapDimensions.Y);
-            
+            Console.WriteLine("map dimensions: width: " + map.MapDimensions.X + ", height: " + map.MapDimensions.Y);
+
 
 
 
             Console.WriteLine("start initiating graph");
             create_graph_dictionary();
-            
+
         }
 
-        
+
 
         private void create_graph_dictionary()
         {
@@ -56,7 +56,7 @@ namespace TombOfAnubis
             {
                 for (int j = 0; j < this.MAP_N_COLUMNS; j++)
                 {
-                    if (this.map.CollisionLayer[grid_location_to_nr(i,j)] == 0)
+                    if (this.map.CollisionLayer[grid_location_to_nr(i, j)] == 0)
                     {
                         this.grid_nr_to_node_id.Add(grid_location_to_nr(i, j), node_counter);
                         node_counter++;

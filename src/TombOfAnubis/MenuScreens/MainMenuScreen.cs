@@ -8,10 +8,10 @@
 #endregion
 
 #region Using Statements
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 #endregion
 
 namespace TombOfAnubis
@@ -50,7 +50,7 @@ namespace TombOfAnubis
         #region Menu Entries
 
 
-        MenuEntry newGameMenuEntry, exitGameMenuEntry; 
+        MenuEntry newGameMenuEntry, exitGameMenuEntry;
 
 
         #endregion
@@ -98,14 +98,14 @@ namespace TombOfAnubis
             // load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/bg");
-            descriptionAreaTexture = 
+            descriptionAreaTexture =
                 content.Load<Texture2D>("Textures/Menu/0");
             iconTexture = content.Load<Texture2D>("Textures/Menu/1");
-            plankTexture1 = 
+            plankTexture1 =
                 content.Load<Texture2D>("Textures/Menu/2");
-            plankTexture2 = 
+            plankTexture2 =
                 content.Load<Texture2D>("Textures/Menu/2");
-            plankTexture3 = 
+            plankTexture3 =
                 content.Load<Texture2D>("Textures/Menu/3");
             backTexture = content.Load<Texture2D>("Textures/Menu/4");
             selectTexture = content.Load<Texture2D>("Textures/Menu/4");
@@ -130,7 +130,7 @@ namespace TombOfAnubis
             {
                 MenuEntries[i].Position = new Vector2(
                     MenuEntries[i].Position.X,
-                    500f - ((MenuEntries[i].Texture.Height - 10) * 
+                    500f - ((MenuEntries[i].Texture.Height - 10) *
                         (MenuEntries.Count - 1 - i)));
             }
 
@@ -179,7 +179,7 @@ namespace TombOfAnubis
             string message = String.Empty;
             if (Session.IsActive)
             {
-                message = 
+                message =
                     "Are you sure you want to exit?  All progress will be lost.";
             }
             else
@@ -200,7 +200,7 @@ namespace TombOfAnubis
         {
             GameScreenManager.Game.Exit();
         }
-        
+
 
         #endregion
 
@@ -221,7 +221,7 @@ namespace TombOfAnubis
 
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            spriteBatch.Draw(descriptionAreaTexture, descriptionAreaPosition, 
+            spriteBatch.Draw(descriptionAreaTexture, descriptionAreaPosition,
                 Color.White);
             spriteBatch.Draw(iconTexture, iconPosition, Color.White);
 
@@ -238,12 +238,12 @@ namespace TombOfAnubis
             if ((selectedMenuEntry != null) &&
                 !String.IsNullOrEmpty(selectedMenuEntry.Description))
             {
-                Vector2 textSize = 
+                Vector2 textSize =
                     Fonts.ArcheologicapsFont.MeasureString(selectedMenuEntry.Description);
                 Vector2 textPosition = descriptionAreaTextPosition + new Vector2(
                     (float)Math.Floor((descriptionAreaTexture.Width - textSize.X) / 2),
                     0f);
-                spriteBatch.DrawString(Fonts.ArcheologicapsFont, 
+                spriteBatch.DrawString(Fonts.ArcheologicapsFont,
                     selectedMenuEntry.Description, textPosition, Color.White);
             }
 
@@ -251,7 +251,7 @@ namespace TombOfAnubis
             spriteBatch.Draw(selectTexture, selectPosition, Color.White);
             spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Select",
                 new Vector2(
-                selectPosition.X - Fonts.ArcheologicapsFont.MeasureString("Select").X - 5, 
+                selectPosition.X - Fonts.ArcheologicapsFont.MeasureString("Select").X - 5,
                 selectPosition.Y + 5), Color.White);
 
             // if we are in-game, draw the back instruction

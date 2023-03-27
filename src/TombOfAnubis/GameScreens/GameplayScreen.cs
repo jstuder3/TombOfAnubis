@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -42,7 +38,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
-            if (this.gameStartDescription == null) {
+            if (this.gameStartDescription == null)
+            {
                 this.gameStartDescription = new GameStartDescription();
                 this.gameStartDescription.MapContentName = "Map001";
                 this.gameStartDescription.NumberOfPlayers = 4;
@@ -123,7 +120,7 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            for(int playerIdx = 0; playerIdx < SplitScreen.NumberOfPlayers; playerIdx++)
+            for (int playerIdx = 0; playerIdx < SplitScreen.NumberOfPlayers; playerIdx++)
             {
                 Viewport viewport = SplitScreen.SetViewport(playerIdx);
 

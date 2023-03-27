@@ -103,12 +103,12 @@ namespace TombOfAnubis
             loadingBlackTexture =
                 content.Load<Texture2D>("Textures/Menu/1");
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            loadingBlackTextureDestination = new Rectangle(viewport.X, viewport.Y, 
+            loadingBlackTextureDestination = new Rectangle(viewport.X, viewport.Y,
                 viewport.Width, viewport.Height);
             loadingPosition = new Vector2(
-                viewport.X + (float)Math.Floor((viewport.Width - 
+                viewport.X + (float)Math.Floor((viewport.Width -
                     loadingTexture.Width) / 2f),
-                viewport.Y + (float)Math.Floor((viewport.Height - 
+                viewport.Y + (float)Math.Floor((viewport.Height -
                     loadingTexture.Height) / 2f));
 
             base.LoadContent();

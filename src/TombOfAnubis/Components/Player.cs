@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TombOfAnubis
+﻿namespace TombOfAnubis
 {
     public enum PlayerState
     {
@@ -23,9 +17,10 @@ namespace TombOfAnubis
         public int PlayerID { get; set; }
 
         public PlayerState PlayerState { get; set; }
-        public Player(int playerID) { 
+        public Player(int playerID)
+        {
             PlayerID = playerID;
             PlayerState = PlayerState.Idle;
-        } 
+        }
     }
 }

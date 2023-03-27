@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -25,8 +21,8 @@ namespace TombOfAnubis
         /// Delete entity, its components and children. Removes this entity from its parent.children list.
         /// </summary>
         public void Delete()
-        {                       
-            foreach(Component component in components)
+        {
+            foreach (Component component in components)
             {
                 component.Delete();
             }
@@ -76,13 +72,14 @@ namespace TombOfAnubis
             return foundChildren;
         }
 
-        public void AddChild(Entity entity) { 
+        public void AddChild(Entity entity)
+        {
             children.Add(entity);
             entity.Parent = this;
         }
         public void AddChildren(List<Entity> entities)
         {
-            foreach(Entity entity in entities)
+            foreach (Entity entity in entities)
             {
                 AddChild(entity);
             }

@@ -2,13 +2,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 
@@ -120,7 +115,7 @@ namespace TombOfAnubis
             singleton.CollisionSystem.Update(gameTime);
             singleton.PlayerInputSystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
-            
+
 
         }
 
@@ -172,12 +167,12 @@ namespace TombOfAnubis
 
             List<String> colours = new List<String> { "red", "green", "blue", "purple" };
 
-            for(int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
+            for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
                 Character character = new Character(i,
                     new Vector2(singleton.Map.SpawnMapPosition.X + 75 * i, singleton.Map.SpawnMapPosition.Y + 75 * i),
                     new Vector2(0.07f, 0.07f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/" + colours[i] +"_plagiarized_explorer"),
+                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/" + colours[i] + "_plagiarized_explorer"),
                     100
                     //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
                     );
@@ -195,11 +190,12 @@ namespace TombOfAnubis
             singleton.Scene.AddChild(anubis);
 
             //hard coded artefact positions for now
-            List<Vector2> positions = new List<Vector2> { new Vector2(64, 64) , new Vector2(590, 64) , new Vector2(832, 1024) , new Vector2(1024, 128) };
+            List<Vector2> positions = new List<Vector2> { new Vector2(64, 64), new Vector2(590, 64), new Vector2(832, 1024), new Vector2(1024, 128) };
 
-            for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++) {
+            for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
+            {
 
-                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] +"_gear_icon"));
+                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] + "_gear_icon"));
                 singleton.Scene.AddChild(artefact);
             }
 
@@ -266,10 +262,10 @@ namespace TombOfAnubis
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
                     Character player = playerInput.Entity as Character;
-                    Transform playerTransform= player.GetComponent<Transform>();
+                    Transform playerTransform = player.GetComponent<Transform>();
                     Vector2 playerPosition = playerTransform.Position;
                     Vector2 playerSize = player.Size();
-                    Vector2 playerCenter = new Vector2 (playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
+                    Vector2 playerCenter = new Vector2(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
 
                     singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - playerCenter;
                 }

@@ -8,12 +8,12 @@
 #endregion
 
 #region Using Statements
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.Text;
 #endregion
 
 namespace TombOfAnubis
@@ -194,7 +194,7 @@ namespace TombOfAnubis
         /// </param>
         /// <param name="maximumLines">The maximum number of lines to draw.</param>
         /// <returns>The new string, with newline characters if needed.</returns>
-        public static string BreakTextIntoLines(string text, 
+        public static string BreakTextIntoLines(string text,
             int maximumCharactersPerLine, int maximumLines)
         {
             if (maximumLines <= 0)
@@ -247,7 +247,7 @@ namespace TombOfAnubis
         /// <param name="maximumCharactersPerLine">
         /// The maximum length of a single line of text.
         /// </param>
-        public static string BreakTextIntoLines(string text, 
+        public static string BreakTextIntoLines(string text,
             int maximumCharactersPerLine)
         {
             // check the parameters
@@ -295,7 +295,7 @@ namespace TombOfAnubis
         /// <param name="text">The text to be broken up.</param>
         /// <param name="font">The font used ot measure the width of the text.</param>
         /// <param name="rowWidth">The maximum width of each line, in pixels.</param>
-        public static List<string> BreakTextIntoList(string text, SpriteFont font, 
+        public static List<string> BreakTextIntoList(string text, SpriteFont font,
             int rowWidth)
         {
             // check parameters
@@ -389,7 +389,7 @@ namespace TombOfAnubis
         /// <param name="text">The text to be drawn</param>
         /// <param name="position">The center position of the text.</param>
         /// <param name="color">The color of the text.</param>
-        public static void DrawCenteredText(SpriteBatch spriteBatch, SpriteFont font, 
+        public static void DrawCenteredText(SpriteBatch spriteBatch, SpriteFont font,
             string text, Vector2 position, Color color)
         {
             // check the parameters
@@ -415,7 +415,7 @@ namespace TombOfAnubis
                 position.Y - (int)textSize.Y / 2);
 
             // draw the string
-            spriteBatch.DrawString(font, text, centeredPosition, color, 0f, 
+            spriteBatch.DrawString(font, text, centeredPosition, color, 0f,
                 Vector2.Zero, 1f, SpriteEffects.None, 1f - position.Y / 720f);
         }
 

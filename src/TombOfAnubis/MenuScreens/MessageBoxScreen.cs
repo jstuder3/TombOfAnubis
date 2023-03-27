@@ -8,10 +8,10 @@
 #endregion
 
 #region Using Statements
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Linq;
 #endregion
 
@@ -160,7 +160,7 @@ namespace TombOfAnubis
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(loadingBlackTexture, loadingBlackTextureDestination, 
+            spriteBatch.Draw(loadingBlackTexture, loadingBlackTextureDestination,
                 Color.White);
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             spriteBatch.Draw(backTexture, backPosition, Color.White);
@@ -174,7 +174,7 @@ namespace TombOfAnubis
                 selectPosition.Y + 5), Color.White);
             spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Confirmation", confirmPosition,
                 Fonts.CountColor);
-            spriteBatch.DrawString(Fonts.ArcheologicapsFont, message, messagePosition, 
+            spriteBatch.DrawString(Fonts.ArcheologicapsFont, message, messagePosition,
                 Fonts.CountColor);
 
             spriteBatch.End();

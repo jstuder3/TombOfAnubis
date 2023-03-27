@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -16,7 +11,8 @@ namespace TombOfAnubis
 
         public Rectangle SourceRectangle { get; set; }
 
-        public Sprite(Texture2D texture, int layer) {
+        public Sprite(Texture2D texture, int layer)
+        {
             Texture = texture;
             SourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
             Layer = layer;

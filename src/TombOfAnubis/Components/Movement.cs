@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TombOfAnubis
+﻿namespace TombOfAnubis
 {
     public enum Orientation
     {
@@ -21,7 +15,8 @@ namespace TombOfAnubis
 
         public Orientation Orientation { get; set; }
 
-        public Movement(int maxSpeed) {
+        public Movement(int maxSpeed)
+        {
 
             MaxSpeed = maxSpeed;
             IsWalking = false;

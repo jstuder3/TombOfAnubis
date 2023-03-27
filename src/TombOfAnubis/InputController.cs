@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -19,17 +16,17 @@ namespace TombOfAnubis
     public static class InputController
     {
 
-        public static Keys[] upKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up};
-        public static Keys[] leftKeys = new Keys[] {Keys.A, Keys.F, Keys.J, Keys.Left };
+        public static Keys[] upKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up };
+        public static Keys[] leftKeys = new Keys[] { Keys.A, Keys.F, Keys.J, Keys.Left };
         public static Keys[] downKeys = new Keys[] { Keys.S, Keys.G, Keys.K, Keys.Down };
         public static Keys[] rightKeys = new Keys[] { Keys.D, Keys.H, Keys.L, Keys.Right };
         public static Keys[] useKeys = new Keys[] { Keys.E, Keys.E, Keys.E, Keys.E };
 
         public static Buttons[] upButtons = new Buttons[] { Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp };
-        public static Buttons[] leftButtons = new Buttons[] {Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft };
-        public static Buttons[] downButtons = new Buttons[] {Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown };
-        public static Buttons[] rightButtons = new Buttons[] {Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight };
-        public static Buttons[] useButtons = new Buttons[] {Buttons.A, Buttons.A, Buttons.A, Buttons.A };
+        public static Buttons[] leftButtons = new Buttons[] { Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft };
+        public static Buttons[] downButtons = new Buttons[] { Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown };
+        public static Buttons[] rightButtons = new Buttons[] { Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight };
+        public static Buttons[] useButtons = new Buttons[] { Buttons.A, Buttons.A, Buttons.A, Buttons.A };
 
 
         //convert key presses by the current player into actions (walking left, right, up down, use, ...)
@@ -42,7 +39,7 @@ namespace TombOfAnubis
 
             if (player == 0) gamepadState = GamePad.GetState(PlayerIndex.One);
             if (player == 1) gamepadState = GamePad.GetState(PlayerIndex.Two);
-            if (player == 2) gamepadState = GamePad.GetState(PlayerIndex.Three); 
+            if (player == 2) gamepadState = GamePad.GetState(PlayerIndex.Three);
             if (player == 3) gamepadState = GamePad.GetState(PlayerIndex.Four);
 
             Buttons[] pressedButtons = GetPressedButtons(gamepadState);
@@ -50,7 +47,7 @@ namespace TombOfAnubis
             List<PlayerActions> actions = new List<PlayerActions>();
 
 
-            foreach(Keys key in pressedKeys)
+            foreach (Keys key in pressedKeys)
             {
                 if (key == upKeys[player])
                 {
@@ -78,7 +75,7 @@ namespace TombOfAnubis
                 }
             }
 
-            foreach(Buttons button in pressedButtons)
+            foreach (Buttons button in pressedButtons)
             {
                 if (button == upButtons[player])
                 {
@@ -133,10 +130,10 @@ namespace TombOfAnubis
 
         public static List<PlayerActions> HandleOpposingActions(List<PlayerActions> actions)
         {
-            List<PlayerActions> resolvedActions = new List<PlayerActions> ();
+            List<PlayerActions> resolvedActions = new List<PlayerActions>();
 
             //if up and down are pressed at the same time, we don't add them to the list of player inputs
-            if(actions.Contains(PlayerActions.WalkUp) && !actions.Contains(PlayerActions.WalkDown))
+            if (actions.Contains(PlayerActions.WalkUp) && !actions.Contains(PlayerActions.WalkDown))
             {
                 resolvedActions.Add(PlayerActions.WalkUp);
             }
@@ -156,9 +153,9 @@ namespace TombOfAnubis
             }
 
             //for all remaining actions, just append them to the list if they're not already contained
-            foreach(PlayerActions action in actions)
+            foreach (PlayerActions action in actions)
             {
-                if(action != PlayerActions.WalkUp && action != PlayerActions.WalkDown && action != PlayerActions.WalkLeft && action != PlayerActions.WalkRight && !resolvedActions.Contains(action))
+                if (action != PlayerActions.WalkUp && action != PlayerActions.WalkDown && action != PlayerActions.WalkLeft && action != PlayerActions.WalkRight && !resolvedActions.Contains(action))
                 {
                     resolvedActions.Add(action);
                 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TombOfAnubis
+﻿namespace TombOfAnubis
 {
     public enum ItemType
     {
@@ -21,10 +15,12 @@ namespace TombOfAnubis
 
         public bool isInWorld = false;
         public bool isInInventory = false;
-        public InventoryItem() {
+        public InventoryItem()
+        {
             ItemType = ItemType.None;
         }
-        public InventoryItem(ItemType itemType) {
+        public InventoryItem(ItemType itemType)
+        {
             ItemType = itemType;
         }
 

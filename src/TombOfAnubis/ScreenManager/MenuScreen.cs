@@ -8,10 +8,10 @@
 #endregion
 
 #region Using Statements
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 #endregion
 
@@ -103,7 +103,7 @@ namespace TombOfAnubis
             // Move to the next menu entry
             if (currentActions.Contains(PlayerActions.WalkDown))
             {
-                selectedEntry = (selectedEntry+1) % menuEntries.Count;
+                selectedEntry = (selectedEntry + 1) % menuEntries.Count;
             }
 
             // Button pressed

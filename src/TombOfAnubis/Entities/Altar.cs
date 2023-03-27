@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace TombOfAnubis
@@ -55,14 +52,14 @@ namespace TombOfAnubis
                 Console.WriteLine("Either player " + playerID + " doesn't have an artefact or their artefact is already placed!");
             }
 
-            if(AllArtefactsPlaced())
+            if (AllArtefactsPlaced())
             {
                 Console.WriteLine("All artefacts placed! Anubis was defeated!");
             }
             else
             {
                 int remaining = 0;
-                foreach(bool var in placedArtefacts)
+                foreach (bool var in placedArtefacts)
                 {
                     if (!var) remaining++;
                 }

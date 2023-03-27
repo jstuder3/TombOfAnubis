@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -13,7 +10,8 @@ namespace TombOfAnubis
 
         public override void Update(GameTime deltaTime)
         {
-            foreach(Input input in components) {
+            foreach (Input input in components)
+            {
                 Character character = (Character)input.Entity;
                 Transform transform = character.GetComponent<Transform>();
                 Movement movement = character.GetComponent<Movement>();
@@ -24,7 +22,7 @@ namespace TombOfAnubis
                 if (!movement.IsTrapped)
                 {
                     PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(character.GetComponent<Player>().PlayerID);
-                    
+
                     Vector2 newPosition = transform.Position;
                     Vector2 movementVector = Vector2.Zero;
 
@@ -60,7 +58,7 @@ namespace TombOfAnubis
                         movement.Orientation = Orientation.Down;
                     }
 
-                    if(movementVector.Length() > 0)
+                    if (movementVector.Length() > 0)
                     {
                         movementVector.Normalize();
                         newPosition += movementVector * movement.MaxSpeed * deltaTimeSeconds;

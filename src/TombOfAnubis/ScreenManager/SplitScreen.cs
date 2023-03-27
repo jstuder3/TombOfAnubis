@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -32,9 +27,9 @@ namespace TombOfAnubis
 
         public static Viewport GameScreenViewport
         {
-             
+
             get { return gameScreenViewport; }
-            
+
         }
         public static void Initialize(GraphicsDevice graphicsDevice, int numPlayers)
         {
@@ -57,7 +52,8 @@ namespace TombOfAnubis
 
         }
 
-        public static Viewport SetViewport(int playerIndex) {
+        public static Viewport SetViewport(int playerIndex)
+        {
             graphics.Viewport = playerViewports[playerIndex];
             //TileEngine.Viewport = graphics.Viewport;
             return playerViewports[playerIndex];

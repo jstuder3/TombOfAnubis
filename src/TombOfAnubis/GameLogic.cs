@@ -1,11 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -16,48 +9,48 @@ namespace TombOfAnubis
         public static void OnCollision(Entity source, Entity target)
         {
             //check that the source and target still have a collider (they might have been destroyed)
-                switch (source.GetType().Name, target.GetType().Name)
-                {
-                    case (nameof(Character), nameof(Character)):
-                        OnCollision((Character)source, (Character)target);
-                        break;
-                    case (nameof(Character), nameof(Wall)):
-                        OnCollision((Character)source, (Wall)target);
-                        break;
-                    case (nameof(Wall), nameof(Character)):
-                        OnCollision((Character)target, (Wall)source);
-                        break;
-                    case (nameof(Character), nameof(Artefact)):
-                        OnCollision((Character)source, (Artefact)target);
-                        break;
-                    case (nameof(Artefact), nameof(Character)):
-                        OnCollision((Character)target, (Artefact)source);
-                        break;
-                    case (nameof(Character), nameof(Dispenser)):
-                        OnCollision((Character)source, (Dispenser)target);
-                        break;
-                    case (nameof(Dispenser), nameof(Character)):
-                        OnCollision((Character)target, (Dispenser)source);
-                        break;
-                    case (nameof(Character), nameof(Anubis)):
-                        OnCollision((Character)source, (Anubis)target);
-                        break;
-                    case (nameof(Anubis), nameof(Character)):
-                        OnCollision((Character)target, (Anubis)source);
-                        break;
-                    case (nameof(Anubis), nameof(Wall)):
-                        OnCollision((Anubis)source, (Wall)target);
-                        break;
-                    case (nameof(Wall), nameof(Anubis)):
-                        OnCollision((Wall)target, (Anubis)source);
-                        break;
-                    case (nameof(Character), nameof(Altar)):
-                        OnCollision((Character)source, (Altar)target);
-                        break; 
-                    case (nameof(Altar), nameof(Character)):    
-                        OnCollision((Character)target, (Altar)source);
-                        break;
-                }
+            switch (source.GetType().Name, target.GetType().Name)
+            {
+                case (nameof(Character), nameof(Character)):
+                    OnCollision((Character)source, (Character)target);
+                    break;
+                case (nameof(Character), nameof(Wall)):
+                    OnCollision((Character)source, (Wall)target);
+                    break;
+                case (nameof(Wall), nameof(Character)):
+                    OnCollision((Character)target, (Wall)source);
+                    break;
+                case (nameof(Character), nameof(Artefact)):
+                    OnCollision((Character)source, (Artefact)target);
+                    break;
+                case (nameof(Artefact), nameof(Character)):
+                    OnCollision((Character)target, (Artefact)source);
+                    break;
+                case (nameof(Character), nameof(Dispenser)):
+                    OnCollision((Character)source, (Dispenser)target);
+                    break;
+                case (nameof(Dispenser), nameof(Character)):
+                    OnCollision((Character)target, (Dispenser)source);
+                    break;
+                case (nameof(Character), nameof(Anubis)):
+                    OnCollision((Character)source, (Anubis)target);
+                    break;
+                case (nameof(Anubis), nameof(Character)):
+                    OnCollision((Character)target, (Anubis)source);
+                    break;
+                case (nameof(Anubis), nameof(Wall)):
+                    OnCollision((Anubis)source, (Wall)target);
+                    break;
+                case (nameof(Wall), nameof(Anubis)):
+                    OnCollision((Wall)target, (Anubis)source);
+                    break;
+                case (nameof(Character), nameof(Altar)):
+                    OnCollision((Character)source, (Altar)target);
+                    break;
+                case (nameof(Altar), nameof(Character)):
+                    OnCollision((Character)target, (Altar)source);
+                    break;
+            }
         }
         public static void OnCollision(Character p1, Character p2)
         {
@@ -73,7 +66,7 @@ namespace TombOfAnubis
 
             t1.Position -= overlap_direction * deltaTime * 50;
             t2.Position += overlap_direction * deltaTime * 50;
-            
+
         }
         public static void OnCollision(Character character, Wall wall)
         {
@@ -143,7 +136,7 @@ namespace TombOfAnubis
             RectangleCollider c1 = character.GetComponent<RectangleCollider>();
             RectangleCollider c2 = altar.GetComponent<RectangleCollider>();
 
-            WallCollision (t1, c1, c2);
+            WallCollision(t1, c1, c2);
 
         }
 

@@ -1,20 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
     public class AISystem : BaseSystem<AI>
     {
-        public Scene Scene {  get; set; }
-        public AISystem(Scene scene) { 
+        public Scene Scene { get; set; }
+        public AISystem(Scene scene)
+        {
             Scene = scene;
         }
 
-        protected enum Directions {
+        protected enum Directions
+        {
             Up,
             Right,
             Down,
@@ -36,7 +35,7 @@ namespace TombOfAnubis
 
             //Console.WriteLine("start update AnubisAISystem");
             Random rnd = new Random();
-            
+
             foreach (AI ai in components)
             {
                 //Console.WriteLine("reached anubis section");
@@ -63,7 +62,7 @@ namespace TombOfAnubis
                 int newDirection = (MovingDirection != -1) ? MovingDirection : rnd.Next(numDirections);
 
                 PreviousPosition = (PreviousPosition.Equals(Vector2.Zero)) ? transform.Position : PreviousPosition;
-                TimesUnchangedPosition = (PreviousPosition.Equals(transform.Position)) ? TimesUnchangedPosition+1 : 0;
+                TimesUnchangedPosition = (PreviousPosition.Equals(transform.Position)) ? TimesUnchangedPosition + 1 : 0;
                 PreviousPosition = transform.Position;
 
                 //Console.Write("ANUBIS: ");
@@ -97,24 +96,29 @@ namespace TombOfAnubis
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Up;
 
-                    } else if (newDirection == (int)Directions.Down) {
+                    }
+                    else if (newDirection == (int)Directions.Down)
+                    {
                         // walk down 
                         newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Down;
-                    } else if (newDirection == (int)Directions.Left)
+                    }
+                    else if (newDirection == (int)Directions.Left)
                     {
                         //walk left
                         newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Left;
-                    } else if (newDirection == (int)Directions.Right)
+                    }
+                    else if (newDirection == (int)Directions.Right)
                     {
                         //walk right 
                         newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
                         movement.IsWalking = true;
                         movement.Orientation = Orientation.Left;
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("Error: Unknown direction " + newDirection);
                         movement.IsWalking = false;

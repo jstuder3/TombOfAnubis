@@ -1,10 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -35,7 +29,7 @@ namespace TombOfAnubis
         /// </summary>
         public Transform ToWorld()
         {
-            if(Entity.Parent != null && Entity.Parent.GetComponent<Transform>() != null)
+            if (Entity.Parent != null && Entity.Parent.GetComponent<Transform>() != null)
             {
                 Transform parentWorld = Entity.Parent.GetComponent<Transform>().ToWorld();
                 return new Transform(Position + parentWorld.Position, Scale * parentWorld.Scale);

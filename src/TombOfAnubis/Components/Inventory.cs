@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TombOfAnubis
 {
     public class Inventory : Component
     {
-        public List<InventorySlot> InventorySlots {  get; set; }
+        public List<InventorySlot> InventorySlots { get; set; }
 
-        public Inventory() {
+        public Inventory()
+        {
             InventorySlots = new List<InventorySlot>();
 
             InventorySlots.Add(new InventorySlot(0, SlotType.ArtefactSlot));

@@ -1,12 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
-using static System.Collections.Specialized.BitVector32;
 
 namespace TombOfAnubis
 {
@@ -21,7 +14,7 @@ namespace TombOfAnubis
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch.Begin();
-            foreach(Sprite sprite in components)
+            foreach (Sprite sprite in components)
             {
                 Entity entity = sprite.Entity;
                 Transform transform = entity.GetComponent<Transform>();
@@ -29,12 +22,12 @@ namespace TombOfAnubis
                 Vector2 worldPosition = transform.ToWorld().Position;
                 Texture2D texture = sprite.Texture;
                 Rectangle destinationRectangle = new Rectangle(
-                    (int)worldPosition.X, 
-                    (int)worldPosition.Y, 
-                    (int)entitySize.X, 
+                    (int)worldPosition.X,
+                    (int)worldPosition.Y,
+                    (int)entitySize.X,
                     (int)entitySize.Y
                 );
-                if(CheckVisibility(destinationRectangle))
+                if (CheckVisibility(destinationRectangle))
                 {
                     SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, Color.White);
                 }

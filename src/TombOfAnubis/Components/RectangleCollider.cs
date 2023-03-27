@@ -1,10 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TombOfAnubis
 {
@@ -19,7 +13,7 @@ namespace TombOfAnubis
     {
         public Vector2 Position { get; set; } //position is always top left of collider, but we separately keep the center position
         public Vector2 CenterPosition { get; set; }
-        public Vector2 Size { get; set; } 
+        public Vector2 Size { get; set; }
 
         public RectangleCollider(Vector2 position, Vector2 size) : base()
         {
