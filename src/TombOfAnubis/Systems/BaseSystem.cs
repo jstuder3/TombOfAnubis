@@ -14,7 +14,7 @@ namespace TombOfAnubis
         }
         public static void Deregister(T component)
         {
-            Console.WriteLine(components.Remove(component));
+            components.Remove(component);
         }
 
         public static void SortComponents(Comparison<T> comparison)

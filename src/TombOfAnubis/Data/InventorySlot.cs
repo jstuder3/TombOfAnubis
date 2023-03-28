@@ -3,7 +3,9 @@
     public enum SlotType
     {
         ArtefactSlot,
-        ItemSlot
+        BodyPowerupSlot,
+        WisdomPowerupSlot,
+        ResurrectionSlot
     }
     public class InventorySlot
     {
@@ -22,7 +24,8 @@
         }
         public bool IsEmpty()
         {
-            return Item == null;
+            return Item == null || Item.ItemType == ItemType.None;
         }
+
     }
 }

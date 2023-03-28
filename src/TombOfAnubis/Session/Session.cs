@@ -196,8 +196,8 @@ namespace TombOfAnubis
                     );
             singleton.Scene.AddChild(anubis);
 
-            //hard coded artefact positions for now
-            List<Vector2> positions = new List<Vector2> { new Vector2(64, 64), new Vector2(590, 64), new Vector2(832, 1024), new Vector2(1024, 128) };
+            //hard coded artefacts for now
+            List<Vector2> artefactPositions = new List<Vector2> { new Vector2(64, 64), new Vector2(590, 64), new Vector2(832, 1024), new Vector2(1024, 128) };
             singleton.ArtefactTextures = new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/red_gear_icon") ,
                                         singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/green_gear_icon"),
                                         singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/blue_gear_icon"),
@@ -205,15 +205,27 @@ namespace TombOfAnubis
 
             for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
-
-                Artefact artefact = new Artefact(i, positions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] + "_gear_icon"), true);
+                Artefact artefact = new Artefact(i, artefactPositions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] + "_gear_icon"), true);
                 singleton.Scene.AddChild(artefact);
             }
 
+            //hard coded altar
             Altar altar = new Altar(new Vector2(450, 400), new Vector2(0.1f, 0.1f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Altar/plagiarized_table"));
-
             singleton.Scene.AddChild(altar);
 
+            //hard coded dispensers
+            //red dispenser is for body powerup, blue is for wisdom powerup, green is for resurrection powerup
+            List<Vector2> dispenserPositions = new List<Vector2> { new Vector2(210, 64), new Vector2(400, 290), new Vector2(400, 1100)};
+            List <Texture2D> dispenserTextures = new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser") ,
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser"),
+                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Dispensers/green_plagiarized_minecraft_dispenser")};
+            List<DispenserType> dispenserTypes = new List<DispenserType> { DispenserType.BodyPowerup, DispenserType.WisdomPowerup, DispenserType.ResurrectionPowerup };
+            for (int i = 0; i < 3; i++)
+            {
+                Dispenser dispenser = new Dispenser(dispenserPositions[i], new Vector2(0.1f, 0.1f), dispenserTextures[i], dispenserTypes[i]);
+                singleton.Scene.AddChild(dispenser);        
+            }
+            
             List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
 

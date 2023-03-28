@@ -333,7 +333,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Artefacts/yellow_gear_icon.png
 
-#begin Textures/Objects/red_gear_icon.png
+#begin Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -343,5 +343,41 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Objects/red_gear_icon.png
+/build:Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser.png
+
+#begin Textures/Objects/Dispensers/green_plagiarized_minecraft_dispenser.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Dispensers/green_plagiarized_minecraft_dispenser.png
+
+#begin Textures/Objects/Dispensers/plagiarized_minecraft_dispenser.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Dispensers/plagiarized_minecraft_dispenser.png
+
+#begin Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser.png
 

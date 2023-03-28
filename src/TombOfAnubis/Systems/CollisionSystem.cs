@@ -8,6 +8,7 @@ namespace TombOfAnubis
         public override void Update(GameTime gameTime)
         {
             GameLogic.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            GameLogic.gameTime = gameTime;
 
             foreach (Collider collider in components)
             {

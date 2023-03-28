@@ -14,10 +14,16 @@ namespace TombOfAnubis
             {
                 InventorySlots.Add(new InventorySlot(i, SlotType.ArtefactSlot));
             }
-            for (int i = numArtefactSlots; i < numArtefactSlots + numItemSlots; i++)
+            //with the current version, we always have one item slot per SlotType
+            /*for (int i = numArtefactSlots; i < numArtefactSlots + numItemSlots; i++)
             {
                 InventorySlots.Add(new InventorySlot(i, SlotType.ItemSlot));
-            }
+            }*/
+
+            InventorySlots.Add(new InventorySlot(numArtefactSlots, SlotType.BodyPowerupSlot));
+            InventorySlots.Add(new InventorySlot(numArtefactSlots + 1, SlotType.WisdomPowerupSlot));
+            InventorySlots.Add(new InventorySlot(numArtefactSlots + 2, SlotType.ResurrectionSlot));
+
         }
 
         public void AddArtefact(int slotIndex = 0)
@@ -84,6 +90,31 @@ namespace TombOfAnubis
             }
             return c;
         }
+
+        public InventorySlot GetEmptySlotOfType(SlotType slotType)
+        {
+            foreach(InventorySlot slot in InventorySlots)
+            {
+                if (slot.SlotType == slotType && slot.IsEmpty()) return slot;
+            }
+            return null;
+        }
+
+        public InventorySlot GetEmptyBodyPowerupSlot()
+        {
+            return GetEmptySlotOfType(SlotType.BodyPowerupSlot);
+        }
+
+        public InventorySlot GetEmptyWisdomPowerupSlot()
+        {
+            return GetEmptySlotOfType(SlotType.WisdomPowerupSlot);
+        }
+
+        public InventorySlot GetEmptyResurrectionSlot()
+        {
+            return GetEmptySlotOfType(SlotType.ResurrectionSlot);
+        }
+
 
     }
 }

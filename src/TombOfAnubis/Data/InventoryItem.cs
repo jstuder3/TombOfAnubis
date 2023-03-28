@@ -4,6 +4,8 @@
     {
         None,
         Speedup,
+        IncreaseViewDistance,
+        Resurrection,
         Artefact
     }
 
