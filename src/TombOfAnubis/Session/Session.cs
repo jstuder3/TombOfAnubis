@@ -46,7 +46,6 @@ namespace TombOfAnubis
         }
 
 
-
         /// <summary>
         /// The viewport that the tile engine is rendering within.
         /// </summary>
@@ -166,10 +165,11 @@ namespace TombOfAnubis
             singleton.PlayerInputSystem = new InputSystem();
             singleton.AnubisAISystem = new AISystem(singleton.Scene);
 
-
-
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
+
+
+
 
             List<String> colours = new List<String> { "red", "green", "blue", "purple" };
 
