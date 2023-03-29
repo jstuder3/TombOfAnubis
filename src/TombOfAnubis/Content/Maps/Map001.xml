@@ -2,9 +2,12 @@
 <XnaContent>
   <Asset Type="TombOfAnubis.Map">
       <Name>Map001</Name>
-      <MapDimensions>20 23</MapDimensions>
-      <TileSize>64 64</TileSize>
-	  <SpawnMapPosition>400 400</SpawnMapPosition>
+	  <!-- Number of tiles in x(right) and y(down) of the map-->
+	  <MapDimensions>20 23</MapDimensions>
+	  <!-- Size of one tile in the Texture source -->
+	  <SourceTileSize>64 64</SourceTileSize>
+	  <!-- Scale here to increase the in game size of the tiles (Walls and floors) -->
+	  <TileScale>3 3</TileScale>
 	  <TextureName>SimpleTiles</TextureName>
 	  <CollisionLayer>
 		  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
@@ -31,5 +34,89 @@
 		  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
 		  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
 	  </CollisionLayer>
+	  <EntityProperties>
+		  <MaxCharacterMovementSpeed>400</MaxCharacterMovementSpeed>
+		  <MaxAnubisMovementSpeed>100</MaxAnubisMovementSpeed>
+	  </EntityProperties>
+	  <Characters>
+		  <Item>
+			  <!-- Coordinates in the collision layer where the entity spawns. By default the entity is centered in the middle of the tile. -->
+			  <SpawnTileCoordinate> 6 6</SpawnTileCoordinate>
+			  <!-- (Optional) Offset of the entity. Moves the entity away from the center of the tile. -->
+			  <Offset>0 0</Offset>
+			  <!-- Scale of the entity -->
+			  <Scale>0.1 0.1</Scale>
+			  <!-- Name of the texture. Tha path is handled by the MapReader class.-->
+			  <SpriteTextureName>red_plagiarized_explorer</SpriteTextureName>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 6 10</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>green_plagiarized_explorer</SpriteTextureName>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 9 6</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>blue_plagiarized_explorer</SpriteTextureName>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 9 10</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>purple_plagiarized_explorer</SpriteTextureName>
+		  </Item>
+	  </Characters>
+	  <Anubis>
+		  <SpawnTileCoordinate> 9 8</SpawnTileCoordinate>
+		  <Scale>0.3 0.3</Scale>
+		  <SpriteTextureName>anubis_sprite</SpriteTextureName>
+	  </Anubis>
+	  <Artefacts>
+		  <Item>
+			  <SpawnTileCoordinate> 1 1</SpawnTileCoordinate>
+			  <Scale>0.02 0.02</Scale>
+			  <SpriteTextureName>red_gear_icon</SpriteTextureName>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 9 1</SpawnTileCoordinate>
+			  <Scale>0.02 0.02</Scale>
+			  <SpriteTextureName>green_gear_icon</SpriteTextureName>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 13 16</SpawnTileCoordinate>
+			  <Scale>0.02 0.02</Scale>
+			  <SpriteTextureName>blue_gear_icon</SpriteTextureName>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 16 2</SpawnTileCoordinate>
+			  <Scale>0.02 0.02</Scale>
+			  <SpriteTextureName>purple_gear_icon</SpriteTextureName>
+		  </Item>
+	  </Artefacts>
+	  <Altar>
+		  <SpawnTileCoordinate> 7 6</SpawnTileCoordinate>
+		  <Scale>0.1 0.1</Scale>
+		  <SpriteTextureName>plagiarized_table</SpriteTextureName>
+	  </Altar>
+	  <Dispensers>
+		  <Item>
+			  <SpawnTileCoordinate> 3 1</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>red_plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <Type>BodyPowerup</Type>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 6 4</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>blue_plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <Type>WisdomPowerup</Type>
+		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 6 17</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>green_plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <!-- (Optional) Type of the entity, will be converted in the session to an enum type -->
+			  <Type>ResurrectionPowerup</Type>
+		  </Item>
+	  </Dispensers>
   </Asset>
 </XnaContent>

@@ -152,8 +152,9 @@ namespace TombOfAnubis
         public int position_to_node_id(Vector2 position)
         {
             //Console.WriteLine("player initial position: " + position.X + ", " + position.Y);
-            int x = (int) Math.Floor(position.X/63.125);
-            int y = (int) Math.Floor(position.Y/63.125);
+
+            int x = (int) Math.Floor(position.X / map.TileSize.X);
+            int y = (int) Math.Floor(position.Y / map.TileSize.Y);
             //Console.WriteLine("rounded x, y: " + x + ", " + y);
             int grid_nr = grid_location_to_nr(x, y);
 

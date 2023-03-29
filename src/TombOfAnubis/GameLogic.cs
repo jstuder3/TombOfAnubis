@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -162,9 +163,10 @@ namespace TombOfAnubis
                 altarInventory.AddArtefact(playerID);
 
                 float artefactScale = 0.075f;
-                float artefactWidth = Session.GetInstance().ArtefactTextures[playerID].Width * artefactScale * altar.GetComponent<Transform>().ToWorld().Scale.X;
+                Texture2D artefactTexture = Session.GetInstance().Map.Artefacts[playerID].Texture;
+                float artefactWidth = artefactTexture.Width * artefactScale * altar.GetComponent<Transform>().ToWorld().Scale.X;
 
-                Artefact artefact = new Artefact(playerID, new Vector2(playerID * artefactWidth, 0), Vector2.One * artefactScale, Session.GetInstance().ArtefactTextures[playerID], false);
+                Artefact artefact = new Artefact(playerID, new Vector2(playerID * artefactWidth, 0), Vector2.One * artefactScale, artefactTexture, false);
                 altar.AddChild(artefact);
                 Console.WriteLine("Artefact of player " + playerID + " was placed!");
             }

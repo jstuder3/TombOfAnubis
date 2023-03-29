@@ -168,63 +168,49 @@ namespace TombOfAnubis
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
 
-
-
-
-            List<String> colours = new List<String> { "red", "green", "blue", "purple" };
-
             singleton.NumberOfPlayers = gameStartDescription.NumberOfPlayers;
-            for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
-            {
-                Character character = new Character(i,
-                    new Vector2(singleton.Map.SpawnMapPosition.X + 75 * i, singleton.Map.SpawnMapPosition.Y + 75 * i),
-                    new Vector2(0.07f, 0.07f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/" + colours[i] + "_plagiarized_explorer"),
-                    100
-                    //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
-                    );
-                singleton.Scene.AddChild(character);
-            }
-
-            Anubis anubis = new Anubis(
-                    new Vector2(singleton.Map.SpawnMapPosition.X + 100 * 1, singleton.Map.SpawnMapPosition.Y + 100 * 1),
-                    new Vector2(0.3f, 0.3f),
-                    singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Characters/anubis_sprite"),
-                    100,
-                    singleton.Map
-                    //,singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Debug/DebugBox")
-                    );
-            singleton.Scene.AddChild(anubis);
-
-            //hard coded artefacts for now
-            List<Vector2> artefactPositions = new List<Vector2> { new Vector2(64, 64), new Vector2(590, 64), new Vector2(832, 1024), new Vector2(1024, 128) };
-            singleton.ArtefactTextures = new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/red_gear_icon") ,
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/green_gear_icon"),
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/blue_gear_icon"),
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/purple_gear_icon")};
 
             for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
-                Artefact artefact = new Artefact(i, artefactPositions[i], new Vector2(0.02f, 0.02f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Artefacts/" + colours[i] + "_gear_icon"), true);
-                singleton.Scene.AddChild(artefact);
+                EntityDescription character = singleton.Map.Characters[i];
+                singleton.Scene.AddChild(new Character(
+                    i,
+                    singleton.Map.TileCoordinateToPosition(character),
+                    character.Scale,
+                    character.Texture,
+                    singleton.Map.EntityProperties.MaxCharacterMovementSpeed
+                    ));
+
+                EntityDescription artefact = singleton.Map.Artefacts[i];
+                singleton.Scene.AddChild(new Artefact(
+                    i,
+                    singleton.Map.TileCoordinateToPosition(artefact),
+                    artefact.Scale,
+                    artefact.Texture,
+                    true
+                    ));
+            }
+            foreach( var dispenser in singleton.Map.Dispensers ) {
+                _ = Enum.TryParse(dispenser.Type, out DispenserType type);
+                singleton.Scene.AddChild(new Dispenser(
+                    singleton.Map.TileCoordinateToPosition(dispenser),
+                    dispenser.Scale,
+                    dispenser.Texture,
+                    type
+                    ));
             }
 
-            //hard coded altar
-            Altar altar = new Altar(new Vector2(450, 400), new Vector2(0.1f, 0.1f), singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Altar/plagiarized_table"));
-            singleton.Scene.AddChild(altar);
+            singleton.Scene.AddChild(new Anubis(
+                                    singleton.Map.TileCoordinateToPosition(singleton.Map.Anubis),
+                                    singleton.Map.Anubis.Scale,
+                                    singleton.Map.Anubis.Texture,
+                                    singleton.Map.EntityProperties.MaxAnubisMovementSpeed,
+                                    singleton.Map));
 
-            //hard coded dispensers
-            //red dispenser is for body powerup, blue is for wisdom powerup, green is for resurrection powerup
-            List<Vector2> dispenserPositions = new List<Vector2> { new Vector2(210, 64), new Vector2(400, 290), new Vector2(400, 1100)};
-            List <Texture2D> dispenserTextures = new List<Texture2D> { singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser") ,
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser"),
-                                        singleton.gameScreenManager.Game.Content.Load<Texture2D>("Textures/Objects/Dispensers/green_plagiarized_minecraft_dispenser")};
-            List<DispenserType> dispenserTypes = new List<DispenserType> { DispenserType.BodyPowerup, DispenserType.WisdomPowerup, DispenserType.ResurrectionPowerup };
-            for (int i = 0; i < 3; i++)
-            {
-                Dispenser dispenser = new Dispenser(dispenserPositions[i], new Vector2(0.1f, 0.1f), dispenserTextures[i], dispenserTypes[i]);
-                singleton.Scene.AddChild(dispenser);        
-            }
+            singleton.Scene.AddChild(new Altar(
+                                    singleton.Map.TileCoordinateToPosition(singleton.Map.Altar),
+                                    singleton.Map.Altar.Scale,
+                                    singleton.Map.Altar.Texture));
             
             List<Entity> mapEntities = CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
@@ -309,13 +295,13 @@ namespace TombOfAnubis
                     {
                         if (wall)
                         {
-                            Wall newWall = new Wall(position, Vector2.One, singleton.Map.Texture, sourceRectangle);
+                            Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, sourceRectangle);
                             entities.Add(newWall);
 
                         }
                         else
                         {
-                            Floor newFloor = new Floor(position, Vector2.One, singleton.Map.Texture, sourceRectangle);
+                            Floor newFloor = new Floor(position,  singleton.Map.TileScale, singleton.Map.Texture, sourceRectangle);
                             entities.Add(newFloor);
                         }
                     }

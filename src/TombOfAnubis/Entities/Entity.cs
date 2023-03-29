@@ -5,7 +5,6 @@ namespace TombOfAnubis
 {
     public class Entity
     {
-        public int Id { get; set; }
         private List<Component> components = new List<Component>();
         public Entity Parent { get; set; }
 
