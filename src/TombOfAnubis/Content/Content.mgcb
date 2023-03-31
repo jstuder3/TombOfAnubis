@@ -244,7 +244,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/4.png
 
-#begin Textures/Menu/bg.png
+#begin Textures/Menu/plagiarized_bg.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -254,7 +254,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Menu/bg.png
+/build:Textures/Menu/plagiarized_bg.png
 
 #begin Textures/Objects/Altar/plagiarized_table.png
 /importer:TextureImporter

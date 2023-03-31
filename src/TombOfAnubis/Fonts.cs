@@ -25,10 +25,22 @@ namespace TombOfAnubis
     {
         #region Fonts
 
+        private static SpriteFont pegyptaFont;
         private static SpriteFont archeologicapsFont;
+        private static SpriteFont disneyHeroicFont;
+        public static SpriteFont PegyptaFont
+        {
+            get { return pegyptaFont; }
+        }
+
         public static SpriteFont ArcheologicapsFont
         {
             get { return archeologicapsFont; }
+        }
+
+        public static SpriteFont DisneyHeroicFont
+        {
+            get { return disneyHeroicFont; }
         }
 
         /*
@@ -137,10 +149,9 @@ namespace TombOfAnubis
             }
 
             // load each font from the content pipeline
-            archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Pegypta-ALE6");
-
-            // TODO: Add custom font
-            // @Lukas: here the fonts are loaded
+            pegyptaFont = contentManager.Load<SpriteFont>("Fonts/Pegypta-ALE6");
+            archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Archeologicaps");
+            disneyHeroicFont = contentManager.Load<SpriteFont>("Fonts/DisneyHeroic");
 
             /*
             buttonNamesFont = contentManager.Load<SpriteFont>("Fonts/ButtonNamesFont");
@@ -164,6 +175,8 @@ namespace TombOfAnubis
         public static void UnloadContent()
         {
             archeologicapsFont = null;
+            pegyptaFont = null;
+            disneyHeroicFont = null;
             /*
             buttonNamesFont = null;
             captionFont = null;
