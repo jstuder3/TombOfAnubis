@@ -21,6 +21,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Archeologicaps.spritefont
 
+#begin Fonts/DisneyHeroic.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/DisneyHeroic.spritefont
+
 #begin Fonts/Pegypta-ALE6.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
