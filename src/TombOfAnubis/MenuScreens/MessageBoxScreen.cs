@@ -85,11 +85,11 @@ namespace TombOfAnubis
         {
             ContentManager content = GameScreenManager.Game.Content;
 
-            backgroundTexture = content.Load<Texture2D>(@"Textures\MainMenu\Confirm");
-            backTexture = content.Load<Texture2D>(@"Textures\Buttons\BButton");
-            selectTexture = content.Load<Texture2D>(@"Textures\Buttons\AButton");
+            backgroundTexture = content.Load<Texture2D>(@"Textures/Menu/bg");
+            backTexture = content.Load<Texture2D>(@"Textures/Menu/1");
+            selectTexture = content.Load<Texture2D>(@"Textures/Menu/2");
             loadingBlackTexture =
-                content.Load<Texture2D>(@"Textures\GameScreens\FadeScreen");
+                content.Load<Texture2D>(@"Textures/Menu/3");
 
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
             backgroundPosition = new Vector2(

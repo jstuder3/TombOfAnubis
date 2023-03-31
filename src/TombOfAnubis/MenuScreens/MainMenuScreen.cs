@@ -50,7 +50,7 @@ namespace TombOfAnubis
         #region Menu Entries
 
 
-        MenuEntry newGameMenuEntry, exitGameMenuEntry;
+        MenuEntry newGameMenuEntry, playerSelectionMenuEntry;
 
 
         #endregion
@@ -68,18 +68,18 @@ namespace TombOfAnubis
             // add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
             newGameMenuEntry.Description = "Start a New Game";
-            newGameMenuEntry.Font = Fonts.ArcheologicapsFont;
+            newGameMenuEntry.Font = Fonts.DisneyHeroicFont;
             newGameMenuEntry.Position = new Vector2(715, 0f);
             newGameMenuEntry.Selected += NewGameMenuEntrySelected;
             MenuEntries.Add(newGameMenuEntry);
 
             // create the Exit menu entry
-            exitGameMenuEntry = new MenuEntry("Exit");
-            exitGameMenuEntry.Description = "Quit the Game";
-            exitGameMenuEntry.Font = Fonts.ArcheologicapsFont;
-            exitGameMenuEntry.Position = new Vector2(720, 0f);
-            exitGameMenuEntry.Selected += OnCancel;
-            MenuEntries.Add(exitGameMenuEntry);
+            playerSelectionMenuEntry = new MenuEntry("Number of players: " + numberOfPlayers);
+            playerSelectionMenuEntry.Description = "Choose the number of players";
+            playerSelectionMenuEntry.Font = Fonts.DisneyHeroicFont;
+            playerSelectionMenuEntry.Position = new Vector2(720, 0f);
+            playerSelectionMenuEntry.Selected += PlayerSelectionMenuEntrySelected;
+            MenuEntries.Add(playerSelectionMenuEntry);
 
             // TODO: Add number of players selection
 
@@ -123,7 +123,7 @@ namespace TombOfAnubis
 
             // set the textures on each menu entry
             newGameMenuEntry.Texture = plankTexture3;
-            exitGameMenuEntry.Texture = plankTexture1;
+            playerSelectionMenuEntry.Texture = plankTexture1;
 
             // now that they have textures, set the proper positions on the menu entries
             for (int i = 0; i < MenuEntries.Count; i++)
@@ -170,25 +170,11 @@ namespace TombOfAnubis
         }
 
         /// <summary>
-        /// When the user cancels the main menu,
-        /// or when the Exit Game menu entry is selected.
+        /// Event handler for when the Number of players menu entry is selected.
         /// </summary>
-        protected override void OnCancel()
+        void PlayerSelectionMenuEntrySelected(object sender, EventArgs e)
         {
-            // add a confirmation message box
-            string message = String.Empty;
-            if (Session.IsActive)
-            {
-                message =
-                    "Are you sure you want to exit?  All progress will be lost.";
-            }
-            else
-            {
-                message = "Are you sure you want to exit?";
-            }
-            MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
-            confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
-            GameScreenManager.AddScreen(confirmExitMessageBox);
+            numberOfPlayers = (numberOfPlayers%4)+1;
         }
 
 
@@ -198,7 +184,7 @@ namespace TombOfAnubis
         /// </summary>
         void ConfirmExitMessageBoxAccepted(object sender, EventArgs e)
         {
-            GameScreenManager.Game.Exit();
+            //GameScreenManager.Game.Exit();
         }
 
 
@@ -213,7 +199,6 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            // TODO: Main Menu work in progress
 
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
@@ -230,7 +215,14 @@ namespace TombOfAnubis
             {
                 MenuEntry menuEntry = MenuEntries[i];
                 bool isSelected = IsActive && (i == selectedEntry);
-                menuEntry.Draw(this, isSelected, gameTime);
+                if (i == MenuEntries.Count - 1)
+                {
+                    menuEntry.Draw(this, isSelected, gameTime, numberOfPlayers);
+                }
+                else
+                {
+                    menuEntry.Draw(this, isSelected, gameTime);
+                }
             }
 
             // draw the description text for the selected entry
@@ -239,28 +231,29 @@ namespace TombOfAnubis
                 !String.IsNullOrEmpty(selectedMenuEntry.Description))
             {
                 Vector2 textSize =
-                    Fonts.ArcheologicapsFont.MeasureString(selectedMenuEntry.Description);
+                    Fonts.DisneyHeroicFont.MeasureString(selectedMenuEntry.Description);
                 Vector2 textPosition = descriptionAreaTextPosition + new Vector2(
                     (float)Math.Floor((descriptionAreaTexture.Width - textSize.X) / 2),
                     0f);
-                spriteBatch.DrawString(Fonts.ArcheologicapsFont,
+                spriteBatch.DrawString(Fonts.DisneyHeroicFont,
                     selectedMenuEntry.Description, textPosition, Color.White);
             }
-
+            /*
             // draw the select instruction
             spriteBatch.Draw(selectTexture, selectPosition, Color.White);
-            spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Select",
+            spriteBatch.DrawString(Fonts.DisneyHeroicFont, "Select",
                 new Vector2(
-                selectPosition.X - Fonts.ArcheologicapsFont.MeasureString("Select").X - 5,
+                selectPosition.X - Fonts.DisneyHeroicFont.MeasureString("Select").X - 5,
                 selectPosition.Y + 5), Color.White);
 
             // if we are in-game, draw the back instruction
             if (Session.IsActive)
             {
                 spriteBatch.Draw(backTexture, backPosition, Color.White);
-                spriteBatch.DrawString(Fonts.ArcheologicapsFont, "Resume",
+                spriteBatch.DrawString(Fonts.DisneyHeroicFont, "Resume",
                     new Vector2(backPosition.X + 55, backPosition.Y + 5), Color.White);
             }
+            */
 
             spriteBatch.End();
         }

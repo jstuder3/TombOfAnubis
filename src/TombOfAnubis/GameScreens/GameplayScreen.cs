@@ -38,6 +38,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
+            // TODO: Will be removed and called directly from Menu
+
             if (this.gameStartDescription == null)
             {
                 this.gameStartDescription = new GameStartDescription();
