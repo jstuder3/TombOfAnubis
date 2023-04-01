@@ -117,8 +117,8 @@ namespace TombOfAnubis
             {
                 return;
             }
-            singleton.CollisionSystem.Update(gameTime);
             singleton.PlayerInputSystem.Update(gameTime);
+            singleton.CollisionSystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
 
 
