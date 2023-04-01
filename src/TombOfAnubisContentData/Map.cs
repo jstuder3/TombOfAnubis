@@ -64,6 +64,11 @@ namespace TombOfAnubis
         [ContentSerializerIgnore]
         public Texture2D Texture { get; set; }
 
+        /// <summary>
+        /// The texture of undiscovered tiles.
+        /// </summary>
+        [ContentSerializerIgnore]
+        public Texture2D UndiscoveredTexture { get; set; }
 
         /// <summary>
         /// Spatial array for the ground tiles for this map.
@@ -154,6 +159,19 @@ namespace TombOfAnubis
             var spriteCenter = tilePos + new Vector2(texture.Width * scale.X  / 2 - offset.X, texture.Height * scale.Y / 2 - offset.Y);
             var tileCenter = tilePos + new Vector2(TileSize.X / 2, TileSize.Y / 2);
             return tilePos + tileCenter - spriteCenter;
+        }
+
+        /// <summary>
+        /// Takes a position on the tile map and returns the coordinates of the tile under this position.
+        /// </summary>
+        public Point PositionToTileCoordinate(Vector2 position)
+        {
+            return new Point((int)(position.X / TileSize.X), (int)(position.Y / TileSize.Y));
+        }
+
+        public bool ValidTileCoordinates(Point coords)
+        {
+            return coords.X >= 0 && coords.Y >= 0 && coords.X < MapDimensions.X && coords.Y < MapDimensions.Y;
         }
 
         /// <summary>

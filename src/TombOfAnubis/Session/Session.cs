@@ -75,12 +75,15 @@ namespace TombOfAnubis
         public InputSystem PlayerInputSystem { get; set; }
         public AISystem AnubisAISystem { get; set; }
 
+        public DiscoverySystem DiscoverySystem { get; set; }
+
         public Scene Scene { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
 
         public int NumberOfPlayers { get; set; }
 
+        public Entity[,] MapTiles { get; set; } 
 
 
         // <summary>
@@ -119,9 +122,8 @@ namespace TombOfAnubis
             }
             singleton.PlayerInputSystem.Update(gameTime);
             singleton.CollisionSystem.Update(gameTime);
+            singleton.DiscoverySystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
-
-
         }
 
         /// <summary>
@@ -164,6 +166,7 @@ namespace TombOfAnubis
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem();
             singleton.AnubisAISystem = new AISystem(singleton.Scene);
+            singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
@@ -212,7 +215,7 @@ namespace TombOfAnubis
                                     singleton.Map.Altar.Scale,
                                     singleton.Map.Altar.Texture));
             
-            List<Entity> mapEntities = CreateMapEntities();
+            List<Entity> mapEntities = singleton.CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
 
         }
@@ -256,6 +259,12 @@ namespace TombOfAnubis
             // load the map
             ContentManager content = singleton.gameScreenManager.Game.Content;
             singleton.Map = content.Load<Map>(mapContentName);
+
+            // Create the undiscovered texture. This should be loaded from a png and prettier than just a black square.
+            singleton.Map.UndiscoveredTexture = new Texture2D(singleton.gameScreenManager.GraphicsDevice, 1, 1);
+            singleton.Map.UndiscoveredTexture.SetData(new[] { Color.Black });
+
+            singleton.DiscoverySystem.SetMap(singleton.Map);
         }
 
         public static void SetFocusOnPlayer(int playerIdx, Viewport viewport)
@@ -285,9 +294,10 @@ namespace TombOfAnubis
                 singleton.Map.MapDimensions.Y * singleton.Map.TileSize.Y * singleton.Scene.GetComponent<Transform>().Scale.Y / 2);
             singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - mapCenter;
         }
-        public static List<Entity> CreateMapEntities()
+        public List<Entity> CreateMapEntities()
         {
             List<Entity> entities = new List<Entity>();
+            singleton.MapTiles = new Entity[singleton.Map.MapDimensions.X, singleton.Map.MapDimensions.Y];
 
             for (int y = 0; y < singleton.Map.MapDimensions.Y; y++)
             {
@@ -303,14 +313,17 @@ namespace TombOfAnubis
                     {
                         if (wall)
                         {
-                            Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, sourceRectangle);
+                            Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle);
                             entities.Add(newWall);
+                            singleton.MapTiles[x, y] = newWall;
 
                         }
                         else
                         {
-                            Floor newFloor = new Floor(position,  singleton.Map.TileScale, singleton.Map.Texture, sourceRectangle);
+                            Floor newFloor = new Floor(position,  singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle);
                             entities.Add(newFloor);
+                            singleton.MapTiles[x, y] = newFloor;
+
                         }
                     }
                 }

@@ -9,6 +9,8 @@ namespace TombOfAnubis
 
         public Texture2D Texture { get; set; }
 
+        public Texture2D UndiscoveredTexture { get; set; }
+
         public Rectangle SourceRectangle { get; set; }
 
         public Sprite(Texture2D texture, int layer)

@@ -13,11 +13,12 @@ namespace TombOfAnubis
         }
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin();
+            //SpriteBatch.Begin();
             foreach (Sprite sprite in components)
             {
                 Entity entity = sprite.Entity;
                 Transform transform = entity.GetComponent<Transform>();
+                Discovery discovery = entity.GetComponent<Discovery>();
                 Vector2 entitySize = entity.Size();
                 Vector2 worldPosition = transform.ToWorld().Position;
                 Texture2D texture = sprite.Texture;
@@ -29,10 +30,22 @@ namespace TombOfAnubis
                 );
                 if (CheckVisibility(destinationRectangle))
                 {
-                    SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, Color.White);
+                    if(discovery != null && !discovery.Discovered && sprite.UndiscoveredTexture != null)
+                    {
+                        SpriteBatch.Draw(sprite.UndiscoveredTexture, destinationRectangle, Color.White);
+                    }
+                    else
+                    {
+                        Point entityTileCoord = Session.GetInstance().Map.PositionToTileCoordinate(transform.Position);
+                        bool onDiscoveredTile = Session.GetInstance().MapTiles[entityTileCoord.X, entityTileCoord.Y].GetComponent<Discovery>().Discovered;
+                        if (onDiscoveredTile)
+                        {
+                            SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, Color.White);
+                        }
+                    }
                 }
             }
-            SpriteBatch.End();
+            //SpriteBatch.End();
         }
 
         private bool CheckVisibility(Rectangle screenRectangle)

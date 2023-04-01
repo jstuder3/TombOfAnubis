@@ -11,6 +11,8 @@ namespace TombOfAnubis
 
         public Hud Hud {  get; set; }
 
+        private SpriteBatch SpriteBatch;
+
         /// <summary>
         /// Create a new GameplayScreen object.
         /// </summary>
@@ -49,6 +51,7 @@ namespace TombOfAnubis
                 this.gameStartDescription.NumberOfPlayers = 4;
 
             }
+            SpriteBatch = GameScreenManager.SpriteBatch;
             SplitScreen.Initialize(GameScreenManager.GraphicsDevice, gameStartDescription.NumberOfPlayers);
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
             Hud = new Hud(GameScreenManager.GraphicsDevice);
@@ -130,10 +133,14 @@ namespace TombOfAnubis
                 Viewport viewport = SplitScreen.SetViewport(playerIdx);
 
                 Session.SetFocusOnPlayer(playerIdx, viewport);
+                SpriteBatch.Begin();
                 Session.Draw(gameTime);
+                SpriteBatch.End();
             }
-            Hud.Draw(gameTime);
             SplitScreen.ResetViewport();
+            SpriteBatch.Begin();
+            Hud.Draw(gameTime);
+            SpriteBatch.End();
         }
     }
 }
