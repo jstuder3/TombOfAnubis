@@ -60,6 +60,10 @@ namespace TombOfAnubis
             }
         }
 
+        protected bool buttonPressed;
+        protected bool buttonCooldown;
+        protected TimeSpan lastPressed;
+
 
         #endregion
 
@@ -74,6 +78,9 @@ namespace TombOfAnubis
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
+            buttonCooldown = false;
+            buttonPressed = false;
+            lastPressed = TimeSpan.Zero;
         }
 
 
@@ -90,27 +97,33 @@ namespace TombOfAnubis
         public override void HandleInput()
         {
             int oldSelectedEntry = selectedEntry;
+            // TODO: Add counter of connected players
             PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(0);
 
-            // Move to the previous menu entry
-            if (currentActions.Contains(PlayerActions.WalkUp))
-            {
-                selectedEntry--;
-                if (selectedEntry < 0)
-                    selectedEntry = menuEntries.Count - 1;
-            }
+            if (!buttonCooldown) {
+                // Move to the previous menu entry
+                if (currentActions.Contains(PlayerActions.WalkUp))
+                {
+                    selectedEntry--;
+                    if (selectedEntry < 0)
+                        selectedEntry = menuEntries.Count - 1;
+                    buttonPressed = true;
+                }
 
-            // Move to the next menu entry
-            if (currentActions.Contains(PlayerActions.WalkDown))
-            {
-                selectedEntry = (selectedEntry + 1) % menuEntries.Count;
-            }
+                // Move to the next menu entry
+                if (currentActions.Contains(PlayerActions.WalkDown))
+                {
+                    selectedEntry = (selectedEntry + 1) % menuEntries.Count;
+                    buttonPressed = true;
+                }
 
-            // Button pressed
-            if (currentActions.Contains(PlayerActions.UseObject))
-            {
-                // AudioManager.PlayCue("Continue");
-                OnSelectEntry(selectedEntry);
+                // Button pressed
+                if (currentActions.Contains(PlayerActions.UseObject))
+                {
+                    // AudioManager.PlayCue("Continue");
+                    OnSelectEntry(selectedEntry);
+                    buttonPressed = true;
+                }
             }
             /*
             else if (currentActions.Contains(PlayerActions.Back) ||
@@ -167,6 +180,22 @@ namespace TombOfAnubis
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+
+            // Update button cooldown.
+            if (buttonPressed)
+            {
+                buttonPressed = false;
+                buttonCooldown = true;
+                lastPressed = gameTime.TotalGameTime;
+            }
+            if (buttonCooldown) // enough time elapsed since last pressed
+            {
+                TimeSpan diff = gameTime.TotalGameTime - lastPressed;
+                if (diff.TotalMilliseconds > 250)
+                {
+                    buttonCooldown = false;
+                }
+            }
 
             // Update each nested MenuEntry object.
             for (int i = 0; i < menuEntries.Count; i++)

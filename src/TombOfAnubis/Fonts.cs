@@ -121,14 +121,14 @@ namespace TombOfAnubis
 
 
         public static readonly Color CountColor = new Color(79, 24, 44);
-        public static readonly Color TitleColor = new Color(59, 18, 6);
+        public static readonly Color TitleColor = new Color(140, 50, 5);
         public static readonly Color CaptionColor = new Color(228, 168, 57);
         public static readonly Color HighlightColor = new Color(223, 206, 148);
         public static readonly Color DisplayColor = new Color(68, 32, 19);
         public static readonly Color DescriptionColor = new Color(0, 0, 0);
         public static readonly Color RestrictionColor = new Color(0, 0, 0);
         public static readonly Color ModifierColor = new Color(0, 0, 0);
-        public static readonly Color MenuSelectedColor = new Color(248, 218, 127);
+        public static readonly Color MenuSelectedColor = new Color(200, 30, 30);
 
 
         #endregion

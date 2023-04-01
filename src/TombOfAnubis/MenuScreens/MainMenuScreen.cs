@@ -67,7 +67,7 @@ namespace TombOfAnubis
         {
             // add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
-            newGameMenuEntry.Description = "Start a New Game";
+            newGameMenuEntry.Description = "Start a New Game (Press E)";
             newGameMenuEntry.Font = Fonts.DisneyHeroicFont;
             newGameMenuEntry.Position = new Vector2(715, 0f);
             newGameMenuEntry.Selected += NewGameMenuEntrySelected;
@@ -97,18 +97,18 @@ namespace TombOfAnubis
             // TODO: Add actual textures
             // load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("Textures/Menu/bg");
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
             descriptionAreaTexture =
-                content.Load<Texture2D>("Textures/Menu/0");
-            iconTexture = content.Load<Texture2D>("Textures/Menu/1");
+                content.Load<Texture2D>("Textures/Menu/MenuTile");
+            iconTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
             plankTexture1 =
-                content.Load<Texture2D>("Textures/Menu/2");
+                content.Load<Texture2D>("Textures/Menu/MenuTile");
             plankTexture2 =
-                content.Load<Texture2D>("Textures/Menu/2");
+                content.Load<Texture2D>("Textures/Menu/MenuTile");
             plankTexture3 =
-                content.Load<Texture2D>("Textures/Menu/3");
-            backTexture = content.Load<Texture2D>("Textures/Menu/4");
-            selectTexture = content.Load<Texture2D>("Textures/Menu/4");
+                content.Load<Texture2D>("Textures/Menu/MenuTile");
+            backTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            selectTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
 
             // calculate the texture positions
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
@@ -236,7 +236,7 @@ namespace TombOfAnubis
                     (float)Math.Floor((descriptionAreaTexture.Width - textSize.X) / 2),
                     0f);
                 spriteBatch.DrawString(Fonts.DisneyHeroicFont,
-                    selectedMenuEntry.Description, textPosition, Color.White);
+                    selectedMenuEntry.Description, textPosition, Fonts.TitleColor);
             }
             /*
             // draw the select instruction

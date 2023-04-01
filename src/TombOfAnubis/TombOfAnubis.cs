@@ -26,7 +26,7 @@ namespace TombOfAnubis
 
             base.Initialize();
 
-            screenManager.AddScreen(new GameplayScreen());
+            screenManager.AddScreen(new MainMenuScreen());
 
         }
 

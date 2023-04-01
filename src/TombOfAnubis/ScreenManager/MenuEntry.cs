@@ -184,7 +184,7 @@ namespace TombOfAnubis
                 spriteBatch.Draw(texture, position, Color.White);
                 if (newNumPlayers != null)
                 {
-                    text = "4 Players_temp"; //text.Substring(0, text.Length - 2) + newNumPlayers;
+                    text = text.Substring(0, text.Length - 1) + newNumPlayers;
                 }
                 if ((spriteFont != null) && !String.IsNullOrEmpty(text))
                 {
