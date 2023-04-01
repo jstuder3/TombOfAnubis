@@ -32,7 +32,7 @@ namespace TombOfAnubis
             if (Entity.Parent != null && Entity.Parent.GetComponent<Transform>() != null)
             {
                 Transform parentWorld = Entity.Parent.GetComponent<Transform>().ToWorld();
-                return new Transform(Position + parentWorld.Position, Scale * parentWorld.Scale);
+                return new Transform(Position * parentWorld.Scale + parentWorld.Position, Scale * parentWorld.Scale);
             }
             else
             {

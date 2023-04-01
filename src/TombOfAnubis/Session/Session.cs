@@ -127,7 +127,7 @@ namespace TombOfAnubis
         /// <summary>
         /// Draws the session environment to the screen
         /// </summary>
-        public static void Draw(GameTime gameTime, int playerIndex)
+        public static void Draw(GameTime gameTime)
         {
             singleton.SpriteSystem.Viewport = singleton.Viewport;
             singleton.SpriteSystem.Draw(gameTime);
@@ -276,7 +276,15 @@ namespace TombOfAnubis
                 }
             }
         }
+        public static void SetFocusOnMapCenter(Viewport viewport)
+        {
+            singleton.Viewport = viewport;
 
+            Vector2 mapCenter = new Vector2(
+                singleton.Map.MapDimensions.X * singleton.Map.TileSize.X * singleton.Scene.GetComponent<Transform>().Scale.X / 2,
+                singleton.Map.MapDimensions.Y * singleton.Map.TileSize.Y * singleton.Scene.GetComponent<Transform>().Scale.Y / 2);
+            singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - mapCenter;
+        }
         public static List<Entity> CreateMapEntities()
         {
             List<Entity> entities = new List<Entity>();

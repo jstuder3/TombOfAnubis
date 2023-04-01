@@ -25,7 +25,7 @@ namespace TombOfAnubis
         public override void Update(GameTime gameTime)
         {
             //update location of collider based on owner
-            Position = Entity.GetComponent<Transform>().Position;
+            Position = Entity.GetComponent<Transform>().ToWorld().Position;
             Size = Entity.Size();
             CenterPosition = Position + new Vector2(Size.X / 2, Size.Y / 2);
         }

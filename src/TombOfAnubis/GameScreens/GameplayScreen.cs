@@ -9,6 +9,8 @@ namespace TombOfAnubis
 
         GameStartDescription gameStartDescription = null;
 
+        public Hud Hud {  get; set; }
+
         /// <summary>
         /// Create a new GameplayScreen object.
         /// </summary>
@@ -49,6 +51,7 @@ namespace TombOfAnubis
             }
             SplitScreen.Initialize(GameScreenManager.GraphicsDevice, gameStartDescription.NumberOfPlayers);
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
+            Hud = new Hud(GameScreenManager.GraphicsDevice);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -127,8 +130,9 @@ namespace TombOfAnubis
                 Viewport viewport = SplitScreen.SetViewport(playerIdx);
 
                 Session.SetFocusOnPlayer(playerIdx, viewport);
-                Session.Draw(gameTime, playerIdx);
+                Session.Draw(gameTime);
             }
+            Hud.Draw(gameTime);
             SplitScreen.ResetViewport();
         }
     }

@@ -38,6 +38,14 @@ namespace TombOfAnubis
                 return new Vector2(SourceTileSize.X * TileScale.X, SourceTileSize.Y * TileScale.Y);
             }
         }
+        [ContentSerializerIgnore]
+        public Vector2 MapSize {
+            get
+            {
+                return new Vector2(MapDimensions.X * TileSize.X, MapDimensions.Y * TileSize.Y);
+            }
+                
+        }
 
         /// The number of tiles in a row of the map texture.
         /// </summary>

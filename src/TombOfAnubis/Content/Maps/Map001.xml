@@ -66,8 +66,8 @@
 		  </Item>
 	  </Characters>
 	  <Anubis>
-		  <SpawnTileCoordinate> 9 8</SpawnTileCoordinate>
-		  <Scale>0.3 0.3</Scale>
+		  <SpawnTileCoordinate> 8 8</SpawnTileCoordinate>
+		  <Scale>0.5 0.5</Scale>
 		  <SpriteTextureName>anubis_sprite</SpriteTextureName>
 	  </Anubis>
 	  <Artefacts>
