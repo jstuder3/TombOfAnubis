@@ -5,7 +5,6 @@ namespace TombOfAnubis
 {
     public class Character : Entity
     {
-
         public Character(int playerID, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed)
         {
             Transform transform = new Transform(position, scale);
