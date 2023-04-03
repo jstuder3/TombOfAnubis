@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace TombOfAnubis
 {
     public class CollisionSystem : BaseSystem<Collider>
     {
-
+        public static HashSet<Tuple<Collider, Collider>> SkippedCollisions;
         public override void Update(GameTime gameTime)
         {
             GameLogic.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -19,6 +21,7 @@ namespace TombOfAnubis
         }
         private static void HandleAllCollisions()
         {
+            SkippedCollisions = new HashSet<Tuple<Collider, Collider>>();
             for (int i = 0; i < components.Count; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)
@@ -27,6 +30,14 @@ namespace TombOfAnubis
                     {
                         GameLogic.OnCollision(components[i].Entity, components[j].Entity);
                     }
+                }
+            }
+            // Try skipped collisions again if the still collide
+            foreach (Tuple<Collider, Collider> tuple in SkippedCollisions)
+            {
+                if(Intersect(tuple.Item1, tuple.Item2))
+                {
+                    GameLogic.OnCollision(tuple.Item1.Entity, tuple.Item2.Entity);
                 }
             }
         }

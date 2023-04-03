@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -9,6 +10,8 @@ namespace TombOfAnubis
     {
         public static float deltaTime { get; set; }
         public static GameTime gameTime {get; set; }
+
+        private static Random random = new Random();
         public static void OnCollision(Entity source, Entity target)
         {
             //check that the source and target still have a collider (they might have been destroyed)
@@ -92,7 +95,7 @@ namespace TombOfAnubis
         }
         public static void OnCollision(Character character, Wall wall)
         {
-            WallCollision(character, wall);
+            StaticCollision(character, wall);
         }
         public static void OnCollision(Character character, Artefact artefact)
         {
@@ -107,14 +110,14 @@ namespace TombOfAnubis
 
             //else: collide with artefact
 
-            WallCollision(character, artefact);
+            StaticCollision(character, artefact);
 
         }
         public static void OnCollision(Character character, Dispenser dispenser)
         {
             dispenser.TryGiveItem(character.GetComponent<Inventory>(), gameTime.TotalGameTime.TotalSeconds);
 
-            WallCollision(character, dispenser);
+            StaticCollision(character, dispenser);
         }
 
         public static void OnCollision(Character character, Anubis anubis)
@@ -123,12 +126,12 @@ namespace TombOfAnubis
             character.GetComponent<Player>().PlayerState = PlayerState.Trapped;
             character.GetComponent<Movement>().IsTrapped = true;
 
-            WallCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
+            StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
         }
 
         public static void OnCollision(Anubis anubis, Wall wall)
         {
-            WallCollision(anubis, wall);
+            StaticCollision(anubis, wall);
         }
 
         public static void OnCollision(Character character, Altar altar)
@@ -136,46 +139,9 @@ namespace TombOfAnubis
             PlaceArtefactIfPossible(character, altar);
 
             //can optionally treat the altar like a wall
-            WallCollision(character, altar);
+            StaticCollision(character, altar);
         }
 
-        public static void WallCollision(Transform actorTransform, RectangleCollider actorCollider, RectangleCollider wallCollider)
-        {
-            float epsilon = 1e0f; //additional offset to ensure the actor is actually outside of the wall
-
-            float sum_half_widths = actorCollider.Size.X / 2f + wallCollider.Size.X / 2f;
-            float sum_half_heights = actorCollider.Size.Y / 2f + wallCollider.Size.Y / 2f;
-
-            Vector2 overlap = actorCollider.CenterPosition - wallCollider.CenterPosition; //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
-
-            while (overlap.Length() == 0) //prevent NaNs
-            {
-                Random random = new Random();
-                overlap.X = (float)random.NextDouble() - 0.5f;
-                overlap.Y = (float)random.NextDouble() - 0.5f;
-            }
-            
-            // Check whether first to push out in x or y direction based on which overlap is bigger.
-            // We can't move in both directions at the same time because every overlap in one direction necessarily brings with it an overlap in the other direction,
-            // which would cause the actor to be "teleported" unintentionally.
-            // As an approximation, we only move in the direction with the bigger overlap.
-            // Unfortunately, this brings with it some issues when the player touches multiple walls at the same time, as the behaviour is dependent on the order in which the collisions are handled
-
-            if (MathF.Abs(overlap.X / sum_half_widths) > MathF.Abs(overlap.Y / sum_half_heights))
-            {
-                overlap.X = MathF.Sign(overlap.X) * (sum_half_widths - MathF.Abs(overlap.X) + epsilon); //push out so much that the overlap is zero
-                overlap.Y = 0;
-            }
-            else
-            {
-                overlap.X = 0;
-                overlap.Y = MathF.Sign(overlap.Y) * (sum_half_heights - MathF.Abs(overlap.Y) + epsilon); //push out so much that the overlap is zero
-            }
-
-            //execute overlap correction
-            actorTransform.Position += overlap;
-            actorCollider.Position += overlap;
-        }
         public static void PlaceArtefactIfPossible(Character character, Altar altar)
         {
             if (character == null || altar == null) return;
@@ -215,13 +181,56 @@ namespace TombOfAnubis
 
 
         }
-        public static void WallCollision(Entity blockedEntity, Entity wall){
-            Transform t1 = blockedEntity.GetComponent<Transform>();
+        public static void StaticCollision(Entity blockedEntity, Entity staticObject){
+            Transform actorTransform = blockedEntity.GetComponent<Transform>();
 
-            RectangleCollider c1 = blockedEntity.GetComponent<RectangleCollider>();
-            RectangleCollider c2 = wall.GetComponent<RectangleCollider>();
+            RectangleCollider actorCollider = blockedEntity.GetComponent<RectangleCollider>();
+            RectangleCollider wallCollider = staticObject.GetComponent<RectangleCollider>();
 
-            WallCollision(t1, c1, c2);
+            float epsilon = 1e0f; //additional offset to ensure the actor is actually outside of the wall
+
+            float sum_half_widths = actorCollider.Size.X / 2f + wallCollider.Size.X / 2f;
+            float sum_half_heights = actorCollider.Size.Y / 2f + wallCollider.Size.Y / 2f;
+
+            Vector2 overlap = actorCollider.CenterPosition - wallCollider.CenterPosition; //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
+
+            while (overlap.Length() == 0) //prevent NaNs
+            {
+                overlap.X = (float)random.NextDouble() - 0.5f;
+                overlap.Y = (float)random.NextDouble() - 0.5f;
+            }
+
+            // Check whether first to push out in x or y direction based on which overlap is bigger.
+            // We can't move in both directions at the same time because every overlap in one direction necessarily brings with it an overlap in the other direction,
+            // which would cause the actor to be "teleported" unintentionally.
+            // As an approximation, we only move in the direction with the bigger overlap.
+            // Unfortunately, this brings with it some issues when the player touches multiple walls at the same time, as the behaviour is dependent on the order in which the collisions are handled
+
+            // This is why we do the following:
+            // In case of almost equality we simply don't know where we should move the colliding object. So we add it to a list of skipped collisions
+            // and hope someone else solves our problems for us. Otherwise we will just pick one option when we deal with this collision the next time (Corner on corner collisions).
+            if(MathF.Abs(MathF.Abs(overlap.X / sum_half_widths) - MathF.Abs(overlap.Y / sum_half_heights)) < 0.01f){
+                if(!CollisionSystem.SkippedCollisions.Contains(new Tuple<Collider, Collider>(actorCollider, wallCollider)))
+                {
+                    CollisionSystem.SkippedCollisions.Add(new Tuple<Collider, Collider>(actorCollider, wallCollider));
+                    return;
+                }
+            }
+
+            if (MathF.Abs(overlap.X / sum_half_widths) > MathF.Abs(overlap.Y / sum_half_heights))
+            {
+                overlap.X = MathF.Sign(overlap.X) * (sum_half_widths - MathF.Abs(overlap.X) + epsilon); //push out so much that the overlap is zero
+                overlap.Y = 0;
+            }
+            else
+            {
+                overlap.X = 0;
+                overlap.Y = MathF.Sign(overlap.Y) * (sum_half_heights - MathF.Abs(overlap.Y) + epsilon); //push out so much that the overlap is zero
+            }
+          
+            //execute overlap correction
+            actorTransform.Position += overlap;
+            actorCollider.Position += overlap;
         }
     }
 }
