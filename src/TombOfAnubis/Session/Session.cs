@@ -267,10 +267,13 @@ namespace TombOfAnubis
             singleton.DiscoverySystem.SetMap(singleton.Map);
         }
 
-        public static void SetFocusOnPlayer(int playerIdx, Viewport viewport)
+        public static void SetViewport(Viewport viewport)
         {
             singleton.Viewport = viewport;
+        }
 
+        public static void SetFocusOnPlayer(int playerIdx)
+        {
             foreach (Input playerInput in InputSystem.GetRegisteredComponents())
             {
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
@@ -285,14 +288,12 @@ namespace TombOfAnubis
                 }
             }
         }
-        public static void SetFocusOnMapCenter(Viewport viewport)
+        public static void MoveMapCenterTo(Vector2 newMapCenter)
         {
-            singleton.Viewport = viewport;
-
             Vector2 mapCenter = new Vector2(
                 singleton.Map.MapDimensions.X * singleton.Map.TileSize.X * singleton.Scene.GetComponent<Transform>().Scale.X / 2,
                 singleton.Map.MapDimensions.Y * singleton.Map.TileSize.Y * singleton.Scene.GetComponent<Transform>().Scale.Y / 2);
-            singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - mapCenter;
+            singleton.Scene.GetComponent<Transform>().Position = newMapCenter - mapCenter;
         }
         public List<Entity> CreateMapEntities()
         {

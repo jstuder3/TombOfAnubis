@@ -132,12 +132,14 @@ namespace TombOfAnubis
             {
                 Viewport viewport = SplitScreen.SetViewport(playerIdx);
 
-                Session.SetFocusOnPlayer(playerIdx, viewport);
+                Session.SetViewport(viewport);
+                Session.SetFocusOnPlayer(playerIdx);
                 SpriteBatch.Begin();
                 Session.Draw(gameTime);
                 SpriteBatch.End();
             }
-            SplitScreen.ResetViewport();
+            Viewport defaultViewport = SplitScreen.ResetViewport();
+            Session.SetViewport(defaultViewport);
             SpriteBatch.Begin();
             Hud.Draw(gameTime);
             SpriteBatch.End();

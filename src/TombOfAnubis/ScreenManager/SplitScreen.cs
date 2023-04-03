@@ -59,9 +59,10 @@ namespace TombOfAnubis
             return playerViewports[playerIndex];
         }
 
-        public static void ResetViewport()
+        public static Viewport ResetViewport()
         {
             graphics.Viewport = gameScreenViewport;
+            return gameScreenViewport;
         }
 
         private static void CreateFourPlayerViewports(GraphicsDevice graphicsDevice)
