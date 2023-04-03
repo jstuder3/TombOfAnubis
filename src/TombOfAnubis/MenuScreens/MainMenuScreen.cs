@@ -21,6 +21,8 @@ namespace TombOfAnubis
     /// </summary>
     class MainMenuScreen : MenuScreen
     {
+        private GameStartDescription gameStartDescription;
+
         #region Graphics Data
 
 
@@ -42,8 +44,6 @@ namespace TombOfAnubis
 
         private Texture2D plankTexture1, plankTexture2, plankTexture3;
 
-        private int numberOfPlayers = 4;
-
         #endregion
 
 
@@ -55,7 +55,6 @@ namespace TombOfAnubis
 
         #endregion
 
-
         #region Initialization
 
 
@@ -65,6 +64,10 @@ namespace TombOfAnubis
         public MainMenuScreen()
             : base()
         {
+            gameStartDescription = new GameStartDescription();
+            gameStartDescription.MapContentName = "Map001";
+            gameStartDescription.NumberOfPlayers = 4;
+
             // add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
             newGameMenuEntry.Description = "Start a New Game (Press E)";
@@ -74,7 +77,7 @@ namespace TombOfAnubis
             MenuEntries.Add(newGameMenuEntry);
 
             // create the Exit menu entry
-            playerSelectionMenuEntry = new MenuEntry("Number of players: " + numberOfPlayers);
+            playerSelectionMenuEntry = new MenuEntry("Number of players: " + gameStartDescription.NumberOfPlayers);
             playerSelectionMenuEntry.Description = "Choose the number of players";
             playerSelectionMenuEntry.Font = Fonts.DisneyHeroicFont;
             playerSelectionMenuEntry.Position = new Vector2(720, 0f);
@@ -161,11 +164,6 @@ namespace TombOfAnubis
             {
                 ExitScreen();
             }
-
-            ContentManager content = GameScreenManager.Game.Content;
-            GameStartDescription gameStartDescription = new GameStartDescription();
-            gameStartDescription.MapContentName = "Map001";
-            gameStartDescription.NumberOfPlayers = numberOfPlayers;
             LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
         }
 
@@ -174,7 +172,8 @@ namespace TombOfAnubis
         /// </summary>
         void PlayerSelectionMenuEntrySelected(object sender, EventArgs e)
         {
-            numberOfPlayers = (numberOfPlayers%4)+1;
+            gameStartDescription.NumberOfPlayers = (gameStartDescription.NumberOfPlayers %4)+1;
+            playerSelectionMenuEntry.Text = "Number of players: " + gameStartDescription.NumberOfPlayers;
         }
 
 
@@ -215,14 +214,7 @@ namespace TombOfAnubis
             {
                 MenuEntry menuEntry = MenuEntries[i];
                 bool isSelected = IsActive && (i == selectedEntry);
-                if (i == MenuEntries.Count - 1)
-                {
-                    menuEntry.Draw(this, isSelected, gameTime, numberOfPlayers);
-                }
-                else
-                {
-                    menuEntry.Draw(this, isSelected, gameTime);
-                }
+                menuEntry.Draw(this, isSelected, gameTime);
             }
 
             // draw the description text for the selected entry
