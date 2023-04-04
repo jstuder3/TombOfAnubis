@@ -18,6 +18,8 @@ namespace TombOfAnubis
         private Session session;
         private List<Character> characters;
         private List<Viewport> characterViewports;
+        private SpriteFont artefactStatusFont;
+        private Color artefactStatusColor;
 
 
         public Hud(GraphicsDevice graphicsDevice)
@@ -31,6 +33,9 @@ namespace TombOfAnubis
             minimapBackground = new Texture2D(graphicsDevice, 1, 1);
             minimapBackground.SetData(new[] { Color.Yellow });
 
+            // In-game UI Fonts
+            artefactStatusFont = Fonts.DisneyHeroicFont;
+            artefactStatusColor = Fonts.ArtefactStatusColor;
         }
 
         public void Draw(GameTime gameTime)
@@ -66,6 +71,20 @@ namespace TombOfAnubis
         private void DrawArtefactInventory(GameTime gameTime, Character character, Viewport characterViewport)
         {
             // TODO: Implement
+
+            int playerID = character.GetComponent<Player>().PlayerID;
+            int numCollectedArtefacts = character.GetComponent<Inventory>().ArtefactCount();
+            int totalArtefacts = character.GetComponent<Inventory>().ArtefactSlots.Count;
+
+            string artefactStatus = "Artefacts: " + numCollectedArtefacts + "/" + totalArtefacts;
+            Vector2 textLength = artefactStatusFont.MeasureString(artefactStatus);
+            Vector2 displayPositionOffSet = new Vector2((characterViewport.Width - textLength.X )/2, 0f);
+            Vector2 displayPosition = new Vector2(characterViewport.X, characterViewport.Y) + displayPositionOffSet;
+
+            // Session.SetFocusOnPlayer(playerID, characterViewport);
+            session.SpriteSystem.SpriteBatch.DrawString(artefactStatusFont, artefactStatus, displayPosition, artefactStatusColor);
+            // Session.Draw(gameTime);
+
         }
     }
 }
