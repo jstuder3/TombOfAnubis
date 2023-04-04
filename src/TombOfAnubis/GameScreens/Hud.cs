@@ -52,10 +52,27 @@ namespace TombOfAnubis
         private void DrawMinimap(GameTime gameTime)
         {
             session.Scene.GetComponent<Transform>().Scale = MinimapScale;
-            Session.SetFocusOnMapCenter(viewport);
 
+            Vector2 viewportCenter = new Vector2(
+             viewport.Width / 2f,
+             viewport.Height / 2f);
             Vector2 mapSize = session.Map.MapSize * MinimapScale;
-            Vector2 minimapPosition = session.MapTiles[0, 0].GetComponent<Transform>().ToWorld().Position;
+
+            Vector2 topRightMapCenter = new Vector2(
+                viewport.X + viewport.Width - mapSize.X / 2 - 10,
+                viewport.Y + mapSize.Y / 2 + 10
+                ) ;
+
+            if(session.NumberOfPlayers > 1)
+            {
+                Session.MoveMapCenterTo(viewportCenter);
+            }
+            else
+            {
+                Session.MoveMapCenterTo(topRightMapCenter);
+            }
+            Vector2 minimapPosition = session.Scene.GetComponent<Transform>().Position;
+
 
             // Minimap background
             session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 1, (int)minimapPosition.Y - 1, (int)mapSize.X + 2, (int)mapSize.Y + 2), Color.White * 0.1f);

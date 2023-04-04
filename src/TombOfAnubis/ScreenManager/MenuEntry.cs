@@ -170,7 +170,7 @@ namespace TombOfAnubis
         /// <summary>
         /// Draws the menu entry. This can be overridden to customize the appearance.
         /// </summary>
-        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime, int? newNumPlayers = null)
+        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
             // Draw the selected entry in yellow, otherwise white.
             Color color = isSelected ? Fonts.MenuSelectedColor : Fonts.TitleColor;
@@ -182,10 +182,6 @@ namespace TombOfAnubis
             if (texture != null)
             {
                 spriteBatch.Draw(texture, position, Color.White);
-                if (newNumPlayers != null)
-                {
-                    text = text.Substring(0, text.Length - 1) + newNumPlayers;
-                }
                 if ((spriteFont != null) && !String.IsNullOrEmpty(text))
                 {
                     Vector2 textSize = spriteFont.MeasureString(text);
