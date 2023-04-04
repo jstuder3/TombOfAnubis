@@ -206,9 +206,7 @@ namespace TombOfAnubis
                 map.Characters = input.ReadObject<List<EntityDescription>>();
                 foreach(EntityDescription ed in map.Characters)
                 {
-                    ed.Texture = input.ContentManager.Load<Texture2D>(
-                        Path.Combine(@"Textures\Characters",
-                        ed.SpriteTextureName));
+                    ed.Load(input.ContentManager, @"Textures\Characters");
                 }
                 map.Anubis = input.ReadObject<EntityDescription>();
                 map.Anubis.Texture = input.ContentManager.Load<Texture2D>(
@@ -217,9 +215,8 @@ namespace TombOfAnubis
                 map.Artefacts = input.ReadObject<List<EntityDescription>>();
                 foreach (EntityDescription ed in map.Artefacts)
                 {
-                    ed.Texture = input.ContentManager.Load<Texture2D>(
-                        Path.Combine(@"Textures\Objects\Artefacts",
-                        ed.SpriteTextureName));
+                    ed.Load(input.ContentManager, @"Textures\Objects\Artefacts");
+
                 }
                 map.Altar = input.ReadObject<EntityDescription>();
                 map.Altar.Texture = input.ContentManager.Load<Texture2D>(
@@ -228,9 +225,7 @@ namespace TombOfAnubis
                 map.Dispensers = input.ReadObject<List<EntityDescription>>();
                 foreach (EntityDescription ed in map.Dispensers)
                 {
-                    ed.Texture = input.ContentManager.Load<Texture2D>(
-                        Path.Combine(@"Textures\Objects\Dispensers",
-                        ed.SpriteTextureName));
+                    ed.Load(input.ContentManager, @"Textures\Objects\Dispensers");
                 }
 
                 return map;
