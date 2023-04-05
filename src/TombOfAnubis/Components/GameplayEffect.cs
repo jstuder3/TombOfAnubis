@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 
 namespace TombOfAnubis { 
     public enum EffectType
@@ -13,28 +9,39 @@ namespace TombOfAnubis {
     }
     public class GameplayEffect : Component
     {
+        private bool started;
+        private readonly float duration;
+        private float startTime;
+        private float endTime;
 
-        float duration;
-        float startTime;
-        float endTime;
+        private bool applied;
 
-        bool applied;
+        public EffectType Type { get; set; }
 
-        public EffectType type { get; set; }
-
-        public GameplayEffect(EffectType type, float duration, Entity entity)
+        public GameplayEffect(EffectType type, float duration)
         {
-            this.type = type;
+            Type = type;
             this.duration = duration;
-            startTime = Session.GameTime.TotalGameTime.Seconds;
-            endTime = startTime + duration;
-            Entity = entity;
-
+            started = false;
+            GameplayEffectSystem.Register(this);
         }
-
-        public bool IsActive()
+        public override void Delete()
         {
-            return Session.GameTime.TotalGameTime.Seconds < endTime;
+            GameplayEffectSystem.Deregister(this);
+        }
+        public void Start(GameTime gameTime)
+        {
+            startTime = gameTime.TotalGameTime.Seconds;
+            endTime = startTime + duration;
+            started = true;
+        }
+        public bool IsStarted()
+        {
+            return started;
+        }
+        public bool IsActive(GameTime gameTime)
+        {
+            return gameTime.TotalGameTime.Seconds < endTime;
         }
 
         public bool HasBeenApplied()
@@ -50,7 +57,7 @@ namespace TombOfAnubis {
 
         public bool IsAppliedEveryUpdate() //effects like "damage over time" would, for example, be applied every update
         {
-            switch (type)
+            switch (Type)
             {
                 case EffectType.Speedup: //speedup directly changes maxSpeed, so it is only applied in the very beginning (and removed again in the very end)
                     return false;
