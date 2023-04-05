@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TombOfAnubisContentData;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -153,9 +154,20 @@ namespace TombOfAnubis
             Point tileCoordinates = entityDescription.SpawnTileCoordinate;
             Vector2 offset = entityDescription.Offset;
             Vector2 scale = entityDescription.Scale;
-            Texture2D texture = entityDescription.Texture;
+
+            AnimationClip clip = entityDescription.Animation?[0];
+            Rectangle sourceRectangle;
+            if(clip != null)
+            {
+                sourceRectangle = clip.SourceRectangle;
+            }
+            else
+            {
+                sourceRectangle = new Rectangle(0, 0, entityDescription.Texture.Width, entityDescription.Texture.Height);
+            }
+
             var tilePos = TileCoordinateToPosition(tileCoordinates);
-            var spriteCenter = tilePos + new Vector2(texture.Width * scale.X  / 2 - offset.X, texture.Height * scale.Y / 2 - offset.Y);
+            var spriteCenter = tilePos + new Vector2(sourceRectangle.Width * scale.X  / 2 - offset.X, sourceRectangle.Height * scale.Y / 2 - offset.Y);
             var tileCenter = tilePos + new Vector2(TileSize.X / 2, TileSize.Y / 2);
             return tilePos + tileCenter - spriteCenter;
         }

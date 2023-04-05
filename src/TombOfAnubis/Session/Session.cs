@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 
 namespace TombOfAnubis

@@ -165,14 +165,16 @@ namespace TombOfAnubis
                         foreach (Character player in characters)
                         {
                             Transform cur_player_transform = player.GetComponent<Transform>();
-                            int cur_player_node_id = movementGraph.ToNodeID(cur_player_transform.Position);
+                            Vector2 cur_position = cur_player_transform.Position;
+                            Vector2 curEntityCenterPosition = cur_position + player.Size() / 2f;
+                            int cur_player_node_id = movementGraph.ToNodeID(curEntityCenterPosition);
 
                             //check if mapping works
-                            Vector2 cur_position = cur_player_transform.Position;
                             Point tileCoordinates = movementGraph.ToTileCoordinate(cur_player_node_id);
                             Vector2 mapped_position = movementGraph.ToPosition(cur_player_node_id);
+                            Vector2 mappedCenterPosition = movementGraph.ToCenterTilePosition(cur_player_node_id);
 
-                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + cur_position + " : " + mapped_position);
+                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + curEntityCenterPosition + " : " + mappedCenterPosition);
                             //int temp = movementGraph.world_position_to_node_id2(cur_player_transform.ToWorld().Position);
                             return;
 
