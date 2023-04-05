@@ -148,7 +148,7 @@ namespace TombOfAnubis
                 }
                 else
                 {
-                    int anubis_node_id = movementGraph.world_position_to_node_id(transform.Position);
+                    int anubis_node_id = movementGraph.ToNodeID(transform.Position);
                     //int anubis_node_id = 5;
 
                     //Console.WriteLine("using real anubis AI");
@@ -165,21 +165,22 @@ namespace TombOfAnubis
                         foreach (Character player in characters)
                         {
                             Transform cur_player_transform = player.GetComponent<Transform>();
-                            int cur_player_node_id = movementGraph.world_position_to_node_id(cur_player_transform.ToWorld().Position);
+                            int cur_player_node_id = movementGraph.ToNodeID(cur_player_transform.Position);
 
                             //check if mapping works
-                            Vector2 cur_position = cur_player_transform.ToWorld().Position;
-                            Vector2 mapped_position = movementGraph.node_id_to_world_position(cur_player_node_id);
+                            Vector2 cur_position = cur_player_transform.Position;
+                            Point tileCoordinates = movementGraph.ToTileCoordinate(cur_player_node_id);
+                            Vector2 mapped_position = movementGraph.ToPosition(cur_player_node_id);
 
-                            Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + cur_position + " : " + mapped_position);
+                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + cur_position + " : " + mapped_position);
                             //int temp = movementGraph.world_position_to_node_id2(cur_player_transform.ToWorld().Position);
                             return;
 
                             //Console.WriteLine("test, player id: " + player.Id + ", position: "+ cur_player_transform.Position.X +"," + cur_player_transform.Position.Y);
-                            if (!player.GetComponent<Movement>().IsTrapped && ai.MovementGraph.check_path_exists(anubis_node_id, cur_player_node_id))
+                            if (!player.GetComponent<Movement>().IsTrapped && ai.MovementGraph.CheckPathExists(anubis_node_id, cur_player_node_id))
                             {
 
-                                int dist = ai.MovementGraph.get_distance(anubis_node_id, cur_player_node_id);
+                                int dist = ai.MovementGraph.GetDistance(anubis_node_id, cur_player_node_id);
                                 if (cur_player_node_id >= 0 && dist >= 0 && dist < closest_player_dist)
                                 {
                                     tailed_a_player = true;
@@ -194,12 +195,12 @@ namespace TombOfAnubis
                         {
                             //Console.WriteLine("Anubis tailes player " + tailing_player_nr);
                             Transform tailed_player_transform = tailed_player.GetComponent<Transform>();
-                            int tailed_player_node_id = movementGraph.world_position_to_node_id(tailed_player_transform.Position);
+                            int tailed_player_node_id = movementGraph.ToNodeID(tailed_player_transform.Position);
 
-                            if(ai.MovementGraph.check_path_exists(anubis_node_id, tailed_player_node_id))
+                            if(ai.MovementGraph.CheckPathExists(anubis_node_id, tailed_player_node_id))
                             {
                                 //Console.WriteLine("found path from anubis to closest player");
-                                Vector2 target_position = ai.MovementGraph.get_target_to_walk_to(anubis_node_id, tailed_player_node_id);
+                                Vector2 target_position = ai.MovementGraph.GetTargetToWalkTo(anubis_node_id, tailed_player_node_id);
 
                                 Vector2 curPosition = tailed_player_transform.Position;
                                 //Console.WriteLine("cur/target position: " + curPosition + ",, " + target_position);
