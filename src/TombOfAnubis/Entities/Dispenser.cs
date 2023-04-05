@@ -45,21 +45,22 @@ namespace TombOfAnubis
 
             //if there is space, put an item in the empty slot according to which type of dispenser this is
 
+            emptyItemSlot = inventory.GetEmptyItemSlot();
+            if (emptyItemSlot == null) return false;
+
             if(dispenserType == DispenserType.BodyPowerup)
             {
-                emptyItemSlot = inventory.GetEmptyBodyPowerupSlot();
-                if (emptyItemSlot == null) return false;
 
                 switch(random.Next(0, 3))
                 {
                     case (0):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup);
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
                         break;
                     case (1):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup);
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
                         break;
                     case (2):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup);
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
                         break;
                     default:
                         return false;
@@ -68,13 +69,11 @@ namespace TombOfAnubis
             }
             else if(dispenserType == DispenserType.WisdomPowerup)
             {
-                emptyItemSlot = inventory.GetEmptyWisdomPowerupSlot();
-                if (emptyItemSlot == null) return false;
 
                 switch (random.Next(0, 1))
                 {
                     case (0):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.IncreaseViewDistance);
+                        emptyItemSlot.Item = new InventoryItem(ItemType.IncreaseViewDistance, emptyItemSlot.Entity);
                         break;
                     default:
                         return false; 
@@ -84,14 +83,13 @@ namespace TombOfAnubis
             }
             else if(dispenserType == DispenserType.ResurrectionPowerup)
             {
-                emptyItemSlot = inventory.GetEmptyResurrectionSlot();
-                if (emptyItemSlot == null) return false;
 
-                emptyItemSlot.Item = new InventoryItem(ItemType.Resurrection);
+                emptyItemSlot.Item = new InventoryItem(ItemType.Resurrection, emptyItemSlot.Entity);
                 Console.WriteLine("Put ResurrectionPowerup in somebody's inventory!");
             }
             else
             {
+                Console.WriteLine("No more space in inventory!");
                 return false;
             }
 

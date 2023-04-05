@@ -3,28 +3,34 @@
     public enum SlotType
     {
         ArtefactSlot,
-        BodyPowerupSlot,
-        WisdomPowerupSlot,
-        ResurrectionSlot
+        ItemSlot
     }
-    public class InventorySlot
+    public class InventorySlot : Component
     {
 
         public InventoryItem Item { get; set; }
         public int SlotNumber { get; set; } = -1;
         public SlotType SlotType { get; set; }
-        public InventorySlot(int slotNumber, SlotType slotType)
+        public InventorySlot(int slotNumber, SlotType slotType, Entity entity)
         {
+            Item = new InventoryItem(ItemType.None, Entity);
             SlotNumber = slotNumber;
             SlotType = slotType;
+            Entity = entity;
+
         }
         public void ClearItem()
         {
-            Item = null;
+            Item.ItemType = ItemType.None;
         }
         public bool IsEmpty()
         {
             return Item == null || Item.ItemType == ItemType.None;
+        }
+
+        public bool TryUseItem()
+        {
+            return Item.TryUse();
         }
 
     }

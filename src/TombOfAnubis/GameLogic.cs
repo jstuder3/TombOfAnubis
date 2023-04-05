@@ -8,8 +8,8 @@ namespace TombOfAnubis
 {
     public static class GameLogic
     {
-        public static float deltaTime { get; set; }
-        public static GameTime gameTime {get; set; }
+        public static float DeltaTime { get; set; }
+        public static GameTime GameTime {get; set; }
 
         private static Random random = new Random();
         public static void OnCollision(Entity source, Entity target)
@@ -74,15 +74,15 @@ namespace TombOfAnubis
                 Vector2 overlap_direction = center2 - center1;
                 overlap_direction.Normalize();
 
-                t1.Position -= overlap_direction * deltaTime * 100;
-                t2.Position += overlap_direction * deltaTime * 100;
+                t1.Position -= overlap_direction * DeltaTime * 100;
+                t2.Position += overlap_direction * DeltaTime * 100;
             }
 
             //if both are trapped, do nothing
             else if (character1.GetComponent<Movement>().IsTrapped && character2.GetComponent<Movement>().IsTrapped) { }
             else if(!character1.GetComponent<Movement>().IsTrapped && character2.GetComponent<Movement>().IsTrapped && character1.GetComponent<Inventory>().HasResurrectItem())
             {
-                InventorySlot slot = character1.GetComponent<Inventory>().GetFullResurrectionSlot();
+                InventorySlot slot = character1.GetComponent<Inventory>().GetResurrectionSlot();
                 slot.ClearItem();
 
                 character2.GetComponent<Movement>().IsTrapped = false;
@@ -115,7 +115,7 @@ namespace TombOfAnubis
         }
         public static void OnCollision(Character character, Dispenser dispenser)
         {
-            dispenser.TryGiveItem(character.GetComponent<Inventory>(), gameTime.TotalGameTime.TotalSeconds);
+            dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
 
             StaticCollision(character, dispenser);
         }

@@ -14,7 +14,7 @@ namespace TombOfAnubis
             Sprite sprite = new Sprite(texture, 1);
             AddComponent(sprite);
 
-            Inventory inventory = new Inventory(4, 0);
+            Inventory inventory = new Inventory(4, 0, this);
             AddComponent(inventory);
 
             RectangleCollider collider = new RectangleCollider(position, Size());
