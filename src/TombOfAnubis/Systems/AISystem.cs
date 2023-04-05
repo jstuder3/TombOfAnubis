@@ -106,7 +106,7 @@ namespace TombOfAnubis
                     // Console.WriteLine("New direction is " + (Directions)newDirection);
                     MovingDirection = newDirection;
 
-                    if (!movement.IsTrapped)
+                    if (!movement.IsTrapped())
                     {
                         newPosition = transform.Position;
 
@@ -153,7 +153,7 @@ namespace TombOfAnubis
 
                     //Console.WriteLine("using real anubis AI");
                     newPosition = transform.Position;
-                    if (!movement.IsTrapped)
+                    if (!movement.IsTrapped())
                     {
                         //loop over all players and get closest player if he is close enough (<=MaxTailDistance)
                         int closest_player_dist = MaxTailDistance + 1;
@@ -179,7 +179,7 @@ namespace TombOfAnubis
                             return;
 
                             //Console.WriteLine("test, player id: " + player.Id + ", position: "+ cur_player_transform.Position.X +"," + cur_player_transform.Position.Y);
-                            if (!player.GetComponent<Movement>().IsTrapped && ai.MovementGraph.CheckPathExists(anubis_node_id, cur_player_node_id))
+                            if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.CheckPathExists(anubis_node_id, cur_player_node_id))
                             {
 
                                 int dist = ai.MovementGraph.GetDistance(anubis_node_id, cur_player_node_id);
