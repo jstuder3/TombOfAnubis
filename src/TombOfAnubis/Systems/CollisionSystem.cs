@@ -9,8 +9,8 @@ namespace TombOfAnubis
         public static HashSet<Tuple<Collider, Collider>> SkippedCollisions;
         public override void Update(GameTime gameTime)
         {
-            GameLogic.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            GameLogic.gameTime = gameTime;
+            GameLogic.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            GameLogic.GameTime = gameTime;
 
             foreach (Collider collider in components)
             {

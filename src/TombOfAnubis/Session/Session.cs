@@ -17,6 +17,11 @@ namespace TombOfAnubis
         protected static Session singleton;
 
         /// <summary>
+        /// Global gametime that can be accessed from anywhere.
+        /// </summary>
+        public static GameTime GameTime { get; private set; }
+
+        /// <summary>
         /// The GameplayScreen object that created this session.
         /// </summary>
         private GameplayScreen gameplayScreen;
@@ -72,6 +77,7 @@ namespace TombOfAnubis
         private Vector2 viewportCenter;
         public SpriteSystem SpriteSystem { get; set; }
         public CollisionSystem CollisionSystem { get; set; }
+        public GameplayEffectSystem GameplayEffectSystem { get; set; }
         public InputSystem PlayerInputSystem { get; set; }
         public AISystem AnubisAISystem { get; set; }
 
@@ -120,8 +126,12 @@ namespace TombOfAnubis
             {
                 return;
             }
+
+            Session.GameTime = gameTime;
+
             singleton.PlayerInputSystem.Update(gameTime);
             singleton.CollisionSystem.Update(gameTime);
+            singleton.GameplayEffectSystem.Update(gameTime);
             singleton.DiscoverySystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
         }
@@ -131,6 +141,9 @@ namespace TombOfAnubis
         /// </summary>
         public static void Draw(GameTime gameTime)
         {
+
+            Session.GameTime = gameTime;
+
             singleton.SpriteSystem.Viewport = singleton.Viewport;
             singleton.SpriteSystem.Draw(gameTime);
         }
@@ -165,6 +178,7 @@ namespace TombOfAnubis
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem();
+            singleton.GameplayEffectSystem = new GameplayEffectSystem();
             singleton.AnubisAISystem = new AISystem(singleton.Scene);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
 

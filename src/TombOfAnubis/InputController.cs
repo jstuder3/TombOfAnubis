@@ -11,22 +11,28 @@ namespace TombOfAnubis
         WalkRight,
         WalkUp,
         WalkDown,
-        UseObject
+        UseObject,
+        UseBodyPowerup,
+        UseWisdomPowerup
     }
     public static class InputController
     {
 
-        public static Keys[] upKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up };
-        public static Keys[] leftKeys = new Keys[] { Keys.A, Keys.F, Keys.J, Keys.Left };
-        public static Keys[] downKeys = new Keys[] { Keys.S, Keys.G, Keys.K, Keys.Down };
-        public static Keys[] rightKeys = new Keys[] { Keys.D, Keys.H, Keys.L, Keys.Right };
-        public static Keys[] useKeys = new Keys[] { Keys.E, Keys.E, Keys.E, Keys.E };
+        public static Keys[] UpKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up };
+        public static Keys[] LeftKeys = new Keys[] { Keys.A, Keys.F, Keys.J, Keys.Left };
+        public static Keys[] DownKeys = new Keys[] { Keys.S, Keys.G, Keys.K, Keys.Down };
+        public static Keys[] RightKeys = new Keys[] { Keys.D, Keys.H, Keys.L, Keys.Right };
+        public static Keys[] UseKeys = new Keys[] { Keys.E, Keys.Z, Keys.O, Keys.OemMinus };
+        // public static Keys[] BodyPowerupKeys = new Keys[] { Keys.E, Keys.Z, Keys.O, Keys.OemMinus };
+        // public static Keys[] WisdomPowerupKeys = new Keys[] { Keys.Q, Keys.R, Keys.U, Keys.OemPeriod };
 
-        public static Buttons[] upButtons = new Buttons[] { Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp };
-        public static Buttons[] leftButtons = new Buttons[] { Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft };
-        public static Buttons[] downButtons = new Buttons[] { Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown };
-        public static Buttons[] rightButtons = new Buttons[] { Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight };
-        public static Buttons[] useButtons = new Buttons[] { Buttons.A, Buttons.A, Buttons.A, Buttons.A };
+        public static Buttons[] UpButtons = new Buttons[] { Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp };
+        public static Buttons[] LeftButtons = new Buttons[] { Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft };
+        public static Buttons[] DownButtons = new Buttons[] { Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown };
+        public static Buttons[] RightButtons = new Buttons[] { Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight };
+        public static Buttons[] UseButtons = new Buttons[] { Buttons.A, Buttons.A, Buttons.A, Buttons.A };
+        // public static Buttons[] BodyPowerupButtons = new Buttons[] { Buttons.B, Buttons.B, Buttons.B, Buttons.B };
+        // public static Buttons[] WisdomPowerupButtons = new Buttons[] { Buttons.X, Buttons.X, Buttons.X, Buttons.X };
 
 
         //convert key presses by the current player into actions (walking left, right, up down, use, ...)
@@ -49,58 +55,60 @@ namespace TombOfAnubis
 
             foreach (Keys key in pressedKeys)
             {
-                if (key == upKeys[player])
+                if (key == UpKeys[player])
                 {
                     actions.Add(PlayerActions.WalkUp);
                 }
 
-                if (key == leftKeys[player])
+                if (key == LeftKeys[player])
                 {
                     actions.Add(PlayerActions.WalkLeft);
                 }
 
-                if (key == downKeys[player])
+                if (key == DownKeys[player])
                 {
                     actions.Add(PlayerActions.WalkDown);
                 }
 
-                if (key == rightKeys[player])
+                if (key == RightKeys[player])
                 {
                     actions.Add(PlayerActions.WalkRight);
                 }
 
-                if (key == useKeys[player])
+                if (key == UseKeys[player])
                 {
                     actions.Add(PlayerActions.UseObject);
                 }
+                
             }
 
             foreach (Buttons button in pressedButtons)
             {
-                if (button == upButtons[player])
+                if (button == UpButtons[player])
                 {
                     actions.Add(PlayerActions.WalkUp);
                 }
 
-                if (button == leftButtons[player])
+                if (button == LeftButtons[player])
                 {
                     actions.Add(PlayerActions.WalkLeft);
                 }
 
-                if (button == downButtons[player])
+                if (button == DownButtons[player])
                 {
                     actions.Add(PlayerActions.WalkDown);
                 }
 
-                if (button == rightButtons[player])
+                if (button == RightButtons[player])
                 {
                     actions.Add(PlayerActions.WalkRight);
                 }
 
-                if (button == useButtons[player])
+                if (button == UseButtons[player])
                 {
                     actions.Add(PlayerActions.UseObject);
                 }
+
             }
 
             //remove up/down and left/right conflicts, as well as duplicate keys

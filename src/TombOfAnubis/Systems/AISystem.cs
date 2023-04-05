@@ -162,7 +162,7 @@ namespace TombOfAnubis
 
                         if (tailed_a_player)
                         {
-                            Console.WriteLine("Anubis tailes player " + tailing_player_nr);
+                            //Console.WriteLine("Anubis tailes player " + tailing_player_nr);
                         }
                     }
                 }

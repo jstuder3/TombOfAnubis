@@ -77,6 +77,11 @@ namespace TombOfAnubis
 
                     //}
 
+                    if (currentActions.Contains(PlayerActions.UseObject))
+                    {
+                        character.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
+                    }
+
                     transform.Position = newPosition;
 
                 }
