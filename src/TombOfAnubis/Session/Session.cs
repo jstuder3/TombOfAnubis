@@ -11,6 +11,9 @@ namespace TombOfAnubis
 {
     class Session
     {
+        // TEMPORARY HARD CODED PARAMETERS
+
+        public AnubisBehaviour AnubisBehaviour { get; set; } = AnubisBehaviour.Random;
         /// <summary>
         /// The single Session instance that can be active at a time.
         /// </summary>
@@ -182,7 +185,7 @@ namespace TombOfAnubis
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem();
             singleton.GameplayEffectSystem = new GameplayEffectSystem();
-            singleton.AnubisAISystem = new AISystem(singleton.Scene);
+            singleton.AnubisAISystem = new AISystem(singleton.Scene, AnubisBehaviour.Random);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
             singleton.AnimationSystem = new AnimationSystem();
 

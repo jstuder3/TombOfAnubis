@@ -86,7 +86,7 @@ namespace TombOfAnubis
                 slot.ClearItem();
 
                 character2.GetComponent<Movement>().IsTrapped = false;
-                character2.GetComponent<Player>().PlayerState = PlayerState.Idle;
+                character2.GetComponent<Player>().PlayerState = MovementState.Idle;
 
             }
 
@@ -123,7 +123,7 @@ namespace TombOfAnubis
         public static void OnCollision(Character character, Anubis anubis)
         {
 
-            character.GetComponent<Player>().PlayerState = PlayerState.Trapped;
+            character.GetComponent<Player>().PlayerState = MovementState.Trapped;
             character.GetComponent<Movement>().IsTrapped = true;
 
             StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
