@@ -33,6 +33,7 @@ namespace TombOfAnubis
         protected override void LoadContent()
         {
             Fonts.LoadContent(Content);
+            AudioController.LoadContent(Content);
             base.LoadContent();
         }
 

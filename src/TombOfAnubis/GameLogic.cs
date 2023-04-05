@@ -103,6 +103,7 @@ namespace TombOfAnubis
             {
                 character.GetComponent<Inventory>().AddArtefact();
                 artefact.Delete();
+                AudioController.PlaySoundEffect("amazing_soundeffect");
                 Console.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }
