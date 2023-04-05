@@ -133,11 +133,8 @@ namespace TombOfAnubis
 
             singleton.PlayerInputSystem.Update(gameTime);
             singleton.CollisionSystem.Update(gameTime);
-<<<<<<< HEAD
             singleton.GameplayEffectSystem.Update(gameTime);
-=======
             singleton.AnimationSystem.Update(gameTime);
->>>>>>> 7804633962220eb45aabb65bee2d60edf4b7acb6
             singleton.DiscoverySystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
         }
