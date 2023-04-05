@@ -11,6 +11,9 @@ namespace TombOfAnubis
 {
     class Session
     {
+        // TEMPORARY HARD CODED PARAMETERS
+
+        public AnubisBehaviour AnubisBehaviour { get; set; } = AnubisBehaviour.Random;
         /// <summary>
         /// The single Session instance that can be active at a time.
         /// </summary>
@@ -165,7 +168,7 @@ namespace TombOfAnubis
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem();
-            singleton.AnubisAISystem = new AISystem(singleton.Scene);
+            singleton.AnubisAISystem = new AISystem(singleton.Scene, AnubisBehaviour.Random);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
 
             //// set up the initial map

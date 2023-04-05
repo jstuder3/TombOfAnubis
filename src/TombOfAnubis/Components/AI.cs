@@ -2,6 +2,8 @@
 {
     public class AI : Component
     {
+        public MovementState MovementState { get; set; }
+
         public MovementGraph MovementGraph { get; set; }
         public AI(Map map)
         {
