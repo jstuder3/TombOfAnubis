@@ -136,7 +136,7 @@ namespace TombOfAnubis
                     500f - ((MenuEntries[i].Texture.Height - 10) *
                         (MenuEntries.Count - 1 - i)));
             }
-
+            AudioController.PlaySong("background_music");
             base.LoadContent();
         }
 
