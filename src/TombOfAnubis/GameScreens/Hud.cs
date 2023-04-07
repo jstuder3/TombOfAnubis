@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,20 @@ namespace TombOfAnubis
         private Session session;
         private List<Character> characters;
         private List<Viewport> characterViewports;
-        private SpriteFont artefactStatusFont;
-        private Color artefactStatusColor;
+        private SpriteFont statusFont;
+        private Color statusColor;
+        private GameScreenManager screenManager;
+        private List<Texture2D> itemBorderTextures = new List<Texture2D>();
+        private int displayOffset = 30;
+        private int placementOffset = 3;
+        private float scalingFactor = 0.75f;
+        private int numSlots = 1;
+        private float fontScale = 0.35f;
+        private string artefactSlotFiller = "Artefact";
+        private string itemSlotFiller = "Power Up";
 
 
-        public Hud(GraphicsDevice graphicsDevice)
+        public Hud(GraphicsDevice graphicsDevice, GameScreenManager gameScreenManager)
         {
             graphics = graphicsDevice;
             viewport = graphics.Viewport;
@@ -34,8 +44,24 @@ namespace TombOfAnubis
             minimapBackground.SetData(new[] { Color.Yellow });
 
             // In-game UI Fonts
-            artefactStatusFont = Fonts.DisneyHeroicFont;
-            artefactStatusColor = Fonts.ArtefactStatusColor;
+            statusFont = Fonts.DisneyHeroicFont;
+            statusColor = Fonts.ArtefactStatusColor;
+            screenManager = gameScreenManager;
+
+            LoadContent();
+        }
+
+        public void LoadContent()
+        {
+            ContentManager content = screenManager.Game.Content;
+            for (int i = 0; i < characters.Count; i++)
+            {
+                string textureName = "Item_slot_" + (i + 1);
+                string textureFullPath = "Textures/Objects/UI/" + textureName;
+                Texture2D itemSlotTexture = content.Load<Texture2D>(textureFullPath);
+                itemBorderTextures.Add(itemSlotTexture);
+            }
+
         }
 
         public void Draw(GameTime gameTime)
@@ -90,18 +116,105 @@ namespace TombOfAnubis
             // TODO: Implement
 
             int playerID = character.GetComponent<Player>().PlayerID;
-            int numCollectedArtefacts = character.GetComponent<Inventory>().ArtefactCount();
-            int totalArtefacts = character.GetComponent<Inventory>().ArtefactSlots.Count;
+            bool hasArtefact = character.GetComponent<Inventory>().HasArtefact();
+            // bool hasPowerup = character.GetComponent<Inventory>().GetEmptyItemSlot();
+            // int totalArtefacts = character.GetComponent<Inventory>().ArtefactSlots.Count;
 
-            string artefactStatus = "Artefacts: " + numCollectedArtefacts + "/" + totalArtefacts;
-            Vector2 textLength = artefactStatusFont.MeasureString(artefactStatus);
-            Vector2 displayPositionOffSet = new Vector2((characterViewport.Width - textLength.X )/2, 0f);
-            Vector2 displayPosition = new Vector2(characterViewport.X, characterViewport.Y) + displayPositionOffSet;
+            Texture2D texture = itemBorderTextures[playerID];
+            int textureWidth = (int) (texture.Width * scalingFactor);
+            int textureHeight = (int)(texture.Height * scalingFactor);
 
-            // Session.SetFocusOnPlayer(playerID, characterViewport);
-            session.SpriteSystem.SpriteBatch.DrawString(artefactStatusFont, artefactStatus, displayPosition, artefactStatusColor);
-            // Session.Draw(gameTime);
+            List<int> positionX = new List<int>();
+            List<int> positionY = new List<int>();
 
+            for (int i = 0; i < numSlots; i++)
+            {
+                int X, Y;
+                if (playerID == 0)
+                {
+                    X = characterViewport.X + textureWidth * i + placementOffset;
+                    Y = characterViewport.Y + placementOffset;
+                }
+                else if (playerID == 1)
+                {
+                    X = characterViewport.X + characterViewport.Width - textureWidth * (i+1) - placementOffset;
+                    Y = characterViewport.Y + placementOffset;
+                }
+                else if (playerID == 2)
+                {
+                    X = characterViewport.X + textureWidth * i + placementOffset;
+                    Y = characterViewport.Y + characterViewport.Height - textureHeight - placementOffset - displayOffset;
+                }
+                else
+                {
+                    X = characterViewport.X + characterViewport.Width - textureWidth * (i+1) - placementOffset;
+                    Y = characterViewport.Y + characterViewport.Height - textureHeight - placementOffset - displayOffset;
+                }
+
+                positionX.Add(X);
+                positionY.Add(Y);
+            }
+
+            for (int i=0; i < numSlots; i++)
+            {
+                // Rectangle SourceRectangle = new Rectangle(0,0,texture.Width, texture.Height);
+                Rectangle DestinationRectangle = new Rectangle(positionX[i], positionY[i], textureWidth, textureHeight);
+                session.SpriteSystem.SpriteBatch.Draw(texture, DestinationRectangle, Color.White);
+            }
+
+            if (hasArtefact)
+            {
+                DrawArtefactSprite(playerID, textureWidth, textureHeight, positionX[0], positionY[0]);
+            }
+
+            else
+            {
+                DrawFillerString(artefactSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 0);
+            }
+
+            // Fill up item slot with a filler
+            DrawFillerString(itemSlotFiller ,textureWidth, textureHeight, positionX[0], positionY[0], 1);
+        }
+
+        /// <summary>
+        /// Draws the artefact sprite in the designated slot
+        /// </summary>
+        private void DrawArtefactSprite(int playerID, int frameWidth, int frameHeight, int framePositionX, int framePositionY)
+        {
+            Texture2D artefactTexture = session.Map.Artefacts[playerID].Texture;
+            Vector2 artefactScale = session.Map.Artefacts[playerID].Scale;
+
+            int artefactWidth = (int)(artefactTexture.Width * artefactScale.X);
+            int artefactHeight = (int)(artefactTexture.Height * artefactScale.Y);
+
+            Vector2 artefactPositionOffSet = new Vector2((frameWidth - artefactWidth) / 4, (frameHeight - artefactHeight) / 2);
+            Vector2 artefactDisplayPosition = new Vector2(framePositionX, framePositionY) + artefactPositionOffSet;
+
+            Rectangle DestinationRectangle = new Rectangle((int)artefactDisplayPosition.X, (int)artefactDisplayPosition.Y, artefactWidth, artefactHeight);
+
+            session.SpriteSystem.SpriteBatch.Draw(artefactTexture, DestinationRectangle, Color.White);
+        }
+
+        /// <summary>
+        /// Draws a filler string when no artefact or item is collected.
+        /// Slot 0 is for an artefact, the other for the item.
+        /// </summary>
+        private void DrawFillerString(string statusText,int frameWidth, int frameHeight, int framePositionX, int framePositionY, int slot)
+        {
+            Vector2 textLength = statusFont.MeasureString(statusText) * fontScale;
+            Vector2 positionOffSet;
+            if (slot == 0)
+            {
+                positionOffSet = new Vector2((frameWidth - textLength.X) / 4, (frameHeight - textLength.Y) / 2);
+            }
+            else {
+                positionOffSet = new Vector2((frameWidth - textLength.X) * 3 / 4, (frameHeight - textLength.Y) / 2);
+            }
+            
+            Vector2 displayPosition = new Vector2(framePositionX, framePositionY) + positionOffSet;
+
+            session.SpriteSystem.SpriteBatch.DrawString(statusFont, statusText, displayPosition, statusColor,
+            0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
         }
     }
 }

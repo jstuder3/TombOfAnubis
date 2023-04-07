@@ -54,7 +54,7 @@ namespace TombOfAnubis
             SpriteBatch = GameScreenManager.SpriteBatch;
             SplitScreen.Initialize(GameScreenManager.GraphicsDevice, gameStartDescription.NumberOfPlayers);
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
-            Hud = new Hud(GameScreenManager.GraphicsDevice);
+            Hud = new Hud(GameScreenManager.GraphicsDevice, GameScreenManager);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
