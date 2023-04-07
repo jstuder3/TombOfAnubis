@@ -217,6 +217,7 @@ namespace TombOfAnubis
                                     singleton.Map.CreateEntityTileCenteredPosition(singleton.Map.Anubis),
                                     singleton.Map.Anubis.Scale,
                                     singleton.Map.Anubis.Texture,
+                                    singleton.Map.Anubis.Animation,
                                     singleton.Map.EntityProperties.MaxAnubisMovementSpeed,
                                     singleton.Map));
 

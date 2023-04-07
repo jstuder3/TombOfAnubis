@@ -101,8 +101,8 @@
 				  <Type>Idle</Type>
 				  <NumberOfFrames>2</NumberOfFrames>
 				  <!-- Duration of one frame in milliseconds-->
-				  <FrameDuration>400</FrameDuration>
-				  <FrameSize>10 10</FrameSize>
+				  <FrameDuration>200</FrameDuration>
+				  <FrameSize>200 200</FrameSize>
 			  </Item>
 		  </Animation>
 	  </Anubis>
