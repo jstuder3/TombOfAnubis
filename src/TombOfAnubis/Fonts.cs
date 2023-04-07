@@ -129,6 +129,7 @@ namespace TombOfAnubis
         public static readonly Color RestrictionColor = new Color(0, 0, 0);
         public static readonly Color ModifierColor = new Color(0, 0, 0);
         public static readonly Color MenuSelectedColor = new Color(200, 30, 30);
+        public static readonly Color ArtefactStatusColor = new Color(255, 255, 255);
 
 
         #endregion
