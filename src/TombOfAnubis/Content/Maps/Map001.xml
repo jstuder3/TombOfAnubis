@@ -95,7 +95,16 @@
 	  <Anubis>
 		  <SpawnTileCoordinate> 8 8</SpawnTileCoordinate>
 		  <Scale>0.5 0.5</Scale>
-		  <SpriteTextureName>anubis_sprite</SpriteTextureName>
+		  <SpriteTextureName>anubis</SpriteTextureName>
+		  <Animation>
+			  <Item>
+				  <Type>Idle</Type>
+				  <NumberOfFrames>2</NumberOfFrames>
+				  <!-- Duration of one frame in milliseconds-->
+				  <FrameDuration>400</FrameDuration>
+				  <FrameSize>10 10</FrameSize>
+			  </Item>
+		  </Animation>
 	  </Anubis>
 	  <Artefacts>
 		  <Item>
