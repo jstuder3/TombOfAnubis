@@ -148,14 +148,13 @@ namespace TombOfAnubis
                 SourceTileSize.X, SourceTileSize.Y);
         }
 
-        public Vector2 TileCoordinateToPosition(EntityDescription entityDescription)
+        public Vector2 CreateEntityTileCenteredPosition(EntityDescription entityDescription)
         {
-            Point tileCoordinate = entityDescription.SpawnTileCoordinate;
+            Point tileCoordinates = entityDescription.SpawnTileCoordinate;
             Vector2 offset = entityDescription.Offset;
             Vector2 scale = entityDescription.Scale;
             Texture2D texture = entityDescription.Texture;
-            var tilePos = new Vector2(tileCoordinate.X * TileSize.X,
-                                       tileCoordinate.Y * TileSize.Y);
+            var tilePos = TileCoordinateToPosition(tileCoordinates);
             var spriteCenter = tilePos + new Vector2(texture.Width * scale.X  / 2 - offset.X, texture.Height * scale.Y / 2 - offset.Y);
             var tileCenter = tilePos + new Vector2(TileSize.X / 2, TileSize.Y / 2);
             return tilePos + tileCenter - spriteCenter;
@@ -167,6 +166,20 @@ namespace TombOfAnubis
         public Point PositionToTileCoordinate(Vector2 position)
         {
             return new Point((int)(position.X / TileSize.X), (int)(position.Y / TileSize.Y));
+        }
+        /// <summary>
+        /// Takes a tile coordinate and returns the position of the top left corner of this tile.
+        /// </summary>
+        public Vector2 TileCoordinateToPosition(Point tileCoordinate)
+        {
+            return new Vector2(tileCoordinate.X * TileSize.X, tileCoordinate.Y * TileSize.Y);
+        }
+        /// <summary>
+        /// Takes a tile coordinate and returns the position of the center of this tile
+        /// </summary>
+        public Vector2 TileCoordinateToTileCenterPosition(Point tileCoordinate)
+        {
+            return new Vector2(tileCoordinate.X * TileSize.X + TileSize.X / 2f, tileCoordinate.Y * TileSize.Y + TileSize.Y / 2f);
         }
 
         public bool ValidTileCoordinates(Point coords)

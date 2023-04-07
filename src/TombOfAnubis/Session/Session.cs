@@ -199,7 +199,7 @@ namespace TombOfAnubis
                 EntityDescription character = singleton.Map.Characters[i];
                 singleton.Scene.AddChild(new Character(
                     i,
-                    singleton.Map.TileCoordinateToPosition(character),
+                    singleton.Map.CreateEntityTileCenteredPosition(character),
                     character.Scale,
                     character.Texture,
                     singleton.Map.EntityProperties.MaxCharacterMovementSpeed,
@@ -209,7 +209,7 @@ namespace TombOfAnubis
                 EntityDescription artefact = singleton.Map.Artefacts[i];
                 singleton.Scene.AddChild(new Artefact(
                     i,
-                    singleton.Map.TileCoordinateToPosition(artefact),
+                    singleton.Map.CreateEntityTileCenteredPosition(artefact),
                     artefact.Scale,
                     artefact.Texture,
                     true
@@ -218,7 +218,7 @@ namespace TombOfAnubis
             foreach( var dispenser in singleton.Map.Dispensers ) {
                 _ = Enum.TryParse(dispenser.Type, out DispenserType type);
                 singleton.Scene.AddChild(new Dispenser(
-                    singleton.Map.TileCoordinateToPosition(dispenser),
+                    singleton.Map.CreateEntityTileCenteredPosition(dispenser),
                     dispenser.Scale,
                     dispenser.Texture,
                     type
@@ -226,14 +226,14 @@ namespace TombOfAnubis
             }
 
             singleton.Scene.AddChild(new Anubis(
-                                    singleton.Map.TileCoordinateToPosition(singleton.Map.Anubis),
+                                    singleton.Map.CreateEntityTileCenteredPosition(singleton.Map.Anubis),
                                     singleton.Map.Anubis.Scale,
                                     singleton.Map.Anubis.Texture,
                                     singleton.Map.EntityProperties.MaxAnubisMovementSpeed,
                                     singleton.Map));
 
             singleton.Scene.AddChild(new Altar(
-                                    singleton.Map.TileCoordinateToPosition(singleton.Map.Altar),
+                                    singleton.Map.CreateEntityTileCenteredPosition(singleton.Map.Altar),
                                     singleton.Map.Altar.Scale,
                                     singleton.Map.Altar.Texture));
             
