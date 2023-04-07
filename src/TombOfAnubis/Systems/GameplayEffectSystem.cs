@@ -9,53 +9,38 @@ namespace TombOfAnubis
 {
     public class GameplayEffectSystem : BaseSystem<GameplayEffect>
     {
-        int speedUpModifier = 400;
         public override void Update(GameTime gameTime)
         {
             List<GameplayEffect> effectsToRemove = new List<GameplayEffect>();
-            //wait for effect to run out
+
+            // start effects that have not yet started
             foreach (GameplayEffect effect in components)
             {
                 if (!effect.IsStarted())
                 {
                     effect.Start(gameTime);
-                }
-                //check that effects are still active
+                } 
+            }
+
+            // check that effects are still active. if not, mark them for deletion
+            foreach (GameplayEffect effect in components) { 
                 if (!effect.IsActive(gameTime))
                 {
-                    switch (effect.Type)
-                    {
-                        case (EffectType.Speedup):
-                            //decrease view distance again
-                            effect.Entity.GetComponent<Movement>().MaxSpeed -= speedUpModifier;
-                            Console.WriteLine("Put MaxSpeed to " + effect.Entity.GetComponent<Movement>().MaxSpeed);
-                            break;
-                    }
                     effectsToRemove.Add(effect);
                 }
-
             }
+
+            // then remove effects that have timed out
             foreach (GameplayEffect effectToRemove in effectsToRemove)
             {
+                // delete handles effect disabling ("reverts" effects of applying, if necessary)
                 effectToRemove.Delete();
             }
-            //apply effect (either "on startup", or continuously, depending on the effect)
+
+            // actually apply effect (either "on startup", or continuously, depending on the effect)
             foreach (GameplayEffect effect in components) {
-                if (!effect.HasBeenApplied() || effect.IsAppliedEveryUpdate())
-                {
-                    switch (effect.Type)
-                    {
-                        case (EffectType.Speedup):
-                            //increase movement speed, then mark as applied
-                            effect.Entity.GetComponent<Movement>().MaxSpeed += speedUpModifier;
-                            effect.Apply();
-                            Console.WriteLine("Put MaxSpeed to " + effect.Entity.GetComponent<Movement>().MaxSpeed);
-                            break;
-                            //case EffectType.Resurrection:
-                            //resurrect player
-                            //  break;
-                    }
-                }
+                // GameplayEffects now handle their effect-dependent operations on their own
+                effect.Update(gameTime);
             }
 
         }

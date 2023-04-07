@@ -46,21 +46,24 @@ namespace TombOfAnubis
             //if there is space, put an item in the empty slot according to which type of dispenser this is
 
             emptyItemSlot = inventory.GetEmptyItemSlot();
-            if (emptyItemSlot == null) return false;
+            if (emptyItemSlot == null)
+            {
+                Console.WriteLine("No more space in inventory!");
+                return false;
+            }
 
             if(dispenserType == DispenserType.BodyPowerup)
             {
 
-                switch(random.Next(0, 3))
+                switch(random.Next(0, 2))
                 {
                     case (0):
                         emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
+                        Console.WriteLine("Put Speedup in somebody's inventory!");
                         break;
                     case (1):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
-                        break;
-                    case (2):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Fist, emptyItemSlot.Entity);
+                        Console.WriteLine("Put Fist in somebody's inventory!");
                         break;
                     default:
                         return false;
@@ -74,11 +77,11 @@ namespace TombOfAnubis
                 {
                     case (0):
                         emptyItemSlot.Item = new InventoryItem(ItemType.IncreaseViewDistance, emptyItemSlot.Entity);
+                        Console.WriteLine("Put IncreaseViewDistance in somebody's inventory!");
                         break;
                     default:
                         return false; 
                 }
-                Console.WriteLine("Put WisdomPowerup in somebody's inventory!");
 
             }
             else if(dispenserType == DispenserType.ResurrectionPowerup)
@@ -89,7 +92,7 @@ namespace TombOfAnubis
             }
             else
             {
-                Console.WriteLine("No more space in inventory!");
+                Console.WriteLine("Unknown dispenser type!");
                 return false;
             }
 

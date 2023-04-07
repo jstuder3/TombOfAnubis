@@ -99,6 +99,8 @@ namespace TombOfAnubis
 
         public List<EntityDescription> Dispensers { get; set; }
 
+        public EntityDescription Fist { get; set; }
+
         #endregion
 
         /// <summary>
@@ -252,6 +254,12 @@ namespace TombOfAnubis
                 {
                     ed.Load(input.ContentManager, @"Textures\Objects\Dispensers");
                 }
+
+                //Fist
+                map.Fist = input.ReadObject<EntityDescription>();
+                map.Fist.Texture = input.ContentManager.Load<Texture2D>(
+                        Path.Combine(@"Textures\Objects\Items",
+                        map.Fist.SpriteTextureName));
 
                 return map;
             }

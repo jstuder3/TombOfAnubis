@@ -145,5 +145,11 @@
 			  <Type>ResurrectionPowerup</Type>
 		  </Item>
 	  </Dispensers>
+	  <Fist>
+		  <!-- SpawnTile is necessary, but it's not used -->
+		  <SpawnTileCoordinate> 0 0</SpawnTileCoordinate>
+		  <Scale>0.01 0.01</Scale>
+		  <SpriteTextureName>plagiarized_fist</SpriteTextureName>
+	  </Fist>
   </Asset>
 </XnaContent>
