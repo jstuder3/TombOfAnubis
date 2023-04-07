@@ -1,4 +1,9 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
 {
@@ -8,6 +13,7 @@ namespace TombOfAnubis
         Speedup,
         IncreaseViewDistance,
         Resurrection,
+        Fist,
         Artefact
     }
 
@@ -33,9 +39,19 @@ namespace TombOfAnubis
                 case ItemType.None:
                     return false;
                 case ItemType.Speedup:
-                    Entity.AddComponent(new GameplayEffect(EffectType.Speedup, 10f));
+                    Entity.AddComponent(new GameplayEffect(EffectType.Speedup, 10f, 400f));
                     ItemType = ItemType.None;
                     Console.WriteLine("Speedup applied!");
+                    return true;
+                case ItemType.Fist:
+                    Session singleton = Session.GetInstance();
+                    Fist fist = new Fist(Entity.GetComponent<Transform>().Position, singleton.Map.Fist.Scale, singleton.Map.Fist.Texture, null);
+                    Session.GetInstance().Scene.AddChild(fist);
+                    //make the fist move automatically and make it despawn automatically
+                    fist.AddComponent(new GameplayEffect(EffectType.AutoMove, 0.2f, 400f, new Vector2(1f, 0f)));
+                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.2f));
+                    ItemType = ItemType.None;
+                    Console.WriteLine("Fist spawned!");
                     return true;
             }
             return false;

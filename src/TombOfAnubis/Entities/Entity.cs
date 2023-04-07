@@ -16,6 +16,11 @@ namespace TombOfAnubis
             component.Entity = this;
         }
 
+        public void RemoveComponentWithoutDeleting(Component component)
+        {
+            components.Remove(component);
+        }
+
         /// <summary>
         /// Delete entity, its components and children. Removes this entity from its parent.children list.
         /// </summary>
