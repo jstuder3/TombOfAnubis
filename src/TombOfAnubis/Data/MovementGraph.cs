@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 using QuikGraph;
+using static Microsoft.Xna.Framework.Graphics.SpriteFont;
+using QuikGraph.Algorithms.ShortestPath;
+using System.Linq;
 
 namespace TombOfAnubis
 {
@@ -16,6 +19,8 @@ namespace TombOfAnubis
         int graph_n_nodes;
         int graph_n_edges;
         Dictionary<int, int> grid_nr_to_node_id;
+        Dictionary<int, int> node_id_to_grid_nr;
+        FloydWarshallAllShortestPathAlgorithm<int, Edge<int>> fw_graph;
 
 
 
@@ -27,17 +32,14 @@ namespace TombOfAnubis
                 throw new ArgumentNullException("MapArgument");
             }
             this.map = existingInstance;
-            this.MAP_N_COLUMNS = map.MapDimensions.Y;
-            this.MAP_N_ROWS = map.MapDimensions.X;
-
-
-            Console.WriteLine("map name: " + map.Name);
-            Console.WriteLine("map dimensions: width: " + map.MapDimensions.X + ", height: " + map.MapDimensions.Y);
+            this.MAP_N_COLUMNS = map.MapDimensions.X;
+            this.MAP_N_ROWS = map.MapDimensions.Y;
 
 
 
 
             Console.WriteLine("start initiating graph");
+            
             create_graph_dictionary();
             create_graph();
 
@@ -57,27 +59,32 @@ namespace TombOfAnubis
 
             //inititate dictionary
             this.grid_nr_to_node_id = new Dictionary<int, int>();
+            this.node_id_to_grid_nr = new Dictionary<int, int>();
             int node_counter = 0;
+            Console.WriteLine("draw Map: ");
+            
+            
             for (int i = 0; i < this.MAP_N_ROWS; i++)
             {
                 for (int j = 0; j < this.MAP_N_COLUMNS; j++)
                 {
-                    if (this.map.CollisionLayer[grid_location_to_nr(i, j)] == 0)
+                    if (this.map.CollisionLayer[grid_location_to_grid_nr(i, j)] == 0)
                     {
-                        this.grid_nr_to_node_id.Add(grid_location_to_nr(i, j), node_counter);
-                        Console.Write(0 + ",");
-                        //Console.Write("("+i+","+j+")->(" + grid_location_to_nr(i, j) + "," + node_counter + "), ");
+                        this.grid_nr_to_node_id.Add(grid_location_to_grid_nr(i, j), node_counter);
+                        this.node_id_to_grid_nr.Add(node_counter, grid_location_to_grid_nr(i, j));
+                        //graph.AddVertex(node_counter);
                         node_counter++;
+                        //Console.Write(0 + ",");
                     } else
                     {
-                        Console.Write(1 + ",");
+                        //Console.Write(1 + ",");
                     }
 
 
                 }
-                Console.WriteLine();
+                //Console.WriteLine();
             }
-            Console.WriteLine("---------------------");
+            //Console.WriteLine("---------------------");
             this.graph_n_nodes = node_counter + 1;
             
         }
@@ -88,12 +95,15 @@ namespace TombOfAnubis
             //bidirectinal edges, only need to test from a grid position all edges to right and down
 
             var graph = new BidirectionalGraph<int, Edge<int>>();
+            Console.WriteLine("type of graph: " + graph.GetType());
 
+            
             //first add all nodes to the graph:
             for (int i = 0; i < this.graph_n_nodes; i++)
             {
                 graph.AddVertex(i);
             }
+            
 
             //var edge = new Edge<int>(2, 4);
             //graph.AddEdge(Edge<int>(2, 4));
@@ -106,29 +116,31 @@ namespace TombOfAnubis
 
                 for (int i = 0; i < this.MAP_N_ROWS; i++)
                 {
-                    if (this.map.CollisionLayer[grid_location_to_nr(i,j)] == 1)
+                    if (this.map.CollisionLayer[grid_location_to_grid_nr(i,j)] == 1)
                     {
                         continue;
                     }
-                    int cur_grid_id = grid_location_to_nr(i, j);
+                    
+                    int cur_grid_id = grid_location_to_grid_nr(i, j);
                     int cur_graph_id = grid_nr_to_node_id[cur_grid_id];
 
-                    if (i < this.MAP_N_ROWS-1 && this.map.CollisionLayer[grid_location_to_nr(i + 1, j)] == 0)
+                    if (i < this.MAP_N_ROWS-1 && this.map.CollisionLayer[grid_location_to_grid_nr(i + 1, j)] == 0)
                     {
                         //check if edge to below
-                        int to_grid_id = grid_location_to_nr(i + 1, j);
-                        int to_graph_id = grid_nr_to_node_id[to_grid_id];
-                        //edges.Add(cur_graph_id, to_graph_id);
-                        var edge = new Edge<int>(cur_graph_id, to_graph_id);
+                        int target_grid_id = grid_location_to_grid_nr(i + 1, j);
+                        int target_graph_id = grid_nr_to_node_id[target_grid_id];
+
+                        var edge = new Edge<int>(cur_graph_id, target_graph_id);
+                        Console.WriteLine("try to add edge. #nodes: " + this.graph_n_nodes + ", edge: " + edge.Source + "->" + edge.Target);
                         graph.AddEdge(edge);
                         //edges.Add(grid_nr_to_node_id[grid_location_to_nr(i,j)], grid_nr_to_node_id[grid_location_to_nr(i+1,j)]]);
                         n_edges++;
 
                     }
-                    if (j < this.MAP_N_COLUMNS-1 && this.map.CollisionLayer[grid_location_to_nr(i, j+1)] == 0)
+                    if (j < this.MAP_N_COLUMNS-1 && this.map.CollisionLayer[grid_location_to_grid_nr(i, j+1)] == 0)
                     {
                         // check if edge to right
-                        int to_grid_id = grid_location_to_nr(i, j + 1);
+                        int to_grid_id = grid_location_to_grid_nr(i, j + 1);
                         int to_graph_id = grid_nr_to_node_id[to_grid_id];
 
                         var edge = new Edge<int>(cur_graph_id, to_graph_id);
@@ -139,39 +151,166 @@ namespace TombOfAnubis
                 }
             }
             this.graph_n_edges = n_edges;
-        }
-        private int grid_location_to_nr(int i, int j)
-        {
-            /// <summary>
-            /// Method <c>grid_location_to_nr</c> maps the grid poition to its grid number.
-            /// </summary>
-            //return this.MAP_N_COLUMNS * i + j;
-            return this.MAP_N_ROWS * j + i;
-        }
 
-        public int position_to_node_id(Vector2 position)
-        {
-            //Console.WriteLine("player initial position: " + position.X + ", " + position.Y);
+            
+            Func<Edge<int>, double> weights = edge => 1;
+            //var fw = new FloydWarshallAllShortestPathAlgorithm<int, Edge<int>>(graph, weights);
+            fw_graph = new FloydWarshallAllShortestPathAlgorithm<int, Edge<int>>(graph, weights);
+            fw_graph.Compute();
 
-            int x = (int) Math.Floor(position.X / map.TileSize.X);
-            int y = (int) Math.Floor(position.Y / map.TileSize.Y);
-            //Console.WriteLine("rounded x, y: " + x + ", " + y);
-            int grid_nr = grid_location_to_nr(x, y);
-
-            int node_id = 5;
-            if(!grid_nr_to_node_id.ContainsKey(grid_nr))
+            // Get interesting paths
+            /*
+            foreach (int source in graph.Vertices)
             {
-                Console.WriteLine("graph: node key not found: key: "+ grid_nr);
-                node_id = -1;
-                
+                foreach (int target in graph.Vertices)
+                {
+                    if (fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path))
+                    {
+                        Console.WriteLine("for node " + source + " to " + target + " path: ");
+                        foreach (Edge<int> edge in path)
+                        {
+                            Console.WriteLine(edge);
+                        }
+                    }
+                }
+            }
+            */
+
+
+        }
+
+        /// <summary>
+        /// Method <c>grid_location_to_grid_nr</c> maps the grid poition to its grid number.
+        /// Pair (i,j) represents (row_index,column_index), eg. standart matrix notation
+        /// </summary>
+        public int grid_location_to_grid_nr(int i, int j)
+        {
+            
+            //Map is stored columnwise
+            return this.MAP_N_COLUMNS * i + j;
+          
+        }
+
+        /// <summary>
+        /// Method <c>grid_nr_to_grid_location</c> maps the grid number to the grid location.
+        /// Pair/Tuple (i,j) represents (row_index,column_index), eg. standart matrix notation
+        /// </summary>
+        public Point grid_nr_to_grid_location(int nr)
+        {
+            
+            int j = nr % this.MAP_N_COLUMNS;
+            int i = (nr - j) / this.MAP_N_ROWS;
+            return new Point(j, i);
+        }
+
+
+        /// <summary>
+        /// Method <c>world_position_to_node_id</c> maps the world poition (top left of a sprite) to its location (node id) on the graph.
+        /// The node id can be used in all graphs for shortest path or any other operations
+        /// If the mapping fails, the return value is -1 thus invalid.
+        /// </summary>
+        public int world_position_to_node_id(Vector2 position)
+        {
+            //first get mid position of sprite
+            var map = Session.GetInstance().Map;
+            Vector2 centerPos = new Vector2(position.X / map.TileSize.X, position.Y / map.TileSize.Y);
+
+            Point tilePosition = Session.GetInstance().Map.PositionToTileCoordinate(position);
+            int gridNumber = grid_location_to_grid_nr(tilePosition.Y, tilePosition.X);
+            Console.WriteLine("tilePos to gridNumber: " + tilePosition + " -> " + gridNumber);
+            int nodeID = -1;
+            if (grid_nr_to_node_id.ContainsKey(gridNumber))
+            {
+                nodeID = grid_nr_to_node_id[gridNumber];
             } else
             {
-                node_id = grid_nr_to_node_id[grid_nr];
+                Console.WriteLine("graph: node key not found: key: " + gridNumber);
             }
-            //int node_id = 5;
-            //Console.WriteLine("grid nr: " + grid_nr + ", graph node nr: ", node_id);
+            Console.WriteLine("world posiition otpleft & middle, TilePosition, GridNumber, NodeID: " + position + " -> " + centerPos + " -> " + tilePosition + " -> " + nodeID);
+            return nodeID;
+        }
 
-            return node_id;
+        public Vector2 node_id_to_world_position(int nodeID)
+        {
+            if (this.node_id_to_grid_nr.ContainsKey(nodeID))
+            {
+                int tileNumber = this.node_id_to_grid_nr[nodeID];
+                Point tilePosition = grid_nr_to_grid_location(tileNumber);
+
+                var map = Session.GetInstance().Map;
+                Vector2 topLeft = new Vector2(tilePosition.X * map.TileSize.X, tilePosition.Y * map.TileSize.Y);
+                Vector2 centerPos = topLeft +  map.TileSize / 2;
+                return topLeft;
+
+            }
+            return new Vector2(-1, -1);
+        }
+
+        public Vector2 node_id_to_position(int node_id)
+        {
+            if(this.node_id_to_grid_nr.ContainsKey(node_id))
+            {
+                int grid_nr = this.node_id_to_grid_nr[node_id];
+                //Tuple<int,int> grid_position_tuple = grid_nr_to_grid_location(grid_nr);
+                Point gridPosition = grid_nr_to_grid_location(grid_nr);
+                Vector2 grid_position = new Vector2(gridPosition.Y, gridPosition.X);
+                Point tile_position = new Point((int)grid_position.X, (int)grid_position.Y);
+
+                //Session.GetInstance().Map.TileCoordinateToPosition(tile_position);
+                var map = Session.GetInstance().Map;
+                Vector2 centerPos = new Vector2(tile_position.X * map.TileSize.X, tile_position.Y * map.TileSize.Y);
+                centerPos += map.TileSize / 2;
+
+
+
+                //Vector2 world_position = new Vector2(Convert.ToSingle(grid_position_tuple.Item1) * Convert.ToSingle(63.125), Convert.ToSingle(grid_position_tuple.Item2) * Convert.ToSingle(63.125));
+
+                return new Vector2(tile_position.X, tile_position.Y);
+
+            }
+            //node id does  not exist, return error
+            return new Vector2(-1,-1);
+        }
+
+        
+        public bool check_path_exists(int source, int target)
+        {
+            return fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+        }
+
+        public IEnumerable<Edge<int>> get_path(int source, int target)
+        {
+            fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+            return path;
+        }
+        public Vector2 get_target_to_walk_to(int source, int target)
+        {
+            //assumes path exists
+            fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+
+            Edge<int> to = path.First();
+            if(to.Source != source)
+            {
+                throw new ArgumentException();
+            }
+
+            int target_grid_nr = node_id_to_grid_nr[to.Target];
+            //Tuple<int,int> direction_position_tp = grid_nr_to_grid_location(target_grid_nr);
+            //Vector2 ret = new Vector2(float(direction_position_tp.Item2) * 63.125, float(direction_position_tp.Item1)* 63.125);
+            //Vector2 ret = new Vector2(Convert.ToSingle(direction_position_tp.Item1) * Convert.ToSingle(63.125), Convert.ToSingle(direction_position_tp.Item2)*Convert.ToSingle(63.125));
+            return new Vector2(1,1);
+        }
+
+        public int get_distance(int source, int target)
+        {
+            if(fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path)) 
+            {
+                return path.Count();
+            } else
+            {
+                return -1;
+            }
+
         }
     }
 }

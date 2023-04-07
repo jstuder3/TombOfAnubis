@@ -1,6 +1,6 @@
 ﻿namespace TombOfAnubis
 {
-    public enum PlayerState
+    public enum MovementState
     {
         Idle,
         Walking,
@@ -16,11 +16,11 @@
     {
         public int PlayerID { get; set; }
 
-        public PlayerState PlayerState { get; set; }
+        public MovementState PlayerState { get; set; }
         public Player(int playerID)
         {
             PlayerID = playerID;
-            PlayerState = PlayerState.Idle;
+            PlayerState = MovementState.Idle;
         }
     }
 }
