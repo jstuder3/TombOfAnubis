@@ -106,7 +106,7 @@ namespace TombOfAnubis
                     // Console.WriteLine("New direction is " + (Directions)newDirection);
                     MovingDirection = newDirection;
 
-                    if (!movement.IsTrapped)
+                    if (!movement.IsTrapped())
                     {
                         newPosition = transform.Position;
 
@@ -153,7 +153,7 @@ namespace TombOfAnubis
 
                     //Console.WriteLine("using real anubis AI");
                     newPosition = transform.Position;
-                    if (!movement.IsTrapped)
+                    if (!movement.IsTrapped())
                     {
                         //loop over all players and get closest player if he is close enough (<=MaxTailDistance)
                         int closest_player_dist = MaxTailDistance + 1;
@@ -165,19 +165,21 @@ namespace TombOfAnubis
                         foreach (Character player in characters)
                         {
                             Transform cur_player_transform = player.GetComponent<Transform>();
-                            int cur_player_node_id = movementGraph.ToNodeID(cur_player_transform.Position);
+                            Vector2 cur_position = cur_player_transform.Position;
+                            Vector2 curEntityCenterPosition = cur_position + player.Size() / 2f;
+                            int cur_player_node_id = movementGraph.ToNodeID(curEntityCenterPosition);
 
                             //check if mapping works
-                            Vector2 cur_position = cur_player_transform.Position;
                             Point tileCoordinates = movementGraph.ToTileCoordinate(cur_player_node_id);
                             Vector2 mapped_position = movementGraph.ToPosition(cur_player_node_id);
+                            Vector2 mappedCenterPosition = movementGraph.ToCenterTilePosition(cur_player_node_id);
 
-                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + cur_position + " : " + mapped_position);
+                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + curEntityCenterPosition + " : " + mappedCenterPosition);
                             //int temp = movementGraph.world_position_to_node_id2(cur_player_transform.ToWorld().Position);
                             return;
 
                             //Console.WriteLine("test, player id: " + player.Id + ", position: "+ cur_player_transform.Position.X +"," + cur_player_transform.Position.Y);
-                            if (!player.GetComponent<Movement>().IsTrapped && ai.MovementGraph.CheckPathExists(anubis_node_id, cur_player_node_id))
+                            if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.CheckPathExists(anubis_node_id, cur_player_node_id))
                             {
 
                                 int dist = ai.MovementGraph.GetDistance(anubis_node_id, cur_player_node_id);

@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 
 namespace TombOfAnubis
@@ -18,11 +17,6 @@ namespace TombOfAnubis
         /// The single Session instance that can be active at a time.
         /// </summary>
         protected static Session singleton;
-
-        /// <summary>
-        /// Global gametime that can be accessed from anywhere.
-        /// </summary>
-        public static GameTime GameTime { get; private set; }
 
         /// <summary>
         /// The GameplayScreen object that created this session.
@@ -131,9 +125,6 @@ namespace TombOfAnubis
             {
                 return;
             }
-
-            Session.GameTime = gameTime;
-
             singleton.PlayerInputSystem.Update(gameTime);
             singleton.CollisionSystem.Update(gameTime);
             singleton.GameplayEffectSystem.Update(gameTime);
@@ -147,9 +138,6 @@ namespace TombOfAnubis
         /// </summary>
         public static void Draw(GameTime gameTime)
         {
-
-            Session.GameTime = gameTime;
-
             singleton.SpriteSystem.Viewport = singleton.Viewport;
             singleton.SpriteSystem.Draw(gameTime);
         }

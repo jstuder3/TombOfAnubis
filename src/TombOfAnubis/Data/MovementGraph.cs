@@ -174,7 +174,19 @@ namespace TombOfAnubis
             {
                 return new Vector2(-1, -1);
             }
-            
+        }
+
+        public Vector2 ToCenterTilePosition(int nodeID)
+        {
+            Point tileCoordinates = ToTileCoordinate(nodeID);
+            if (map.ValidTileCoordinates(tileCoordinates))
+            {
+                return map.TileCoordinateToTileCenterPosition(tileCoordinates);
+            }
+            else
+            {
+                return new Vector2(-1, -1);
+            }
         }
         
         public bool CheckPathExists(int source, int target)

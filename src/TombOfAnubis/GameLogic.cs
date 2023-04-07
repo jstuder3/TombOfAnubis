@@ -62,7 +62,7 @@ namespace TombOfAnubis
         {
 
             //if neither character is trapped
-            if (!character1.GetComponent<Movement>().IsTrapped && !character2.GetComponent<Movement>().IsTrapped)
+            if (!character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped())
             {
 
                 Transform t1 = character1.GetComponent<Transform>();
@@ -79,14 +79,13 @@ namespace TombOfAnubis
             }
 
             //if both are trapped, do nothing
-            else if (character1.GetComponent<Movement>().IsTrapped && character2.GetComponent<Movement>().IsTrapped) { }
-            else if(!character1.GetComponent<Movement>().IsTrapped && character2.GetComponent<Movement>().IsTrapped && character1.GetComponent<Inventory>().HasResurrectItem())
+            else if (character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped()) { }
+            else if(!character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped() && character1.GetComponent<Inventory>().HasResurrectItem())
             {
                 InventorySlot slot = character1.GetComponent<Inventory>().GetResurrectionSlot();
                 slot.ClearItem();
 
-                character2.GetComponent<Movement>().IsTrapped = false;
-                character2.GetComponent<Player>().PlayerState = MovementState.Idle;
+                character2.GetComponent<Movement>().State = MovementState.Idle;
 
             }
 
@@ -123,8 +122,7 @@ namespace TombOfAnubis
         public static void OnCollision(Character character, Anubis anubis)
         {
 
-            character.GetComponent<Player>().PlayerState = MovementState.Trapped;
-            character.GetComponent<Movement>().IsTrapped = true;
+            character.GetComponent<Movement>().State = MovementState.Trapped;
 
             StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
         }

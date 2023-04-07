@@ -10,17 +10,20 @@ namespace TombOfAnubis
     public class GameplayEffectSystem : BaseSystem<GameplayEffect>
     {
         int speedUpModifier = 400;
-
         public override void Update(GameTime gameTime)
         {
             List<GameplayEffect> effectsToRemove = new List<GameplayEffect>();
             //wait for effect to run out
             foreach (GameplayEffect effect in components)
             {
-                //check that effects are still active
-                if (!effect.IsActive())
+                if (!effect.IsStarted())
                 {
-                    switch (effect.type)
+                    effect.Start(gameTime);
+                }
+                //check that effects are still active
+                if (!effect.IsActive(gameTime))
+                {
+                    switch (effect.Type)
                     {
                         case (EffectType.Speedup):
                             //decrease view distance again
@@ -32,16 +35,15 @@ namespace TombOfAnubis
                 }
 
             }
-
-            foreach (GameplayEffect effectToRemove in effectsToRemove) { 
-                Deregister(effectToRemove);
+            foreach (GameplayEffect effectToRemove in effectsToRemove)
+            {
+                effectToRemove.Delete();
             }
-
             //apply effect (either "on startup", or continuously, depending on the effect)
             foreach (GameplayEffect effect in components) {
                 if (!effect.HasBeenApplied() || effect.IsAppliedEveryUpdate())
                 {
-                    switch (effect.type)
+                    switch (effect.Type)
                     {
                         case (EffectType.Speedup):
                             //increase movement speed, then mark as applied
