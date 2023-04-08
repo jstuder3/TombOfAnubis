@@ -208,6 +208,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Maps/SimpleTiles.png
 
+#begin Textures/Maps/Tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Maps/Tiles.png
+
 #begin Textures/Menu/MenuTile.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -364,6 +376,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser.png
 
+#begin Textures/Objects/Items/plagiarized_fist.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/plagiarized_fist.png
+
 #begin Textures/Objects/UI/Item_slot_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -411,16 +435,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
-
-#begin Textures/Objects/Items/plagiarized_fist.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Items/plagiarized_fist.png
 
