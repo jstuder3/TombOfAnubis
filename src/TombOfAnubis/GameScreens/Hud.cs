@@ -37,7 +37,7 @@ namespace TombOfAnubis
             graphics = graphicsDevice;
             viewport = graphics.Viewport;
             session = Session.GetInstance();
-            MinimapScale = Vector2.One / 16;
+            MinimapScale = Vector2.One / 40;
             characters = session.Scene.GetChildrenOfType<Character>();
             characterViewports = SplitScreen.PlayerViewports;
             minimapBackground = new Texture2D(graphicsDevice, 1, 1);

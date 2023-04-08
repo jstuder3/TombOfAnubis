@@ -4,11 +4,13 @@
       <Name>Map001</Name>
 	  <!-- Number of tiles in x(right) and y(down) of the map-->
 	  <MapDimensions>20 23</MapDimensions>
-	  <!-- Size of one tile in the Texture source -->
-	  <SourceTileSize>64 64</SourceTileSize>
+	  <!-- Size of one tile in the Texture source. -->
+	  <SourceTileSize>400 400</SourceTileSize>
 	  <!-- Scale here to increase the in game size of the tiles (Walls and floors) -->
-	  <TileScale>3 3</TileScale>
-	  <TextureName>SimpleTiles</TextureName>
+	  <TileScale>1 1</TileScale>
+	  <TextureName>Tiles</TextureName>
+	  <!--The tile png needs 16 wall rectangles in the first row and NumFloorTiles many floor rectangles in the second row-->
+	  <NumberOfFloorTiles>4</NumberOfFloorTiles>
 	  <CollisionLayer>
 		  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
 		  1   0   1   0   1   1   1   1   0   0   0   1   1   1   1   1   1   1   1   1
