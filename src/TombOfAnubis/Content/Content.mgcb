@@ -214,6 +214,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Maps/SimpleTiles.png
 
+#begin Textures/Maps/Tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Maps/Tiles.png
+
 #begin Textures/Menu/MenuTile.png
 /importer:TextureImporter
 /processor:TextureProcessor

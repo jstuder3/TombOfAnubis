@@ -71,6 +71,10 @@ namespace TombOfAnubis
         [ContentSerializerIgnore]
         public Texture2D UndiscoveredTexture { get; set; }
 
+        public int NumberOfFloorTiles { get; set; }
+
+        [ContentSerializerIgnore]
+        private Random floorTileRandom = new Random();
         /// <summary>
         /// Spatial array for the ground tiles for this map.
         /// </summary>
@@ -144,11 +148,25 @@ namespace TombOfAnubis
             {
                 return Rectangle.Empty;
             }
-
-            return new Rectangle(
+            else if (baseLayerValue > 15)
+            {
+                // Pick a random floor tile (Row 1)
+                int index = floorTileRandom.Next(NumberOfFloorTiles);
+                return new Rectangle(
+                    index * SourceTileSize.X,
+                    SourceTileSize.Y,
+                    SourceTileSize.X,
+                    SourceTileSize.Y
+                    );
+            }
+            else
+            {
+                // Chooose the wall tile texture based on its neighbours (Row 0)
+                return new Rectangle(
                 (baseLayerValue % TilesPerRow) * SourceTileSize.X,
-                (baseLayerValue / TilesPerRow) * SourceTileSize.Y,
+                0,
                 SourceTileSize.X, SourceTileSize.Y);
+            }
         }
 
         public Vector2 CreateEntityTileCenteredPosition(EntityDescription entityDescription)
@@ -227,6 +245,7 @@ namespace TombOfAnubis
                     Path.Combine(@"Textures\Maps",
                     map.TextureName));
                 map.TilesPerRow = map.Texture.Width / map.SourceTileSize.X;
+                map.NumberOfFloorTiles = input.ReadInt32();
                 map.CollisionLayer = input.ReadObject<int[]>();
                 map.BaseLayer = input.ReadObject<int[]>();
                 map.EntityProperties = input.ReadObject<EntityProperties>();
@@ -236,6 +255,7 @@ namespace TombOfAnubis
                     ed.Load(input.ContentManager, @"Textures\Characters");
                 }
                 map.Anubis = input.ReadObject<EntityDescription>();
+                map.Anubis.Load(input.ContentManager, @"Textures\Characters");
                 map.Anubis.Texture = input.ContentManager.Load<Texture2D>(
                         Path.Combine(@"Textures\Characters",
                         map.Anubis.SpriteTextureName));
@@ -246,9 +266,7 @@ namespace TombOfAnubis
 
                 }
                 map.Altar = input.ReadObject<EntityDescription>();
-                map.Altar.Texture = input.ContentManager.Load<Texture2D>(
-                        Path.Combine(@"Textures\Objects\Altar",
-                        map.Altar.SpriteTextureName));
+                map.Altar.Load(input.ContentManager, @"Textures\Objects\Altar");
                 map.Dispensers = input.ReadObject<List<EntityDescription>>();
                 foreach (EntityDescription ed in map.Dispensers)
                 {
@@ -257,9 +275,7 @@ namespace TombOfAnubis
 
                 //Fist
                 map.Fist = input.ReadObject<EntityDescription>();
-                map.Fist.Texture = input.ContentManager.Load<Texture2D>(
-                        Path.Combine(@"Textures\Objects\Items",
-                        map.Fist.SpriteTextureName));
+                map.Fist.Load(input.ContentManager, @"Textures\Objects\Items");
 
                 return map;
             }

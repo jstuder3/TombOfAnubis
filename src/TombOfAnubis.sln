@@ -4,10 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TombOfAnubis", "TombOfAnubis\TombOfAnubis.csproj", "{1A4B8601-4424-465D-9271-C94CC08C9E03}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B743D17D-7A35-47F7-B632-12BB9E0F2523} = {B743D17D-7A35-47F7-B632-12BB9E0F2523}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TombOfAnubisProcessors", "TombOfAnubisProcessors\TombOfAnubisProcessors.csproj", "{B743D17D-7A35-47F7-B632-12BB9E0F2523}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TombOfAnubisContentData", "TombOfAnubisContentData\TombOfAnubisContentData.csproj", "{FE7D5DD4-3FAB-4843-A9EA-5633FA70D986}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TombOfAnubisContentData", "TombOfAnubisContentData\TombOfAnubisContentData.csproj", "{FE7D5DD4-3FAB-4843-A9EA-5633FA70D986}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

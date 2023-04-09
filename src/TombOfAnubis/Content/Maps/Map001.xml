@@ -4,11 +4,13 @@
       <Name>Map001</Name>
 	  <!-- Number of tiles in x(right) and y(down) of the map-->
 	  <MapDimensions>20 23</MapDimensions>
-	  <!-- Size of one tile in the Texture source -->
-	  <SourceTileSize>64 64</SourceTileSize>
+	  <!-- Size of one tile in the Texture source. -->
+	  <SourceTileSize>400 400</SourceTileSize>
 	  <!-- Scale here to increase the in game size of the tiles (Walls and floors) -->
-	  <TileScale>3 3</TileScale>
-	  <TextureName>SimpleTiles</TextureName>
+	  <TileScale>1 1</TileScale>
+	  <TextureName>Tiles</TextureName>
+	  <!--The tile png needs 16 wall rectangles in the first row and NumFloorTiles many floor rectangles in the second row-->
+	  <NumberOfFloorTiles>4</NumberOfFloorTiles>
 	  <CollisionLayer>
 		  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
 		  1   0   1   0   1   1   1   1   0   0   0   1   1   1   1   1   1   1   1   1
@@ -45,7 +47,7 @@
 			  <!-- (Optional) Offset of the entity. Moves the entity away from the center of the tile. -->
 			  <Offset>0 0</Offset>
 			  <!-- Scale of the entity -->
-			  <Scale>0.1 0.1</Scale>
+			  <Scale>0.17 0.17</Scale>
 			  <!-- Name of the texture. Tha path is handled by the MapReader class.-->
 			  <SpriteTextureName>animated_explorer</SpriteTextureName>
 			  <Animation>
@@ -78,33 +80,32 @@
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 6 10</SpawnTileCoordinate>
-			  <Scale>0.1 0.1</Scale>
+			  <Scale>0.17 0.17</Scale>
 			  <SpriteTextureName>green_plagiarized_explorer</SpriteTextureName>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 9 6</SpawnTileCoordinate>
-			  <Scale>0.1 0.1</Scale>
+			  <Scale>0.17 0.17</Scale>
 			  <SpriteTextureName>blue_plagiarized_explorer</SpriteTextureName>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 9 10</SpawnTileCoordinate>
-			  <Scale>0.1 0.1</Scale>
+			  <Scale>0.17 0.17</Scale>
 			  <SpriteTextureName>purple_plagiarized_explorer</SpriteTextureName>
 		  </Item>
 	  </Characters>
 	  <Anubis>
 		  <SpawnTileCoordinate> 8 8</SpawnTileCoordinate>
-		  <Scale>0.5 0.5</Scale>
+		  <Scale>0.9 0.9</Scale>
 		  <SpriteTextureName>anubis</SpriteTextureName>
-		  <Animation>
-			  <Item>
-				  <Type>Idle</Type>
-				  <NumberOfFrames>2</NumberOfFrames>
-				  <!-- Duration of one frame in milliseconds-->
-				  <FrameDuration>400</FrameDuration>
-				  <FrameSize>10 10</FrameSize>
-			  </Item>
-		  </Animation>
+			  <Animation>
+				  <Item>
+					  <Type>Idle</Type>
+					  <NumberOfFrames>2</NumberOfFrames>
+					  <FrameDuration>400</FrameDuration>
+					  <FrameSize>200 200</FrameSize>
+				  </Item>
+			  </Animation>
 	  </Anubis>
 	  <Artefacts>
 		  <Item>
