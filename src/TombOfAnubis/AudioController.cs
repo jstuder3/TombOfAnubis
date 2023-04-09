@@ -22,7 +22,7 @@ namespace TombOfAnubis
             };
             SoundEffects = new Dictionary<string, SoundEffect>()
             {
-                { "amazing_soundeffect", content.Load<SoundEffect>(@"Audio\amazing_soundeffect") }
+                { "amazing_soundeffect", content.Load<SoundEffect>(@"Audio\ArtefactPickup") }
             };
             MediaPlayer.IsRepeating = true;
 
