@@ -103,7 +103,7 @@ namespace TombOfAnubis
             {
                 character.GetComponent<Inventory>().AddArtefact();
                 artefact.Delete();
-                AudioController.PlaySoundEffect("amazing_soundeffect");
+                AudioController.PlaySoundEffect("artefactPickup");
                 Console.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }
@@ -115,13 +115,22 @@ namespace TombOfAnubis
         }
         public static void OnCollision(Character character, Dispenser dispenser)
         {
-            dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
+            bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
+            if (newItem)
+            {
+                AudioController.PlaySoundEffect("itemPickup");
+            }
 
             StaticCollision(character, dispenser);
         }
 
         public static void OnCollision(Character character, Anubis anubis)
         {
+
+            if (character.GetComponent<Movement>().State != MovementState.Trapped)
+            {
+                AudioController.PlaySoundEffect("anubisRoar");
+            }
 
             character.GetComponent<Movement>().State = MovementState.Trapped;
 
@@ -163,6 +172,7 @@ namespace TombOfAnubis
                 Artefact artefact = new Artefact(playerID, new Vector2(playerID * artefactWidth, 0), Vector2.One * artefactScale, artefactTexture, false);
                 altar.AddChild(artefact);
                 Console.WriteLine("Artefact of player " + playerID + " was placed!");
+                AudioController.PlaySoundEffect("artefactPlaced");
             }
             else if (!altarInventory.ArtefactSlotsFull())
             {

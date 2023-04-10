@@ -20,17 +20,35 @@
 /processorParam:Quality=Best
 /build:Audio/amazing_soundeffect.mp3
 
+#begin Audio/AnubisRoar.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/AnubisRoar.mp3
+
 #begin Audio/ArtefactPickup.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/ArtefactPickup.mp3
 
+#begin Audio/ArtefactPlaced.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/ArtefactPlaced.mp3
+
 #begin Audio/background_music.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/background_music.mp3
+
+#begin Audio/ItemPickup.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/ItemPickup.mp3
 
 #begin Fonts/Archeologicaps.spritefont
 /importer:FontDescriptionImporter

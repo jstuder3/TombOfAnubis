@@ -22,7 +22,10 @@ namespace TombOfAnubis
             };
             SoundEffects = new Dictionary<string, SoundEffect>()
             {
-                { "amazing_soundeffect", content.Load<SoundEffect>(@"Audio\ArtefactPickup") }
+                { "artefactPickup", content.Load<SoundEffect>(@"Audio\ArtefactPickup") },
+                { "itemPickup", content.Load<SoundEffect>(@"Audio\ItemPickup") },
+                { "artefactPlaced", content.Load<SoundEffect>(@"Audio\ArtefactPlaced") },
+                { "anubisRoar", content.Load<SoundEffect>(@"Audio\AnubisRoar") },
             };
             MediaPlayer.IsRepeating = true;
 
@@ -32,7 +35,7 @@ namespace TombOfAnubis
         {
             if(Songs.ContainsKey(song)) 
             {
-                MediaPlayer.Play(Songs[song]);
+                //MediaPlayer.Play(Songs[song]);
             }
         }
 
