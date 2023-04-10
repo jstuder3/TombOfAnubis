@@ -114,7 +114,7 @@ namespace TombOfAnubis
                         {
                             //walk up
                             newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
-                            movement.IsWalking = true;
+                            movement.State = MovementState.Walking;
                             movement.Orientation = Orientation.Up;
 
                         }
@@ -122,27 +122,27 @@ namespace TombOfAnubis
                         {
                             // walk down 
                             newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
-                            movement.IsWalking = true;
+                            movement.State = MovementState.Walking;
                             movement.Orientation = Orientation.Down;
                         }
                         else if (newDirection == (int)Directions.Left)
                         {
                             //walk left
                             newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
-                            movement.IsWalking = true;
+                            movement.State = MovementState.Walking;
                             movement.Orientation = Orientation.Left;
                         }
                         else if (newDirection == (int)Directions.Right)
                         {
                             //walk right 
                             newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
-                            movement.IsWalking = true;
+                            movement.State = MovementState.Walking;
                             movement.Orientation = Orientation.Left;
                         }
                         else
                         {
                             Console.WriteLine("Error: Unknown direction " + newDirection);
-                            movement.IsWalking = false;
+                            movement.State = MovementState.Walking;
                         }
                     }
                 }

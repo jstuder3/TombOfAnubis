@@ -30,7 +30,7 @@ namespace TombOfAnubis
         /// </summary>
         public bool SetActiveClip(AnimationClipType clipType)
         {
-   
+            ActiveClip = null;
             for (int i = 0; i < AnimationClips.Count; i++)
             {
                 AnimationClip clip = AnimationClips[i];

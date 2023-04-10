@@ -27,7 +27,6 @@ namespace TombOfAnubis
     {
         public int BaseMovementSpeed { get; }
         public int MaxSpeed { get; set; }
-        public bool IsWalking { get; set; }
         public Orientation Orientation { get; set; }
 
         public MovementState State { get; set; }
@@ -41,11 +40,20 @@ namespace TombOfAnubis
         {
             BaseMovementSpeed = maxSpeed;
             MaxSpeed = maxSpeed;
-            IsWalking = false;
             Orientation = Orientation.Up;
             State = state;
+            MovementSystem.Register(this);
         }
 
+        public override void Delete()
+        {
+            MovementSystem.Deregister(this);
+        }
+
+        public bool IsWalking()
+        {
+            return State == MovementState.Walking;
+        }
         public bool IsTrapped()
         {
             return State == MovementState.Trapped;

@@ -18,7 +18,7 @@ namespace TombOfAnubis
                 Animation animation = new Animation(animationClips);
                 AddComponent(animation);
 
-                animation.SetActiveClip(AnimationClipType.WalkingRight);
+                animation.SetActiveClip(AnimationClipType.Idle);
 
                 sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2);
             }

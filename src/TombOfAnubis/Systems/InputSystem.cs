@@ -16,7 +16,7 @@ namespace TombOfAnubis
                 Transform transform = character.GetComponent<Transform>();
                 Movement movement = character.GetComponent<Movement>();
                 RectangleCollider collider = character.GetComponent<RectangleCollider>();
-                movement.IsWalking = false;
+                movement.State = MovementState.Idle;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
                 if (movement.CanMove())
@@ -29,7 +29,7 @@ namespace TombOfAnubis
                     Vector2 movementVector = InputController.PlayerMovementDirections[playerID];
                     if(movementVector.Length() > 0)
                     {
-                        movement.IsWalking = true;
+                        movement.State = MovementState.Walking;
 
                         Vector2 movementVectorNorm = new Vector2(movementVector.X, movementVector.Y);
                         movementVectorNorm.Normalize();
