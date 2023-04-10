@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
 #endregion
 
 namespace TombOfAnubis
@@ -66,7 +67,7 @@ namespace TombOfAnubis
         {
             gameStartDescription = new GameStartDescription();
             gameStartDescription.MapContentName = "Map001";
-            gameStartDescription.NumberOfPlayers = 4;
+            gameStartDescription.NumberOfPlayers = 0;
 
             // add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
@@ -152,6 +153,21 @@ namespace TombOfAnubis
         public override void HandleInput()
         {
             base.HandleInput();
+            foreach (PlayerInput playerInput in InputController.PlayerInputs)
+            {
+                if (playerInput.UseTriggered() && !playerInput.IsActive)
+                {
+                    int activeInputs = InputController.GetActiveInputs().Count();
+                    if (activeInputs < 4)
+                    {
+                        playerInput.IsActive = true;
+                        playerInput.PlayerID = activeInputs;
+                        buttonPressed = true;
+                        gameStartDescription.NumberOfPlayers = activeInputs + 1;
+                        playerSelectionMenuEntry.Text = "Number of players: " + gameStartDescription.NumberOfPlayers;
+                    }
+                }
+            }
         }
 
 
@@ -172,7 +188,7 @@ namespace TombOfAnubis
         /// </summary>
         void PlayerSelectionMenuEntrySelected(object sender, EventArgs e)
         {
-            gameStartDescription.NumberOfPlayers = (gameStartDescription.NumberOfPlayers %4)+1;
+            //gameStartDescription.NumberOfPlayers = (gameStartDescription.NumberOfPlayers %4)+1;
             playerSelectionMenuEntry.Text = "Number of players: " + gameStartDescription.NumberOfPlayers;
         }
 

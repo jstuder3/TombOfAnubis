@@ -117,7 +117,7 @@ namespace TombOfAnubis
                 }
 
                 // Button pressed
-                if (InputController.IsUseTriggered())
+                if(InputController.IsUseTriggered()) 
                 {
                     // AudioManager.PlayCue("Continue");
                     OnSelectEntry(selectedEntry);

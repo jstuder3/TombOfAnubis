@@ -12,24 +12,115 @@ namespace TombOfAnubis
         UseBodyPowerup,
         UseWisdomPowerup
     }
+
+    public class PlayerInput
+    {
+        public bool IsKeyboard { get; }
+        public bool IsActive { get; set; }
+        public int PlayerID { get; set; }
+        public int ControllerID { get; set; }
+        private Keys UpKey;
+        private Keys DownKey;
+        private Keys LeftKey;
+        private Keys RightKey;
+        private Keys UseKey;
+
+        private Buttons UseButton;
+
+        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use) {
+            IsKeyboard = true;
+            UpKey = up;
+            DownKey = down;
+            LeftKey = left;
+            RightKey = right;
+            UseKey = use;
+        }
+        public PlayerInput(Buttons use, int controllerID)
+        {
+            ControllerID = controllerID;
+            IsKeyboard = false;
+            UseButton = use;
+        }
+
+        public void Update()
+        {
+            if (IsActive && IsKeyboard)
+            {
+                Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
+                foreach (Keys key in pressedKeys)
+                {
+                    if (key == UpKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].Y += -1f;
+                    }
+
+                    if (key == LeftKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].X += -1f;
+                    }
+
+                    if (key == DownKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].Y += 1f;
+                    }
+
+                    if (key == RightKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].X += 1f;
+                    }
+                    if (InputController.PlayerMovementDirections[PlayerID].Length() > 0)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].Normalize();
+                    }
+                    if (key == UseKey)
+                    {
+                        InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
+                    }
+                }
+            }
+            else if(IsActive)
+            {
+                GamePadState gamePadState = GamePad.GetState(ControllerID);
+                InputController.PlayerMovementDirections[PlayerID] = gamePadState.ThumbSticks.Left * new Vector2(1f, -1f);
+                if (gamePadState.IsButtonDown(UseButton))
+                {
+                    InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
+                }
+            }
+        }
+
+        public bool UseTriggered()
+        {
+            if (IsKeyboard)
+            {
+                return Keyboard.GetState().IsKeyDown(UseKey);
+            }
+            else
+            {
+                return GamePad.GetState(ControllerID).IsButtonDown(UseButton);
+            }
+        }
+    }
     public static class InputController
     {
-
-        public static Keys[] UpKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up };
-        public static Keys[] LeftKeys = new Keys[] { Keys.A, Keys.F, Keys.J, Keys.Left };
-        public static Keys[] DownKeys = new Keys[] { Keys.S, Keys.G, Keys.K, Keys.Down };
-        public static Keys[] RightKeys = new Keys[] { Keys.D, Keys.H, Keys.L, Keys.Right };
-        public static Keys[] UseKeys = new Keys[] { Keys.E, Keys.Z, Keys.O, Keys.OemMinus };
-        // public static Keys[] BodyPowerupKeys = new Keys[] { Keys.E, Keys.Z, Keys.O, Keys.OemMinus };
-        // public static Keys[] WisdomPowerupKeys = new Keys[] { Keys.Q, Keys.R, Keys.U, Keys.OemPeriod };
-
-        public static Buttons[] UseButtons = new Buttons[] { Buttons.A, Buttons.A, Buttons.A, Buttons.A };
+        public static PlayerInput[] PlayerInputs = new PlayerInput[] { 
+            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E),
+            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z),
+            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O),
+            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus),
+            new PlayerInput(Buttons.A, 0),
+            new PlayerInput(Buttons.A, 1),
+            new PlayerInput(Buttons.A, 2),
+            new PlayerInput(Buttons.A, 3),
+        };
 
         public static Vector2[] PlayerMovementDirections = new Vector2[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero };
 
-        public static HashSet<PlayerAction>[] PlayerActions = new HashSet<PlayerAction>[] { new HashSet<PlayerAction>(), new HashSet<PlayerAction>(), new HashSet<PlayerAction>() , new HashSet<PlayerAction>() };
-        // public static Buttons[] BodyPowerupButtons = new Buttons[] { Buttons.B, Buttons.B, Buttons.B, Buttons.B };
-        // public static Buttons[] WisdomPowerupButtons = new Buttons[] { Buttons.X, Buttons.X, Buttons.X, Buttons.X };
+        public static HashSet<PlayerAction>[] PlayerActions = new HashSet<PlayerAction>[] {
+            new HashSet<PlayerAction>(),
+            new HashSet<PlayerAction>(), 
+            new HashSet<PlayerAction>(), 
+            new HashSet<PlayerAction>()};
 
         public static readonly Vector2 UP = new Vector2(0, -1f);
         public static readonly Vector2 DOWN = new Vector2(0, 1f);
@@ -39,58 +130,9 @@ namespace TombOfAnubis
         public static void Update()
         {
             Clear();
-            for(int playerId = 0; playerId < 4; playerId++)
+            foreach(PlayerInput playerInput in PlayerInputs)
             {
-
-                GamePadState gamepadState = GamePad.GetState(playerId);
-
-                PlayerMovementDirections[playerId] = gamepadState.ThumbSticks.Left * new Vector2(1f, -1f);
-
-                bool keyboardInput = false;
-                Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
-                foreach (Keys key in pressedKeys)
-                {
-                    if (key == UpKeys[playerId])
-                    {
-                        PlayerMovementDirections[playerId].Y += -1f;
-                        keyboardInput = true;
-                    }
-
-                    if (key == LeftKeys[playerId])
-                    {
-                        PlayerMovementDirections[playerId].X += -1f;
-                        keyboardInput = true;
-                    }
-
-                    if (key == DownKeys[playerId])
-                    {
-                        PlayerMovementDirections[playerId].Y += 1f;
-                        keyboardInput = true;
-                    }
-
-                    if (key == RightKeys[playerId])
-                    {
-                        PlayerMovementDirections[playerId].X += 1f;
-                        keyboardInput = true;
-                    }
-                    if (keyboardInput == true && PlayerMovementDirections[playerId].Length() > 0)
-                    {
-                        PlayerMovementDirections[playerId].Normalize();
-                    }
-                    if (key == UseKeys[playerId])
-                    {
-                        PlayerActions[playerId].Add(PlayerAction.UseObject);
-                    }
-
-                }
-                Buttons[] pressedButtons = GetPressedButtons(gamepadState);
-                foreach (Buttons button in pressedButtons)
-                {
-                    if (button == UseButtons[playerId])
-                    {
-                        PlayerActions[playerId].Add(PlayerAction.UseObject);
-                    }
-                }
+                playerInput.Update();
             }
         }
         public static void Clear()
@@ -102,26 +144,11 @@ namespace TombOfAnubis
             }
         }
 
-        //there is no equivalent to GetPressedKeys() of KeyboardState for GamePadState, so we have to implement it ourselves
-        //(adapted from https://community.monogame.net/t/get-all-currently-pressed-gamepad-buttons-similar-to-keyboardstates-getpressedkeys/17966) 
-        public static Buttons[] GetPressedButtons(GamePadState gamepadState)
-        {
-            List<Buttons> pressedButtons = new List<Buttons>();
-            foreach (Buttons btn in Enum.GetValues(typeof(Buttons)))
-            {
-                if (gamepadState.IsButtonDown(btn))
-                {
-                    pressedButtons.Add(btn);
-                }
-            }
-
-            return pressedButtons.ToArray();
-        }
         public static bool IsDownTriggered()
         {
-            for (int playerId = 0; playerId < PlayerMovementDirections.Length; playerId++)
+            foreach (Vector2 dir in PlayerMovementDirections)
             {
-                if (Vector2.Dot(DOWN, PlayerMovementDirections[playerId]) > 0)
+                if (Vector2.Dot(DOWN, dir) > 0)
                 {
                     return true;
                 }
@@ -130,9 +157,9 @@ namespace TombOfAnubis
         }
         public static bool IsUpTriggered()
         {
-            for (int playerId = 0; playerId < PlayerMovementDirections.Length; playerId++)
+            foreach (Vector2 dir in PlayerMovementDirections)
             {
-                if (Vector2.Dot(UP, PlayerMovementDirections[playerId]) > 0)
+                if (Vector2.Dot(UP, dir) > 0)
                 {
                     return true;
                 }
@@ -141,9 +168,9 @@ namespace TombOfAnubis
         }
         public static bool IsRightTriggered()
         {
-            for (int playerId = 0; playerId < PlayerMovementDirections.Length; playerId++)
+            foreach (Vector2 dir in PlayerMovementDirections)
             {
-                if (Vector2.Dot(RIGHT, PlayerMovementDirections[playerId]) > 0)
+                if (Vector2.Dot(RIGHT, dir) > 0)
                 {
                     return true;
                 }
@@ -152,9 +179,9 @@ namespace TombOfAnubis
         }
         public static bool IsleftTriggered()
         {
-            for (int playerId = 0; playerId < PlayerMovementDirections.Length; playerId++)
+            foreach(Vector2 dir in PlayerMovementDirections)
             {
-                if (Vector2.Dot(LEFT, PlayerMovementDirections[playerId]) > 0)
+                if (Vector2.Dot(LEFT, dir) > 0)
                 {
                     return true;
                 }
@@ -163,14 +190,28 @@ namespace TombOfAnubis
         }
         public static bool IsUseTriggered()
         {
-            for (int playerId = 0; playerId < PlayerActions.Length; playerId++)
+            foreach(HashSet<PlayerAction> playerAction in PlayerActions)
             {
-                if (PlayerActions[playerId].Contains(PlayerAction.UseObject))
+                if(playerAction.Contains(PlayerAction.UseObject))
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public static List<PlayerInput> GetActiveInputs()
+        {
+            List<PlayerInput> res = new List<PlayerInput>();
+            foreach (PlayerInput input in PlayerInputs)
+            {
+                if(input.IsActive)
+                {
+                    res.Add(input);
+                }
+            }
+            res.Sort((x, y) => x.PlayerID - y.PlayerID);
+            return res;
         }
     }
 }
