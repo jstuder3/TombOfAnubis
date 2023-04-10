@@ -26,6 +26,7 @@ namespace TombOfAnubis
         /// </summary>
         public void Delete()
         {
+
             foreach (Component component in components)
             {
                 component.Delete();
@@ -74,6 +75,18 @@ namespace TombOfAnubis
                 }
             }
             return foundChildren;
+        }
+
+        public List<T> GetComponentsOfType<T>() where T: Component
+        {
+            List<T> foundComponents = new List<T>();
+            foreach(Component component in components)
+            {
+                if (component.GetType().Equals(typeof(T))) {
+                    foundComponents.Add((T)component);
+                }
+            }
+            return foundComponents;
         }
 
         public void AddChild(Entity entity)

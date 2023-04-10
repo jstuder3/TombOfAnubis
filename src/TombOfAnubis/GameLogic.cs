@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TombOfAnubisContentData;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -56,6 +57,12 @@ namespace TombOfAnubis
                 case (nameof(Altar), nameof(Character)):
                     OnCollision((Character)target, (Altar)source);
                     break;
+                case (nameof(Fist), nameof(Anubis)):
+                    OnCollision((Fist)source, (Anubis)target);
+                    break;
+                case (nameof(Anubis), nameof(Fist)):
+                    OnCollision((Fist)target, (Anubis)source);
+                    break;
             }
         }
         public static void OnCollision(Character character1, Character character2)
@@ -68,8 +75,8 @@ namespace TombOfAnubis
                 Transform t1 = character1.GetComponent<Transform>();
                 Transform t2 = character2.GetComponent<Transform>();
 
-                Vector2 center1 = character1.GetComponent<RectangleCollider>().CenterPosition;
-                Vector2 center2 = character2.GetComponent<RectangleCollider>().CenterPosition;
+                Vector2 center1 = character1.GetComponent<RectangleCollider>().GetCenter();
+                Vector2 center2 = character2.GetComponent<RectangleCollider>().GetCenter();
 
                 Vector2 overlap_direction = center2 - center1;
                 overlap_direction.Normalize();
@@ -150,6 +157,22 @@ namespace TombOfAnubis
             StaticCollision(character, altar);
         }
 
+        public static void OnCollision(Fist fist, Anubis anubis)
+        {
+            //When Anubis collides with the fist, the fist is destroyed (by ending its lifetime GameEffect), a smoke effect is spawned and Anubis is stunned for 2 seconds
+
+            Session singleton = Session.GetInstance();
+            VFX vfx = new VFX(anubis.GetComponent<Transform>().Position, singleton.Map.Fist.Scale*2f, singleton.Map.Fist.Texture, singleton.Map.Fist.Animation, 2, AnimationClipType.VFX_01);
+            singleton.Scene.AddChild(vfx);
+            vfx.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.5f));
+
+            foreach(GameplayEffect gameplayEffect in fist.GetComponentsOfType<GameplayEffect>())
+            {
+                gameplayEffect.EndGameplayEffect();
+            }
+
+            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f));
+        }
         public static void PlaceArtefactIfPossible(Character character, Altar altar)
         {
             if (character == null || altar == null) return;
@@ -201,7 +224,7 @@ namespace TombOfAnubis
             float sum_half_widths = actorCollider.Size.X / 2f + wallCollider.Size.X / 2f;
             float sum_half_heights = actorCollider.Size.Y / 2f + wallCollider.Size.Y / 2f;
 
-            Vector2 overlap = actorCollider.CenterPosition - wallCollider.CenterPosition; //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
+            Vector2 overlap = actorCollider.GetCenter() - wallCollider.GetCenter(); //IMPORTANT: Center difference and top-left-corner difference is NOT necessarily the same because the boxes don't have to be quadratic (stupid error that cost me like 3 hours)
 
             while (overlap.Length() == 0) //prevent NaNs
             {

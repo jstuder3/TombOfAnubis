@@ -11,7 +11,6 @@ namespace TombOfAnubis
     {
         public override void Update(GameTime gameTime)
         {
-            List<GameplayEffect> effectsToRemove = new List<GameplayEffect>();
 
             // start effects that have not yet started
             foreach (GameplayEffect effect in components)
@@ -21,6 +20,8 @@ namespace TombOfAnubis
                     effect.Start(gameTime);
                 } 
             }
+
+            List<GameplayEffect> effectsToRemove = new List<GameplayEffect>();
 
             // check that effects are still active. if not, mark them for deletion
             foreach (GameplayEffect effect in components) { 

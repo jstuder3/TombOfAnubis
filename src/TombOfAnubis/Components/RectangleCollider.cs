@@ -12,14 +12,14 @@ namespace TombOfAnubis
     public class RectangleCollider : Collider
     {
         public Vector2 Position { get; set; } //position is always top left of collider, but we separately keep the center position
-        public Vector2 CenterPosition { get; set; }
         public Vector2 Size { get; set; }
+        private Vector2 centerPosition { get; set; }
 
         public RectangleCollider(Vector2 position, Vector2 size) : base()
         {
             Size = size;
             Position = position;
-            CenterPosition = position + new Vector2(size.X / 2, size.Y / 2);
+            centerPosition = position + new Vector2(size.X / 2, size.Y / 2);
         }
 
         public override void Update(GameTime gameTime)
@@ -27,7 +27,7 @@ namespace TombOfAnubis
             //update location of collider based on owner
             Position = Entity.GetComponent<Transform>().ToWorld().Position;
             Size = Entity.Size();
-            CenterPosition = Position + new Vector2(Size.X / 2, Size.Y / 2);
+            centerPosition = Position + new Vector2(Size.X / 2, Size.Y / 2);
         }
 
         public float GetLeft()
@@ -46,6 +46,11 @@ namespace TombOfAnubis
         public float GetBottom()
         {
             return Position.Y + Size.Y;
+        }
+
+        public Vector2 GetCenter()
+        {
+            return centerPosition;
         }
     }
 }

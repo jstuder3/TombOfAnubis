@@ -2,175 +2,216 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TombOfAnubis
 {
-    public enum PlayerActions
+    public enum PlayerAction
     {
-        WalkLeft,
-        WalkRight,
-        WalkUp,
-        WalkDown,
         UseObject,
         UseBodyPowerup,
         UseWisdomPowerup
     }
+
+    public class PlayerInput
+    {
+        public bool IsKeyboard { get; }
+        public bool IsActive { get; set; }
+        public int PlayerID { get; set; }
+        public int ControllerID { get; set; }
+        private Keys UpKey;
+        private Keys DownKey;
+        private Keys LeftKey;
+        private Keys RightKey;
+        private Keys UseKey;
+
+        private Buttons UseButton;
+
+        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use) {
+            IsKeyboard = true;
+            UpKey = up;
+            DownKey = down;
+            LeftKey = left;
+            RightKey = right;
+            UseKey = use;
+        }
+        public PlayerInput(Buttons use, int controllerID)
+        {
+            ControllerID = controllerID;
+            IsKeyboard = false;
+            UseButton = use;
+        }
+
+        public void Update()
+        {
+            if (IsActive && IsKeyboard)
+            {
+                Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
+                foreach (Keys key in pressedKeys)
+                {
+                    if (key == UpKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].Y += -1f;
+                    }
+
+                    if (key == LeftKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].X += -1f;
+                    }
+
+                    if (key == DownKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].Y += 1f;
+                    }
+
+                    if (key == RightKey)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].X += 1f;
+                    }
+                    if (InputController.PlayerMovementDirections[PlayerID].Length() > 0)
+                    {
+                        InputController.PlayerMovementDirections[PlayerID].Normalize();
+                    }
+                    if (key == UseKey)
+                    {
+                        InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
+                    }
+                }
+            }
+            else if(IsActive)
+            {
+                GamePadState gamePadState = GamePad.GetState(ControllerID);
+                InputController.PlayerMovementDirections[PlayerID] = gamePadState.ThumbSticks.Left * new Vector2(1f, -1f);
+                if (gamePadState.IsButtonDown(UseButton))
+                {
+                    InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
+                }
+            }
+        }
+
+        public bool UseTriggered()
+        {
+            if (IsKeyboard)
+            {
+                return Keyboard.GetState().IsKeyDown(UseKey);
+            }
+            else
+            {
+                return GamePad.GetState(ControllerID).IsButtonDown(UseButton);
+            }
+        }
+    }
     public static class InputController
     {
+        public static PlayerInput[] PlayerInputs = new PlayerInput[] { 
+            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E),
+            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z),
+            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O),
+            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus),
+            new PlayerInput(Buttons.A, 0),
+            new PlayerInput(Buttons.A, 1),
+            new PlayerInput(Buttons.A, 2),
+            new PlayerInput(Buttons.A, 3),
+        };
 
-        public static Keys[] UpKeys = new Keys[] { Keys.W, Keys.T, Keys.I, Keys.Up };
-        public static Keys[] LeftKeys = new Keys[] { Keys.A, Keys.F, Keys.J, Keys.Left };
-        public static Keys[] DownKeys = new Keys[] { Keys.S, Keys.G, Keys.K, Keys.Down };
-        public static Keys[] RightKeys = new Keys[] { Keys.D, Keys.H, Keys.L, Keys.Right };
-        public static Keys[] UseKeys = new Keys[] { Keys.E, Keys.Z, Keys.O, Keys.OemMinus };
-        // public static Keys[] BodyPowerupKeys = new Keys[] { Keys.E, Keys.Z, Keys.O, Keys.OemMinus };
-        // public static Keys[] WisdomPowerupKeys = new Keys[] { Keys.Q, Keys.R, Keys.U, Keys.OemPeriod };
+        public static Vector2[] PlayerMovementDirections = new Vector2[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero };
 
-        public static Buttons[] UpButtons = new Buttons[] { Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp, Buttons.DPadUp };
-        public static Buttons[] LeftButtons = new Buttons[] { Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft, Buttons.DPadLeft };
-        public static Buttons[] DownButtons = new Buttons[] { Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown, Buttons.DPadDown };
-        public static Buttons[] RightButtons = new Buttons[] { Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight, Buttons.DPadRight };
-        public static Buttons[] UseButtons = new Buttons[] { Buttons.A, Buttons.A, Buttons.A, Buttons.A };
-        // public static Buttons[] BodyPowerupButtons = new Buttons[] { Buttons.B, Buttons.B, Buttons.B, Buttons.B };
-        // public static Buttons[] WisdomPowerupButtons = new Buttons[] { Buttons.X, Buttons.X, Buttons.X, Buttons.X };
+        public static HashSet<PlayerAction>[] PlayerActions = new HashSet<PlayerAction>[] {
+            new HashSet<PlayerAction>(),
+            new HashSet<PlayerAction>(), 
+            new HashSet<PlayerAction>(), 
+            new HashSet<PlayerAction>()};
 
+        public static readonly Vector2 UP = new Vector2(0, -1f);
+        public static readonly Vector2 DOWN = new Vector2(0, 1f);
+        public static readonly Vector2 LEFT = new Vector2(-1f, 0);
+        public static readonly Vector2 RIGHT = new Vector2(1f, 0);
 
-        //convert key presses by the current player into actions (walking left, right, up down, use, ...)
-        public static PlayerActions[] GetActionsOfCurrentPlayer(int player)
+        public static void Update()
         {
-            KeyboardState keyboardState = Keyboard.GetState();
-            Keys[] pressedKeys = keyboardState.GetPressedKeys();
-
-            GamePadState gamepadState = GamePadState.Default;
-
-            if (player == 0) gamepadState = GamePad.GetState(PlayerIndex.One);
-            if (player == 1) gamepadState = GamePad.GetState(PlayerIndex.Two);
-            if (player == 2) gamepadState = GamePad.GetState(PlayerIndex.Three);
-            if (player == 3) gamepadState = GamePad.GetState(PlayerIndex.Four);
-
-            Buttons[] pressedButtons = GetPressedButtons(gamepadState);
-
-            List<PlayerActions> actions = new List<PlayerActions>();
-
-
-            foreach (Keys key in pressedKeys)
+            Clear();
+            foreach(PlayerInput playerInput in PlayerInputs)
             {
-                if (key == UpKeys[player])
-                {
-                    actions.Add(PlayerActions.WalkUp);
-                }
-
-                if (key == LeftKeys[player])
-                {
-                    actions.Add(PlayerActions.WalkLeft);
-                }
-
-                if (key == DownKeys[player])
-                {
-                    actions.Add(PlayerActions.WalkDown);
-                }
-
-                if (key == RightKeys[player])
-                {
-                    actions.Add(PlayerActions.WalkRight);
-                }
-
-                if (key == UseKeys[player])
-                {
-                    actions.Add(PlayerActions.UseObject);
-                }
-                
+                playerInput.Update();
             }
-
-            foreach (Buttons button in pressedButtons)
+        }
+        public static void Clear()
+        {
+            for (int playerId = 0; playerId < 4; playerId++)
             {
-                if (button == UpButtons[player])
-                {
-                    actions.Add(PlayerActions.WalkUp);
-                }
-
-                if (button == LeftButtons[player])
-                {
-                    actions.Add(PlayerActions.WalkLeft);
-                }
-
-                if (button == DownButtons[player])
-                {
-                    actions.Add(PlayerActions.WalkDown);
-                }
-
-                if (button == RightButtons[player])
-                {
-                    actions.Add(PlayerActions.WalkRight);
-                }
-
-                if (button == UseButtons[player])
-                {
-                    actions.Add(PlayerActions.UseObject);
-                }
-
+                PlayerMovementDirections[playerId] = Vector2.Zero;
+                PlayerActions[playerId].Clear();
             }
-
-            //remove up/down and left/right conflicts, as well as duplicate keys
-            actions = HandleOpposingActions(actions);
-
-            return actions.ToArray();
-
-
         }
 
-        //there is no equivalent to GetPressedKeys() of KeyboardState for GamePadState, so we have to implement it ourselves
-        //(adapted from https://community.monogame.net/t/get-all-currently-pressed-gamepad-buttons-similar-to-keyboardstates-getpressedkeys/17966) 
-        public static Buttons[] GetPressedButtons(GamePadState gamepadState)
+        public static bool IsDownTriggered()
         {
-            List<Buttons> pressedButtons = new List<Buttons>();
-
-            foreach (Buttons btn in Enum.GetValues(typeof(Buttons)))
+            foreach (Vector2 dir in PlayerMovementDirections)
             {
-                if (gamepadState.IsButtonDown(btn))
+                if (Vector2.Dot(DOWN, dir) > 0)
                 {
-                    pressedButtons.Add(btn);
+                    return true;
                 }
             }
-
-            return pressedButtons.ToArray();
+            return false;
+        }
+        public static bool IsUpTriggered()
+        {
+            foreach (Vector2 dir in PlayerMovementDirections)
+            {
+                if (Vector2.Dot(UP, dir) > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsRightTriggered()
+        {
+            foreach (Vector2 dir in PlayerMovementDirections)
+            {
+                if (Vector2.Dot(RIGHT, dir) > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsleftTriggered()
+        {
+            foreach(Vector2 dir in PlayerMovementDirections)
+            {
+                if (Vector2.Dot(LEFT, dir) > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsUseTriggered()
+        {
+            foreach(HashSet<PlayerAction> playerAction in PlayerActions)
+            {
+                if(playerAction.Contains(PlayerAction.UseObject))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public static List<PlayerActions> HandleOpposingActions(List<PlayerActions> actions)
+        public static List<PlayerInput> GetActiveInputs()
         {
-            List<PlayerActions> resolvedActions = new List<PlayerActions>();
-
-            //if up and down are pressed at the same time, we don't add them to the list of player inputs
-            if (actions.Contains(PlayerActions.WalkUp) && !actions.Contains(PlayerActions.WalkDown))
+            List<PlayerInput> res = new List<PlayerInput>();
+            foreach (PlayerInput input in PlayerInputs)
             {
-                resolvedActions.Add(PlayerActions.WalkUp);
-            }
-            if (!actions.Contains(PlayerActions.WalkUp) && actions.Contains(PlayerActions.WalkDown))
-            {
-                resolvedActions.Add(PlayerActions.WalkDown);
-            }
-
-            //if left and right are pressed at the same time, we don't add them to the list of player inputs
-            if (actions.Contains(PlayerActions.WalkLeft) && !actions.Contains(PlayerActions.WalkRight))
-            {
-                resolvedActions.Add(PlayerActions.WalkLeft);
-            }
-            if (!actions.Contains(PlayerActions.WalkLeft) && actions.Contains(PlayerActions.WalkRight))
-            {
-                resolvedActions.Add(PlayerActions.WalkRight);
-            }
-
-            //for all remaining actions, just append them to the list if they're not already contained
-            foreach (PlayerActions action in actions)
-            {
-                if (action != PlayerActions.WalkUp && action != PlayerActions.WalkDown && action != PlayerActions.WalkLeft && action != PlayerActions.WalkRight && !resolvedActions.Contains(action))
+                if(input.IsActive)
                 {
-                    resolvedActions.Add(action);
+                    res.Add(input);
                 }
             }
-
-            return resolvedActions;
-
+            res.Sort((x, y) => x.PlayerID - y.PlayerID);
+            return res;
         }
     }
 }

@@ -98,11 +98,10 @@ namespace TombOfAnubis
         {
             int oldSelectedEntry = selectedEntry;
             // TODO: Add counter of connected players
-            PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(0);
 
             if (!buttonCooldown) {
                 // Move to the previous menu entry
-                if (currentActions.Contains(PlayerActions.WalkUp))
+                if (InputController.IsUpTriggered())
                 {
                     selectedEntry--;
                     if (selectedEntry < 0)
@@ -111,14 +110,14 @@ namespace TombOfAnubis
                 }
 
                 // Move to the next menu entry
-                if (currentActions.Contains(PlayerActions.WalkDown))
+                if (InputController.IsDownTriggered())
                 {
                     selectedEntry = (selectedEntry + 1) % menuEntries.Count;
                     buttonPressed = true;
                 }
 
                 // Button pressed
-                if (currentActions.Contains(PlayerActions.UseObject))
+                if(InputController.IsUseTriggered()) 
                 {
                     // AudioManager.PlayCue("Continue");
                     OnSelectEntry(selectedEntry);

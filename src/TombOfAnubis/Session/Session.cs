@@ -82,6 +82,8 @@ namespace TombOfAnubis
 
         public AnimationSystem AnimationSystem { get; set; }
 
+        public MovementSystem MovementSystem { get; set; }
+
         public Scene Scene { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
@@ -127,6 +129,7 @@ namespace TombOfAnubis
             }
             singleton.PlayerInputSystem.Update(gameTime);
             singleton.CollisionSystem.Update(gameTime);
+            singleton.MovementSystem.Update(gameTime);
             singleton.GameplayEffectSystem.Update(gameTime);
             singleton.AnimationSystem.Update(gameTime);
             singleton.DiscoverySystem.Update(gameTime);
@@ -176,6 +179,7 @@ namespace TombOfAnubis
             singleton.AnubisAISystem = new AISystem(singleton.Scene, AnubisBehaviour.Random);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
             singleton.AnimationSystem = new AnimationSystem();
+            singleton.MovementSystem = new MovementSystem();
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);

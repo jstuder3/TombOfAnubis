@@ -124,8 +124,7 @@ namespace TombOfAnubis
         /// </summary>
         public override void HandleInput()
         {
-            PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(0);
-            if (currentActions.Contains(PlayerActions.UseObject))
+            if (InputController.IsUseTriggered())
             {
                 // Raise the accepted event, then exit the message box.
                 if (Accepted != null)

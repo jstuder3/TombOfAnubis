@@ -55,20 +55,24 @@ namespace TombOfAnubis
             if(dispenserType == DispenserType.BodyPowerup)
             {
 
-                switch(random.Next(0, 2))
+                switch(random.Next(1, 1))
                 {
-                    case (0):
+                    case 0:
                         emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
                         Console.WriteLine("Put Speedup in somebody's inventory!");
                         break;
-                    case (1):
+                    case 1:
                         emptyItemSlot.Item = new InventoryItem(ItemType.Fist, emptyItemSlot.Entity);
                         Console.WriteLine("Put Fist in somebody's inventory!");
+                        break;
+                    case 2:
+                        emptyItemSlot.Item = new InventoryItem(ItemType.HidingCloak, emptyItemSlot.Entity);
+                        Console.WriteLine("Put HidingCloak in somebody's inventory!");
                         break;
                     default:
                         return false;
                 }
-                Console.WriteLine("Put BodyPowerup in somebody's inventory!");
+                //Console.WriteLine("Put BodyPowerup in somebody's inventory!");
             }
             else if(dispenserType == DispenserType.WisdomPowerup)
             {

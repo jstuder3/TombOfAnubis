@@ -7,22 +7,25 @@ using System.ComponentModel.Design.Serialization;
 namespace TombOfAnubis {
     public enum EffectType
     {
-        Speedup,
+        AdditiveSpeedModification,
+        MultiplicativeSpeedModification,
         IncreaseViewDistance,
-        Resurrection,
-        TemporarilyStopped,
-        AutoMove,
-        Lifetime
+        LinearAutoMove,
+        Lifetime,
+        Stunned,
+        Hidden
     }
 
     /**
-     * EffectType parameters: (additional parameters that must be passed when creating the effect)
+     * EffectType parameters: (additional parameters that must be passed when creating the effect, besides duration)
      * 
-     * Speedup: float speedup
+     * AdditiveSpeedModification: float absoluteSpeedModification
+     * MultiplicativeSpeedModification: flolat multiplicativeSpeedModification
      * IncreaseViewDistance: float viewDistanceIncrease
      * Resurrection: no parameters
-     * TemporarilyStopped: no parameters
      * AutoMove: float speed, Vector2 direction
+     * Stunned: no parameters
+     * Hidden: no parameters
      **/
 
     public class GameplayEffect : Component
@@ -59,31 +62,80 @@ namespace TombOfAnubis {
 
             GameplayEffectSystem.Register(this);
         }
+        public void Start(GameTime gameTime)
+        {
+            startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            endTime = startTime + duration;
+            started = true;
+        }
+        public bool IsStarted()
+        {
+            return started;
+        }
+        public bool IsActive(GameTime gameTime)
+        {
+            return (float)gameTime.TotalGameTime.TotalSeconds < endTime;
+        }
+
+        public bool HasBeenApplied()
+        {
+            return applied;
+        }
+
         public void Update(GameTime gameTime)
         {
             // apply effect-dependent effect
+            Movement movement;
             switch (Type)
             {
-                case EffectType.Speedup:
+                case EffectType.AdditiveSpeedModification:
                     // increase movement speed once
                     if (!applied) // applied only once, so we check whether it has already been applied before
                     {
                         CheckHasFloatParameters(1);
-                        Entity.GetComponent<Movement>().MaxSpeed += (int)effectFloatParameters[0]; //first float parameter contains speedup
+                        movement = Entity.GetComponent<Movement>();
+                        movement.AdditiveSpeedModifier += effectFloatParameters[0]; //first float parameter contains speedup value
+                        movement.UpdateMovementSpeed();
                         Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
-
-                case EffectType.AutoMove: // applied on every update, so we don't check for applied
+                case EffectType.MultiplicativeSpeedModification:
+                    // increase movement speed once
+                    if (!applied) // applied only once, so we check whether it has already been applied before
+                    {
+                        CheckHasFloatParameters(1);
+                        movement = Entity.GetComponent<Movement>();
+                        movement.MultiplicativeSpeedModifier *= effectFloatParameters[0]; //first float parameter contains speedup multiplier
+                        movement.UpdateMovementSpeed();
+                        Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                    }
+                    break;
+                case EffectType.LinearAutoMove: // applied on every update, so we don't check for applied
                     // move entity in the given direction every update (note that direction is normalized)
                     CheckHasFloatParameters(1);
                     CheckHasVectorParameters(1);
                     effectVectorParameters[0].Normalize();
                     Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units.");
+                    //Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
                     break;
                 case EffectType.Lifetime:
                     //destroy the entity once this effect runs out, so this has no effect during Update()
+                    break;
+                case EffectType.Stunned:
+                    if (!applied)
+                    {
+                        //set the "stunned" flag of the entity
+                        Entity.GetComponent<Movement>().State = MovementState.Stunned;
+                    }
+                    break;
+                case EffectType.Hidden:
+                    if (!applied)
+                    {
+                        //set the "stunned" flag of the entity
+                        movement = Entity.GetComponent<Movement>();
+                        movement.State = MovementState.Hiding;
+                        movement.HiddenFromAnubis = true;
+                    }
                     break;
             }
 
@@ -93,21 +145,40 @@ namespace TombOfAnubis {
         public override void Delete()
         {
             // remove effect-dependent effect, then deregister
+            Movement movement;
             switch (Type)
             {
-                case EffectType.Speedup:
+                case EffectType.AdditiveSpeedModification:
                     // decrease movement speed again
                     CheckHasFloatParameters(1);
-                    Entity.GetComponent<Movement>().MaxSpeed -= (int)effectFloatParameters[0]; //first float parameter contains speedup
+                    movement = Entity.GetComponent<Movement>();
+                    movement.AdditiveSpeedModifier -= effectFloatParameters[0]; //first float parameter contains speedup
+                    movement.UpdateMovementSpeed();
                     Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
-                case EffectType.AutoMove:
+                case EffectType.MultiplicativeSpeedModification:
+                    // decrease movement speed again
+                    CheckHasFloatParameters(1);
+                    movement = Entity.GetComponent<Movement>();
+                    movement.MultiplicativeSpeedModifier /= effectFloatParameters[0]; //first float parameter contains speedup
+                    movement.UpdateMovementSpeed();
+                    Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                    break;
+                case EffectType.LinearAutoMove:
                     // stop auto move, so no effect
                     break;
                 case EffectType.Lifetime:
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
                     Entity.RemoveComponentWithoutDeleting(this);
                     Entity.Delete();
+                    break;
+                case EffectType.Stunned:
+                    Entity.GetComponent<Movement>().State = MovementState.Idle;
+                    break;
+                case EffectType.Hidden:
+                    movement = Entity.GetComponent<Movement>();
+                    movement.State = MovementState.Idle;
+                    movement.HiddenFromAnubis = false;
                     break;
             }
 
@@ -133,24 +204,10 @@ namespace TombOfAnubis {
             }
         }
 
-        public void Start(GameTime gameTime)
+        public void EndGameplayEffect()
         {
-            startTime = gameTime.TotalGameTime.Seconds;
-            endTime = startTime + duration;
-            started = true;
-        }
-        public bool IsStarted()
-        {
-            return started;
-        }
-        public bool IsActive(GameTime gameTime)
-        {
-            return gameTime.TotalGameTime.Seconds < endTime;
-        }
-
-        public bool HasBeenApplied()
-        {
-            return applied;
+            //"mark" GameplayEffect for deletion on the next update
+            endTime = startTime;
         }
 
 
