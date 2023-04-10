@@ -76,6 +76,18 @@ namespace TombOfAnubis
             return foundChildren;
         }
 
+        public List<T> GetComponentsOfType<T>() where T: Component
+        {
+            List<T> foundComponents = new List<T>();
+            foreach(Component component in components)
+            {
+                if (components.GetType().Equals(typeof(T))) {
+                    foundComponents.Add((T)component);
+                }
+            }
+            return foundComponents;
+        }
+
         public void AddChild(Entity entity)
         {
             children.Add(entity);

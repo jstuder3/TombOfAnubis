@@ -19,7 +19,7 @@ namespace TombOfAnubis
                 movement.IsWalking = false;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
-                if (!movement.IsTrapped())
+                if (movement.CanMove())
                 {
                     PlayerActions[] currentActions = InputController.GetActionsOfCurrentPlayer(character.GetComponent<Player>().PlayerID);
 

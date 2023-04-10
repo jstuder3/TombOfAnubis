@@ -7,12 +7,14 @@ using System.ComponentModel.Design.Serialization;
 namespace TombOfAnubis {
     public enum EffectType
     {
-        Speedup,
+        AdditiveSpeedup,
+        MultiplicativeSpeedup,
         IncreaseViewDistance,
         Resurrection,
         TemporarilyStopped,
         AutoMove,
-        Lifetime
+        Lifetime,
+        Stunned
     }
 
     /**
@@ -59,12 +61,32 @@ namespace TombOfAnubis {
 
             GameplayEffectSystem.Register(this);
         }
+        public void Start(GameTime gameTime)
+        {
+            startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            endTime = startTime + duration;
+            started = true;
+        }
+        public bool IsStarted()
+        {
+            return started;
+        }
+        public bool IsActive(GameTime gameTime)
+        {
+            return (float)gameTime.TotalGameTime.TotalSeconds < endTime;
+        }
+
+        public bool HasBeenApplied()
+        {
+            return applied;
+        }
+
         public void Update(GameTime gameTime)
         {
             // apply effect-dependent effect
             switch (Type)
             {
-                case EffectType.Speedup:
+                case EffectType.AdditiveSpeedup:
                     // increase movement speed once
                     if (!applied) // applied only once, so we check whether it has already been applied before
                     {
@@ -73,17 +95,32 @@ namespace TombOfAnubis {
                         Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
-
+                case EffectType.MultiplicativeSpeedup:
+                    // increase movement speed once
+                    if (!applied) // applied only once, so we check whether it has already been applied before
+                    {
+                        CheckHasFloatParameters(1);
+                        Entity.GetComponent<Movement>().MaxSpeed = (int)MathF.Round(Entity.GetComponent<Movement>().MaxSpeed * effectFloatParameters[0]); //first float parameter contains speedup multiplier
+                        Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                    }
+                    break;
                 case EffectType.AutoMove: // applied on every update, so we don't check for applied
                     // move entity in the given direction every update (note that direction is normalized)
                     CheckHasFloatParameters(1);
                     CheckHasVectorParameters(1);
                     effectVectorParameters[0].Normalize();
                     Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units.");
+                    Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
                     break;
                 case EffectType.Lifetime:
                     //destroy the entity once this effect runs out, so this has no effect during Update()
+                    break;
+                case EffectType.Stunned:
+                    if (!applied)
+                    {
+                        //set the "stunned" flag of the entity
+                        Entity.GetComponent<Movement>().State = MovementState.Stunned;
+                    }
                     break;
             }
 
@@ -95,10 +132,16 @@ namespace TombOfAnubis {
             // remove effect-dependent effect, then deregister
             switch (Type)
             {
-                case EffectType.Speedup:
+                case EffectType.AdditiveSpeedup:
                     // decrease movement speed again
                     CheckHasFloatParameters(1);
                     Entity.GetComponent<Movement>().MaxSpeed -= (int)effectFloatParameters[0]; //first float parameter contains speedup
+                    Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                    break;
+                case EffectType.MultiplicativeSpeedup:
+                    // decrease movement speed again
+                    CheckHasFloatParameters(1);
+                    Entity.GetComponent<Movement>().MaxSpeed = (int)MathF.Round(Entity.GetComponent<Movement>().MaxSpeed / effectFloatParameters[0]); //first float parameter contains speedup
                     Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
                 case EffectType.AutoMove:
@@ -108,6 +151,9 @@ namespace TombOfAnubis {
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
                     Entity.RemoveComponentWithoutDeleting(this);
                     Entity.Delete();
+                    break;
+                case EffectType.Stunned:
+                    Entity.GetComponent<Movement>().State = MovementState.Idle;
                     break;
             }
 
@@ -133,25 +179,12 @@ namespace TombOfAnubis {
             }
         }
 
-        public void Start(GameTime gameTime)
+        public void EndGameplayEffect()
         {
-            startTime = gameTime.TotalGameTime.Seconds;
-            endTime = startTime + duration;
-            started = true;
-        }
-        public bool IsStarted()
-        {
-            return started;
-        }
-        public bool IsActive(GameTime gameTime)
-        {
-            return gameTime.TotalGameTime.Seconds < endTime;
+            //"mark" GameplayEffect for deletion on the next update
+            endTime = startTime - 1f;
         }
 
-        public bool HasBeenApplied()
-        {
-            return applied;
-        }
 
 
     }

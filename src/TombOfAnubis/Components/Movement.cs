@@ -1,4 +1,7 @@
-﻿namespace TombOfAnubis
+﻿using Microsoft.Xna.Framework;
+using System;
+
+namespace TombOfAnubis
 {
     public enum Orientation
     {
@@ -17,7 +20,8 @@
         Hiding,
         Climbing,
         Dead,
-        Trapped
+        Trapped,
+        Stunned
     }
     public class Movement : Component
     {
@@ -41,7 +45,33 @@
         {
             return State == MovementState.Trapped;
         }
-        
+
+        public bool CanMove()
+        {
+            return State != MovementState.Trapped && State != MovementState.Stunned && State != MovementState.Dead;
+        }
+
+        public bool IsVisibleToAnubis()
+        {
+            return State != MovementState.Trapped && State != MovementState.Dead && State != MovementState.Hiding;
+        }
+
+        public Vector2 GetForwardVector()
+        {
+            switch(Orientation)
+            {
+                case Orientation.Left:
+                    return new Vector2(-1, 0);
+                case Orientation.Right:
+                    return new Vector2(1, 0);
+                case Orientation.Down:
+                    return new Vector2(0, 1);
+                case Orientation.Up:
+                    return new Vector2(0, -1);
+            }
+            Console.WriteLine("Error: Orientation of character not found. GetForwardVector() returns faulty vector!");
+            return new Vector2(0, 0);
+        }
 
     }
 }

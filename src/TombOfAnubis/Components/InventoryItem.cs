@@ -39,7 +39,8 @@ namespace TombOfAnubis
                 case ItemType.None:
                     return false;
                 case ItemType.Speedup:
-                    Entity.AddComponent(new GameplayEffect(EffectType.Speedup, 10f, 400f));
+                    //Entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedup, 5f, 200f));
+                    //Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedup, 5f, 1.5f));
                     ItemType = ItemType.None;
                     Console.WriteLine("Speedup applied!");
                     return true;
@@ -48,8 +49,8 @@ namespace TombOfAnubis
                     Fist fist = new Fist(Entity.GetComponent<Transform>().Position, singleton.Map.Fist.Scale, singleton.Map.Fist.Texture, null);
                     Session.GetInstance().Scene.AddChild(fist);
                     //make the fist move automatically and make it despawn automatically
-                    fist.AddComponent(new GameplayEffect(EffectType.AutoMove, 0.2f, 400f, new Vector2(1f, 0f)));
-                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.2f));
+                    fist.AddComponent(new GameplayEffect(EffectType.AutoMove, 0.3f, 600f, Entity.GetComponent<Movement>().GetForwardVector()));
+                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f));
                     ItemType = ItemType.None;
                     Console.WriteLine("Fist spawned!");
                     return true;
