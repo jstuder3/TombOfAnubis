@@ -14,6 +14,7 @@ namespace TombOfAnubis
         IncreaseViewDistance,
         Resurrection,
         Fist,
+        HidingCloak,
         Artefact
     }
 
@@ -54,6 +55,12 @@ namespace TombOfAnubis
                     ItemType = ItemType.None;
                     Console.WriteLine("Fist spawned!");
                     return true;
+                case ItemType.HidingCloak:
+                    Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f));
+                    Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f));
+                    ItemType = ItemType.None;
+                    Console.WriteLine("Used HidingCloak!");
+                    break;
             }
             return false;
         }

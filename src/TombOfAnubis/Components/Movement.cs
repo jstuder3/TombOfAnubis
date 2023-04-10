@@ -25,6 +25,7 @@ namespace TombOfAnubis
     }
     public class Movement : Component
     {
+        public int BaseMovementSpeed { get; }
         public int MaxSpeed { get; set; }
         public bool IsWalking { get; set; }
         public Orientation Orientation { get; set; }
@@ -33,9 +34,12 @@ namespace TombOfAnubis
 
         public bool HiddenFromAnubis = false;
 
+        public float MultiplicativeSpeedModifier = 1f;
+        public float AdditiveSpeedModifier = 0f;
+
         public Movement(int maxSpeed, MovementState state = MovementState.Idle)
         {
-
+            BaseMovementSpeed = maxSpeed;
             MaxSpeed = maxSpeed;
             IsWalking = false;
             Orientation = Orientation.Up;
@@ -72,6 +76,11 @@ namespace TombOfAnubis
             }
             Console.WriteLine("Error: Orientation of character not found. GetForwardVector() returns faulty vector!");
             return new Vector2(0, 0);
+        }
+
+        public void UpdateMovementSpeed()
+        {
+            MaxSpeed = (int)((BaseMovementSpeed + AdditiveSpeedModifier) * MultiplicativeSpeedModifier);
         }
 
     }

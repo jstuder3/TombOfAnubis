@@ -85,6 +85,7 @@ namespace TombOfAnubis {
         public void Update(GameTime gameTime)
         {
             // apply effect-dependent effect
+            Movement movement;
             switch (Type)
             {
                 case EffectType.AdditiveSpeedModification:
@@ -92,7 +93,9 @@ namespace TombOfAnubis {
                     if (!applied) // applied only once, so we check whether it has already been applied before
                     {
                         CheckHasFloatParameters(1);
-                        Entity.GetComponent<Movement>().MaxSpeed += (int)effectFloatParameters[0]; //first float parameter contains speedup
+                        movement = Entity.GetComponent<Movement>();
+                        movement.AdditiveSpeedModifier += effectFloatParameters[0]; //first float parameter contains speedup value
+                        movement.UpdateMovementSpeed();
                         Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
@@ -101,7 +104,9 @@ namespace TombOfAnubis {
                     if (!applied) // applied only once, so we check whether it has already been applied before
                     {
                         CheckHasFloatParameters(1);
-                        Entity.GetComponent<Movement>().MaxSpeed = (int)MathF.Round(Entity.GetComponent<Movement>().MaxSpeed * effectFloatParameters[0]); //first float parameter contains speedup multiplier
+                        movement = Entity.GetComponent<Movement>();
+                        movement.MultiplicativeSpeedModifier *= effectFloatParameters[0]; //first float parameter contains speedup multiplier
+                        movement.UpdateMovementSpeed();
                         Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
@@ -127,7 +132,7 @@ namespace TombOfAnubis {
                     if (!applied)
                     {
                         //set the "stunned" flag of the entity
-                        Movement movement = Entity.GetComponent<Movement>();
+                        movement = Entity.GetComponent<Movement>();
                         movement.State = MovementState.Hiding;
                         movement.HiddenFromAnubis = true;
                     }
@@ -140,18 +145,23 @@ namespace TombOfAnubis {
         public override void Delete()
         {
             // remove effect-dependent effect, then deregister
+            Movement movement;
             switch (Type)
             {
                 case EffectType.AdditiveSpeedModification:
                     // decrease movement speed again
                     CheckHasFloatParameters(1);
-                    Entity.GetComponent<Movement>().MaxSpeed -= (int)effectFloatParameters[0]; //first float parameter contains speedup
+                    movement = Entity.GetComponent<Movement>();
+                    movement.AdditiveSpeedModifier -= effectFloatParameters[0]; //first float parameter contains speedup
+                    movement.UpdateMovementSpeed();
                     Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
                 case EffectType.MultiplicativeSpeedModification:
                     // decrease movement speed again
                     CheckHasFloatParameters(1);
-                    Entity.GetComponent<Movement>().MaxSpeed = (int)MathF.Round(Entity.GetComponent<Movement>().MaxSpeed / effectFloatParameters[0]); //first float parameter contains speedup
+                    movement = Entity.GetComponent<Movement>();
+                    movement.MultiplicativeSpeedModifier /= effectFloatParameters[0]; //first float parameter contains speedup
+                    movement.UpdateMovementSpeed();
                     Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
                 case EffectType.LinearAutoMove:
@@ -166,7 +176,7 @@ namespace TombOfAnubis {
                     Entity.GetComponent<Movement>().State = MovementState.Idle;
                     break;
                 case EffectType.Hidden:
-                    Movement movement = Entity.GetComponent<Movement>();
+                    movement = Entity.GetComponent<Movement>();
                     movement.State = MovementState.Idle;
                     movement.HiddenFromAnubis = false;
                     break;
