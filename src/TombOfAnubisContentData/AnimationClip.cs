@@ -15,7 +15,8 @@ namespace TombOfAnubisContentData
         WalkingRight,
         WalkingUp,
         WalkingDown,
-        Idle
+        Idle,
+        VFX_01
     }
 
     public class AnimationClip

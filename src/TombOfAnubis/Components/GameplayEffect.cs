@@ -207,9 +207,8 @@ namespace TombOfAnubis {
         public void EndGameplayEffect()
         {
             //"mark" GameplayEffect for deletion on the next update
-            endTime = startTime - 1f;
+            endTime = startTime;
         }
-
 
 
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TombOfAnubisContentData;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -149,12 +150,19 @@ namespace TombOfAnubis
 
         public static void OnCollision(Fist fist, Anubis anubis)
         {
+            //When Anubis collides with the fist, the fist is destroyed (by ending its lifetime GameEffect), a smoke effect is spawned and Anubis is stunned for 2 seconds
+
+            Session singleton = Session.GetInstance();
+            VFX vfx = new VFX(anubis.GetComponent<Transform>().Position, singleton.Map.Fist.Scale*2f, singleton.Map.Fist.Texture, singleton.Map.Fist.Animation, 2, AnimationClipType.VFX_01);
+            singleton.Scene.AddChild(vfx);
+            vfx.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.5f));
+
             foreach(GameplayEffect gameplayEffect in fist.GetComponentsOfType<GameplayEffect>())
             {
                 gameplayEffect.EndGameplayEffect();
             }
 
-            GameplayEffectSystem.Register(new GameplayEffect(EffectType.Stunned, 2f));
+            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f));
         }
         public static void PlaceArtefactIfPossible(Character character, Altar altar)
         {

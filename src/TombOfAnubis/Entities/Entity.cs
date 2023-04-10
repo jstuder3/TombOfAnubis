@@ -26,6 +26,7 @@ namespace TombOfAnubis
         /// </summary>
         public void Delete()
         {
+
             foreach (Component component in components)
             {
                 component.Delete();
@@ -81,7 +82,7 @@ namespace TombOfAnubis
             List<T> foundComponents = new List<T>();
             foreach(Component component in components)
             {
-                if (components.GetType().Equals(typeof(T))) {
+                if (component.GetType().Equals(typeof(T))) {
                     foundComponents.Add((T)component);
                 }
             }

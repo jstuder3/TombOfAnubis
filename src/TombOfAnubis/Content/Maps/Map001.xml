@@ -154,12 +154,51 @@
 			  <!-- (Optional) Type of the entity, will be converted in the session to an enum type -->
 			  <Type>ResurrectionPowerup</Type>
 		  </Item>
+		  <Item>
+			  <SpawnTileCoordinate> 7 7</SpawnTileCoordinate>
+			  <Scale>0.1 0.1</Scale>
+			  <SpriteTextureName>red_plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <Type>BodyPowerup</Type>
+		  </Item>
 	  </Dispensers>
 	  <Fist>
 		  <!-- SpawnTile is necessary, but it's not used -->
 		  <SpawnTileCoordinate> 0 0</SpawnTileCoordinate>
-		  <Scale>0.01 0.01</Scale>
-		  <SpriteTextureName>plagiarized_fist</SpriteTextureName>
+		  <Scale>0.2 0.2</Scale>
+		  <SpriteTextureName>plagiarized_fist_and_attributed_smoke_spritesheet</SpriteTextureName>
+		  <Animation>
+			  <Item>
+				  <Type>WalkingLeft</Type>
+				  <NumberOfFrames>1</NumberOfFrames>
+				  <!-- Duration of one frame in milliseconds-->
+				  <FrameDuration>200</FrameDuration>
+				  <FrameSize>400 400</FrameSize>
+			  </Item>
+			  <Item>
+				  <Type>WalkingRight</Type>
+				  <NumberOfFrames>1</NumberOfFrames>
+				  <FrameDuration>200</FrameDuration>
+				  <FrameSize>400 400</FrameSize>
+			  </Item>
+			  <Item>
+				  <Type>WalkingUp</Type>
+				  <NumberOfFrames>1</NumberOfFrames>
+				  <FrameDuration>200</FrameDuration>
+				  <FrameSize>400 400</FrameSize>
+			  </Item>
+			  <Item>
+				  <Type>WalkingDown</Type>
+				  <NumberOfFrames>1</NumberOfFrames>
+				  <FrameDuration>200</FrameDuration>
+				  <FrameSize>400 400</FrameSize>
+			  </Item>
+			  <Item>
+				  <Type>VFX_01</Type>
+				  <NumberOfFrames>5</NumberOfFrames>
+				  <FrameDuration>100</FrameDuration>
+				  <FrameSize>400 400</FrameSize>
+			  </Item>
+		  </Animation>
 	  </Fist>
   </Asset>
 </XnaContent>

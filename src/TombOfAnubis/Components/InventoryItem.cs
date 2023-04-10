@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
+using TombOfAnubisContentData;
 
 namespace TombOfAnubis
 {
@@ -47,11 +48,12 @@ namespace TombOfAnubis
                     return true;
                 case ItemType.Fist:
                     Session singleton = Session.GetInstance();
-                    Fist fist = new Fist(Entity.GetComponent<Transform>().Position, singleton.Map.Fist.Scale, singleton.Map.Fist.Texture, null);
+                    Vector2 forwardVector = Entity.GetComponent<Movement>().GetForwardVector();
+                    Fist fist = new Fist(Entity.GetComponent<Transform>().Position, singleton.Map.Fist.Scale, singleton.Map.Fist.Texture, singleton.Map.Fist.Animation, forwardVector);
                     Session.GetInstance().Scene.AddChild(fist);
                     //make the fist move automatically and make it despawn automatically
-                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 600f, Entity.GetComponent<Movement>().GetForwardVector()));
-                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f));
+                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 1f, 600f, forwardVector));
+                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 1f));
                     ItemType = ItemType.None;
                     Console.WriteLine("Fist spawned!");
                     return true;
