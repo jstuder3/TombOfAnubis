@@ -39,7 +39,7 @@ namespace TombOfAnubis
 
         protected override void Update(GameTime gameTime)
         {
-
+            InputController.Update();
             base.Update(gameTime);
         }
 
