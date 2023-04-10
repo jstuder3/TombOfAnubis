@@ -111,7 +111,7 @@ namespace TombOfAnubis {
                     CheckHasVectorParameters(1);
                     effectVectorParameters[0].Normalize();
                     Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
+                    //Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
                     break;
                 case EffectType.Lifetime:
                     //destroy the entity once this effect runs out, so this has no effect during Update()

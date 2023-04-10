@@ -68,7 +68,7 @@ namespace TombOfAnubis
                     default:
                         return false;
                 }
-                Console.WriteLine("Put BodyPowerup in somebody's inventory!");
+                //Console.WriteLine("Put BodyPowerup in somebody's inventory!");
             }
             else if(dispenserType == DispenserType.WisdomPowerup)
             {
