@@ -39,8 +39,8 @@ namespace TombOfAnubis
                 case ItemType.None:
                     return false;
                 case ItemType.Speedup:
-                    //Entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedup, 5f, 200f));
-                    //Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedup, 5f, 1.5f));
+                    Entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 5f, 200f));
+                    //Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 1.5f));
                     ItemType = ItemType.None;
                     Console.WriteLine("Speedup applied!");
                     return true;
