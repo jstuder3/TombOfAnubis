@@ -174,7 +174,7 @@ namespace TombOfAnubis
 
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
-            singleton.PlayerInputSystem = new InputSystem();
+            singleton.PlayerInputSystem = new InputSystem(screenManager);
             singleton.GameplayEffectSystem = new GameplayEffectSystem();
             singleton.AnubisAISystem = new AISystem(singleton.Scene, AnubisBehaviour.Random);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);

@@ -15,6 +15,7 @@ namespace TombOfAnubis
         bool _traceEnabled;
         bool _isInitialized;
 
+        private readonly Game _game;
 
         public SpriteBatch SpriteBatch
         {
@@ -34,7 +35,7 @@ namespace TombOfAnubis
 
         public GameScreenManager(Game game) : base(game)
         {
-
+            _game = game;
         }
         public override void Initialize()
         {
@@ -197,6 +198,11 @@ namespace TombOfAnubis
         public GameScreen[] GetScreens()
         {
             return _screens.ToArray();
+        }
+
+        public void ExitGame()
+        {
+            _game.Exit();
         }
 
     }

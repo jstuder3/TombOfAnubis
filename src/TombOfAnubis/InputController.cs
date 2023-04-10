@@ -10,7 +10,8 @@ namespace TombOfAnubis
     {
         UseObject,
         UseBodyPowerup,
-        UseWisdomPowerup
+        UseWisdomPowerup,
+        PauseGame
     }
 
     public class PlayerInput
@@ -24,22 +25,26 @@ namespace TombOfAnubis
         private Keys LeftKey;
         private Keys RightKey;
         private Keys UseKey;
+        private Keys PauseKey;
 
         private Buttons UseButton;
+        private Buttons PauseButton;
 
-        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use) {
+        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause) {
             IsKeyboard = true;
             UpKey = up;
             DownKey = down;
             LeftKey = left;
             RightKey = right;
             UseKey = use;
+            PauseKey = pause;
         }
         public PlayerInput(Buttons use, int controllerID)
         {
             ControllerID = controllerID;
             IsKeyboard = false;
             UseButton = use;
+            PauseButton = Buttons.Start;
         }
 
         public void Update()
@@ -76,6 +81,10 @@ namespace TombOfAnubis
                     {
                         InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
                     }
+                    if (key == PauseKey)
+                    {
+                        InputController.PlayerActions[PlayerID].Add(PlayerAction.PauseGame);
+                    }
                 }
             }
             else if(IsActive)
@@ -85,6 +94,10 @@ namespace TombOfAnubis
                 if (gamePadState.IsButtonDown(UseButton))
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
+                }
+                if (gamePadState.IsButtonDown(PauseButton))
+                {
+                    InputController.PlayerActions[PlayerID].Add(PlayerAction.PauseGame);
                 }
             }
         }
@@ -104,10 +117,10 @@ namespace TombOfAnubis
     public static class InputController
     {
         public static PlayerInput[] PlayerInputs = new PlayerInput[] { 
-            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E),
-            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z),
-            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O),
-            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus),
+            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E, Keys.Escape),
+            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z, Keys.Escape),
+            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O, Keys.Escape),
+            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus, Keys.Escape),
             new PlayerInput(Buttons.A, 0),
             new PlayerInput(Buttons.A, 1),
             new PlayerInput(Buttons.A, 2),
@@ -193,6 +206,18 @@ namespace TombOfAnubis
             foreach(HashSet<PlayerAction> playerAction in PlayerActions)
             {
                 if(playerAction.Contains(PlayerAction.UseObject))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsPauseTriggered()
+        {
+            foreach (HashSet<PlayerAction> playerAction in PlayerActions)
+            {
+                if (playerAction.Contains(PlayerAction.PauseGame))
                 {
                     return true;
                 }

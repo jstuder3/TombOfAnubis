@@ -6,10 +6,18 @@ namespace TombOfAnubis
 {
     public class InputSystem : BaseSystem<Input>
     {
-        public InputSystem() { }
+        private GameScreenManager ScreenManager;
+        public InputSystem(GameScreenManager screenManager) 
+        {
+            ScreenManager = screenManager;
+        }
 
         public override void Update(GameTime deltaTime)
         {
+            if (InputController.IsPauseTriggered())
+            {
+                ScreenManager.AddScreen(new PauseMenuScreen());
+            }
             foreach (Input input in components)
             {
                 Character character = (Character)input.Entity;
