@@ -7,24 +7,25 @@ using System.ComponentModel.Design.Serialization;
 namespace TombOfAnubis {
     public enum EffectType
     {
-        AdditiveSpeedup,
-        MultiplicativeSpeedup,
+        AdditiveSpeedModification,
+        MultiplicativeSpeedModification,
         IncreaseViewDistance,
-        Resurrection,
-        TemporarilyStopped,
-        AutoMove,
+        LinearAutoMove,
         Lifetime,
-        Stunned
+        Stunned,
+        Hidden
     }
 
     /**
-     * EffectType parameters: (additional parameters that must be passed when creating the effect)
+     * EffectType parameters: (additional parameters that must be passed when creating the effect, besides duration)
      * 
-     * Speedup: float speedup
+     * AdditiveSpeedModification: float absoluteSpeedModification
+     * MultiplicativeSpeedModification: flolat multiplicativeSpeedModification
      * IncreaseViewDistance: float viewDistanceIncrease
      * Resurrection: no parameters
-     * TemporarilyStopped: no parameters
      * AutoMove: float speed, Vector2 direction
+     * Stunned: no parameters
+     * Hidden: no parameters
      **/
 
     public class GameplayEffect : Component
@@ -86,7 +87,7 @@ namespace TombOfAnubis {
             // apply effect-dependent effect
             switch (Type)
             {
-                case EffectType.AdditiveSpeedup:
+                case EffectType.AdditiveSpeedModification:
                     // increase movement speed once
                     if (!applied) // applied only once, so we check whether it has already been applied before
                     {
@@ -95,7 +96,7 @@ namespace TombOfAnubis {
                         Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
-                case EffectType.MultiplicativeSpeedup:
+                case EffectType.MultiplicativeSpeedModification:
                     // increase movement speed once
                     if (!applied) // applied only once, so we check whether it has already been applied before
                     {
@@ -104,7 +105,7 @@ namespace TombOfAnubis {
                         Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
-                case EffectType.AutoMove: // applied on every update, so we don't check for applied
+                case EffectType.LinearAutoMove: // applied on every update, so we don't check for applied
                     // move entity in the given direction every update (note that direction is normalized)
                     CheckHasFloatParameters(1);
                     CheckHasVectorParameters(1);
@@ -122,6 +123,15 @@ namespace TombOfAnubis {
                         Entity.GetComponent<Movement>().State = MovementState.Stunned;
                     }
                     break;
+                case EffectType.Hidden:
+                    if (!applied)
+                    {
+                        //set the "stunned" flag of the entity
+                        Movement movement = Entity.GetComponent<Movement>();
+                        movement.State = MovementState.Hiding;
+                        movement.HiddenFromAnubis = true;
+                    }
+                    break;
             }
 
             applied = true;
@@ -132,19 +142,19 @@ namespace TombOfAnubis {
             // remove effect-dependent effect, then deregister
             switch (Type)
             {
-                case EffectType.AdditiveSpeedup:
+                case EffectType.AdditiveSpeedModification:
                     // decrease movement speed again
                     CheckHasFloatParameters(1);
                     Entity.GetComponent<Movement>().MaxSpeed -= (int)effectFloatParameters[0]; //first float parameter contains speedup
                     Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
-                case EffectType.MultiplicativeSpeedup:
+                case EffectType.MultiplicativeSpeedModification:
                     // decrease movement speed again
                     CheckHasFloatParameters(1);
                     Entity.GetComponent<Movement>().MaxSpeed = (int)MathF.Round(Entity.GetComponent<Movement>().MaxSpeed / effectFloatParameters[0]); //first float parameter contains speedup
                     Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
-                case EffectType.AutoMove:
+                case EffectType.LinearAutoMove:
                     // stop auto move, so no effect
                     break;
                 case EffectType.Lifetime:
@@ -154,6 +164,11 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.Stunned:
                     Entity.GetComponent<Movement>().State = MovementState.Idle;
+                    break;
+                case EffectType.Hidden:
+                    Movement movement = Entity.GetComponent<Movement>();
+                    movement.State = MovementState.Idle;
+                    movement.HiddenFromAnubis = false;
                     break;
             }
 

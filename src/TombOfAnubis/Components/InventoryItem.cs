@@ -49,7 +49,7 @@ namespace TombOfAnubis
                     Fist fist = new Fist(Entity.GetComponent<Transform>().Position, singleton.Map.Fist.Scale, singleton.Map.Fist.Texture, null);
                     Session.GetInstance().Scene.AddChild(fist);
                     //make the fist move automatically and make it despawn automatically
-                    fist.AddComponent(new GameplayEffect(EffectType.AutoMove, 0.3f, 600f, Entity.GetComponent<Movement>().GetForwardVector()));
+                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 600f, Entity.GetComponent<Movement>().GetForwardVector()));
                     fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f));
                     ItemType = ItemType.None;
                     Console.WriteLine("Fist spawned!");

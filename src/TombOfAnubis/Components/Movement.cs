@@ -31,6 +31,7 @@ namespace TombOfAnubis
 
         public MovementState State { get; set; }
 
+        public bool HiddenFromAnubis = false;
 
         public Movement(int maxSpeed, MovementState state = MovementState.Idle)
         {
@@ -53,7 +54,7 @@ namespace TombOfAnubis
 
         public bool IsVisibleToAnubis()
         {
-            return State != MovementState.Trapped && State != MovementState.Dead && State != MovementState.Hiding;
+            return State != MovementState.Trapped && State != MovementState.Dead && State != MovementState.Hiding && !HiddenFromAnubis;
         }
 
         public Vector2 GetForwardVector()
