@@ -32,9 +32,9 @@ namespace TombOfAnubis
                                 animation.SetActiveClip(AnimationClipType.WalkingRight); break;
 
                         }
-                    }else if(movement.State == MovementState.Idle)
+                    }else if(movement.State == MovementState.Idle) //note: we need an idle-state for every orientation, otherwise the player "snaps" back to the default animation whenever you stop pressing buttons, so I disabled this for now
                     {
-                        animation.SetActiveClip(AnimationClipType.Idle);
+                        //animation.SetActiveClip(AnimationClipType.Idle);
                     }
                 }
 

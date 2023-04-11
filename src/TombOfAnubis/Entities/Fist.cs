@@ -40,11 +40,6 @@ namespace TombOfAnubis
                 {
                     animation.SetActiveClip(AnimationClipType.WalkingUp);
                 }
-                else
-                {
-                    animation.SetActiveClip(AnimationClipType.WalkingRight);
-                }
-
 
                 sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2);
             }
