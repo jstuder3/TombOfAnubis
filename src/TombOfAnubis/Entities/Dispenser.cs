@@ -55,7 +55,7 @@ namespace TombOfAnubis
             if(dispenserType == DispenserType.BodyPowerup)
             {
 
-                switch(random.Next(1, 1))
+                switch(random.Next(0, 2))
                 {
                     case 0:
                         emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
