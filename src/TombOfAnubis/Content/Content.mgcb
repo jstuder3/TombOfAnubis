@@ -532,3 +532,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
 
+#begin Videos/SampleVideo_1280x720_1mb.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/SampleVideo_1280x720_1mb.mp4
+
