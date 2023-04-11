@@ -179,7 +179,7 @@ namespace TombOfAnubis
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-
+            
             // Update button cooldown.
             if (buttonPressed)
             {

@@ -24,11 +24,11 @@ namespace TombOfAnubis
                 Transform transform = character.GetComponent<Transform>();
                 Movement movement = character.GetComponent<Movement>();
                 RectangleCollider collider = character.GetComponent<RectangleCollider>();
-                movement.State = MovementState.Idle;
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
                 if (movement.CanMove())
                 {
+                    movement.State = MovementState.Idle;
                     int playerID = character.GetComponent<Player>().PlayerID;
                     HashSet<PlayerAction> currentActions = InputController.PlayerActions[playerID];
 

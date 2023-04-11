@@ -8,6 +8,12 @@ using System.IO;
 
 namespace TombOfAnubis
 {
+    public enum SessionState
+    {
+        Running,
+        GameWon,
+        GameOver
+    }
     class Session
     {
         // TEMPORARY HARD CODED PARAMETERS
@@ -17,6 +23,8 @@ namespace TombOfAnubis
         /// The single Session instance that can be active at a time.
         /// </summary>
         protected static Session singleton;
+
+        public SessionState SessionState { get; set; }
 
         /// <summary>
         /// The GameplayScreen object that created this session.
@@ -116,6 +124,7 @@ namespace TombOfAnubis
             // assign the parameter
             gameScreenManager = screenManager;
             this.gameplayScreen = gameplayScreen;
+            this.SessionState = SessionState.Running;
         }
 
         /// <summary>
@@ -173,6 +182,7 @@ namespace TombOfAnubis
 
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
+
             singleton.Scene = new Scene(Vector2.Zero);
 
             singleton.CollisionSystem = new CollisionSystem();
@@ -232,7 +242,8 @@ namespace TombOfAnubis
             singleton.Scene.AddChild(new Altar(
                                     singleton.Map.CreateEntityTileCenteredPosition(singleton.Map.Altar),
                                     singleton.Map.Altar.Scale,
-                                    singleton.Map.Altar.Texture));
+                                    singleton.Map.Altar.Texture,
+                                    singleton.NumberOfPlayers));
             
             foreach(var trap in singleton.Map.Traps)
             {
@@ -267,7 +278,6 @@ namespace TombOfAnubis
 
             List<Entity> mapEntities = singleton.CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
-
         }
 
         // <summary>
@@ -282,8 +292,19 @@ namespace TombOfAnubis
                 GameplayScreen gameplayScreen = singleton.gameplayScreen;
                 singleton.gameplayScreen = null;
 
-                // clear the singleton
-                singleton = null;
+                // clear systems
+                SpriteSystem.Clear();
+                CollisionSystem.Clear();
+                GameplayEffectSystem.Clear();
+                InputSystem.Clear();
+                AISystem.Clear();
+                DiscoverySystem.Clear();
+                AnimationSystem.Clear();
+                MovementSystem.Clear();
+                ButtonControllerSystem.Clear();
+
+        // clear the singleton
+        singleton = null;
 
                 if (gameplayScreen != null)
                 {

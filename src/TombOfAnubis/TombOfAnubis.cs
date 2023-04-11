@@ -26,7 +26,7 @@ namespace TombOfAnubis
 
             base.Initialize();
 
-            screenManager.AddScreen(new MainMenuScreen());
+            screenManager.AddScreen(new IntroScreen());
 
         }
 
@@ -34,12 +34,13 @@ namespace TombOfAnubis
         {
             Fonts.LoadContent(Content);
             AudioController.LoadContent(Content);
+            VideoController.LoadContent(graphics.GraphicsDevice);
             base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            InputController.Update();
+            InputController.Update(gameTime);
             base.Update(gameTime);
         }
 

@@ -155,6 +155,18 @@ namespace TombOfAnubis
             character.GetComponent<Movement>().State = MovementState.Trapped;
 
             StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
+            bool gameover = true;
+            foreach (Character ch in Session.GetInstance().Scene.GetChildrenOfType<Character>())
+            {
+                if (!ch.GetComponent<Movement>().IsTrapped())
+                {
+                    gameover = false;
+                }
+            }
+            if (gameover)
+            {
+                Session.GetInstance().SessionState = SessionState.GameOver;
+            }
         }
 
         public static void OnCollision(Anubis anubis, Wall wall)
@@ -232,6 +244,7 @@ namespace TombOfAnubis
             if (altarInventory.ArtefactSlotsFull())
             {
                 Console.WriteLine("All artefacts placed! Anubis was defeated!");
+                Session.GetInstance().SessionState = SessionState.GameWon;
             }
             else
             {

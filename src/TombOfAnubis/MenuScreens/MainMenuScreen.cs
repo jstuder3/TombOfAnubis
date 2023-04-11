@@ -67,7 +67,7 @@ namespace TombOfAnubis
         {
             gameStartDescription = new GameStartDescription();
             gameStartDescription.MapContentName = "Map001";
-            gameStartDescription.NumberOfPlayers = 0;
+            gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
             // add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");

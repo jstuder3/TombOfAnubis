@@ -33,9 +33,6 @@ namespace TombOfAnubis
 
         MenuEntry resumeGameMenuEntry, exitGameMenuEntry;
 
-        VideoPlayer player;
-        Video video;
-
         public PauseMenuScreen() : base()
         {
             // add the New Game entry
@@ -58,10 +55,6 @@ namespace TombOfAnubis
         {
             // TODO: Add actual textures
             // load the textures
-            player = new VideoPlayer(GameScreenManager.GraphicsDevice);
-            video = VideoHelper.LoadFromFile(@"Content/Videos/SampleVideo_1280x720_1mb.mp4");
-            player.IsLooped = true;
-            player.Play(video);
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
             descriptionAreaTexture =
@@ -104,7 +97,6 @@ namespace TombOfAnubis
         }
         public override void Draw(GameTime gameTime)
         {
-
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
             spriteBatch.Begin();
@@ -138,16 +130,6 @@ namespace TombOfAnubis
             }
 
             spriteBatch.End();
-
-            var videoTexture = player.GetTexture();
-
-            spriteBatch.Begin();
-
-            var destRect = new Rectangle(0, 0, 500, 500);
-            spriteBatch.Draw(videoTexture, destRect, Color.White);
-            spriteBatch.End();
-
-
         }
         void ResumeMenuEntrySelected(object sender, EventArgs e)
         {

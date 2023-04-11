@@ -20,15 +20,15 @@ namespace TombOfAnubis
         public bool IsActive { get; set; }
         public int PlayerID { get; set; }
         public int ControllerID { get; set; }
-        private Keys UpKey;
-        private Keys DownKey;
-        private Keys LeftKey;
-        private Keys RightKey;
-        private Keys UseKey;
-        private Keys PauseKey;
+        public Keys UpKey { get; set; }
+        public Keys DownKey { get; set; }
+        public Keys LeftKey { get; set; }
+        public Keys RightKey { get; set; }
+        public Keys UseKey { get; set; }
+        public Keys PauseKey { get; set; }
 
-        private Buttons UseButton;
-        private Buttons PauseButton;
+        public Buttons UseButton { get; set; }
+        public Buttons PauseButton { get; set; }
 
         public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause) {
             IsKeyboard = true;
@@ -54,6 +54,7 @@ namespace TombOfAnubis
                 Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
                 foreach (Keys key in pressedKeys)
                 {
+                    if (InputController.KeyCooldowns.ContainsKey(key)) { continue; }
                     if (key == UpKey)
                     {
                         InputController.PlayerMovementDirections[PlayerID].Y += -1f;
@@ -91,11 +92,11 @@ namespace TombOfAnubis
             {
                 GamePadState gamePadState = GamePad.GetState(ControllerID);
                 InputController.PlayerMovementDirections[PlayerID] = gamePadState.ThumbSticks.Left * new Vector2(1f, -1f);
-                if (gamePadState.IsButtonDown(UseButton))
+                if (gamePadState.IsButtonDown(UseButton) && !InputController.ButtonCooldowns.ContainsKey(UseButton))
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
                 }
-                if (gamePadState.IsButtonDown(PauseButton))
+                if (gamePadState.IsButtonDown(PauseButton) && !InputController.ButtonCooldowns.ContainsKey(PauseButton))
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.PauseGame);
                 }
@@ -106,7 +107,7 @@ namespace TombOfAnubis
         {
             if (IsKeyboard)
             {
-                return Keyboard.GetState().IsKeyDown(UseKey);
+                return Keyboard.GetState().GetPressedKeys().Contains(UseKey);
             }
             else
             {
@@ -140,9 +141,13 @@ namespace TombOfAnubis
         public static readonly Vector2 LEFT = new Vector2(-1f, 0);
         public static readonly Vector2 RIGHT = new Vector2(1f, 0);
 
-        public static void Update()
+        public static Dictionary<Keys, int> KeyCooldowns = new Dictionary<Keys, int>();
+        public static Dictionary<Buttons, int> ButtonCooldowns = new Dictionary<Buttons, int>();
+
+        public static void Update(GameTime gameTime)
         {
             Clear();
+            UpdateCooldowns(gameTime);
             foreach(PlayerInput playerInput in PlayerInputs)
             {
                 playerInput.Update();
@@ -237,6 +242,31 @@ namespace TombOfAnubis
             }
             res.Sort((x, y) => x.PlayerID - y.PlayerID);
             return res;
+        }
+
+        public static void AddCooldown(Keys keys, Buttons button, int timeInMs)
+        {
+            KeyCooldowns.Add(keys, timeInMs);
+            ButtonCooldowns.Add(button, timeInMs);
+        }
+        private static void UpdateCooldowns(GameTime gameTime)
+        {
+            foreach(Keys key in KeyCooldowns.Keys)
+            {
+                KeyCooldowns[key] -= gameTime.ElapsedGameTime.Milliseconds;
+                if (KeyCooldowns[key] < 0)
+                {
+                    KeyCooldowns.Remove(key);
+                }
+            }
+            foreach (Buttons button in ButtonCooldowns.Keys)
+            {
+                ButtonCooldowns[button] -= gameTime.ElapsedGameTime.Milliseconds;
+                if (ButtonCooldowns[button] < 0)
+                {
+                    ButtonCooldowns.Remove(button);
+                }
+            }
         }
     }
 }

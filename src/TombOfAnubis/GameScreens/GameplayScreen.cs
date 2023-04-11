@@ -76,7 +76,19 @@ namespace TombOfAnubis
 
             if (IsActive && !coveredByOtherScreen)
             {
-                Session.Update(gameTime);
+                switch (Session.GetInstance().SessionState)
+                {
+                    case SessionState.Running:
+                        Session.Update(gameTime); break;
+                    case SessionState.GameWon:
+                        Session.EndSession();
+                        GameScreenManager.AddScreen(new GameWonScreen());
+                        break;
+                    case SessionState.GameOver:
+                        Session.EndSession();
+                        GameScreenManager.AddScreen(new GameOverScreen());
+                        break;
+                }
             }
         }
 

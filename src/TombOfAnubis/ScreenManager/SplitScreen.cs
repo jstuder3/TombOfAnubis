@@ -16,11 +16,12 @@ namespace TombOfAnubis
             get { return numberOfPlayers; }
         }
 
-        private static List<Viewport> playerViewports = new List<Viewport>();
+        private static List<Viewport> playerViewports;
 
         public static List<Viewport> PlayerViewports
         {
             get { return playerViewports; }
+            private set { playerViewports = value; }
         }
 
         private static Viewport gameScreenViewport;
@@ -36,6 +37,7 @@ namespace TombOfAnubis
             graphics = graphicsDevice;
             numberOfPlayers = numPlayers;
             gameScreenViewport = graphics.Viewport;
+            PlayerViewports = new List<Viewport>();
             switch (numberOfPlayers)
             {
                 case 1:
