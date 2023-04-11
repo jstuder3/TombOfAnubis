@@ -84,6 +84,8 @@ namespace TombOfAnubis
 
         public MovementSystem MovementSystem { get; set; }
 
+        public ButtonControllerSystem ButtonControllerSystem { get; set; }
+
         public Scene Scene { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
@@ -134,6 +136,7 @@ namespace TombOfAnubis
             singleton.AnimationSystem.Update(gameTime);
             singleton.DiscoverySystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
+            singleton.ButtonControllerSystem.Update(gameTime);
         }
 
         /// <summary>
@@ -180,6 +183,7 @@ namespace TombOfAnubis
             singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
             singleton.AnimationSystem = new AnimationSystem();
             singleton.MovementSystem = new MovementSystem();
+            singleton.ButtonControllerSystem = new ButtonControllerSystem();
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
@@ -230,6 +234,37 @@ namespace TombOfAnubis
                                     singleton.Map.Altar.Scale,
                                     singleton.Map.Altar.Texture));
             
+            foreach(var trap in singleton.Map.Traps)
+            {
+                _ = Enum.TryParse(trap.Type, out TrapType type);
+                singleton.Scene.AddChild(new Trap(
+                    type,
+                    singleton.Map.CreateEntityTileCenteredPosition(trap),
+                    trap.Scale,
+                    trap.Texture,
+                    trap.Animation
+                    ));
+            }
+
+            foreach(var button in singleton.Map.Buttons)
+            {
+                List<Vector2> connectedTraps = new List<Vector2>();
+
+                foreach(EntityDescription trapEntity in button.ConnectedTrapPositions)
+                {
+                    connectedTraps.Add(singleton.Map.CreateEntityTileCenteredPositionSpriteless(trapEntity));
+                }
+                _ = Enum.TryParse(button.Type, out ButtonType type);
+                singleton.Scene.AddChild(new Button(
+                    type,
+                    singleton.Map.CreateEntityTileCenteredPosition(button),
+                    button.Scale,
+                    button.Texture,
+                    button.Animation,
+                    connectedTraps
+                    ));
+            }
+
             List<Entity> mapEntities = singleton.CreateMapEntities();
             singleton.Scene.AddChildren(mapEntities);
 

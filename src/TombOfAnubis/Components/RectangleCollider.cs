@@ -15,6 +15,7 @@ namespace TombOfAnubis
         public Vector2 Size { get; set; }
         private Vector2 centerPosition { get; set; }
 
+
         public RectangleCollider(Vector2 position, Vector2 size) : base()
         {
             Size = size;
@@ -24,6 +25,7 @@ namespace TombOfAnubis
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             //update location of collider based on owner
             Position = Entity.GetComponent<Transform>().ToWorld().Position;
             Size = Entity.Size();

@@ -352,6 +352,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Artefacts/yellow_gear_icon.png
 
+#begin Textures/Objects/Buttons/selfmade_simplistic_button_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Buttons/selfmade_simplistic_button_spritesheet.png
+
 #begin Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -447,6 +459,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/plagiarized_fist.png
+
+#begin Textures/Objects/Traps/selfmade_simplistic_trap_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Traps/selfmade_simplistic_trap_spritesheet.png
+
+#begin Textures/Objects/Traps/selfmade_simplistic_trap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Traps/selfmade_simplistic_trap.png
 
 #begin Textures/Objects/UI/Item_slot_1.png
 /importer:TextureImporter

@@ -23,6 +23,9 @@ namespace TombOfAnubis
         [ContentSerializer(Optional = true)]
         public string Type;
 
+        [ContentSerializer(Optional = true)]
+        public List<EntityDescription> ConnectedTrapPositions = new List<EntityDescription>();
+
         [ContentSerializerIgnore]
         public Texture2D Texture;
 

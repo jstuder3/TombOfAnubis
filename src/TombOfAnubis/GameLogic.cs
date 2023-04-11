@@ -63,6 +63,18 @@ namespace TombOfAnubis
                 case (nameof(Anubis), nameof(Fist)):
                     OnCollision((Fist)target, (Anubis)source);
                     break;
+                case (nameof(Character), nameof(Trap)):
+                    OnCollision((Character)source, (Trap)target);
+                    break;
+                case(nameof(Trap), nameof(Character)):
+                    OnCollision((Character)target, (Trap)source);
+                    break;
+                case (nameof(Character), nameof(Button)):
+                    OnCollision((Character)source, (Button)target);
+                    break;
+                case(nameof(Button), nameof(Character)):
+                    OnCollision((Character)target, (Button)source);
+                    break;
             }
         }
         public static void OnCollision(Character character1, Character character2)
@@ -120,6 +132,7 @@ namespace TombOfAnubis
             StaticCollision(character, artefact);
 
         }
+
         public static void OnCollision(Character character, Dispenser dispenser)
         {
             bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
@@ -173,6 +186,20 @@ namespace TombOfAnubis
 
             anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f));
         }
+
+        public static void OnCollision(Character character, Trap trap)
+        {
+            if (trap.IsEnabled())
+            {
+                StaticCollision(character, trap);
+            }
+        }
+
+        public static void OnCollision(Character character, Button button)
+        {
+            //do nothing; all of this is handled in the ButtonController
+        }
+
         public static void PlaceArtefactIfPossible(Character character, Altar altar)
         {
             if (character == null || altar == null) return;

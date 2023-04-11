@@ -1,14 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace TombOfAnubis
 {
     public class Collider : Component
     {
+        public List<Collider> OverlappingColliders = new List<Collider>();
+
         public Collider()
         {
             CollisionSystem.Register(this);
         }
-        public virtual void Update(GameTime gameTime) { }
+
+        public virtual void Update(GameTime gameTime) {
+            ClearOverlap();
+        }
+
+        public virtual void ClearOverlap()
+        {
+            OverlappingColliders.Clear();
+        }
+        public virtual void AddOverlap(Collider other)
+        {
+            OverlappingColliders.Add(other);
+        }
 
         public override void Delete()
         {

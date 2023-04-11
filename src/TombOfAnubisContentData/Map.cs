@@ -4,7 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using TombOfAnubisContentData;
+using static System.Formats.Asn1.AsnWriter;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -105,6 +107,10 @@ namespace TombOfAnubis
 
         public EntityDescription Fist { get; set; }
 
+        public List<EntityDescription> Traps { get; set; }
+
+        public List<EntityDescription> Buttons { get; set; }
+
         #endregion
 
         /// <summary>
@@ -192,6 +198,16 @@ namespace TombOfAnubis
             return tilePos + tileCenter - spriteCenter;
         }
 
+        public Vector2 CreateEntityTileCenteredPositionSpriteless(EntityDescription entityDescription)
+        {
+            Point tileCoordinates = entityDescription.SpawnTileCoordinate;
+            Vector2 offset = entityDescription.Offset;
+
+            var tilePos = TileCoordinateToPosition(tileCoordinates);
+            var tileCenter = new Vector2(TileSize.X / 2, TileSize.Y / 2);
+            return tilePos + tileCenter + offset;
+        }
+
         /// <summary>
         /// Takes a position on the tile map and returns the coordinates of the tile under this position.
         /// </summary>
@@ -226,6 +242,7 @@ namespace TombOfAnubis
         {
             protected override Map Read(ContentReader input, Map existingInstance)
             {
+                // Map data
                 Map map = existingInstance;
                 if (map == null)
                 {
@@ -239,7 +256,7 @@ namespace TombOfAnubis
                 map.SourceTileSize = input.ReadObject<Point>();
                 map.TileScale = input.ReadObject<Vector2>();
                 //map.SpawnMapPosition = input.ReadObject<Point>();
-
+                
                 map.TextureName = input.ReadString();
                 map.Texture = input.ContentManager.Load<Texture2D>(
                     Path.Combine(@"Textures\Maps",
@@ -249,33 +266,58 @@ namespace TombOfAnubis
                 map.CollisionLayer = input.ReadObject<int[]>();
                 map.BaseLayer = input.ReadObject<int[]>();
                 map.EntityProperties = input.ReadObject<EntityProperties>();
+
+                // Characters
                 map.Characters = input.ReadObject<List<EntityDescription>>();
                 foreach(EntityDescription ed in map.Characters)
                 {
                     ed.Load(input.ContentManager, @"Textures\Characters");
                 }
+
+                // Anubis
                 map.Anubis = input.ReadObject<EntityDescription>();
                 map.Anubis.Load(input.ContentManager, @"Textures\Characters");
                 map.Anubis.Texture = input.ContentManager.Load<Texture2D>(
                         Path.Combine(@"Textures\Characters",
                         map.Anubis.SpriteTextureName));
+
+                // Artefacts
                 map.Artefacts = input.ReadObject<List<EntityDescription>>();
                 foreach (EntityDescription ed in map.Artefacts)
                 {
                     ed.Load(input.ContentManager, @"Textures\Objects\Artefacts");
 
                 }
+
+                // Altar
                 map.Altar = input.ReadObject<EntityDescription>();
                 map.Altar.Load(input.ContentManager, @"Textures\Objects\Altar");
+
+                // Dispensers
                 map.Dispensers = input.ReadObject<List<EntityDescription>>();
                 foreach (EntityDescription ed in map.Dispensers)
                 {
                     ed.Load(input.ContentManager, @"Textures\Objects\Dispensers");
                 }
 
-                //Fist
+                // Traps
+                map.Traps = input.ReadObject<List<EntityDescription>>();
+                foreach(EntityDescription ed in map.Traps)
+                {
+                    ed.Load(input.ContentManager, @"Textures\Objects\Traps");
+                }
+
+                // Buttons
+                map.Buttons = input.ReadObject<List<EntityDescription>>();
+                foreach (EntityDescription ed in map.Buttons)
+                {
+                    ed.Load(input.ContentManager, @"Textures\Objects\Buttons");
+                }
+
+                // Fist
                 map.Fist = input.ReadObject<EntityDescription>();
                 map.Fist.Load(input.ContentManager, @"Textures\Objects\Items");
+
 
                 return map;
             }

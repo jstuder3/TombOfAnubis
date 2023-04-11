@@ -16,6 +16,10 @@ namespace TombOfAnubisContentData
         WalkingUp,
         WalkingDown,
         Idle,
+        ObjectActive,
+        ObjectInactive,
+        Pressed,
+        NotPressed,
         VFX_01
     }
 

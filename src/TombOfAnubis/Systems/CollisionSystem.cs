@@ -14,7 +14,7 @@ namespace TombOfAnubis
 
             foreach (Collider collider in components)
             {
-                collider.Update(gameTime);
+                collider.Update(gameTime); // clears overlap list and updates position based on owner's transform.position
             }
 
             HandleAllCollisions();
@@ -28,6 +28,9 @@ namespace TombOfAnubis
                 {
                     if (Intersect(components[i], components[j]))
                     {
+                        components[i].AddOverlap(components[j]);
+                        components[j].AddOverlap(components[i]);
+
                         GameLogic.OnCollision(components[i].Entity, components[j].Entity);
                     }
                 }
