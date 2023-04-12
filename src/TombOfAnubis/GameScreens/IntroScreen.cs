@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace TombOfAnubis
 {
@@ -41,6 +42,22 @@ namespace TombOfAnubis
                     ExitScreen();
                     GameScreenManager.AddScreen(new MainMenuScreen());
                 }
+            }
+            if(Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                ExitScreen();
+                GameStartDescription gameStartDescription = new GameStartDescription();
+                gameStartDescription.MapContentName = "Map001";
+                gameStartDescription.NumberOfPlayers = 4;
+                int activeInputs = 0;
+                foreach(PlayerInput input in InputController.PlayerInputs)
+                {
+                    input.IsActive = true;
+                    input.PlayerID = activeInputs;
+                    activeInputs++;
+                    if(activeInputs == 4) { break; }
+                }
+                LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
             }
         }
         public override void Draw(GameTime gameTime)
