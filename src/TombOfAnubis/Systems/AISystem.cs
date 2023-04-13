@@ -46,10 +46,139 @@ namespace TombOfAnubis
         public int TimesUnchangedPosition { get; set; } = 0;
         public const int MaxTimesUnchangedPosition = 3;
 
+
+        public bool tailingPlayer = false;
+        public int tailedPlayerId = default;
+        Character tailedPlayer = default;
+
+        public void printState(AI ai)
+        {
+            Entity entity = ai.Entity;
+            Transform transform = entity.GetComponent<Transform>();
+            List<Character> characters = Scene.GetChildrenOfType<Character>();
+
+            //Anubis:
+            Vector2 positionAnubis = transform.Position;
+            int nodeIdAnubis = ai.MovementGraph.ToNodeID(positionAnubis);
+
+            Console.WriteLine("----Print AI System State:------");
+            Console.WriteLine("Anubis: position, nodeId: " + positionAnubis + ", " + nodeIdAnubis);
+
+            foreach (Character player in characters)
+            {
+                Transform transformPlayer = player.GetComponent<Transform>();
+                Vector2 positionPlayer = transformPlayer.Position;
+                int nodeIdPlayer = ai.MovementGraph.ToNodeID(transformPlayer.Position);
+                Console.WriteLine("Player nr: " + player.GetComponent<Player>().PlayerID + ", position " + positionPlayer + ", nodeId " + nodeIdPlayer + ", distance: " + ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer));
+            }
+
+
+        }
+
+        private Vector2 getDirection(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
+        {
+
+            int nodeIdAnubis = ai.MovementGraph.ToNodeID(anubisPosition);
+            int nodeIdPlayer = ai.MovementGraph.ToNodeID(playerPosition);
+
+            Point tileCoordinateAnubis = ai.MovementGraph.ToTileCoordinate(nodeIdAnubis);
+            Point tileCoordinatePlayer = ai.MovementGraph.ToTileCoordinate(nodeIdPlayer);
+
+            //if player&anubis close use real direction
+            if (nodeIdAnubis == nodeIdPlayer || ai.MovementGraph.isTileNeighbor(tileCoordinateAnubis, tileCoordinatePlayer))
+            {
+                Vector2 difference = playerPosition - anubisPosition;
+                Vector2 temp2 = difference; //only for debug
+                difference.Normalize();
+                //Console.WriteLine("State: direcToPlayer, anubis, player, target, direction, direction norml.: " + anubisPosition + ", " + playerPosition + ", " + playerPosition + ", " + temp2 + ", " + difference);
+                return difference;
+            }
+
+
+            //else use direction to next tile\node of the path to the tailed player
+
+            if (!ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
+            {
+                Console.WriteLine("Error: Anbuis cound not find a Path to cur tailed player");
+
+                //hotfix:
+                this.tailingPlayer = false;
+                return new Vector2(0, 0);
+            }
+
+
+            Vector2 target = ai.MovementGraph.GetTargetToWalkTo(nodeIdAnubis, nodeIdPlayer);
+            Vector2 direction = target - anubisPosition;
+            
+            //somehow sometimes anubis position is already at target position??? try hotfix
+            if(direction.LengthSquared() < 0.1)
+            {
+                Console.WriteLine("AI: movement HotFix needed, tile distance too small");
+                if(ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer) > 1)
+                {
+                    target = ai.MovementGraph.getNthTargetToWalkTo(nodeIdAnubis, nodeIdPlayer, 2);
+                    direction = target - anubisPosition;
+                } else
+                {
+                    direction = playerPosition - anubisPosition;
+                }
+                
+            }
+            Vector2 temp = direction;
+            direction.Normalize();
+            //Console.WriteLine("State: direcToTile, anubis, player, target, direction, direciton norml.: " + anubisPosition + ", " + playerPosition + ", " + target + ", " + temp + ", " + direction);
+            return direction;
+        }
+
+        public bool updateClosestPlayer(AI ai, Vector2 anubisPosition)
+        {
+            //Console.WriteLine("cur no tailed player, try to change now");
+            MovementGraph movementGraph = ai.MovementGraph;
+            List<Character> characters = Scene.GetChildrenOfType<Character>();
+
+
+            int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
+
+            int closest_player_dist = 999999;
+            bool tailed_a_player = false;
+            int tailing_player_nr = -1;
+            Character tailed_player = default;
+
+            foreach (Character player in characters)
+            {
+                Transform cur_player_transform = player.GetComponent<Transform>();
+                int nodeIdPlayer = movementGraph.ToNodeID(cur_player_transform.Position);
+
+                if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
+                {
+
+                    int dist = ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer);
+                    if (nodeIdPlayer >= 0 && dist >= 0 && dist < closest_player_dist)
+                    {
+                        tailed_a_player = true;
+                        closest_player_dist = dist;
+                        tailing_player_nr = player.GetComponent<Player>().PlayerID;
+                        tailed_player = player;
+                    }
+                }
+            }
+
+            if(tailed_a_player)
+            {
+                
+                this.tailingPlayer = true;
+                this.tailedPlayer = tailed_player;
+                this.tailedPlayerId = tailing_player_nr;
+                Console.WriteLine("AI: tailing new player: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                return true;
+            }
+            Console.WriteLine("AI: udpateClosestPlayer failed: could not find any reachable player");
+            return false;
+        }   
+
         public override void Update(GameTime deltaTime)
         {
 
-            //Console.WriteLine("start update AnubisAISystem");
             Random rnd = new Random();
 
             foreach (AI ai in components)
@@ -74,9 +203,7 @@ namespace TombOfAnubis
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
                 Vector2 newPosition = transform.Position;
 
-                bool random_walk = false;
-
-                if (random_walk)
+                if (AnubisBehaviour.Random == this.AnubisBehaviour)
                 {
                     int numDirections = Enum.GetNames(typeof(Directions)).Length;
                     // Initializes Anubis' first moving direction
@@ -141,14 +268,68 @@ namespace TombOfAnubis
                         }
                         else
                         {
-                            Console.WriteLine("Error: Unknown direction " + newDirection);
+                            Console.WriteLine("AI: Error: Unknown direction " + newDirection);
                             movement.State = MovementState.Walking;
                         }
                     }
+                } else if(AnubisBehaviour.TailPlayers == this.AnubisBehaviour)
+                {
+                    //check if tailed player is trapped
+                    if(this.tailingPlayer && this.tailedPlayer.GetComponent<Movement>().IsTrapped())
+                    {
+                        //invalidate tailing
+                        this.tailingPlayer = false;
+                    }
+                    
+                    
+                    //find closest player alive to follow if no target
+                    if(!this.tailingPlayer)
+                    {
+                        //Console.WriteLine("try to find new player to tail");
+                        updateClosestPlayer(ai, transform.Position);
+                    }
+
+                    //update direction of anubis to tailing player
+                    if(!this.tailingPlayer)
+                    {
+                        //throw new ArgumentException();
+                        //Console.WriteLine("AI: ");
+                        return;
+                    }
+
+                    Vector2 positionAnubis = transform.Position;
+                    int anubis_node_id = movementGraph.ToNodeID(positionAnubis);
+
+                    Vector2 positionPlayer = this.tailedPlayer.GetComponent<Transform>().Position;
+                    int tailed_player_node_id = movementGraph.ToNodeID(positionPlayer);
+
+                    Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.GetComponent<Transform>().Position);
+                    //Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailedPlayer.GetComponent<Transform>().Position + " -> " + direction);
+                    newPosition += direction;
+
                 }
                 else
                 {
+                    // not used currently, is buggy, prob bullshit
+                    //
+                    //
+                    Console.WriteLine("AI: do not use this AI mode");
+
+                    /*
+                    int closest_player_dist = default;
+                    if(AnubisBehaviour.TailPlayers == this.AnubisBehaviour)
+                    {
+                        //always tail the closest player
+                        closest_player_dist = 999999;
+                    } else
+                    {
+                        closest_player_dist = MaxTailDistance + 1;
+                    }
+
+                    Vector2 positionAnubis = transform.Position;
                     int anubis_node_id = movementGraph.ToNodeID(transform.Position);
+                    printState(ai);
+
                     //int anubis_node_id = 5;
 
                     //Console.WriteLine("using real anubis AI");
@@ -156,7 +337,7 @@ namespace TombOfAnubis
                     if (!movement.IsTrapped())
                     {
                         //loop over all players and get closest player if he is close enough (<=MaxTailDistance)
-                        int closest_player_dist = MaxTailDistance + 1;
+                        
                         bool tailed_a_player = false;
                         int tailing_player_nr = -1;
                         Character tailed_player = default;
@@ -165,62 +346,49 @@ namespace TombOfAnubis
                         foreach (Character player in characters)
                         {
                             Transform cur_player_transform = player.GetComponent<Transform>();
-                            Vector2 cur_position = cur_player_transform.Position;
-                            Vector2 curEntityCenterPosition = cur_position + player.Size() / 2f;
-                            int cur_player_node_id = movementGraph.ToNodeID(curEntityCenterPosition);
+                            int nodeIdPlayer = movementGraph.ToNodeID(cur_player_transform.Position);
 
                             //check if mapping works
-                            Point tileCoordinates = movementGraph.ToTileCoordinate(cur_player_node_id);
-                            Vector2 mapped_position = movementGraph.ToPosition(cur_player_node_id);
-                            Vector2 mappedCenterPosition = movementGraph.ToCenterTilePosition(cur_player_node_id);
+                            //Vector2 cur_position = cur_player_transform.Position;
+                            
+                            //Point tileCoordinates = movementGraph.ToTileCoordinate(nodeIdPlayer);
+                            //Vector2 mapped_position = movementGraph.ToPosition(nodeIdPlayer);
 
-                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + curEntityCenterPosition + " : " + mappedCenterPosition);
+                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + cur_position + " : " + tileCoordinates + " -> " + mapped_position);
                             //int temp = movementGraph.world_position_to_node_id2(cur_player_transform.ToWorld().Position);
-                            return;
+                            //return;
 
                             //Console.WriteLine("test, player id: " + player.Id + ", position: "+ cur_player_transform.Position.X +"," + cur_player_transform.Position.Y);
-                            if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.CheckPathExists(anubis_node_id, cur_player_node_id))
+                            if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.PathExists(anubis_node_id, nodeIdPlayer))
                             {
 
-                                int dist = ai.MovementGraph.GetDistance(anubis_node_id, cur_player_node_id);
-                                if (cur_player_node_id >= 0 && dist >= 0 && dist < closest_player_dist)
+                                int dist = ai.MovementGraph.GetDistance(anubis_node_id, nodeIdPlayer);
+                                if (nodeIdPlayer >= 0 && dist >= 0 && dist < closest_player_dist)
                                 {
                                     tailed_a_player = true;
                                     closest_player_dist = dist;
                                     tailing_player_nr = player.GetComponent<Player>().PlayerID;
-                                    tailed_player = player;
+                                    
                                 }
                             }
                         }
 
                         if (tailed_a_player)
                         {
-                            //Console.WriteLine("Anubis tailes player " + tailing_player_nr);
-                            Transform tailed_player_transform = tailed_player.GetComponent<Transform>();
-                            int tailed_player_node_id = movementGraph.ToNodeID(tailed_player_transform.Position);
+                            Console.WriteLine("Anubis tailes player " + tailing_player_nr);
+                            int tailed_player_node_id = movementGraph.ToNodeID(tailed_player.GetComponent<Transform>().Position);
 
-                            if(ai.MovementGraph.CheckPathExists(anubis_node_id, tailed_player_node_id))
+                            if(ai.MovementGraph.PathExists(anubis_node_id, tailed_player_node_id))
                             {
-                                //Console.WriteLine("found path from anubis to closest player");
-                                Vector2 target_position = ai.MovementGraph.GetTargetToWalkTo(anubis_node_id, tailed_player_node_id);
 
-                                Vector2 curPosition = tailed_player_transform.Position;
-                                //Console.WriteLine("cur/target position: " + curPosition + ",, " + target_position);
-                                //Console.WriteLine("types: " + curPosition.X.GetType() + ", " + target_position.X.GetType());
-                                Vector2 direction = target_position - curPosition;
-                                direction.Normalize();
-                                //direction.Y *= -1;
-                                //Vector2 direction_normalized = direction.Normalize();
+                                Vector2 direction = this.playerDirection(ai, positionAnubis, tailed_player.GetComponent<Transform>().Position);
+                                Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailed_player.GetComponent<Transform>().Position + " -> " + direction);
                                 newPosition += direction;
                             }
-                            
-
-
-
-                            //int cur_player_node_id = movementGraph.position_to_node_id(cur_player_transform.Position);
-
                         }
+                        
                     }
+                    */
                 }
                 //if (currentActions.Contains(PlayerActions.UseObject))
                 //{
@@ -263,6 +431,11 @@ namespace TombOfAnubis
 
 
             }
+        }
+
+        private Point toPoint(Vector2 vec)
+        {
+            return new Point((int)vec.X, (int)vec.Y);
         }
     }
 }
