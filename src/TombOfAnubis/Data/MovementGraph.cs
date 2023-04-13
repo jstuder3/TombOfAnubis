@@ -30,13 +30,13 @@ namespace TombOfAnubis
                 throw new ArgumentNullException("MapArgument");
             }
             this.map = map;
-            Console.WriteLine("start initiating graph");
+            //Console.WriteLine("start initiating graph");
             
             CreateNodeTileCoordinateMapping();
             CreateGraph();
 
-            Console.WriteLine("graph has " + nGraphNodes + " nodes and " + nGraphEdges + " edges.");
-            Console.WriteLine("finished creating graph, dajuuum");
+            //Console.WriteLine("graph has " + nGraphNodes + " nodes and " + nGraphEdges + " edges.");
+            //Console.WriteLine("finished creating graph, dajuuum");
         }
 
 
@@ -82,7 +82,6 @@ namespace TombOfAnubis
             //bidirectinal edges, only need to test from a grid position all edges to right and down
 
             var graph = new BidirectionalGraph<int, Edge<int>>();
-            Console.WriteLine("type of graph: " + graph.GetType());
 
 
             //first add all nodes to the graph:
@@ -121,7 +120,6 @@ namespace TombOfAnubis
             }
 
             Func<Edge<int>, double> weights = edge => 1;
-            //var fw = new FloydWarshallAllShortestPathAlgorithm<int, Edge<int>>(graph, weights);
             fwGraph = new FloydWarshallAllShortestPathAlgorithm<int, Edge<int>>(graph, weights);
             fwGraph.Compute();
 
@@ -133,7 +131,7 @@ namespace TombOfAnubis
                 {
                     if (fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path))
                     {
-                        Console.WriteLine("for node " + source + " to " + target + " path: ");
+                        Console.WriteLine("from node " + source + " to " + target + " path: ");
                         foreach (Edge<int> edge in path)
                         {
                             Console.WriteLine(edge);
@@ -189,7 +187,7 @@ namespace TombOfAnubis
             }
         }
         
-        public bool CheckPathExists(int source, int target)
+        public bool PathExists(int source, int target)
         {
             return fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
         }
@@ -209,12 +207,30 @@ namespace TombOfAnubis
             {
                 throw new ArgumentException();
             }
+            return ToPosition(to.Target);
+        }
 
-            Point targetTileCoordinates = tileCoordinates[to.Target];
-            //Tuple<int,int> direction_position_tp = grid_nr_to_grid_location(target_grid_nr);
-            //Vector2 ret = new Vector2(float(direction_position_tp.Item2) * 63.125, float(direction_position_tp.Item1)* 63.125);
-            //Vector2 ret = new Vector2(Convert.ToSingle(direction_position_tp.Item1) * Convert.ToSingle(63.125), Convert.ToSingle(direction_position_tp.Item2)*Convert.ToSingle(63.125));
-            return new Vector2(1,1);
+        public Vector2 getNthTargetToWalkTo(int source, int target, int n)
+        {
+            //assumes path exists
+            fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+
+            int counter = 1;
+
+            foreach (Edge<int> edge in path)
+            {
+                if (counter == n)
+                {
+                    return ToPosition(edge.Target);
+                }
+                counter++;
+            }
+
+            Console.WriteLine("Error: MovementGraph 34");
+            return new Vector2(0, 0);
+
+
+
         }
 
         public int GetDistance(int source, int target)
@@ -227,6 +243,17 @@ namespace TombOfAnubis
                 return -1;
             }
 
+        }
+
+        public bool isTileNeighbor(Point main, Point potential_neighbor)
+        {
+            //check if both itles are valid then check if tiles are close (dist equal to one or sqrt(2))
+            if(map.ValidTileCoordinates(main) && map.ValidTileCoordinates(potential_neighbor) 
+                && (Math.Pow(main.X - potential_neighbor.X,2) + Math.Pow(main.Y-potential_neighbor.Y,2)) < 1.6)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
