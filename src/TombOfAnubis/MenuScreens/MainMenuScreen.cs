@@ -34,9 +34,8 @@ namespace TombOfAnubis
         private Vector2 backgroundPosition;
 
         private Vector2 titlePosition;
-        private string titleText;
-        private SpriteFont titleFont;
-        private float titleScale = 4.0f;
+        private Texture2D titleTexture;
+        private float titleScale = 0.4f;
 
         private Texture2D plankTexture;
         private float plankTextureScale = 0.75f;
@@ -73,10 +72,6 @@ namespace TombOfAnubis
             gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
-            // Add game title font
-            titleFont = Fonts.PegyptaFont;
-            titleText = "TomB of\nAnuBIs";
-
             // Add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
             newGameMenuEntry.Font = Fonts.DisneyHeroicFont;
@@ -84,7 +79,7 @@ namespace TombOfAnubis
             MenuEntries.Add(newGameMenuEntry);
 
             // Create the Exit menu entry
-            playerSelectionMenuEntry = new MenuEntry("Players connected: " + gameStartDescription.NumberOfPlayers);
+            playerSelectionMenuEntry = new MenuEntry("Players connected");
             playerSelectionMenuEntry.Font = Fonts.DisneyHeroicFont;
             playerSelectionMenuEntry.Selected += PlayerSelectionMenuEntrySelected;
             MenuEntries.Add(playerSelectionMenuEntry);
@@ -106,12 +101,13 @@ namespace TombOfAnubis
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
             plankTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_white");
 
             emptyPlayerSlot = content.Load<Texture2D>("Textures/Menu/Empty");
             keyboardPlayerSlot = content.Load<Texture2D>("Textures/Menu/Keyboard");
             controllerPlayerSlot = content.Load<Texture2D>("Textures/Menu/Controller");
 
-            Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
+            Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? controllerPlayerSlot : controllerPlayerSlot;
             connectedPlayerSlots = new List<Texture2D> { playerOneSlot, emptyPlayerSlot, emptyPlayerSlot, emptyPlayerSlot };
 
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
@@ -139,8 +135,8 @@ namespace TombOfAnubis
                 (screenWidth - backgroundTexture.Width) / 2,
                 (screenHeight - backgroundTexture.Height) / 2);
 
-            float titleWidth = titleScale * titleFont.MeasureString(titleText).X / screenWidth;
-            float titleHeight = titleScale * titleFont.MeasureString(titleText).Y / screenHeight;
+            float titleWidth = titleScale * titleTexture.Width / screenWidth;
+            float titleHeight = titleScale * titleTexture.Height / screenHeight;
             // Assume every entry has the same sized texture
             float textureWidth = ((float)MenuEntries[0].Texture.Width / screenWidth) * plankTextureScale;
             float textureHeight = ((float) MenuEntries[0].Texture.Height / screenHeight) * plankTextureScale;
@@ -148,7 +144,7 @@ namespace TombOfAnubis
             float titleOffsetX = marginX + (textureWidth - titleWidth) / 2;
             titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
 
-            float entryStart = titleHeight + marginY + textureHeight;
+            float entryStart = titleHeight + marginY + textureHeight/2;
 
             for (int i = 0; i < MenuEntries.Count; i++)
             {
@@ -200,7 +196,7 @@ namespace TombOfAnubis
                         playerInput.PlayerID = activeInputs;
                         buttonPressed = true;
                         gameStartDescription.NumberOfPlayers = activeInputs + 1;
-                        playerSelectionMenuEntry.Text = "Players connected: " + gameStartDescription.NumberOfPlayers;
+                        playerSelectionMenuEntry.Text = "Players connected";
                         bool isKeyboard = InputController.GetActiveInputs().Last().IsKeyboard;
                         Texture2D newPlayerSlotIcon = isKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
                         connectedPlayerSlots[activeInputs] = newPlayerSlotIcon;
@@ -228,7 +224,7 @@ namespace TombOfAnubis
         void PlayerSelectionMenuEntrySelected(object sender, EventArgs e)
         {
             //gameStartDescription.NumberOfPlayers = (gameStartDescription.NumberOfPlayers %4)+1;
-            playerSelectionMenuEntry.Text = "Players connected: " + gameStartDescription.NumberOfPlayers;
+            playerSelectionMenuEntry.Text = "Players connected";
         }
 
 
@@ -260,9 +256,7 @@ namespace TombOfAnubis
 
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            //spriteBatch.Draw(descriptionAreaTexture, descriptionAreaPosition,
-            //    Color.White);
-            spriteBatch.DrawString(titleFont, titleText, titlePosition, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < MenuEntries.Count; i++)
