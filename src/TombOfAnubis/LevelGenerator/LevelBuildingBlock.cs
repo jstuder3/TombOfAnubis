@@ -61,6 +61,11 @@ namespace TombOfAnubis
                 Priority+=2;
             }
         }
+        public void Reset()
+        {
+            numPlacedCount = 0;
+            clones = new List<LevelBuildingBlock>();
+        }
         public bool RequirementSatisfied()
         {
             if(Name.Equals("A") || Name.Equals("B") ||  Name.Equals("C"))

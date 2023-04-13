@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using QuikGraph;
+using QuikGraph.Algorithms;
 using Sdcb.FFmpeg.Raw;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,9 @@ namespace TombOfAnubis
         private Random rand;
         private int numPlayers;
 
+        // Graph to complete the paths between the building blocks
+        private UndirectedBidirectionalGraph<Point, Edge<Point>> Graph;
+        private Dictionary<Edge<Point>, double> EdgeCost;
 
         public LevelGenerator(Point levelDimensions, List<LevelBuildingBlock> levelBuildingBlocks, int numPlayers)
         {
@@ -58,14 +63,29 @@ namespace TombOfAnubis
                 numAttempts++;
                 GenerateBlockGrid();
                 if (ValidateBlockGrid()) break;
+                foreach(LevelBuildingBlock block in blocks)
+                {
+                    block.Reset();
+                }
             }
             Console.WriteLine("Num Attempts: " + numAttempts);
 
             PrintBlockGrid();
             MapBlockGridToLevel();
+            CreatGraphFromLevel();
             PrintLevel();
 
             return level;
+        }
+
+        private void CreatGraphFromLevel()
+        {
+            for (int i = 0; i < blockGrid.GetLength(0); i++)
+            {
+                for (int j = 0; j < blockGrid.GetLength(1); j++)
+                {
+                }
+            }
         }
 
         private void MapBlockGridToLevel()
@@ -227,6 +247,22 @@ namespace TombOfAnubis
                 }
             }
             return null;
+        }
+
+        public void FindPath(Point from, Point to)
+        {
+            Func<Edge<Point>, double> edgeCost = AlgorithmExtensions.GetIndexer(EdgeCost);
+            // Positive or negative weights
+            TryFunc<Point, System.Collections.Generic.IEnumerable<Edge<Point>>> tryGetPath = Graph.ShortestPathsDijkstra(edgeCost, from);
+
+            IEnumerable<Edge<Point>> path;
+            if (tryGetPath(to, out path))
+            {
+                Console.Write("Path found from {0} to {1}: {0}", from, to);
+                foreach (var e in path) { Console.Write(" > {0}", e.Target); }
+                Console.WriteLine();
+            }
+            else { Console.WriteLine("No path found from {0} to {1}."); }
         }
 
         public void PrintLevel()
