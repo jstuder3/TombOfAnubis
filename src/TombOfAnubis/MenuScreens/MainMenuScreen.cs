@@ -41,8 +41,9 @@ namespace TombOfAnubis
         private Texture2D plankTexture;
         private float plankTextureScale = 0.75f;
 
-        private Texture2D emptyPlayerSlot, playerOneSlot, 
-            playerTwoSlot, playerThreeSlot, playerFourSlot;
+        private Texture2D emptyPlayerSlot;
+        private Texture2D keyboardPlayerSlot, controllerPlayerSlot;
+        private List<Color> playerColors = new List<Color> { Color.Red, Color.Green, Color.Blue, Color.Purple};
         private List<Texture2D> connectedPlayerSlots;
         private float slotScale = 0.6f;
 
@@ -107,11 +108,10 @@ namespace TombOfAnubis
             plankTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
 
             emptyPlayerSlot = content.Load<Texture2D>("Textures/Menu/Empty");
-            playerOneSlot = content.Load<Texture2D>("Textures/Menu/Player1");
-            playerTwoSlot = content.Load<Texture2D>("Textures/Menu/Player2");
-            playerThreeSlot = content.Load<Texture2D>("Textures/Menu/Player3");
-            playerFourSlot = content.Load<Texture2D>("Textures/Menu/Player4");
+            keyboardPlayerSlot = content.Load<Texture2D>("Textures/Menu/Keyboard");
+            controllerPlayerSlot = content.Load<Texture2D>("Textures/Menu/Controller");
 
+            Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
             connectedPlayerSlots = new List<Texture2D> { playerOneSlot, emptyPlayerSlot, emptyPlayerSlot, emptyPlayerSlot };
 
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
@@ -201,18 +201,9 @@ namespace TombOfAnubis
                         buttonPressed = true;
                         gameStartDescription.NumberOfPlayers = activeInputs + 1;
                         playerSelectionMenuEntry.Text = "Players connected: " + gameStartDescription.NumberOfPlayers;
-
-                        switch(activeInputs)
-                        {
-                            case 1: 
-                                connectedPlayerSlots[activeInputs] = playerTwoSlot; break;
-                            case 2:
-                                connectedPlayerSlots[activeInputs] = playerThreeSlot; break;
-                            case 3:
-                                connectedPlayerSlots[activeInputs] = playerFourSlot; break;
-                        }
-                            
-
+                        bool isKeyboard = InputController.GetActiveInputs().Last().IsKeyboard;
+                        Texture2D newPlayerSlotIcon = isKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
+                        connectedPlayerSlots[activeInputs] = newPlayerSlotIcon;
                     }
                 }
             }
@@ -322,7 +313,14 @@ namespace TombOfAnubis
                 (texture.Width * textureScale - slotDisplayWidth)/2 + slotSpacing * (i+1) + slotTextureWidth * i,
                 textSize.Y + 2 * verticalSpacing);
 
-                spriteBatch.Draw(connectedPlayerSlots[i], slotPosition, null, Color.White, 0f, Vector2.Zero, slotScale, SpriteEffects.None, 0f);
+                Color color = Color.White;
+
+                if ((i + 1) <= gameStartDescription.NumberOfPlayers)
+                {
+                    color = playerColors[i];
+                }
+                
+                spriteBatch.Draw(connectedPlayerSlots[i], slotPosition, null, color, 0f, Vector2.Zero, slotScale, SpriteEffects.None, 0f);
             }
             
         }
