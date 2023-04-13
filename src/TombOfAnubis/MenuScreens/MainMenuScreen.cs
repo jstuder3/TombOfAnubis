@@ -11,8 +11,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Sdcb.FFmpeg.Raw;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 #endregion
 
 namespace TombOfAnubis
@@ -30,20 +33,20 @@ namespace TombOfAnubis
         private Texture2D backgroundTexture;
         private Vector2 backgroundPosition;
 
-        private Texture2D descriptionAreaTexture;
-        private Vector2 descriptionAreaPosition;
-        private Vector2 descriptionAreaTextPosition;
+        private Vector2 titlePosition;
+        private string titleText;
+        private SpriteFont titleFont;
+        private float titleScale = 4.0f;
 
-        private Texture2D iconTexture;
-        private Vector2 iconPosition;
+        private Texture2D plankTexture;
+        private float plankTextureScale = 0.75f;
 
-        private Texture2D backTexture;
-        private Vector2 backPosition;
+        private Texture2D emptyPlayerSlot, playerOneSlot, 
+            playerTwoSlot, playerThreeSlot, playerFourSlot;
+        private List<Texture2D> connectedPlayerSlots;
+        private float slotScale = 0.6f;
 
-        private Texture2D selectTexture;
-        private Vector2 selectPosition;
-
-        private Texture2D plankTexture1, plankTexture2, plankTexture3;
+        private float marginX = 0.05f, marginY = 0.05f;
 
         #endregion
 
@@ -69,19 +72,19 @@ namespace TombOfAnubis
             gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
-            // add the New Game entry
+            // Add game title font
+            titleFont = Fonts.PegyptaFont;
+            titleText = "TomB of\nAnuBIs";
+
+            // Add the New Game entry
             newGameMenuEntry = new MenuEntry("New Game");
-            newGameMenuEntry.Description = "Start a New Game (Press E)";
             newGameMenuEntry.Font = Fonts.DisneyHeroicFont;
-            newGameMenuEntry.Position = new Vector2(715, 0f);
             newGameMenuEntry.Selected += NewGameMenuEntrySelected;
             MenuEntries.Add(newGameMenuEntry);
 
-            // create the Exit menu entry
-            playerSelectionMenuEntry = new MenuEntry("Number of players: " + gameStartDescription.NumberOfPlayers);
-            playerSelectionMenuEntry.Description = "Choose the number of players";
+            // Create the Exit menu entry
+            playerSelectionMenuEntry = new MenuEntry("Players connected: " + gameStartDescription.NumberOfPlayers);
             playerSelectionMenuEntry.Font = Fonts.DisneyHeroicFont;
-            playerSelectionMenuEntry.Position = new Vector2(720, 0f);
             playerSelectionMenuEntry.Selected += PlayerSelectionMenuEntrySelected;
             MenuEntries.Add(playerSelectionMenuEntry);
 
@@ -98,47 +101,80 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
 
-            // TODO: Add actual textures
-            // load the textures
+            // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
-            descriptionAreaTexture =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            iconTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
-            plankTexture1 =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            plankTexture2 =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            plankTexture3 =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            backTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
-            selectTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            plankTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
 
-            // calculate the texture positions
+            emptyPlayerSlot = content.Load<Texture2D>("Textures/Menu/Empty");
+            playerOneSlot = content.Load<Texture2D>("Textures/Menu/Player1");
+            playerTwoSlot = content.Load<Texture2D>("Textures/Menu/Player2");
+            playerThreeSlot = content.Load<Texture2D>("Textures/Menu/Player3");
+            playerFourSlot = content.Load<Texture2D>("Textures/Menu/Player4");
+
+            connectedPlayerSlots = new List<Texture2D> { playerOneSlot, emptyPlayerSlot, emptyPlayerSlot, emptyPlayerSlot };
+
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            backgroundPosition = new Vector2(
-                (viewport.Width - backgroundTexture.Width) / 2,
-                (viewport.Height - backgroundTexture.Height) / 2);
-            descriptionAreaPosition = backgroundPosition + new Vector2(158, 130);
-            descriptionAreaTextPosition = backgroundPosition + new Vector2(158, 350);
-            iconPosition = backgroundPosition + new Vector2(170, 80);
-            backPosition = backgroundPosition + new Vector2(225, 610);
-            selectPosition = backgroundPosition + new Vector2(1120, 610);
+            // Set the textures on each menu element and its scale
+            newGameMenuEntry.Texture = plankTexture;
+            newGameMenuEntry.TextureScale = plankTextureScale;
 
-            // set the textures on each menu entry
-            newGameMenuEntry.Texture = plankTexture3;
-            playerSelectionMenuEntry.Texture = plankTexture1;
+            playerSelectionMenuEntry.Texture = plankTexture;
+            playerSelectionMenuEntry.TextureScale = plankTextureScale;
 
-            // now that they have textures, set the proper positions on the menu entries
-            for (int i = 0; i < MenuEntries.Count; i++)
-            {
-                MenuEntries[i].Position = new Vector2(
-                    MenuEntries[i].Position.X,
-                    500f - ((MenuEntries[i].Texture.Height - 10) *
-                        (MenuEntries.Count - 1 - i)));
-            }
+            // Now that they have textures, set the proper positions on the menu entries
+            SetElementPosition(viewport);
+
             AudioController.PlaySong("background_music");
             base.LoadContent();
+        }
+
+        public void SetElementPosition(Viewport viewport)
+        {
+            int screenWidth = viewport.Width;
+            int screenHeight = viewport.Height;
+
+            // Center background image around viewport
+            backgroundPosition = new Vector2(
+                (screenWidth - backgroundTexture.Width) / 2,
+                (screenHeight - backgroundTexture.Height) / 2);
+
+            float titleWidth = titleScale * titleFont.MeasureString(titleText).X / screenWidth;
+            float titleHeight = titleScale * titleFont.MeasureString(titleText).Y / screenHeight;
+            // Assume every entry has the same sized texture
+            float textureWidth = ((float)MenuEntries[0].Texture.Width / screenWidth) * plankTextureScale;
+            float textureHeight = ((float) MenuEntries[0].Texture.Height / screenHeight) * plankTextureScale;
+
+            float titleOffsetX = marginX + (textureWidth - titleWidth) / 2;
+            titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
+
+            float entryStart = titleHeight + marginY + textureHeight;
+
+            for (int i = 0; i < MenuEntries.Count; i++)
+            {
+                float entrySpacing = (i == 0) ? 0.0f : textureHeight;
+
+                float offsetY = entryStart + entrySpacing;
+
+                MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
+            }
+
+            //descriptionAreaPosition = Vector2.Zero;
+            //descriptionAreaTextPosition = backgroundPosition + new Vector2(158, 350);
+
+
+        }
+
+        /// <summary>
+        /// Returns the position on viewport relative to its width and height
+        /// </summary>
+        public Vector2 GetRelativePosition(Viewport viewport, float offsetX, float offsetY)
+        {
+            int xPos = (int)(viewport.Width * offsetX);
+            int yPos = (int)(viewport.Height * offsetY);
+            Vector2 relPosition = new Vector2(xPos, yPos);
+
+            return relPosition;
         }
 
         #endregion
@@ -164,7 +200,19 @@ namespace TombOfAnubis
                         playerInput.PlayerID = activeInputs;
                         buttonPressed = true;
                         gameStartDescription.NumberOfPlayers = activeInputs + 1;
-                        playerSelectionMenuEntry.Text = "Number of players: " + gameStartDescription.NumberOfPlayers;
+                        playerSelectionMenuEntry.Text = "Players connected: " + gameStartDescription.NumberOfPlayers;
+
+                        switch(activeInputs)
+                        {
+                            case 1: 
+                                connectedPlayerSlots[activeInputs] = playerTwoSlot; break;
+                            case 2:
+                                connectedPlayerSlots[activeInputs] = playerThreeSlot; break;
+                            case 3:
+                                connectedPlayerSlots[activeInputs] = playerFourSlot; break;
+                        }
+                            
+
                     }
                 }
             }
@@ -189,7 +237,7 @@ namespace TombOfAnubis
         void PlayerSelectionMenuEntrySelected(object sender, EventArgs e)
         {
             //gameStartDescription.NumberOfPlayers = (gameStartDescription.NumberOfPlayers %4)+1;
-            playerSelectionMenuEntry.Text = "Number of players: " + gameStartDescription.NumberOfPlayers;
+            playerSelectionMenuEntry.Text = "Players connected: " + gameStartDescription.NumberOfPlayers;
         }
 
 
@@ -221,49 +269,62 @@ namespace TombOfAnubis
 
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            spriteBatch.Draw(descriptionAreaTexture, descriptionAreaPosition,
-                Color.White);
-            spriteBatch.Draw(iconTexture, iconPosition, Color.White);
+            //spriteBatch.Draw(descriptionAreaTexture, descriptionAreaPosition,
+            //    Color.White);
+            spriteBatch.DrawString(titleFont, titleText, titlePosition, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < MenuEntries.Count; i++)
             {
                 MenuEntry menuEntry = MenuEntries[i];
-                bool isSelected = IsActive && (i == selectedEntry);
-                menuEntry.Draw(this, isSelected, gameTime);
+                if (i == 1)
+                {
+                    DrawSpecialEntry(gameTime, menuEntry);
+                }
+                else
+                {
+                    bool isSelected = IsActive && (i == selectedEntry);
+                    menuEntry.Draw(this, isSelected, gameTime);
+                }
             }
-
-            // draw the description text for the selected entry
-            MenuEntry selectedMenuEntry = SelectedMenuEntry;
-            if ((selectedMenuEntry != null) &&
-                !String.IsNullOrEmpty(selectedMenuEntry.Description))
-            {
-                Vector2 textSize =
-                    Fonts.DisneyHeroicFont.MeasureString(selectedMenuEntry.Description);
-                Vector2 textPosition = descriptionAreaTextPosition + new Vector2(
-                    (float)Math.Floor((descriptionAreaTexture.Width - textSize.X) / 2),
-                    0f);
-                spriteBatch.DrawString(Fonts.DisneyHeroicFont,
-                    selectedMenuEntry.Description, textPosition, Fonts.TitleColor);
-            }
-            /*
-            // draw the select instruction
-            spriteBatch.Draw(selectTexture, selectPosition, Color.White);
-            spriteBatch.DrawString(Fonts.DisneyHeroicFont, "Select",
-                new Vector2(
-                selectPosition.X - Fonts.DisneyHeroicFont.MeasureString("Select").X - 5,
-                selectPosition.Y + 5), Color.White);
-
-            // if we are in-game, draw the back instruction
-            if (Session.IsActive)
-            {
-                spriteBatch.Draw(backTexture, backPosition, Color.White);
-                spriteBatch.DrawString(Fonts.DisneyHeroicFont, "Resume",
-                    new Vector2(backPosition.X + 55, backPosition.Y + 5), Color.White);
-            }
-            */
 
             spriteBatch.End();
+        }
+
+        public void DrawSpecialEntry(GameTime gameTime, MenuEntry menuEntry)
+        {
+            SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
+
+            Texture2D texture = menuEntry.Texture;
+            String text = menuEntry.Text;
+            SpriteFont spriteFont = menuEntry.Font;
+            Vector2 position = menuEntry.Position;
+            float textureScale = menuEntry.TextureScale;
+
+            float slotTextureWidth = emptyPlayerSlot.Width * slotScale;
+            float slotTextureHeight = emptyPlayerSlot.Height * slotScale;
+            float slotDisplayWidth = texture.Width * textureScale * 0.6f;
+            float slotSpacing = (float)Math.Floor((slotDisplayWidth - 4 * slotTextureWidth) / 5);
+
+            Vector2 textSize = spriteFont.MeasureString(text);
+            float verticalSpacing = (float)Math.Floor((texture.Height * textureScale - textSize.Y - slotTextureHeight) / 3);
+
+            Vector2 textPosition = position + new Vector2(
+                (float)Math.Floor((texture.Width * textureScale - textSize.X) / 2),
+                verticalSpacing);
+
+            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, textureScale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, text, textPosition, Color.White);
+
+            for(int i=0; i < connectedPlayerSlots.Count(); i++)
+            {
+                Vector2 slotPosition = position + new Vector2(
+                (texture.Width * textureScale - slotDisplayWidth)/2 + slotSpacing * (i+1) + slotTextureWidth * i,
+                textSize.Y + 2 * verticalSpacing);
+
+                spriteBatch.Draw(connectedPlayerSlots[i], slotPosition, null, Color.White, 0f, Vector2.Zero, slotScale, SpriteEffects.None, 0f);
+            }
+            
         }
 
         #endregion

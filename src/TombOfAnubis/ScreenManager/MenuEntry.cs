@@ -58,6 +58,7 @@ namespace TombOfAnubis
         /// </summary>
         /// <remarks>If present, the text will be centered on the texture.</remarks>
         private Texture2D texture;
+        private float textureScale = 1.0f;
 
 
         #endregion
@@ -114,6 +115,12 @@ namespace TombOfAnubis
         {
             get { return texture; }
             set { texture = value; }
+        }
+
+        public float TextureScale
+        {
+            get { return textureScale; }
+            set { textureScale = value; }
         }
 
 
@@ -181,13 +188,14 @@ namespace TombOfAnubis
 
             if (texture != null)
             {
-                spriteBatch.Draw(texture, position, Color.White);
+                //spriteBatch.Draw(texture, position, Color.White);
+                spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, textureScale, SpriteEffects.None, 0f);
                 if ((spriteFont != null) && !String.IsNullOrEmpty(text))
                 {
                     Vector2 textSize = spriteFont.MeasureString(text);
                     Vector2 textPosition = position + new Vector2(
-                        (float)Math.Floor((texture.Width - textSize.X) / 2),
-                        (float)Math.Floor((texture.Height - textSize.Y) / 2));
+                        (float)Math.Floor((texture.Width * textureScale - textSize.X) / 2),
+                        (float)Math.Floor((texture.Height * textureScale - textSize.Y) / 2));
                     spriteBatch.DrawString(spriteFont, text, textPosition, color);
                 }
             }
