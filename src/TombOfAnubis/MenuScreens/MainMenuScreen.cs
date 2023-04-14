@@ -83,11 +83,6 @@ namespace TombOfAnubis
             playerSelectionMenuEntry.Font = Fonts.DisneyHeroicFont;
             playerSelectionMenuEntry.Selected += PlayerSelectionMenuEntrySelected;
             MenuEntries.Add(playerSelectionMenuEntry);
-
-            // TODO: Add number of players selection
-
-            // start the menu music
-            // AudioManager.PushMusic("MainTheme");
         }
 
 
@@ -107,7 +102,7 @@ namespace TombOfAnubis
             keyboardPlayerSlot = content.Load<Texture2D>("Textures/Menu/Keyboard");
             controllerPlayerSlot = content.Load<Texture2D>("Textures/Menu/Controller");
 
-            Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? controllerPlayerSlot : controllerPlayerSlot;
+            Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
             connectedPlayerSlots = new List<Texture2D> { playerOneSlot, emptyPlayerSlot, emptyPlayerSlot, emptyPlayerSlot };
 
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
@@ -144,6 +139,7 @@ namespace TombOfAnubis
             float titleOffsetX = marginX + (textureWidth - titleWidth) / 2;
             titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
 
+            // The first MenuEntry element is drawn at this relative vertical coordinate
             float entryStart = titleHeight + marginY + textureHeight/2;
 
             for (int i = 0; i < MenuEntries.Count; i++)
@@ -154,11 +150,6 @@ namespace TombOfAnubis
 
                 MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
             }
-
-            //descriptionAreaPosition = Vector2.Zero;
-            //descriptionAreaTextPosition = backgroundPosition + new Vector2(158, 350);
-
-
         }
 
         /// <summary>
@@ -223,7 +214,6 @@ namespace TombOfAnubis
         /// </summary>
         void PlayerSelectionMenuEntrySelected(object sender, EventArgs e)
         {
-            //gameStartDescription.NumberOfPlayers = (gameStartDescription.NumberOfPlayers %4)+1;
             playerSelectionMenuEntry.Text = "Players connected";
         }
 
