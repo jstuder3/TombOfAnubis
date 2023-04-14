@@ -33,23 +33,16 @@ namespace TombOfAnubis
             Left
         }
 
+        //variables for random movement
+        public int NumStepsToGo { get; set; } = -1;
+        public Vector2 RandomDirection { get; set; } = default;
 
-        // Initialize direction to invalid direction
-        public int MovingDirection { get; set; } = -1;
-        public int NumStepsInSameDirection { get; set; } = 0;
-        public int MaxStepsInSameDirection { get; set; } = 0;
-
+        
+        //variables to tail players
         private int MaxTailDistance { get; set; } = 10;
-
-        public Vector2 PreviousPosition { get; set; } = Vector2.Zero;
-
-        public int TimesUnchangedPosition { get; set; } = 0;
-        public const int MaxTimesUnchangedPosition = 3;
-
-
-        public bool tailingPlayer = false;
-        public int tailedPlayerId = default;
-        Character tailedPlayer = default;
+        public bool tailingPlayer { get; set; } = false;
+        public int tailedPlayerId { get; set; } = default;
+        Character tailedPlayer { get; set; } = default;
 
         public void printState(AI ai)
         {
@@ -174,7 +167,36 @@ namespace TombOfAnubis
             }
             Console.WriteLine("AI: udpateClosestPlayer failed: could not find any reachable player");
             return false;
-        }   
+        }
+
+        /// <summary>
+        /// Method <c>detailAPlayer</c> removes Anubis of tailing the specified player.
+        /// </summary>
+        public void detailAPlayer(int playerId)
+        {
+            if(this.tailedPlayerId == playerId)
+            {
+                this.tailingPlayer = false;
+            }
+        }
+
+        /// <summary>
+        /// Method <c>detailAllPlayers</c> resets the tailing.
+        /// </summary>
+        public void detailAllPlayers()
+        {
+            this.tailingPlayer = false;
+        }
+
+        /// <summary>
+        /// Method <c>getRandomDirection</c> returns a vector with random orientation of length 1.
+        /// </summary>
+        private Vector2 getRandomDirection()
+        {
+            Random rnd = new Random();
+            double phi = rnd.NextDouble() * 2*Math.PI;
+            return new Vector2((float)Math.Cos(phi), (float)-Math.Sin(phi));
+        }
 
         public override void Update(GameTime deltaTime)
         {
@@ -205,74 +227,24 @@ namespace TombOfAnubis
 
                 if (AnubisBehaviour.Random == this.AnubisBehaviour)
                 {
-                    int numDirections = Enum.GetNames(typeof(Directions)).Length;
-                    // Initializes Anubis' first moving direction
-                    int newDirection = (MovingDirection != -1) ? MovingDirection : rnd.Next(numDirections);
-
-                    PreviousPosition = (PreviousPosition.Equals(Vector2.Zero)) ? transform.Position : PreviousPosition;
-                    TimesUnchangedPosition = (PreviousPosition.Equals(transform.Position)) ? TimesUnchangedPosition + 1 : 0;
-                    PreviousPosition = transform.Position;
-
-                    //Console.Write("ANUBIS: ");
-                    //Console.WriteLine(TimesUnchangedPosition + "\t" + PreviousPosition + "\t" + transform.Position);
-                    //Console.WriteLine(NumStepsInSameDirection + "\t" + MaxStepsInSameDirection);
-
-                    // while (collider.BlockedDirections.Contains((BlockDirections)newDirection) && newDirection == MovingDirection)
-                    if ((NumStepsInSameDirection == MaxStepsInSameDirection || TimesUnchangedPosition >= MaxTimesUnchangedPosition))
+                    //check #setps > 0, if not, make a step and decrease by 1
+                    // else get new direction, set #steps
+                    if (this.NumStepsToGo < 1)
                     {
-                        while (newDirection == MovingDirection)
-                        {
-                            //Console.WriteLine("Collision: Determining new direction...");
-                            newDirection = rnd.Next(numDirections);
-                        }
-                        NumStepsInSameDirection = 0;
-                        MaxStepsInSameDirection = rnd.Next(60, 100);
+                        //set new direction & #steps
+                        Vector2 newDirection = getRandomDirection();
+                        this.RandomDirection = newDirection;
+                        //this.RandomDirection = newDirection + this.RandomDirection;
+                        //this.RandomDirection.Normalize();
+                        this.NumStepsToGo = rnd.Next(150)+30;
+                        //Console.WriteLine("set new randomdirection: " + this.RandomDirection + ", #steps: " + this.NumStepsToGo);
 
                     }
 
-                    // Console.WriteLine("New direction is " + (Directions)newDirection);
-                    MovingDirection = newDirection;
+                    newPosition += this.RandomDirection * movement.MaxSpeed;
+                    this.NumStepsToGo--;
 
-                    if (!movement.IsTrapped())
-                    {
-                        newPosition = transform.Position;
-
-                        if (newDirection == (int)Directions.Up)
-                        {
-                            //walk up
-                            newPosition.Y -= movement.MaxSpeed * deltaTimeSeconds;
-                            movement.State = MovementState.Walking;
-                            movement.Orientation = Orientation.Up;
-
-                        }
-                        else if (newDirection == (int)Directions.Down)
-                        {
-                            // walk down 
-                            newPosition.Y += movement.MaxSpeed * deltaTimeSeconds;
-                            movement.State = MovementState.Walking;
-                            movement.Orientation = Orientation.Down;
-                        }
-                        else if (newDirection == (int)Directions.Left)
-                        {
-                            //walk left
-                            newPosition.X -= movement.MaxSpeed * deltaTimeSeconds;
-                            movement.State = MovementState.Walking;
-                            movement.Orientation = Orientation.Left;
-                        }
-                        else if (newDirection == (int)Directions.Right)
-                        {
-                            //walk right 
-                            newPosition.X += movement.MaxSpeed * deltaTimeSeconds;
-                            movement.State = MovementState.Walking;
-                            movement.Orientation = Orientation.Left;
-                        }
-                        else
-                        {
-                            Console.WriteLine("AI: Error: Unknown direction " + newDirection);
-                            movement.State = MovementState.Walking;
-                        }
-                    }
-                } else if(AnubisBehaviour.TailPlayers == this.AnubisBehaviour)
+                } else if(this.AnubisBehaviour == AnubisBehaviour.TailPlayers)
                 {
                     //check if tailed player is trapped
                     if(this.tailingPlayer && this.tailedPlayer.GetComponent<Movement>().IsTrapped())
@@ -305,90 +277,13 @@ namespace TombOfAnubis
 
                     Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.GetComponent<Transform>().Position);
                     //Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailedPlayer.GetComponent<Transform>().Position + " -> " + direction);
-                    newPosition += direction;
+                    newPosition += direction * movement.MaxSpeed;
 
                 }
                 else
                 {
-                    // not used currently, is buggy, prob bullshit
-                    //
-                    //
-                    Console.WriteLine("AI: do not use this AI mode");
+                    Console.WriteLine("AI: this AI mode is not implemented yet");
 
-                    /*
-                    int closest_player_dist = default;
-                    if(AnubisBehaviour.TailPlayers == this.AnubisBehaviour)
-                    {
-                        //always tail the closest player
-                        closest_player_dist = 999999;
-                    } else
-                    {
-                        closest_player_dist = MaxTailDistance + 1;
-                    }
-
-                    Vector2 positionAnubis = transform.Position;
-                    int anubis_node_id = movementGraph.ToNodeID(transform.Position);
-                    printState(ai);
-
-                    //int anubis_node_id = 5;
-
-                    //Console.WriteLine("using real anubis AI");
-                    newPosition = transform.Position;
-                    if (!movement.IsTrapped())
-                    {
-                        //loop over all players and get closest player if he is close enough (<=MaxTailDistance)
-                        
-                        bool tailed_a_player = false;
-                        int tailing_player_nr = -1;
-                        Character tailed_player = default;
-                        //Console.WriteLine("distance")
-
-                        foreach (Character player in characters)
-                        {
-                            Transform cur_player_transform = player.GetComponent<Transform>();
-                            int nodeIdPlayer = movementGraph.ToNodeID(cur_player_transform.Position);
-
-                            //check if mapping works
-                            //Vector2 cur_position = cur_player_transform.Position;
-                            
-                            //Point tileCoordinates = movementGraph.ToTileCoordinate(nodeIdPlayer);
-                            //Vector2 mapped_position = movementGraph.ToPosition(nodeIdPlayer);
-
-                            //Console.WriteLine("chekc if position (re)mapping works. player: " + player.GetComponent<Player>().PlayerID + " positions: " + cur_position + " : " + tileCoordinates + " -> " + mapped_position);
-                            //int temp = movementGraph.world_position_to_node_id2(cur_player_transform.ToWorld().Position);
-                            //return;
-
-                            //Console.WriteLine("test, player id: " + player.Id + ", position: "+ cur_player_transform.Position.X +"," + cur_player_transform.Position.Y);
-                            if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.PathExists(anubis_node_id, nodeIdPlayer))
-                            {
-
-                                int dist = ai.MovementGraph.GetDistance(anubis_node_id, nodeIdPlayer);
-                                if (nodeIdPlayer >= 0 && dist >= 0 && dist < closest_player_dist)
-                                {
-                                    tailed_a_player = true;
-                                    closest_player_dist = dist;
-                                    tailing_player_nr = player.GetComponent<Player>().PlayerID;
-                                    
-                                }
-                            }
-                        }
-
-                        if (tailed_a_player)
-                        {
-                            Console.WriteLine("Anubis tailes player " + tailing_player_nr);
-                            int tailed_player_node_id = movementGraph.ToNodeID(tailed_player.GetComponent<Transform>().Position);
-
-                            if(ai.MovementGraph.PathExists(anubis_node_id, tailed_player_node_id))
-                            {
-
-                                Vector2 direction = this.playerDirection(ai, positionAnubis, tailed_player.GetComponent<Transform>().Position);
-                                Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailed_player.GetComponent<Transform>().Position + " -> " + direction);
-                                newPosition += direction;
-                            }
-                        }
-                        
-                    }
-                    */
                 }
                 //if (currentActions.Contains(PlayerActions.UseObject))
                 //{
@@ -402,7 +297,8 @@ namespace TombOfAnubis
                 //    //if a player: check if trapped/unconscious, then check if the current player can free/resurrect that player
 
                 //}
-                NumStepsInSameDirection += 1;
+
+                //set new Anubis Position
                 transform.Position = newPosition;
 
                 return;
