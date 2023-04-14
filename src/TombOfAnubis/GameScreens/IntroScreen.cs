@@ -15,7 +15,7 @@ namespace TombOfAnubis
         public IntroScreen()
             : base()
         {
-            
+            InputController.ResetPlayerInputs();
         }
         public override void LoadContent()
         {

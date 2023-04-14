@@ -162,6 +162,16 @@ namespace TombOfAnubis
             }
         }
 
+        public static void ResetPlayerInputs()
+        {
+            foreach(PlayerInput playerInput in PlayerInputs)
+            {
+                playerInput.IsActive = false;
+                playerInput.PlayerID = default(int);
+                playerInput.ControllerID = default(int);
+            }
+        }
+
         public static bool IsDownTriggered()
         {
             foreach (Vector2 dir in PlayerMovementDirections)
