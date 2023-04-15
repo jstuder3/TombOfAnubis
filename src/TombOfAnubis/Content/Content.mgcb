@@ -50,6 +50,48 @@
 /processorParam:Quality=Best
 /build:Audio/ItemPickup.mp3
 
+#begin Audio/Soundtrack/Fast1_115bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Fast1_115bpm.wav
+
+#begin Audio/Soundtrack/Fast2_100bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Fast2_100bpm.wav
+
+#begin Audio/Soundtrack/Fast2.2_100bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Fast2.2_100bpm.wav
+
+#begin Audio/Soundtrack/Slow1_100bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Slow1_100bpm.wav
+
+#begin Audio/Soundtrack/Slow2_100bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Slow2_100bpm.wav
+
+#begin Audio/Soundtrack/Slow3_95bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Slow3_95bpm.wav
+
+#begin Audio/Soundtrack/Slow4_95bpm.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Soundtrack/Slow4_95bpm.wav
+
 #begin Fonts/Archeologicaps.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -579,6 +621,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/plagiarized_fist.png
+
+#begin Textures/Objects/Items/PowerUp/Fist.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/Fist.png
+
+#begin Textures/Objects/Items/PowerUp/Resurrection.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/Resurrection.png
+
+#begin Textures/Objects/Items/PowerUp/SpeedUp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/SpeedUp.png
 
 #begin Textures/Objects/Traps/selfmade_simplistic_trap_spritesheet.png
 /importer:TextureImporter

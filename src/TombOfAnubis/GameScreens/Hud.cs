@@ -30,6 +30,8 @@ namespace TombOfAnubis
         private float fontScale = 0.35f;
         private string artefactSlotFiller = "Artefact";
         private string itemSlotFiller = "Power Up";
+        private Dictionary<ItemType, Texture2D> itemTextures = new Dictionary<ItemType, Texture2D>();
+        private float itemDisplayScale = 0.3f;
 
 
         public Hud(GraphicsDevice graphicsDevice, GameScreenManager gameScreenManager)
@@ -60,6 +62,30 @@ namespace TombOfAnubis
                 string textureFullPath = "Textures/Objects/UI/" + textureName;
                 Texture2D itemSlotTexture = content.Load<Texture2D>(textureFullPath);
                 itemBorderTextures.Add(itemSlotTexture);
+            }
+
+            foreach (int i in Enum.GetValues(typeof(ItemType)))
+            {
+                bool skip = false;
+                string textureName = "";
+                switch ((ItemType) i) {
+                    
+                    case ItemType.None: skip = true;  break;
+                    case ItemType.Speedup: textureName = "SpeedUp"; break;
+                    case ItemType.IncreaseViewDistance: skip = true; break;
+                    case ItemType.Resurrection: textureName = "Resurrection"; break;
+                    case ItemType.HidingCloak: skip = true; break;
+                    case ItemType.Fist: textureName = "Fist"; break;
+                    default: skip = true; break;
+                }
+
+                if (!skip)
+                {
+                    string textureFullPath = "Textures/Objects/Items/PowerUp/" + textureName;
+                    Texture2D itemTexture = content.Load<Texture2D>(textureFullPath);
+                    itemTextures.Add((ItemType)i, itemTexture);
+                }
+                
             }
 
         }
@@ -99,14 +125,10 @@ namespace TombOfAnubis
             }
             Vector2 minimapPosition = session.Scene.GetComponent<Transform>().Position;
 
-
             // Minimap background
             session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 1, (int)minimapPosition.Y - 1, (int)mapSize.X + 2, (int)mapSize.Y + 2), Color.White * 0.1f);
 
             Session.Draw(gameTime);
-
-
-
 
             session.Scene.GetComponent<Transform>().Scale = Vector2.One;
         }
@@ -117,7 +139,15 @@ namespace TombOfAnubis
 
             int playerID = character.GetComponent<Player>().PlayerID;
             bool hasArtefact = character.GetComponent<Inventory>().HasArtefact();
-            // bool hasPowerup = character.GetComponent<Inventory>().GetEmptyItemSlot();
+
+            bool hasPowerUp = false;
+            ItemType powerUp = ItemType.None;
+            if (character.GetComponent<Inventory>().GetEmptyItemSlot() == null)
+            {
+                hasPowerUp = true;
+                powerUp = character.GetComponent<Inventory>().ItemSlots[0].Item.ItemType;
+                
+            }
             // int totalArtefacts = character.GetComponent<Inventory>().ArtefactSlots.Count;
 
             Texture2D texture = itemBorderTextures[playerID];
@@ -169,11 +199,21 @@ namespace TombOfAnubis
 
             else
             {
+                // Fill up artefact slot with a filler string
                 DrawFillerString(artefactSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 0);
             }
 
-            // Fill up item slot with a filler
-            DrawFillerString(itemSlotFiller ,textureWidth, textureHeight, positionX[0], positionY[0], 1);
+            if(hasPowerUp)
+            {
+                texture = itemTextures[powerUp];
+                DrawItemSprite(playerID, texture, textureWidth, textureHeight, positionX[0], positionY[0]);
+            }
+
+            else
+            {
+                // Fill up item slot with a filler string
+                DrawFillerString(itemSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 1);
+            }
         }
 
         /// <summary>
@@ -193,6 +233,22 @@ namespace TombOfAnubis
             Rectangle DestinationRectangle = new Rectangle((int)artefactDisplayPosition.X, (int)artefactDisplayPosition.Y, artefactWidth, artefactHeight);
 
             session.SpriteSystem.SpriteBatch.Draw(artefactTexture, DestinationRectangle, Color.White);
+        }
+
+        /// <summary>
+        /// Draws the artefact sprite in the designated slot
+        /// </summary>
+        private void DrawItemSprite(int playerID, Texture2D itemTexture, int frameWidth, int frameHeight, int framePositionX, int framePositionY)
+        {
+            int itemWidth = (int)(itemTexture.Width * itemDisplayScale);
+            int itemHeight = (int)(itemTexture.Height * itemDisplayScale);
+
+            Vector2 itemPositionOffSet = new Vector2((frameWidth - itemWidth) * 3 / 4, (frameHeight - itemHeight) / 2);
+            Vector2 itemDisplayPosition = new Vector2(framePositionX, framePositionY) + itemPositionOffSet;
+
+            Rectangle DestinationRectangle = new Rectangle((int)itemDisplayPosition.X, (int)itemDisplayPosition.Y, itemWidth, itemHeight);
+
+            session.SpriteSystem.SpriteBatch.Draw(itemTexture, DestinationRectangle, Color.White);
         }
 
         /// <summary>

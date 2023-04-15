@@ -13,99 +13,208 @@ namespace TombOfAnubis
 {
     class PauseMenuScreen : MenuScreen
     {
+        private GameStartDescription gameStartDescription;
+
+        #region Graphics Data
+
+
         private Texture2D backgroundTexture;
         private Vector2 backgroundPosition;
 
-        private Texture2D descriptionAreaTexture;
-        private Vector2 descriptionAreaPosition;
-        private Vector2 descriptionAreaTextPosition;
+        private Vector2 titlePosition;
+        private Texture2D titleTexture;
+        private float titleScale = 0.4f;
 
-        private Texture2D iconTexture;
-        private Vector2 iconPosition;
+        private Texture2D plankTexture;
+        private float plankTextureScale = 0.6f;
 
-        private Texture2D backTexture;
-        private Vector2 backPosition;
+        private float marginY = 0.05f;
 
-        private Texture2D selectTexture;
-        private Vector2 selectPosition;
+        #endregion
 
-        private Texture2D plankTexture1, plankTexture2, plankTexture3;
 
-        MenuEntry resumeGameMenuEntry, exitGameMenuEntry;
+        #region Menu Entries
 
+
+        MenuEntry resumeMenuEntry, restartMenuEntry, endGameMenuEntry;
+
+
+        #endregion
+
+        #region Initialization
+
+
+        /// <summary>
+        /// Constructor fills in the menu contents.
+        /// </summary>
         public PauseMenuScreen() : base()
         {
-            // add the New Game entry
-            resumeGameMenuEntry = new MenuEntry("Resume");
-            resumeGameMenuEntry.Description = "Resume the game";
-            resumeGameMenuEntry.Font = Fonts.DisneyHeroicFont;
-            resumeGameMenuEntry.Position = new Vector2(715, 0f);
-            resumeGameMenuEntry.Selected += ResumeMenuEntrySelected;
-            MenuEntries.Add(resumeGameMenuEntry);
+            gameStartDescription = new GameStartDescription();
+            gameStartDescription.MapContentName = "Map001";
+            gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
-            // create the Exit menu entry
-            exitGameMenuEntry = new MenuEntry("Quit");
-            exitGameMenuEntry.Description = "Quit the game";
-            exitGameMenuEntry.Font = Fonts.DisneyHeroicFont;
-            exitGameMenuEntry.Position = new Vector2(720, 0f);
-            exitGameMenuEntry.Selected += ExitGameMenuEntrySelected;
-            MenuEntries.Add(exitGameMenuEntry);
+            // Add the Resume entry
+            resumeMenuEntry = new MenuEntry("Resume");
+            resumeMenuEntry.Font = Fonts.DisneyHeroicFont;
+            resumeMenuEntry.Selected += ResumeMenuEntrySelected;
+            MenuEntries.Add(resumeMenuEntry);
+
+            // Add the New Game entry
+            restartMenuEntry = new MenuEntry("Restart");
+            restartMenuEntry.Font = Fonts.DisneyHeroicFont;
+            restartMenuEntry.Selected += RestartMenuEntrySelected;
+            MenuEntries.Add(restartMenuEntry);
+
+            // Create the Exit menu entry
+            endGameMenuEntry = new MenuEntry("End Game");
+            endGameMenuEntry.Font = Fonts.DisneyHeroicFont;
+            endGameMenuEntry.Selected += EndGameMenuEntrySelected;
+            MenuEntries.Add(endGameMenuEntry);
         }
+
+
+        /// <summary>
+        /// Load the graphics content for this screen.
+        /// </summary>
         public override void LoadContent()
         {
-            // TODO: Add actual textures
-            // load the textures
+
+            // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
-            descriptionAreaTexture =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            iconTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
-            plankTexture1 =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            plankTexture2 =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            plankTexture3 =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
-            backTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
-            selectTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            plankTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_white");
 
-            // calculate the texture positions
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            backgroundPosition = new Vector2(
-                (viewport.Width - backgroundTexture.Width) / 2,
-                (viewport.Height - backgroundTexture.Height) / 2);
-            descriptionAreaPosition = backgroundPosition + new Vector2(158, 130);
-            descriptionAreaTextPosition = backgroundPosition + new Vector2(158, 350);
-            iconPosition = backgroundPosition + new Vector2(170, 80);
-            backPosition = backgroundPosition + new Vector2(225, 610);
-            selectPosition = backgroundPosition + new Vector2(1120, 610);
+            // Set the textures on each menu element and its scale
+            resumeMenuEntry.Texture = plankTexture;
+            resumeMenuEntry.TextureScale = plankTextureScale;
 
-            // set the textures on each menu entry
-            resumeGameMenuEntry.Texture = plankTexture3;
-            exitGameMenuEntry.Texture = plankTexture1;
+            restartMenuEntry.Texture = plankTexture;
+            restartMenuEntry.TextureScale = plankTextureScale;
 
-            // now that they have textures, set the proper positions on the menu entries
-            for (int i = 0; i < MenuEntries.Count; i++)
-            {
-                MenuEntries[i].Position = new Vector2(
-                    MenuEntries[i].Position.X,
-                    500f - ((MenuEntries[i].Texture.Height - 10) *
-                        (MenuEntries.Count - 1 - i)));
-            }
-            //AudioController.PlaySong("background_music");
+            endGameMenuEntry.Texture = plankTexture;
+            endGameMenuEntry.TextureScale = plankTextureScale;
+
+            // Now that they have textures, set the proper positions on the menu entries
+            SetElementPosition(viewport);
+
             base.LoadContent();
         }
+
+        public void SetElementPosition(Viewport viewport)
+        {
+            int screenWidth = viewport.Width;
+            int screenHeight = viewport.Height;
+
+            // Center background image around viewport
+            backgroundPosition = new Vector2(
+                (screenWidth - backgroundTexture.Width) / 2,
+                (screenHeight - backgroundTexture.Height) / 2);
+
+            float titleWidth = titleScale * titleTexture.Width / screenWidth;
+            float titleHeight = titleScale * titleTexture.Height / screenHeight;
+            // Assume every entry has the same sized texture
+            float textureWidth = ((float)MenuEntries[0].Texture.Width / screenWidth) * plankTextureScale;
+            float textureHeight = ((float)MenuEntries[0].Texture.Height / screenHeight) * plankTextureScale;
+
+            // Center the title according to the screen width
+            float titleOffsetX = (1.0f - titleWidth) / 2;
+            titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
+
+            // Center the UI element according to the screen width
+            float textureOffsetX = (1.0f - textureWidth) / 2;
+            // The first MenuEntry element is drawn at this relative vertical coordinate
+            float entryStart = titleHeight + marginY + textureHeight / 2;
+
+            for (int i = 0; i < MenuEntries.Count; i++)
+            {
+                float entrySpacing = (i == 0) ? 0.0f : i * textureHeight;
+
+                float offsetY = entryStart + entrySpacing;
+
+                MenuEntries[i].Position = GetRelativePosition(viewport, textureOffsetX, offsetY);
+            }
+        }
+
+        /// <summary>
+        /// Returns the position on viewport relative to its width and height
+        /// </summary>
+        public Vector2 GetRelativePosition(Viewport viewport, float offsetX, float offsetY)
+        {
+            int xPos = (int)(viewport.Width * offsetX);
+            int yPos = (int)(viewport.Height * offsetY);
+            Vector2 relPosition = new Vector2(xPos, yPos);
+
+            return relPosition;
+        }
+
+        #endregion
+
+
+        #region Updating
+
+        /// <summary>
+        /// Event handler for when the Restart menu entry is selected.
+        /// </summary>
+        void ResumeMenuEntrySelected(object sender, EventArgs e)
+        {
+            ExitScreen();
+        }
+
+        /// <summary>
+        /// Event handler for when the Restart menu entry is selected.
+        /// </summary>
+        void RestartMenuEntrySelected(object sender, EventArgs e)
+        {
+            if (Session.IsActive)
+            {
+                ExitScreen();
+            }
+            LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
+        }
+
+        /// <summary>
+        /// Event handler for when the End Game menu entry is selected.
+        /// </summary>
+        void EndGameMenuEntrySelected(object sender, EventArgs e)
+        {
+            if (Session.IsActive)
+            {
+                ExitScreen();
+            }
+            LoadingScreen.Load(GameScreenManager, true, new IntroScreen());
+        }
+
+        /// <summary>
+        /// Event handler for when the user selects Yes 
+        /// on the "Are you sure?" message box.
+        /// </summary>
+        void ConfirmExitMessageBoxAccepted(object sender, EventArgs e)
+        {
+            //GameScreenManager.Game.Exit();
+        }
+
+
+        #endregion
+
+
+        #region Drawing
+
+
+        /// <summary>
+        /// Draw this screen.
+        /// </summary>
         public override void Draw(GameTime gameTime)
         {
+
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
             spriteBatch.Begin();
 
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            spriteBatch.Draw(descriptionAreaTexture, descriptionAreaPosition,
-                Color.White);
-            spriteBatch.Draw(iconTexture, iconPosition, Color.White);
+            spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < MenuEntries.Count; i++)
@@ -115,31 +224,10 @@ namespace TombOfAnubis
                 menuEntry.Draw(this, isSelected, gameTime);
             }
 
-            // draw the description text for the selected entry
-            MenuEntry selectedMenuEntry = SelectedMenuEntry;
-            if ((selectedMenuEntry != null) &&
-                !String.IsNullOrEmpty(selectedMenuEntry.Description))
-            {
-                Vector2 textSize =
-                    Fonts.DisneyHeroicFont.MeasureString(selectedMenuEntry.Description);
-                Vector2 textPosition = descriptionAreaTextPosition + new Vector2(
-                    (float)Math.Floor((descriptionAreaTexture.Width - textSize.X) / 2),
-                    0f);
-                spriteBatch.DrawString(Fonts.DisneyHeroicFont,
-                    selectedMenuEntry.Description, textPosition, Fonts.TitleColor);
-            }
-
             spriteBatch.End();
         }
-        void ResumeMenuEntrySelected(object sender, EventArgs e)
-        {
-            ExitScreen();
-        }
 
-        void ExitGameMenuEntrySelected(Object sender, EventArgs e)
-        {
-            GameScreenManager.ExitGame();
-        }
+        #endregion
 
     }
 }

@@ -18,7 +18,7 @@ namespace TombOfAnubis
         {
             Songs = new Dictionary<string, Song>
             {
-                { "background_music", content.Load<Song>(@"Audio\background_music") }
+                { "background_music", content.Load<Song>(@"Audio\Soundtrack/Slow1_100bpm") }
             };
             SoundEffects = new Dictionary<string, SoundEffect>()
             {
@@ -35,7 +35,7 @@ namespace TombOfAnubis
         {
             if(Songs.ContainsKey(song)) 
             {
-                //MediaPlayer.Play(Songs[song]);
+                MediaPlayer.Play(Songs[song]);
             }
         }
 
