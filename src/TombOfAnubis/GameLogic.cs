@@ -80,7 +80,7 @@ namespace TombOfAnubis
         public static void OnCollision(Character character1, Character character2)
         {
 
-            //if neither character is trapped
+            //if neither character is trapped, push them apart
             if (!character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped())
             {
 
@@ -99,16 +99,27 @@ namespace TombOfAnubis
 
             //if both are trapped, do nothing
             else if (character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped()) { }
-            else if(!character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped() && character1.GetComponent<Inventory>().HasResurrectItem())
+            //if at least one character is trapped, check if one can revive the other
+            else if (!character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped() && character1.GetComponent<Inventory>().HasResurrectItem())
             {
                 InventorySlot slot = character1.GetComponent<Inventory>().GetResurrectionSlot();
                 slot.ClearItem();
 
                 character2.GetComponent<Movement>().State = MovementState.Idle;
+                character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
+
+            }
+            else if (character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Inventory>().HasResurrectItem())
+            {
+                InventorySlot slot = character2.GetComponent<Inventory>().GetResurrectionSlot();
+                slot.ClearItem();
+
+                character1.GetComponent<Movement>().State = MovementState.Idle;
+                character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
             }
 
-            //if at least one character is trapped, check if one can
+
 
         }
         public static void OnCollision(Character character, Wall wall)
@@ -147,12 +158,13 @@ namespace TombOfAnubis
         public static void OnCollision(Character character, Anubis anubis)
         {
 
-            if (character.GetComponent<Movement>().State != MovementState.Trapped)
+            if (!character.GetComponent<Movement>().IsTrapped())
             {
                 AudioController.PlaySoundEffect("anubisRoar");
             }
 
             character.GetComponent<Movement>().State = MovementState.Trapped;
+            character.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Dead);
 
             /*if(character.GetComponent<Movement>().CanMove()) //use CanMove instead of IsVisibleToAnubis(), because when the player is invisible, there should still be a collision
             {

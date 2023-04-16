@@ -20,6 +20,7 @@ namespace TombOfAnubisContentData
         ObjectInactive,
         Pressed,
         NotPressed,
+        Dead,
         VFX_01
     }
 

@@ -76,6 +76,12 @@
 					  <FrameDuration>200</FrameDuration>
 					  <FrameSize>380 520</FrameSize>
 				  </Item>
+				  <Item>
+					  <Type>Dead</Type>
+					  <NumberOfFrames>4</NumberOfFrames>
+					  <FrameDuration>250</FrameDuration>
+					  <FrameSize>380 520</FrameSize>
+				  </Item>
 			  </Animation>
 		  </Item>
 		  <Item>
