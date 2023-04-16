@@ -37,10 +37,16 @@ namespace TombOfAnubis
                     else
                     {
                         Point entityTileCoord = Session.GetInstance().Map.PositionToTileCoordinate(transform.Position);
-                        bool onDiscoveredTile = Session.GetInstance().MapTiles[entityTileCoord.X, entityTileCoord.Y].GetComponent<Discovery>().Discovered;
-                        if (onDiscoveredTile)
+                        Entity[,] mapTiles = Session.GetInstance().MapTiles;
+                        int width = mapTiles.GetLength(0);
+                        int height = mapTiles.GetLength(1);
+                        if (entityTileCoord.X >= 0 && entityTileCoord.X < width && entityTileCoord.Y >= 0 && entityTileCoord.Y < height) //check that we're in bounds
                         {
-                            SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, Color.White);
+                            bool onDiscoveredTile = mapTiles[entityTileCoord.X, entityTileCoord.Y].GetComponent<Discovery>().Discovered;
+                            if (onDiscoveredTile)
+                            {
+                                SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, Color.White);
+                            }
                         }
                     }
                 }
