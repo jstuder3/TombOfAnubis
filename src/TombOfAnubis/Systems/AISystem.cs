@@ -203,6 +203,7 @@ namespace TombOfAnubis
 
             Random rnd = new Random();
 
+
             foreach (AI ai in components)
             {
                 //Console.WriteLine("reached anubis section");
@@ -241,7 +242,7 @@ namespace TombOfAnubis
 
                     }
 
-                    newPosition += this.RandomDirection * movement.MaxSpeed;
+                    newPosition += this.RandomDirection * movement.MaxSpeed * deltaTimeSeconds;
                     this.NumStepsToGo--;
 
                 } else if(this.AnubisBehaviour == AnubisBehaviour.TailPlayers)
@@ -277,7 +278,7 @@ namespace TombOfAnubis
 
                     Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.GetComponent<Transform>().Position);
                     //Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailedPlayer.GetComponent<Transform>().Position + " -> " + direction);
-                    newPosition += direction * movement.MaxSpeed;
+                    newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
 
                 }
                 else
