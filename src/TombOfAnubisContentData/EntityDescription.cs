@@ -34,8 +34,8 @@ namespace TombOfAnubis
 
         public void Load(ContentManager content, string textureDirectory)
         {
-            int startPosition = 0; 
             Texture = content.Load<Texture2D>(Path.Combine(textureDirectory, SpriteTextureName));
+            int startPosition = 0; 
             if (Animation != null)
             {
                 for (int i = 0; i < Animation.Count; i++)
@@ -43,6 +43,7 @@ namespace TombOfAnubis
                     Animation[i].SourceRectangle = new Rectangle(0, startPosition, Animation[i].FrameSize.X, Animation[i].FrameSize.Y);
                     startPosition += Animation[i].FrameSize.Y;
                 }
-            }        }
+            }
+        }
     }
 }

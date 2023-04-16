@@ -54,7 +54,7 @@ namespace TombOfAnubis
             output.WriteObject(value.Dispensers);
             output.WriteObject(value.Traps);
             output.WriteObject(value.Buttons);
-            output.WriteObject(value.Fist);
+            //output.WriteObject(value.Fist);
         }
     }
 }

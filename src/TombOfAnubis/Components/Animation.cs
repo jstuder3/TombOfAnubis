@@ -16,6 +16,7 @@ namespace TombOfAnubis
             AnimationClips = animationClips;
             SetActiveClip(AnimationClipType.Idle);
             DefaultSourceRectangle = animationClips[0].SourceRectangle;
+            ComputeAnimationClipRectangles();
             AnimationSystem.Register(this);
         }
 
@@ -23,6 +24,21 @@ namespace TombOfAnubis
         {
             AnimationSystem.Deregister(this);
             base.Delete();
+        }
+
+        public void ComputeAnimationClipRectangles()
+        {
+            int startPosition = 0;
+            for (int i = 0; i < AnimationClips.Count; i++)
+            {
+                AnimationClips[i].SourceRectangle = new Rectangle(0, startPosition, AnimationClips[i].FrameSize.X, AnimationClips[i].FrameSize.Y);
+                startPosition += AnimationClips[i].FrameSize.Y;
+            }
+        }
+
+        public float GetCurrentClipDuration()
+        {
+            return ActiveClip.GetTotalClipDuration();
         }
 
         /// <summary>

@@ -105,7 +105,7 @@ namespace TombOfAnubis
 
         public List<EntityDescription> Dispensers { get; set; }
 
-        public EntityDescription Fist { get; set; }
+        //public EntityDescription Fist { get; set; }
 
         public List<EntityDescription> Traps { get; set; }
 
@@ -315,8 +315,8 @@ namespace TombOfAnubis
                 }
 
                 // Fist
-                map.Fist = input.ReadObject<EntityDescription>();
-                map.Fist.Load(input.ContentManager, @"Textures\Objects\Items");
+                //map.Fist = input.ReadObject<EntityDescription>();
+                //map.Fist.Load(input.ContentManager, @"Textures\Objects\Items");
 
 
                 return map;

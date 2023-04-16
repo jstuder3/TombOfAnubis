@@ -49,7 +49,7 @@ namespace TombOfAnubis
                 case ItemType.Fist:
                     Session singleton = Session.GetInstance();
                     Vector2 forwardVector = Entity.GetComponent<Movement>().GetForwardVector();
-                    Fist fist = new Fist(Entity.GetComponent<Transform>().Position, singleton.Map.Fist.Scale, singleton.Map.Fist.Texture, singleton.Map.Fist.Animation, forwardVector);
+                    Fist fist = new Fist(Entity.GetComponent<Transform>().Position, forwardVector);
                     Session.GetInstance().Scene.AddChild(fist);
                     //make the fist move automatically and make it despawn automatically
                     fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 1000f, forwardVector));

@@ -24,10 +24,10 @@ namespace TombOfAnubis
                     {
                         int frameIdx = (int)(totalTime / activeClip.FrameDuration) % activeClip.NumberOfFrames;
                         sprite.SourceRectangle = new Rectangle(
-                           frameIdx * activeClip.FrameSize.X,
-                           sprite.SourceRectangle.Y,
-                           sprite.SourceRectangle.Width,
-                           sprite.SourceRectangle.Height
+                            frameIdx * activeClip.FrameSize.X,
+                            activeClip.SourceRectangle.Y,
+                            activeClip.SourceRectangle.Width,
+                            activeClip.SourceRectangle.Height
                            );
                     }
                     else

@@ -103,7 +103,7 @@
 					  <Type>Idle</Type>
 					  <NumberOfFrames>2</NumberOfFrames>
 					  <FrameDuration>400</FrameDuration>
-					  <FrameSize>200 200</FrameSize>
+					  <FrameSize>130 200</FrameSize>
 				  </Item>
 			  </Animation>
 	  </Anubis>
@@ -161,45 +161,6 @@
 			  <Type>BodyPowerup</Type>
 		  </Item>
 	  </Dispensers>
-	  <Fist>
-		  <!-- SpawnTile is necessary, but it's not used -->
-		  <SpawnTileCoordinate> 0 0</SpawnTileCoordinate>
-		  <Scale>0.2 0.2</Scale>
-		  <SpriteTextureName>plagiarized_fist_and_attributed_smoke_spritesheet</SpriteTextureName>
-		  <Animation>
-			  <Item>
-				  <Type>WalkingLeft</Type>
-				  <NumberOfFrames>1</NumberOfFrames>
-				  <!-- Duration of one frame in milliseconds-->
-				  <FrameDuration>200</FrameDuration>
-				  <FrameSize>400 400</FrameSize>
-			  </Item>
-			  <Item>
-				  <Type>WalkingRight</Type>
-				  <NumberOfFrames>1</NumberOfFrames>
-				  <FrameDuration>200</FrameDuration>
-				  <FrameSize>400 400</FrameSize>
-			  </Item>
-			  <Item>
-				  <Type>WalkingUp</Type>
-				  <NumberOfFrames>1</NumberOfFrames>
-				  <FrameDuration>200</FrameDuration>
-				  <FrameSize>400 400</FrameSize>
-			  </Item>
-			  <Item>
-				  <Type>WalkingDown</Type>
-				  <NumberOfFrames>1</NumberOfFrames>
-				  <FrameDuration>200</FrameDuration>
-				  <FrameSize>400 400</FrameSize>
-			  </Item>
-			  <Item>
-				  <Type>VFX_01</Type>
-				  <NumberOfFrames>5</NumberOfFrames>
-				  <FrameDuration>100</FrameDuration>
-				  <FrameSize>400 400</FrameSize>
-			  </Item>
-		  </Animation>
-	  </Fist>
 	  <Traps>
 		  <Item>
 			  <SpawnTileCoordinate> 1 3</SpawnTileCoordinate>
