@@ -154,7 +154,11 @@ namespace TombOfAnubis
 
             character.GetComponent<Movement>().State = MovementState.Trapped;
 
-            StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
+            /*if(character.GetComponent<Movement>().CanMove()) //use CanMove instead of IsVisibleToAnubis(), because when the player is invisible, there should still be a collision
+            {
+                StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
+            }*/
+
             bool gameover = true;
             foreach (Character ch in Session.GetInstance().Scene.GetChildrenOfType<Character>())
             {
