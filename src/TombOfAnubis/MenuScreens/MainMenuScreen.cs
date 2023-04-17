@@ -40,6 +40,10 @@ namespace TombOfAnubis
         private Texture2D plankTexture;
         private float plankTextureScale = 0.75f;
 
+        private Texture2D gameControllTexture;
+        private float gameControllTextureScale = 1.0f;
+        private Vector2 gameControllPosition;
+
         private Texture2D emptyPlayerSlot;
         private Texture2D keyboardPlayerSlot, controllerPlayerSlot;
         private List<Color> playerColors = new List<Color> { Color.Red, Color.Green, Color.Blue, Color.Purple};
@@ -102,6 +106,8 @@ namespace TombOfAnubis
             keyboardPlayerSlot = content.Load<Texture2D>("Textures/Menu/Keyboard");
             controllerPlayerSlot = content.Load<Texture2D>("Textures/Menu/Controller");
 
+            gameControllTexture = content.Load<Texture2D>("Textures/Menu/GameControlls_1");
+
             Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
             connectedPlayerSlots = new List<Texture2D> { playerOneSlot, emptyPlayerSlot, emptyPlayerSlot, emptyPlayerSlot };
 
@@ -150,6 +156,13 @@ namespace TombOfAnubis
 
                 MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
             }
+
+            float gameControllWidth = gameControllTextureScale * gameControllTexture.Width / screenWidth;
+            float gameControllHeight = gameControllTextureScale * gameControllTexture.Height / screenHeight;
+            
+            float gameControllOffsetX = (titleOffsetX + titleWidth) + (((1.0f - marginX) - (titleOffsetX + titleWidth)) - gameControllWidth) / 2;
+            float gameControllOffsetY = (1.0f - gameControllHeight) / 2;
+            gameControllPosition = GetRelativePosition(viewport, gameControllOffsetX, gameControllOffsetY);
         }
 
         /// <summary>
@@ -247,6 +260,7 @@ namespace TombOfAnubis
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(gameControllTexture, gameControllPosition, null, Color.White, 0f, Vector2.Zero, gameControllTextureScale, SpriteEffects.None, 0f);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < MenuEntries.Count; i++)
