@@ -212,6 +212,9 @@ namespace TombOfAnubis
                 Transform transform = entity.GetComponent<Transform>();
                 Movement movement = entity.GetComponent<Movement>();
 
+                //only update if the entity is capable of moving (i.e. not dead, not trapped and not stunned)
+                if (!movement.CanMove()) continue;
+
                 MovementGraph movementGraph = ai.MovementGraph;
                 List<Character> characters = Scene.GetChildrenOfType<Character>();
                 List<Artefact> artefacts = Scene.GetChildrenOfType<Artefact>();
