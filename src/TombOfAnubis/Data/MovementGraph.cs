@@ -22,6 +22,8 @@ namespace TombOfAnubis
         private int nGraphNodes;
         private int nGraphEdges;
 
+        private int nNodesPerTile = 9;
+
         public MovementGraph(Map map)
         {
 
@@ -57,11 +59,19 @@ namespace TombOfAnubis
                     Point tileCoordinate = new Point(i, j);
                     if (map.GetCollisionLayerValue(tileCoordinate) == 0)
                     {
+                        //Console.Write(0 + ",");
+                        /*
+                        for (int k = 0; k < nNodesPerTile; k++)
+                        {
+                            
+                            nodeIds.Add(tileCoordinate, node_counter);
+                            tileCoordinates.Add(node_counter, tileCoordinate);
+                            node_counter++;
+                        }
+                        */
                         nodeIds.Add(tileCoordinate, node_counter);
                         tileCoordinates.Add(node_counter, tileCoordinate);
-                        //graph.AddVertex(node_counter);
                         node_counter++;
-                        //Console.Write(0 + ",");
                     } else
                     {
                         //Console.Write(1 + ",");

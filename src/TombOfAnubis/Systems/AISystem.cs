@@ -104,9 +104,9 @@ namespace TombOfAnubis
             Vector2 direction = target - anubisPosition;
             
             //somehow sometimes anubis position is already at target position??? try hotfix
-            if(direction.LengthSquared() < 0.1)
+            if(direction.LengthSquared() < 1000)
             {
-                Console.WriteLine("AI: movement HotFix needed, tile distance too small");
+                //Console.WriteLine("AI: movement HotFix needed, tile distance too small");
                 if(ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer) > 1)
                 {
                     target = ai.MovementGraph.getNthTargetToWalkTo(nodeIdAnubis, nodeIdPlayer, 2);
@@ -120,6 +120,7 @@ namespace TombOfAnubis
             Vector2 temp = direction;
             direction.Normalize();
             //Console.WriteLine("State: direcToTile, anubis, player, target, direction, direciton norml.: " + anubisPosition + ", " + playerPosition + ", " + target + ", " + temp + ", " + direction);
+            //Console.WriteLine("direction length: " + temp.LengthSquared());
             return direction;
         }
 
@@ -247,8 +248,8 @@ namespace TombOfAnubis
 
                 } else if(this.AnubisBehaviour == AnubisBehaviour.TailPlayers)
                 {
-                    //check if tailed player is trapped
-                    if(this.tailingPlayer && this.tailedPlayer.GetComponent<Movement>().IsTrapped())
+                    //check if tailed player is trapped or invisible
+                    if(this.tailingPlayer && (this.tailedPlayer.GetComponent<Movement>().IsTrapped() || !this.tailedPlayer.GetComponent<Movement>().IsVisibleToAnubis()))
                     {
                         //invalidate tailing
                         this.tailingPlayer = false;
@@ -278,7 +279,7 @@ namespace TombOfAnubis
 
                     Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.GetComponent<Transform>().Position);
                     //Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailedPlayer.GetComponent<Transform>().Position + " -> " + direction);
-                    newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
+                    newPosition += direction * (float)3 *movement.MaxSpeed * deltaTimeSeconds;
 
                 }
                 else
