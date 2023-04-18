@@ -32,7 +32,7 @@ namespace TombOfAnubis
                 {
                     if(discovery != null && !discovery.Discovered && sprite.UndiscoveredTexture != null)
                     {
-                        SpriteBatch.Draw(sprite.UndiscoveredTexture, destinationRectangle, Color.White);
+                        SpriteBatch.Draw(sprite.UndiscoveredTexture, destinationRectangle, sprite.Tint);
                     }
                     else
                     {
@@ -45,7 +45,7 @@ namespace TombOfAnubis
                             bool onDiscoveredTile = mapTiles[entityTileCoord.X, entityTileCoord.Y].GetComponent<Discovery>().Discovered;
                             if (onDiscoveredTile)
                             {
-                                SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, Color.White);
+                                SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, sprite.Tint);
                             }
                         }
                     }

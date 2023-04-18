@@ -42,8 +42,28 @@ namespace TombOfAnubis
                     return false;
                 case ItemType.Speedup:
                     Entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 5f, 200f));
-                    //Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 1.5f));
                     ItemType = ItemType.None;
+
+                    ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                    pec.LocalPosition = new Vector2(25f, 25f);
+                    pec.RandomizedSpawnPositionRadius = 20f;
+                    pec.Texture = ParticleTextureLibrary.FourCornerStar;
+                    pec.RandomizedTintMin = Color.LightBlue;
+                    pec.RandomizedTintMax = Color.DarkBlue;
+                    pec.Scale = Vector2.One * 0.4f;
+                    pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                    pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
+                    pec.EmitterDuration = 5f;
+                    pec.ParticleDuration = 1f;
+                    pec.EmissionFrequency = 60f;
+                    pec.EmissionRate = 1f;
+                    pec.InitialSpeed = 100f;
+                    pec.SpawnDirection = new Vector2(0f, -1f);
+                    pec.SpawnConeDegrees = 360f;
+                    pec.Drag = 0.5f;
+
+                    Entity.AddComponent(new ParticleEmitter(pec));
+
                     Console.WriteLine("Speedup applied!");
                     return true;
                 case ItemType.Fist:

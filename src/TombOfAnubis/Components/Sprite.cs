@@ -11,6 +11,8 @@ namespace TombOfAnubis
 
         public Texture2D UndiscoveredTexture { get; set; }
 
+        public Color Tint = Color.White;
+
         public Rectangle SourceRectangle { get; set; }
 
         public Sprite(Texture2D texture, int layer)
@@ -20,6 +22,10 @@ namespace TombOfAnubis
             Layer = layer;
             SpriteSystem.Register(this);
             SpriteSystem.SortComponents((x, y) => x.Layer.CompareTo(y.Layer));
+        }
+        public Sprite(Texture2D texture, Color tint, int layer) : this(texture, layer)
+        {
+            Tint = tint;
         }
         public Sprite(Texture2D texture, Rectangle sourceRectangle, int layer)
         {

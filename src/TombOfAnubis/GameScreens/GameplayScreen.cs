@@ -44,6 +44,11 @@ namespace TombOfAnubis
         {
             // TODO: Will be removed and called directly from Menu
 
+            //load item sprites and vfx sprites (this must happen before creating a session if this content should be able to be used on startup)
+            Fist.LoadContent(GameScreenManager);
+            //load particle effect base sprites
+            ParticleEmitter.LoadContent(GameScreenManager);
+
             if (this.gameStartDescription == null)
             {
                 this.gameStartDescription = new GameStartDescription();
@@ -56,8 +61,6 @@ namespace TombOfAnubis
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
             Hud = new Hud(GameScreenManager.GraphicsDevice, GameScreenManager);
 
-            //load item sprites and vfx sprites
-            Fist.LoadContent(GameScreenManager);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's

@@ -135,6 +135,7 @@ namespace TombOfAnubis {
                         movement = Entity.GetComponent<Movement>();
                         movement.State = MovementState.Hiding;
                         movement.HiddenFromAnubis = true;
+
                     }
                     break;
             }

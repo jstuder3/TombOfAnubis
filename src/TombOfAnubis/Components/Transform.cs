@@ -39,5 +39,6 @@ namespace TombOfAnubis
                 return this;
             }
         }
+
     }
 }

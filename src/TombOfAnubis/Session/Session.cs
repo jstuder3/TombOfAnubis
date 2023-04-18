@@ -94,6 +94,7 @@ namespace TombOfAnubis
 
         public ButtonControllerSystem ButtonControllerSystem { get; set; }
 
+        public ParticleEmitterSystem ParticleEmitterSystem { get; set; }
         public Scene Scene { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
@@ -146,6 +147,7 @@ namespace TombOfAnubis
             singleton.DiscoverySystem.Update(gameTime);
             singleton.AnubisAISystem.Update(gameTime);
             singleton.ButtonControllerSystem.Update(gameTime);
+            singleton.ParticleEmitterSystem.Update(gameTime);
         }
 
         /// <summary>
@@ -194,6 +196,7 @@ namespace TombOfAnubis
             singleton.AnimationSystem = new AnimationSystem();
             singleton.MovementSystem = new MovementSystem();
             singleton.ButtonControllerSystem = new ButtonControllerSystem();
+            singleton.ParticleEmitterSystem = new ParticleEmitterSystem();
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
@@ -221,7 +224,40 @@ namespace TombOfAnubis
                     true
                     ));
             }
-            foreach( var dispenser in singleton.Map.Dispensers ) {
+
+            //DEBUG: Attach ParticleEmitter to first character
+            /*
+            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+            pec.LocalPosition = Vector2.Zero;
+            pec.RandomizedSpawnPositionRadius = 20f;
+            //doesn't work yet
+            pec.ParticlesMoveWithEntity = false;
+            pec.Texture = ParticleTextureLibrary.BasicParticle;
+            pec.RandomizedTintMin = Color.LightGray;
+            pec.RandomizedTintMax = Color.DarkGray;
+            pec.Scale = Vector2.One * 0.2f;
+            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+            pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
+            pec.EmitterDuration = 0f;
+            pec.ParticleDuration = 1f;
+            pec.EmissionFrequency = 60f;
+            pec.EmissionRate = 2f;
+            pec.InitialSpeed = 100f;
+            pec.SpawnDirection = new Vector2(0f, -1f);
+            pec.SpawnConeDegrees = 90f;
+            pec.Gravity = new Vector2(0f, 0f);
+            //currently behaves a bit unintuitively
+            pec.LocalPointForcePosition = Vector2.Zero;
+            pec.PointForceStrength = 0f;
+            pec.PointForceUsesQuadraticFalloff = false;
+            pec.Drag = 0.5f;
+
+            singleton.Scene.GetChildrenOfType<Character>()[0].AddComponent(new ParticleEmitter(pec));*/
+
+
+            ParticleEmitterConfiguration pec2 = new ParticleEmitterConfiguration();
+
+            foreach ( var dispenser in singleton.Map.Dispensers ) {
                 _ = Enum.TryParse(dispenser.Type, out DispenserType type);
                 singleton.Scene.AddChild(new Dispenser(
                     singleton.Map.CreateEntityTileCenteredPosition(dispenser),
