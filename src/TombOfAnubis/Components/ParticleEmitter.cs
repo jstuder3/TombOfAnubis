@@ -28,6 +28,12 @@ namespace TombOfAnubis
         LinearDecreaseToZero
     }
 
+    public enum AlphaMode
+    {
+        Constant,
+        LinearDecreaseToZero
+    }
+
     //this takes a LocalPosition, as it can move with the Parent Entity's Position
     public struct ParticleEmitterConfiguration
     {
@@ -37,8 +43,12 @@ namespace TombOfAnubis
         public bool ParticlesMoveWithEntity { get; set; }
         public Texture2D Texture { get; set; }
         public int SpriteLayer { get; set; }
+        public float InitialAlpha { get; set; }
+        public AlphaMode AlphaMode { get; set; }
         public Color RandomizedTintMin { get; set; }
         public Color RandomizedTintMax { get; set; }
+        public Color TintOverLifetimeStart { get; set; }
+        public Color TintOverLifetimeEnd { get; set; }
         public Vector2 Scale { get; set; }
         public ScalingMode ScalingMode { get; set; }
         public Vector2 RelativeScaleVariation { get; set; }

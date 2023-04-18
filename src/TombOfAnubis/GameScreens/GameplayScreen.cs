@@ -152,7 +152,7 @@ namespace TombOfAnubis
 
                 Session.SetViewport(viewport);
                 Session.SetFocusOnPlayer(playerIdx);
-                SpriteBatch.Begin();
+                SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 Session.Draw(gameTime);
                 SpriteBatch.End();
             }

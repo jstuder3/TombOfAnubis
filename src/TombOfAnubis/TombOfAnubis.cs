@@ -17,6 +17,7 @@ namespace TombOfAnubis
 
             screenManager = new GameScreenManager(this);
             Components.Add(screenManager);
+            IsMouseVisible = true;
 
         }
 

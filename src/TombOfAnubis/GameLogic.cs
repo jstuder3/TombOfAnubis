@@ -165,6 +165,7 @@ namespace TombOfAnubis
 
             character.GetComponent<Movement>().State = MovementState.Trapped;
             character.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Dead);
+           // AISystem.DetailAPlayer(character);
 
             foreach(ParticleEmitter pe in character.GetComponentsOfType<ParticleEmitter>())
             {

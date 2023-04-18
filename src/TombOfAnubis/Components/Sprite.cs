@@ -15,6 +15,8 @@ namespace TombOfAnubis
 
         public Rectangle SourceRectangle { get; set; }
 
+        public float Alpha = 1f;
+
         public Sprite(Texture2D texture, int layer)
         {
             Texture = texture;

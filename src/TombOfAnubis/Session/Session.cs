@@ -280,10 +280,12 @@ namespace TombOfAnubis
             pec.ParticlesMoveWithEntity = false;
             pec.Texture = ParticleTextureLibrary.BasicParticle;
             pec.SpriteLayer = 1;
+            pec.InitialAlpha = 0.5f;
+            pec.AlphaMode = AlphaMode.LinearDecreaseToZero;
             pec.RandomizedTintMin = Color.SlateGray;
             pec.RandomizedTintMax = Color.DimGray;
             pec.Scale = Vector2.One * 0.4f;
-            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+            pec.ScalingMode = ScalingMode.Constant;
             pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
             pec.EmitterDuration = 0f;
             pec.ParticleDuration = 2f;
@@ -297,6 +299,7 @@ namespace TombOfAnubis
             pec.LocalPointForcePosition = Vector2.Zero;
             pec.PointForceStrength = 0f;
             pec.PointForceUsesQuadraticFalloff = false;
+            pec.Gravity = new Vector2(0f, 0f);
             pec.Drag = 0.5f;
 
             singleton.Scene.GetChildrenOfType<Anubis>()[0].AddComponent(new ParticleEmitter(pec));

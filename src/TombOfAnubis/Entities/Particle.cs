@@ -56,6 +56,7 @@ namespace TombOfAnubis
             LocalOffset = ParticleConfiguration.LocalPosition + GenerateUniformlyRandomPointOnDisk();
 
             Sprite sprite = new Sprite(ParticleConfiguration.Texture, RandomLinearlyInterpolatedTint(), ParticleConfiguration.SpriteLayer);
+            if (ParticleConfiguration.InitialAlpha != 0) { sprite.Alpha = ParticleConfiguration.InitialAlpha; }
             AddComponent(sprite);
 
             Vector2 randomizedScale = ParticleConfiguration.Scale * (Vector2.One + ((float)random.NextDouble() - 0.5f) * ParticleConfiguration.RelativeScaleVariation);
@@ -141,6 +142,15 @@ namespace TombOfAnubis
                 transform.Scale = ParticleConfiguration.Scale * ((AliveUntil - (float)gameTime.TotalGameTime.TotalSeconds) / Duration);
                 //adjust for non-center origin (because the sprites have origin at the top left, but we want them to "scale down into their center")
                 transform.Position += new Vector2(ParticleConfiguration.Texture.Width * ParticleConfiguration.Scale.X / 2f, ParticleConfiguration.Texture.Height* ParticleConfiguration.Scale.Y / 2f) * (1-((AliveUntil - (float)gameTime.TotalGameTime.TotalSeconds) / Duration));
+            }
+
+            if(ParticleConfiguration.AlphaMode == AlphaMode.LinearDecreaseToZero)
+            {
+                if (Duration == 0)
+                {
+                    throw new Exception("Cannot use AlphaMode.LinearDecreaseToZero with Duration of zero! Please set a duration for the particle if you want to use this scaling mode.");
+                }
+                GetComponent<Sprite>().Alpha = ParticleConfiguration.InitialAlpha * ((AliveUntil - (float)gameTime.TotalGameTime.TotalSeconds) / Duration);
             }
 
             //physics update
