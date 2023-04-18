@@ -36,6 +36,7 @@ namespace TombOfAnubis
         //doesn't work yet. set this to false for correct behaviour
         public bool ParticlesMoveWithEntity { get; set; }
         public Texture2D Texture { get; set; }
+        public int SpriteLayer { get; set; }
         public Color RandomizedTintMin { get; set; }
         public Color RandomizedTintMax { get; set; }
         public Vector2 Scale { get; set; }

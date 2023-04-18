@@ -218,6 +218,28 @@ namespace TombOfAnubis
             }
 
             anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f));
+
+            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+            pec.LocalPosition = new Vector2(30f, 30f);
+            pec.RandomizedSpawnPositionRadius = 40f;
+            pec.Texture = ParticleTextureLibrary.Circle;
+            pec.SpriteLayer = 3;
+            pec.RandomizedTintMin = Color.Yellow;
+            pec.RandomizedTintMax = Color.LightYellow;
+            pec.Scale = Vector2.One * 0.4f;
+            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+            pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
+            pec.EmitterDuration = 2f;
+            pec.ParticleDuration = 1f;
+            pec.EmissionFrequency = 60f;
+            pec.EmissionRate = 1f;
+            pec.InitialSpeed = 10f;
+            pec.SpawnDirection = new Vector2(0f, -1f);
+            pec.SpawnConeDegrees = 360f;
+            pec.Drag = 0.5f;
+
+            anubis.AddComponent(new ParticleEmitter(pec));
+
         }
 
         public static void OnCollision(Character character, Trap trap)

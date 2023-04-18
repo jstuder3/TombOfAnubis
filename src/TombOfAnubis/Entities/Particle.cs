@@ -55,7 +55,7 @@ namespace TombOfAnubis
             }
             LocalOffset = ParticleConfiguration.LocalPosition + GenerateUniformlyRandomPointOnDisk();
 
-            Sprite sprite = new Sprite(ParticleConfiguration.Texture, RandomLinearlyInterpolatedTint(), 1);
+            Sprite sprite = new Sprite(ParticleConfiguration.Texture, RandomLinearlyInterpolatedTint(), ParticleConfiguration.SpriteLayer);
             AddComponent(sprite);
 
             Vector2 randomizedScale = ParticleConfiguration.Scale * (Vector2.One + ((float)random.NextDouble() - 0.5f) * ParticleConfiguration.RelativeScaleVariation);

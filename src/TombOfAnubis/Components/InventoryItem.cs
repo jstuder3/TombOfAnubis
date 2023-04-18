@@ -48,6 +48,7 @@ namespace TombOfAnubis
                     pec.LocalPosition = new Vector2(25f, 25f);
                     pec.RandomizedSpawnPositionRadius = 20f;
                     pec.Texture = ParticleTextureLibrary.FourCornerStar;
+                    pec.SpriteLayer = 1;
                     pec.RandomizedTintMin = Color.LightBlue;
                     pec.RandomizedTintMax = Color.DarkBlue;
                     pec.Scale = Vector2.One * 0.4f;
