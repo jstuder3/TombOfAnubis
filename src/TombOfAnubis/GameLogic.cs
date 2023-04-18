@@ -208,9 +208,9 @@ namespace TombOfAnubis
             //When Anubis collides with the fist, the fist is destroyed (by ending its lifetime GameEffect), a smoke effect is spawned and Anubis is stunned for 2 seconds
 
             Session singleton = Session.GetInstance();
-            VFX vfx = new VFX(anubis.GetComponent<Transform>().Position, Fist.Scale * 2f, Fist.Texture, Fist.AnimationClipList, 2, AnimationClipType.VFX_01);
-            singleton.Scene.AddChild(vfx);
-            vfx.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.5f));
+            //VFX vfx = new VFX(anubis.GetComponent<Transform>().Position, Fist.Scale * 2f, Fist.Texture, Fist.AnimationClipList, 2, AnimationClipType.VFX_01);
+            //singleton.Scene.AddChild(vfx);
+            //vfx.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.5f));
 
             foreach(GameplayEffect gameplayEffect in fist.GetComponentsOfType<GameplayEffect>())
             {
@@ -228,10 +228,10 @@ namespace TombOfAnubis
             pec.RandomizedTintMax = Color.LightYellow;
             pec.Scale = Vector2.One * 0.4f;
             pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
-            pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
+            pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
             pec.EmitterDuration = 2f;
             pec.ParticleDuration = 1f;
-            pec.EmissionFrequency = 60f;
+            pec.EmissionFrequency = 30f;
             pec.EmissionRate = 1f;
             pec.InitialSpeed = 10f;
             pec.SpawnDirection = new Vector2(0f, -1f);
