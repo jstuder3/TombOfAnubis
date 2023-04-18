@@ -365,6 +365,7 @@ namespace TombOfAnubis
                 AnimationSystem.Clear();
                 MovementSystem.Clear();
                 ButtonControllerSystem.Clear();
+                ParticleEmitterSystem.Clear();
 
         // clear the singleton
         singleton = null;
