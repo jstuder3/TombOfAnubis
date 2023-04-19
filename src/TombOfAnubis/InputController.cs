@@ -168,7 +168,6 @@ namespace TombOfAnubis
             {
                 playerInput.IsActive = false;
                 playerInput.PlayerID = default(int);
-                playerInput.ControllerID = default(int);
             }
         }
 

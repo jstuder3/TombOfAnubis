@@ -88,7 +88,7 @@ namespace TombOfAnubis
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
 
-            AudioController.PlaySong("background_music");
+            // AudioController.PlaySong("background_music");
             base.LoadContent();
         }
 
