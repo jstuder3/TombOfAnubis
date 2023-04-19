@@ -205,8 +205,11 @@ namespace TombOfAnubis
 
             if(hasPowerUp)
             {
-                texture = itemTextures[powerUp];
-                DrawItemSprite(playerID, texture, textureWidth, textureHeight, positionX[0], positionY[0]);
+                if (itemTextures.ContainsKey(powerUp))
+                {
+                    texture = itemTextures[powerUp];
+                    DrawItemSprite(playerID, texture, textureWidth, textureHeight, positionX[0], positionY[0]);
+                }
             }
 
             else
