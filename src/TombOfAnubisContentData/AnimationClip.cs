@@ -10,7 +10,9 @@ namespace TombOfAnubisContentData
 {
     public enum AnimationClipType
     {
+        // Default
         None,
+        // Character movement state
         WalkingLeft,
         WalkingRight,
         WalkingUp,
@@ -18,10 +20,17 @@ namespace TombOfAnubisContentData
         Idle,
         ObjectActive,
         ObjectInactive,
+        // Trap button
         Pressed,
         NotPressed,
+        // Character death
         Dead,
-        VFX_01
+        // Anubis-Fist collision
+        VFX_01,
+        // MenuEntry scroll state
+        InactiveEntry,
+        TransitionEntry,
+        ActiveEntry,
     }
 
     public class AnimationClip

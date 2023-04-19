@@ -10,7 +10,9 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Sdcb.FFmpeg.Raw;
 using System;
+using TombOfAnubisContentData;
 #endregion
 
 namespace TombOfAnubis
@@ -60,6 +62,17 @@ namespace TombOfAnubis
         private Texture2D texture;
         private float textureScale = 1.0f;
 
+
+        /// <summary>
+        /// Animation of texture when entry is selected
+        /// </summary>
+        private Animation textureAnimation;
+
+        /// <summary>
+        /// Stores whether this entry was the most recently selected MenuEntry
+        /// </summary>
+        private bool prevSelected = false;
+        private GameTime prevSelectedTime;
 
         #endregion
 
@@ -124,6 +137,30 @@ namespace TombOfAnubis
         }
 
 
+        /// <summary>
+        /// Animation of texture when entry is selected
+        /// </summary>
+        public Animation TextureAnimation
+        {
+            get { return textureAnimation; }
+            set { textureAnimation = value; }
+        }
+
+        /// <summary>
+        /// Stores whether this entry was the most recently selected MenuEntry
+        /// </summary>
+        public bool PrevSelected
+        {
+            get { return prevSelected; }
+            set { prevSelected = value; }
+        }
+
+        public GameTime PrevSelectedTime
+        {
+            get { return prevSelectedTime; }
+            set { prevSelectedTime = value; }
+        }
+
         #endregion
 
 
@@ -171,7 +208,32 @@ namespace TombOfAnubis
         /// Updates the menu entry.
         /// </summary>
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
-        { }
+        { 
+            if (isSelected && prevSelected)
+            {
+                double timeElapsedPrevSelect = gameTime.TotalGameTime.Subtract(prevSelectedTime.TotalGameTime).TotalMilliseconds;
+                double animationDuration = textureAnimation.AnimationClips[1].GetTotalClipDuration();
+                if (timeElapsedPrevSelect >= animationDuration)
+                {
+                    textureAnimation.SetActiveClip(AnimationClipType.ActiveEntry);
+                } 
+            }
+            else if (!isSelected && prevSelected)
+            {
+                textureAnimation.SetActiveClip(AnimationClipType.InactiveEntry);
+                prevSelected = false;
+            }
+            else if (isSelected && !prevSelected)
+            {
+                textureAnimation.SetActiveClip(AnimationClipType.TransitionEntry);
+                prevSelectedTime = gameTime;
+                prevSelected = true;
+            }
+            else
+            {
+                textureAnimation.SetActiveClip(AnimationClipType.InactiveEntry);
+            }
+        }
 
 
         /// <summary>
@@ -189,7 +251,7 @@ namespace TombOfAnubis
             if (texture != null)
             {
                 //spriteBatch.Draw(texture, position, Color.White);
-                spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, textureScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, position, textureAnimation.DefaultSourceRectangle, Color.White, 0f, Vector2.Zero, textureScale, SpriteEffects.None, 0f);
                 if ((spriteFont != null) && !String.IsNullOrEmpty(text))
                 {
                     Vector2 textSize = spriteFont.MeasureString(text);

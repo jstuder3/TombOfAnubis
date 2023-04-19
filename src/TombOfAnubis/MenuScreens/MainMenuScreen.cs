@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
+using TombOfAnubisContentData;
 #endregion
 
 namespace TombOfAnubis
@@ -37,12 +38,10 @@ namespace TombOfAnubis
         private Texture2D titleTexture;
         private float titleScale = 0.4f;
 
-        private Texture2D plankTexture;
-        private float plankTextureScale = 0.75f;
-
-        private Texture2D gameControllTexture;
-        private float gameControllTextureScale = 1.0f;
-        private Vector2 gameControllPosition;
+        private Texture2D scrollTexture;
+        private float scrollTextureScale = 0.5f;
+        private static List<AnimationClip> activeScrollAnimation;
+        private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
         private Texture2D emptyPlayerSlot;
         private Texture2D keyboardPlayerSlot, controllerPlayerSlot;
@@ -99,25 +98,31 @@ namespace TombOfAnubis
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
-            plankTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
             titleTexture = content.Load<Texture2D>("Textures/Menu/Title_white");
 
             emptyPlayerSlot = content.Load<Texture2D>("Textures/Menu/Empty");
             keyboardPlayerSlot = content.Load<Texture2D>("Textures/Menu/Keyboard");
             controllerPlayerSlot = content.Load<Texture2D>("Textures/Menu/Controller");
 
-            gameControllTexture = content.Load<Texture2D>("Textures/Menu/GameControlls_1");
+            activeScrollAnimation = new List<AnimationClip> {
+                            new AnimationClip(AnimationClipType.InactiveEntry, 1, 200, new Point(scrollTextureWidth, scrollTextureHeight)),
+                            new AnimationClip(AnimationClipType.TransitionEntry, 3, 200, new Point(scrollTextureWidth, scrollTextureHeight)),
+                            new AnimationClip(AnimationClipType.ActiveEntry, 1, 200, new Point(scrollTextureWidth, scrollTextureHeight)),
+                        };
 
             Texture2D playerOneSlot = InputController.GetActiveInputs()[0].IsKeyboard ? keyboardPlayerSlot : controllerPlayerSlot;
             connectedPlayerSlots = new List<Texture2D> { playerOneSlot, emptyPlayerSlot, emptyPlayerSlot, emptyPlayerSlot };
 
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
             // Set the textures on each menu element and its scale
-            newGameMenuEntry.Texture = plankTexture;
-            newGameMenuEntry.TextureScale = plankTextureScale;
+            newGameMenuEntry.Texture = scrollTexture;
+            newGameMenuEntry.TextureScale = scrollTextureScale;
+            newGameMenuEntry.TextureAnimation = new Animation(activeScrollAnimation);
 
-            playerSelectionMenuEntry.Texture = plankTexture;
-            playerSelectionMenuEntry.TextureScale = plankTextureScale;
+            playerSelectionMenuEntry.Texture = scrollTexture;
+            playerSelectionMenuEntry.TextureScale = scrollTextureScale;
+            playerSelectionMenuEntry.TextureAnimation = new Animation(activeScrollAnimation);
 
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
@@ -139,8 +144,8 @@ namespace TombOfAnubis
             float titleWidth = titleScale * titleTexture.Width / screenWidth;
             float titleHeight = titleScale * titleTexture.Height / screenHeight;
             // Assume every entry has the same sized texture
-            float textureWidth = ((float)MenuEntries[0].Texture.Width / screenWidth) * plankTextureScale;
-            float textureHeight = ((float) MenuEntries[0].Texture.Height / screenHeight) * plankTextureScale;
+            float textureWidth = ((float) scrollTextureWidth / screenWidth) * scrollTextureScale;
+            float textureHeight = ((float) scrollTextureHeight / screenHeight) * scrollTextureScale;
 
             float titleOffsetX = marginX + (textureWidth - titleWidth) / 2;
             titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
@@ -156,13 +161,6 @@ namespace TombOfAnubis
 
                 MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
             }
-
-            float gameControllWidth = gameControllTextureScale * gameControllTexture.Width / screenWidth;
-            float gameControllHeight = gameControllTextureScale * gameControllTexture.Height / screenHeight;
-            
-            float gameControllOffsetX = (titleOffsetX + titleWidth) + (((1.0f - marginX) - (titleOffsetX + titleWidth)) - gameControllWidth) / 2;
-            float gameControllOffsetY = (1.0f - gameControllHeight) / 2;
-            gameControllPosition = GetRelativePosition(viewport, gameControllOffsetX, gameControllOffsetY);
         }
 
         /// <summary>
@@ -260,13 +258,12 @@ namespace TombOfAnubis
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(gameControllTexture, gameControllPosition, null, Color.White, 0f, Vector2.Zero, gameControllTextureScale, SpriteEffects.None, 0f);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < MenuEntries.Count; i++)
             {
                 MenuEntry menuEntry = MenuEntries[i];
-                if (i == 1)
+                if (i == 2)
                 {
                     DrawSpecialEntry(gameTime, menuEntry);
                 }
