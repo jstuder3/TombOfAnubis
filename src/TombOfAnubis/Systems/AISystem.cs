@@ -203,10 +203,13 @@ namespace TombOfAnubis
         {
 
             Random rnd = new Random();
-
+            
 
             foreach (AI ai in components)
             {
+
+                //Console.WriteLine("mapname: " + ai.MovementGraph.map.Name);
+                
                 //Console.WriteLine("reached anubis section");
                 Entity entity = ai.Entity;
                 Transform transform = entity.GetComponent<Transform>();
@@ -252,7 +255,7 @@ namespace TombOfAnubis
                 } else if(this.AnubisBehaviour == AnubisBehaviour.TailPlayers)
                 {
                     //check if tailed player is trapped or invisible
-                    if(this.tailingPlayer && (this.tailedPlayer.GetComponent<Movement>().IsTrapped() || !this.tailedPlayer.GetComponent<Movement>().IsVisibleToAnubis()))
+                    if(this.tailingPlayer && !this.tailedPlayer.GetComponent<Movement>().IsVisibleToAnubis())
                     {
                         //invalidate tailing
                         this.tailingPlayer = false;
@@ -275,6 +278,7 @@ namespace TombOfAnubis
                     }
 
                     Vector2 positionAnubis = transform.Position;
+                    
                     int anubis_node_id = movementGraph.ToNodeID(positionAnubis);
 
                     Vector2 positionPlayer = this.tailedPlayer.GetComponent<Transform>().Position;
@@ -282,7 +286,8 @@ namespace TombOfAnubis
 
                     Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.GetComponent<Transform>().Position);
                     //Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailedPlayer.GetComponent<Transform>().Position + " -> " + direction);
-                    newPosition += direction * (float)3 *movement.MaxSpeed * deltaTimeSeconds;
+                    newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
+                    
 
                 }
                 else

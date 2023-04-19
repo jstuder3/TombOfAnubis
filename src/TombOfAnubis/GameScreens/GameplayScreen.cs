@@ -52,7 +52,7 @@ namespace TombOfAnubis
             if (this.gameStartDescription == null)
             {
                 this.gameStartDescription = new GameStartDescription();
-                this.gameStartDescription.MapContentName = "Map001";
+                this.gameStartDescription.MapContentName = "Map002";
                 this.gameStartDescription.NumberOfPlayers = 4;
 
             }

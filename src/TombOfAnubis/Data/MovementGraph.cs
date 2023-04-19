@@ -14,7 +14,7 @@ namespace TombOfAnubis
     {
 
 
-        private readonly Map map;
+        public readonly Map map;
         private Dictionary<Point, int> nodeIds;
         private Dictionary<int, Point> tileCoordinates;
 

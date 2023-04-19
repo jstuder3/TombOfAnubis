@@ -118,6 +118,11 @@
 /processor:MapProcessor
 /build:Maps/Map001.xml
 
+#begin Maps/Map002.xml
+/importer:XmlImporter
+/processor:MapProcessor
+/build:Maps/Map002.xml
+
 #begin Textures/Characters/animated_explorer_spritesheet_blue.png
 /importer:TextureImporter
 /processor:TextureProcessor
