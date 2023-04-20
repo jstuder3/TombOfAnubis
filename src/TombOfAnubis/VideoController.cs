@@ -22,7 +22,7 @@ namespace TombOfAnubis
         {
             videos = new Dictionary<string, Video>
                 {
-                    { "test_video", VideoHelper.LoadFromFile(@"Content/Videos/SampleVideo_1280x720_1mb.mp4")}
+                    { "test_video", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")}
                 };
             videoPlayer = new VideoPlayer(graphics);
 
