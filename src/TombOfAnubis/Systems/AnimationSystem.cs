@@ -13,7 +13,7 @@ namespace TombOfAnubis
         public override void Update(GameTime gameTime)
         {
             float totalTime = (float)gameTime.TotalGameTime.TotalMilliseconds;
-            foreach (Animation animation in components)
+            foreach (Animation animation in GetComponents())
             {
                 Sprite sprite = animation.Entity.GetComponent<Sprite>();
                 AnimationClip activeClip = animation.ActiveClip;

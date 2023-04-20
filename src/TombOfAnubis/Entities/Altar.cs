@@ -8,17 +8,23 @@ namespace TombOfAnubis
     {
         public Altar(Vector2 position, Vector2 scale, Texture2D texture, int numPlayers)
         {
-            Transform transform = new Transform(position, scale);
+            Transform transform = new Transform(position, scale, Visibility.Game);
             AddComponent(transform);
 
-            Sprite sprite = new Sprite(texture, 1);
+            Transform minimapTransform = new Transform(position, 2f * scale, Visibility.Minimap);
+            AddComponent(minimapTransform);
+
+            Sprite sprite = new Sprite(texture, 1, Visibility.Both);
             AddComponent(sprite);
 
             Inventory inventory = new Inventory(numPlayers, 0, this);
             AddComponent(inventory);
 
-            RectangleCollider collider = new RectangleCollider(position, Size());
+            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
             AddComponent(collider);
+
+            Discovery discovery = new Discovery();
+            AddComponent(discovery);
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static System.Collections.Specialized.BitVector32;
 
 
 namespace TombOfAnubis
@@ -14,11 +15,22 @@ namespace TombOfAnubis
         GameWon,
         GameOver
     }
+    public enum Visibility
+    {
+        Both,
+        Game,
+        Minimap
+    }
     class Session
     {
         // TEMPORARY HARD CODED PARAMETERS
-
         public AnubisBehaviour AnubisBehaviour { get; set; } = AnubisBehaviour.Random;
+        public static Vector2 MinimapScale { get; set; } = Vector2.One / 40;
+        public static Vector2 WorldScale { get; set; } = Vector2.One;
+
+
+        // END TEMPORARY HARD CODED PARAMETERS
+
         /// <summary>
         /// The single Session instance that can be active at a time.
         /// </summary>
@@ -75,6 +87,8 @@ namespace TombOfAnubis
                      viewport.Height / 2f);
             }
         }
+
+        public Visibility Visibility { get; set; }
 
         /// <summary>
         /// The center of the current viewport.
@@ -185,7 +199,8 @@ namespace TombOfAnubis
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
 
-            singleton.Scene = new Scene(Vector2.Zero);
+            singleton.Scene = new Scene(Vector2.Zero, WorldScale, MinimapScale);
+            singleton.Visibility = Visibility.Game;
 
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
@@ -212,6 +227,7 @@ namespace TombOfAnubis
                     character.Scale,
                     character.Texture,
                     singleton.Map.EntityProperties.MaxCharacterMovementSpeed,
+                    character.Animation,
                     character.Animation
                     ));
 
@@ -400,9 +416,33 @@ namespace TombOfAnubis
 
             // Create the undiscovered texture. This should be loaded from a png and prettier than just a black square.
             singleton.Map.UndiscoveredTexture = new Texture2D(singleton.gameScreenManager.GraphicsDevice, 1, 1);
-            singleton.Map.UndiscoveredTexture.SetData(new[] { Color.Black });
+            singleton.Map.UndiscoveredTexture.SetData(new[] { Color.SaddleBrown });
+        }
 
-            singleton.DiscoverySystem.SetMap(singleton.Map);
+        public static void StartMinimapMode()
+        {
+            singleton.Visibility = Visibility.Minimap;
+
+            Vector2 viewportCenter = new Vector2(singleton.viewport.Width / 2f, singleton.viewport.Height / 2f);
+            Vector2 mapSize = singleton.Map.MapSize * MinimapScale;
+
+            Vector2 topRightMapCenter = new Vector2(
+                singleton.viewport.X + singleton.viewport.Width - mapSize.X / 2 - 10,
+            singleton.viewport.Y + mapSize.Y / 2 + 10
+                );
+
+            if (singleton.NumberOfPlayers > 1)
+            {
+                MoveMapCenterTo(viewportCenter);
+            }
+            else
+            {
+                MoveMapCenterTo(topRightMapCenter);
+            }
+        }
+        public static void EndMinimapMode()
+        {
+            singleton.Visibility = Visibility.Game;
         }
 
         public static void SetViewport(Viewport viewport)
@@ -412,14 +452,14 @@ namespace TombOfAnubis
 
         public static void SetFocusOnPlayer(int playerIdx)
         {
-            foreach (Input playerInput in InputSystem.GetRegisteredComponents())
+            foreach (Input playerInput in InputSystem.GetComponents())
             {
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
                     Character player = playerInput.Entity as Character;
                     Transform playerTransform = player.GetComponent<Transform>();
                     Vector2 playerPosition = playerTransform.Position;
-                    Vector2 playerSize = player.Size();
+                    Vector2 playerSize = player.Size(Visibility.Game);
                     Vector2 playerCenter = new Vector2(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
 
                     singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - playerCenter;

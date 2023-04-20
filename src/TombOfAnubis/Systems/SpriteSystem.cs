@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace TombOfAnubis
 {
@@ -14,12 +15,12 @@ namespace TombOfAnubis
         public override void Draw(GameTime gameTime)
         {
             //SpriteBatch.Begin();
+            var components = GetComponents();
             foreach (Sprite sprite in components)
             {
                 Entity entity = sprite.Entity;
                 Transform transform = entity.GetComponent<Transform>();
-                Discovery discovery = entity.GetComponent<Discovery>();
-                Vector2 entitySize = entity.Size();
+                Vector2 entitySize = entity.Size(Session.GetInstance().Visibility);
                 Vector2 worldPosition = transform.ToWorld().Position;
                 Texture2D texture = sprite.Texture;
                 Rectangle destinationRectangle = new Rectangle(
@@ -27,31 +28,23 @@ namespace TombOfAnubis
                     (int)worldPosition.Y,
                     (int)entitySize.X,
                     (int)entitySize.Y
-                );
+                ); 
                 if (CheckVisibility(destinationRectangle))
                 {
-                    if(discovery != null && !discovery.Discovered && sprite.UndiscoveredTexture != null)
+                    if (Session.GetInstance().Visibility == Visibility.Minimap)
                     {
-                        SpriteBatch.Draw(sprite.UndiscoveredTexture, destinationRectangle, sprite.Tint * sprite.Alpha);
+                        Discovery discovery = entity.GetComponent<Discovery>();
+                        if (discovery == null || discovery.Discovered) 
+                        {
+                            SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, sprite.Tint * sprite.Alpha);
+                        }
                     }
                     else
                     {
-                        Point entityTileCoord = Session.GetInstance().Map.PositionToTileCoordinate(transform.Position);
-                        Entity[,] mapTiles = Session.GetInstance().MapTiles;
-                        int width = mapTiles.GetLength(0);
-                        int height = mapTiles.GetLength(1);
-                        if (entityTileCoord.X >= 0 && entityTileCoord.X < width && entityTileCoord.Y >= 0 && entityTileCoord.Y < height) //check that we're in bounds
-                        {
-                            bool onDiscoveredTile = mapTiles[entityTileCoord.X, entityTileCoord.Y].GetComponent<Discovery>().Discovered;
-                            if (onDiscoveredTile)
-                            {
-                                SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, sprite.Tint * sprite.Alpha);
-                            }
-                        }
+                        SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, sprite.Tint * sprite.Alpha);   
                     }
                 }
             }
-            //SpriteBatch.End();
         }
 
         private bool CheckVisibility(Rectangle screenRectangle)

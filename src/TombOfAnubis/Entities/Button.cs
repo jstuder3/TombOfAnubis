@@ -25,27 +25,30 @@ namespace TombOfAnubis
         {
             Type = type;
 
-            Transform transform = new Transform(position, scale);
+            Transform transform = new Transform(position, scale, Visibility.Game);
             AddComponent(transform);
 
             Sprite sprite;
             if (animationClips != null)
             {
-                Animation animation = new Animation(animationClips);
+                Animation animation = new Animation(animationClips, Visibility.Game);
                 AddComponent(animation);
 
                 animation.SetActiveClip(AnimationClipType.NotPressed);
 
-                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 1);
+                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 1, Visibility.Game);
             }
             else
             {
-                sprite = new Sprite(texture, 2);
+                sprite = new Sprite(texture, 1, Visibility.Game);
             }
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(position, Size());
+            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
             AddComponent(collider);
+
+            Discovery discovery = new Discovery();
+            AddComponent(discovery);
 
             Session singleton = Session.GetInstance();
 

@@ -44,14 +44,14 @@ namespace TombOfAnubis {
         public EffectType Type { get; set; }
 
         //Different constructors for varying types of parameters. Check the comment above to find out which parameters are necessary for the respective EffectType
-        public GameplayEffect(EffectType type, float duration) : this(type, duration, new List<float>(), new List<Vector2>()) { }
+        public GameplayEffect(EffectType type, float duration, Visibility visibility) : this(type, duration, new List<float>(), new List<Vector2>(), visibility) { }
 
-        public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2>()) { }
+        public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01, Visibility visibility) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2>(), visibility) { }
 
-        public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01, Vector2 effectVectorParameter_01) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2> { effectVectorParameter_01 }) { }
+        public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01, Vector2 effectVectorParameter_01, Visibility visibility) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2> { effectVectorParameter_01 }, visibility) { }
 
         // main constructor that is called by all the other constructors
-        public GameplayEffect(EffectType type, float duration, List<float> effectFloatParameters, List<Vector2> effectVectorParameters)
+        public GameplayEffect(EffectType type, float duration, List<float> effectFloatParameters, List<Vector2> effectVectorParameters, Visibility visibility)
         {
             Type = type;
             this.duration = duration;
@@ -59,7 +59,7 @@ namespace TombOfAnubis {
 
             this.effectFloatParameters = effectFloatParameters;
             this.effectVectorParameters = effectVectorParameters;
-
+            visibility = Visibility;
             GameplayEffectSystem.Register(this);
         }
         public void Start(GameTime gameTime)

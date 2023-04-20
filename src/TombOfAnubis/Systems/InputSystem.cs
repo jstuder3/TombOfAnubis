@@ -19,7 +19,7 @@ namespace TombOfAnubis
             {
                 ScreenManager.AddScreen(new PauseMenuScreen());
             }
-            foreach (Input input in components)
+            foreach (Input input in GetComponents())
             {
                 Character character = (Character)input.Entity;
                 Transform transform = character.GetComponent<Transform>();

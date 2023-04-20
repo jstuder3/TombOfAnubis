@@ -14,6 +14,7 @@ namespace TombOfAnubis
     {
         public Vector2 MinimapScale {  get; set; }
         private Texture2D minimapBackground;
+        private Texture2D minimapFrame;
         private Viewport viewport;
         private GraphicsDevice graphics;
         private Session session;
@@ -39,11 +40,12 @@ namespace TombOfAnubis
             graphics = graphicsDevice;
             viewport = graphics.Viewport;
             session = Session.GetInstance();
-            MinimapScale = Vector2.One / 40;
             characters = session.Scene.GetChildrenOfType<Character>();
             characterViewports = SplitScreen.PlayerViewports;
             minimapBackground = new Texture2D(graphicsDevice, 1, 1);
-            minimapBackground.SetData(new[] { Color.Yellow });
+            minimapBackground.SetData(new[] { Color.Black });
+
+
 
             // In-game UI Fonts
             statusFont = Fonts.DisneyHeroicFont;
@@ -56,6 +58,8 @@ namespace TombOfAnubis
         public void LoadContent()
         {
             ContentManager content = screenManager.Game.Content;
+            minimapBackground = content.Load<Texture2D>("Textures/Menu/treasuremap_background");
+            minimapFrame = content.Load<Texture2D>("Textures/Menu/treasuremap_border");
             for (int i = 0; i < characters.Count; i++)
             {
                 string textureName = "Item_slot_" + (i + 1);
@@ -103,34 +107,18 @@ namespace TombOfAnubis
 
         private void DrawMinimap(GameTime gameTime)
         {
-            session.Scene.GetComponent<Transform>().Scale = MinimapScale;
+            Session.StartMinimapMode();
 
-            Vector2 viewportCenter = new Vector2(
-             viewport.Width / 2f,
-             viewport.Height / 2f);
-            Vector2 mapSize = session.Map.MapSize * MinimapScale;
-
-            Vector2 topRightMapCenter = new Vector2(
-                viewport.X + viewport.Width - mapSize.X / 2 - 10,
-                viewport.Y + mapSize.Y / 2 + 10
-                ) ;
-
-            if(session.NumberOfPlayers > 1)
-            {
-                Session.MoveMapCenterTo(viewportCenter);
-            }
-            else
-            {
-                Session.MoveMapCenterTo(topRightMapCenter);
-            }
+            Vector2 mapSize = Session.GetInstance().Map.MapSize * Session.MinimapScale;
             Vector2 minimapPosition = session.Scene.GetComponent<Transform>().Position;
 
-            // Minimap background
-            session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 1, (int)minimapPosition.Y - 1, (int)mapSize.X + 2, (int)mapSize.Y + 2), Color.White * 0.1f);
-
+            //Minimap background
+            session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)mapSize.X + 40, (int)mapSize.Y + 40), Color.White);
             Session.Draw(gameTime);
+            session.SpriteSystem.SpriteBatch.Draw(minimapFrame, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)mapSize.X + 40, (int)mapSize.Y + 40), Color.White);
 
-            session.Scene.GetComponent<Transform>().Scale = Vector2.One;
+
+            Session.EndMinimapMode();
         }
 
         private void DrawArtefactInventory(GameTime gameTime, Character character, Viewport characterViewport)

@@ -11,9 +11,10 @@ namespace TombOfAnubis
 
         public Rectangle DefaultSourceRectangle { get; set; }
 
-        public Animation(List<AnimationClip> animationClips)
+        public Animation(List<AnimationClip> animationClips, Visibility visibility)
         {
             AnimationClips = animationClips;
+            Visibility = visibility;
             SetActiveClip(AnimationClipType.Idle);
             DefaultSourceRectangle = animationClips[0].SourceRectangle;
             ComputeAnimationClipRectangles();

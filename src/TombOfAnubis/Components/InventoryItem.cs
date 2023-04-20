@@ -41,7 +41,7 @@ namespace TombOfAnubis
                 case ItemType.None:
                     return false;
                 case ItemType.Speedup:
-                    Entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 5f, 200f));
+                    Entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 5f, 200f, Visibility.Game));
                     ItemType = ItemType.None;
 
                     ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
@@ -75,14 +75,14 @@ namespace TombOfAnubis
                     Fist fist = new Fist(Entity.GetComponent<Transform>().Position, forwardVector);
                     Session.GetInstance().Scene.AddChild(fist);
                     //make the fist move automatically and make it despawn automatically
-                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 1000f, forwardVector));
-                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f));
+                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 1000f, forwardVector, Visibility.Game));
+                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f, Visibility.Game));
                     ItemType = ItemType.None;
                     Console.WriteLine("Fist spawned!");
                     return true;
                 case ItemType.HidingCloak:
-                    Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f));
-                    Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f));
+                    Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f, Visibility.Game));
+                    Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f, Visibility.Game));
                     ItemType = ItemType.None;
                     Console.WriteLine("Used HidingCloak!");
                     break;

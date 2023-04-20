@@ -9,22 +9,22 @@ namespace TombOfAnubis
     {
         public Anubis(Vector2 position, Vector2 scale, Texture2D texture, List<AnimationClip> animationClips, int maxMovementSpeed, Map map)
         {
-            Transform transform = new Transform(position, scale);
+            Transform transform = new Transform(position, scale, Visibility.Game);
             AddComponent(transform);
 
             Sprite sprite;
             if (animationClips != null)
             {
-                Animation animation = new Animation(animationClips);
+                Animation animation = new Animation(animationClips, Visibility.Game);
                 AddComponent(animation);
 
                 animation.SetActiveClip(AnimationClipType.Idle);
 
-                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2);
+                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2, Visibility.Game);
             }
             else
             {
-                sprite = new Sprite(texture, 2);
+                sprite = new Sprite(texture, 2, Visibility.Game);
             }
             AddComponent(sprite);
 
@@ -34,7 +34,7 @@ namespace TombOfAnubis
             AI ai = new AI(map);
             AddComponent(ai);
 
-            RectangleCollider collider = new RectangleCollider(position, Size());
+            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
             AddComponent(collider);
         }
     }

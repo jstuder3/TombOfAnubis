@@ -6,7 +6,7 @@ namespace TombOfAnubis
 {
     public class BaseSystem<T> where T : Component
     {
-        protected static List<T> components = new List<T>();
+        private static List<T> components = new List<T>();
 
         public static void Register(T component)
         {
@@ -24,10 +24,18 @@ namespace TombOfAnubis
         {
             components.Sort(comparison);
         }
-        public static List<T> GetRegisteredComponents()
+        public static List<T> GetComponents()
         {
-            return components;
+            List<T> res = new List<T>();
+            foreach (T component in components) {
+                if(component.Visible())
+                {
+                    res.Add(component);
+                }
+            }
+            return res;
         }
+
         public virtual void Update(GameTime gameTime)
         {
         }

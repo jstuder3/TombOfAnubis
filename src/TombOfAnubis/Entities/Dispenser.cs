@@ -18,14 +18,20 @@ namespace TombOfAnubis
         float cooldown;
         public Dispenser(Vector2 position, Vector2 scale, Texture2D texture, DispenserType dispenserType)
         {
-            Transform transform = new Transform(position, scale);
+            Transform transform = new Transform(position, scale, Visibility.Game);
             AddComponent(transform);
 
-            Sprite sprite = new Sprite(texture, 1);
+            Transform minimapTransform = new Transform(position, 4f * scale, Visibility.Minimap);
+            AddComponent(minimapTransform);
+
+            Sprite sprite = new Sprite(texture, 1, Visibility.Both);
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(position, Size());
+            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
             AddComponent(collider);
+
+            Discovery discovery = new Discovery();
+            AddComponent(discovery);
 
             this.dispenserType = dispenserType;
 

@@ -218,7 +218,7 @@ namespace TombOfAnubis
                 gameplayEffect.EndGameplayEffect();
             }
 
-            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f));
+            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f, Visibility.Game));
 
             ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
             pec.LocalPosition = new Vector2(30f, 30f);

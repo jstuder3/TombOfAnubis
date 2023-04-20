@@ -55,7 +55,7 @@ namespace TombOfAnubis
             {
                 foreach (Component component in components)
                 {
-                    if (component.GetType().Equals(typeof(T)))
+                    if ( component.Visible() && component.GetType().Equals(typeof(T)))
                     {
                         return (T)component;
                     }
@@ -112,18 +112,35 @@ namespace TombOfAnubis
         /// Computes the size of the Entity in world coordinates.
         /// Returns zero if the entity has no transform or no sprite component attached
         /// </summary>
-        public Vector2 Size()
+        public Vector2 Size(Visibility visibility)
         {
             Vector2 size = Vector2.Zero;
-            if (HasComponent<Transform>() && HasComponent<Sprite>()) //check for existence because the object might have been destroyed
+            
+            Transform transform = null;
+            Sprite sprite = null;
+
+
+            foreach(Transform candidate in GetComponentsOfType<Transform>())
             {
-                Transform transform = GetComponent<Transform>().ToWorld();
-                Sprite sprite = GetComponent<Sprite>();
-                if (sprite != null && transform != null)
+                if(visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
                 {
-                    size = new Vector2(sprite.SourceRectangle.Width * transform.Scale.X, sprite.SourceRectangle.Height * transform.Scale.Y);
+                    transform = candidate.ToWorld();
+
                 }
             }
+            foreach (Sprite candidate in GetComponentsOfType<Sprite>())
+            {
+                if (visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
+                {
+                    sprite = candidate;
+                }
+            }
+
+            if (sprite != null && transform != null)
+            {
+                size = new Vector2(sprite.SourceRectangle.Width * transform.Scale.X, sprite.SourceRectangle.Height * transform.Scale.Y);
+            }
+            
             return size;
         }
     }

@@ -7,11 +7,10 @@ namespace TombOfAnubis
     {
         public Floor(Vector2 position, Vector2 scale, Texture2D texture, Texture2D undiscoveredTexture, Rectangle sourceRectangle)
         {
-            Transform transform = new Transform(position, scale);
+            Transform transform = new Transform(position, scale, Visibility.Both);
             AddComponent(transform);
 
-            Sprite sprite = new Sprite(texture, sourceRectangle, 0);
-            sprite.UndiscoveredTexture = undiscoveredTexture;
+            Sprite sprite = new Sprite(texture, sourceRectangle, 0, Visibility.Both);
             AddComponent(sprite);
 
             Discovery discovery = new Discovery();

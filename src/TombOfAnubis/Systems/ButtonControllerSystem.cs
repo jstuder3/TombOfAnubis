@@ -12,7 +12,7 @@ namespace TombOfAnubis
     {
         public override void Update(GameTime gameTime)
         {
-            foreach (ButtonController buttonController in components)
+            foreach (ButtonController buttonController in GetComponents())
             {
                 buttonController.Update(gameTime);
             }

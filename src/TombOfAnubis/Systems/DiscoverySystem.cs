@@ -18,36 +18,24 @@ namespace TombOfAnubis
 
         public override void Update(GameTime deltaTime)
         {
-            if(map == null) { return; }
             List<Character> characters = Scene.GetChildrenOfType<Character>();
-            foreach (Character character in characters)
+
+            foreach (Discovery discovery in GetComponents())
             {
-                Transform characterTransform = character.GetComponent<Transform>();
-                Point currentTileCoordinates = map.PositionToTileCoordinate(characterTransform.Position);
-
-                Point downright = currentTileCoordinates + new Point(1, 1);
-                Point right = currentTileCoordinates + new Point(1, 0);
-                Point upright = currentTileCoordinates + new Point(1, -1);
-                Point up = currentTileCoordinates + new Point(0, -1);
-                Point upleft = currentTileCoordinates + new Point(-1, -1);
-                Point left = currentTileCoordinates + new Point(-1, 0);
-                Point downleft = currentTileCoordinates + new Point(-1, 1);
-                Point down = currentTileCoordinates + new Point(0, 1);
-
-                List<Point> neightbourTiles = new List<Point>() { currentTileCoordinates, downright, right, upright, up, upleft, left, downleft, down };
-
-                foreach(Point neighbour in neightbourTiles)
+                foreach (Character character in characters)
                 {
-                    if (map.ValidTileCoordinates(neighbour))
+                    Vector2 discoveryPosition = discovery.Entity.GetComponent<Transform>().ToWorld().Position + discovery.Entity.Size(Visibility.Game) / 2f;
+                    Vector2 characterPosition = character.GetComponent<Transform>().ToWorld().Position + character.Size(Visibility.Game) / 2f;
+
+                    float distance = (characterPosition - discoveryPosition).Length();
+
+                    if(distance < 1.5f*Session.GetInstance().Map.TileSize.X)
                     {
-                        Session.GetInstance().MapTiles[neighbour.X, neighbour.Y].GetComponent<Discovery>().Discovered = true;
+                        discovery.Discovered = true;
                     }
                 }
             }
         }
 
-        public void SetMap(Map map) { 
-            this.map = map;
-        }
     }
 }

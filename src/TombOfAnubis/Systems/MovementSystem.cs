@@ -12,7 +12,7 @@ namespace TombOfAnubis
     {
         public override void Update(GameTime deltaTime)
         {
-            foreach (Movement movement in components)
+            foreach (Movement movement in GetComponents())
             {
                 Entity entity = movement.Entity;
                 Animation animation = entity.GetComponent<Animation>();

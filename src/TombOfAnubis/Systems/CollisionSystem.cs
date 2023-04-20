@@ -12,7 +12,7 @@ namespace TombOfAnubis
             GameLogic.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             GameLogic.GameTime = gameTime;
 
-            foreach (Collider collider in components)
+            foreach (Collider collider in GetComponents())
             {
                 collider.Update(gameTime); // clears overlap list and updates position based on owner's transform.position
             }
@@ -22,6 +22,7 @@ namespace TombOfAnubis
         private static void HandleAllCollisions()
         {
             SkippedCollisions = new HashSet<Tuple<Collider, Collider>>();
+            var components = GetComponents();
             for (int i = 0; i < components.Count; i++)
             {
                 for (int j = i + 1; j < components.Count; j++)

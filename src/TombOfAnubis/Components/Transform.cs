@@ -4,22 +4,48 @@ namespace TombOfAnubis
 {
     public class Transform : Component
     {
+        private Vector2 position;
         /// <summary>
         /// Position of the top left corner of the entity relative to its parent
         /// </summary>
-        public Vector2 Position { get; set; }
+        public Vector2 Position { 
+            get {
+                return position;
+            }
+            set{ 
+                position = value;
+                if(Entity != null && Entity.Parent != null)
+                {
+                    foreach (Transform transform in Entity.GetComponentsOfType<Transform>())
+                    {
+                        if (!transform.Equals(this) && transform.Visibility == Visibility.Minimap)
+                        {
+                            Vector2 entitySize = Entity.Size(Visibility.Game);
+                            Vector2 entityCenter = Position + entitySize / 2f;
+
+                            Vector2 minimapEntitySize = Entity.Size(Visibility.Minimap);
+                            Vector2 minimapEntityCenter = Position + minimapEntitySize / 2f;
+
+                            transform.Position = Position + entityCenter - minimapEntityCenter;
+                        }
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Scale of this entity relative to its parent
         /// </summary>
         public Vector2 Scale { get; set; }
 
-        public Transform(Vector2 position)
+        public Transform(Vector2 position, Visibility visibility)
         {
+            Visibility = visibility;
             Position = position;
             Scale = Vector2.One;
         }
-        public Transform(Vector2 position, Vector2 scale)
+        public Transform(Vector2 position, Vector2 scale, Visibility visibility)
         {
+            Visibility = visibility;
             Position = position;
             Scale = scale;
         }
@@ -32,7 +58,11 @@ namespace TombOfAnubis
             if (Entity.Parent != null && Entity.Parent.GetComponent<Transform>() != null)
             {
                 Transform parentWorld = Entity.Parent.GetComponent<Transform>().ToWorld();
-                return new Transform(Position * parentWorld.Scale + parentWorld.Position, Scale * parentWorld.Scale);
+
+                Transform worldTransform = new Transform(Position * parentWorld.Scale + parentWorld.Position, Scale * parentWorld.Scale, Visibility);
+                worldTransform.Entity = Entity;
+                return worldTransform;
+                
             }
             else
             {

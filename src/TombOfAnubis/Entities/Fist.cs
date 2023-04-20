@@ -22,7 +22,7 @@ namespace TombOfAnubis
 
         public Fist(Vector2 position, Vector2 forwardVector)
         {
-            Transform transform = new Transform(position, Scale);
+            Transform transform = new Transform(position, Scale, Visibility.Game);
             AddComponent(transform);
 
             if (Texture == null)
@@ -31,7 +31,7 @@ namespace TombOfAnubis
                 return;
             }
 
-            Animation animation = new Animation(AnimationClipList);
+            Animation animation = new Animation(AnimationClipList, Visibility.Game);
             AddComponent(animation);
 
             Console.WriteLine(forwardVector.ToString());
@@ -54,10 +54,10 @@ namespace TombOfAnubis
                 Console.WriteLine(animation.SetActiveClip(AnimationClipType.WalkingUp));
             }
 
-            Sprite sprite = new Sprite(Texture, animation.DefaultSourceRectangle, 2);
+            Sprite sprite = new Sprite(Texture, animation.DefaultSourceRectangle, 2, Visibility.Game);
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(position, Size());
+            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
             AddComponent(collider);
         }
 

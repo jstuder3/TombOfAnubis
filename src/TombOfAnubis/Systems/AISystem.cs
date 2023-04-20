@@ -205,7 +205,7 @@ namespace TombOfAnubis
             Random rnd = new Random();
             
 
-            foreach (AI ai in components)
+            foreach (AI ai in GetComponents())
             {
 
                 //Console.WriteLine("mapname: " + ai.MovementGraph.map.Name);
@@ -322,7 +322,7 @@ namespace TombOfAnubis
             //Console.WriteLine("start update AnubisAISystem");
             Random rnd = new Random();
 
-            foreach (AI ai in components)
+            foreach (AI ai in GetComponents())
             {
                 //Console.WriteLine("reached anubis section");
                 Entity entity = ai.Entity;

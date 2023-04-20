@@ -16,7 +16,7 @@ namespace TombOfAnubis
             List<ParticleEmitter> emittersToRemove = new List<ParticleEmitter>();
 
             // check that emitters are still active. if not, mark them for deletion
-            foreach (ParticleEmitter emitter in components)
+            foreach (ParticleEmitter emitter in GetComponents())
             {
                 if (!emitter.IsActive())
                 {
@@ -31,7 +31,7 @@ namespace TombOfAnubis
                 emitterToRemove.Delete();
             }
 
-            foreach (ParticleEmitter particleEffect in components)
+            foreach (ParticleEmitter particleEffect in GetComponents())
             {
                 particleEffect.Update(gameTime);
             }
