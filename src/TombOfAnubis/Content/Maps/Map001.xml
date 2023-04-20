@@ -235,9 +235,9 @@
 		  </Item>
 	  </Artefacts>
 	  <Altar>
-		  <SpawnTileCoordinate> 7 6</SpawnTileCoordinate>
-		  <Scale>0.1 0.1</Scale>
-		  <SpriteTextureName>plagiarized_table</SpriteTextureName>
+		  <SpawnTileCoordinate> 8 7</SpawnTileCoordinate>
+		  <Scale>1.4 1.4</Scale>
+		  <SpriteTextureName>altar</SpriteTextureName>
 	  </Altar>
 	  <Dispensers>
 		  <Item>
