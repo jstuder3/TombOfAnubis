@@ -47,7 +47,7 @@
 			  <!-- (Optional) Offset of the entity. Moves the entity away from the center of the tile. -->
 			  <Offset>0 0</Offset>
 			  <!-- Scale of the entity -->
-			  <Scale>0.17 0.17</Scale>
+			  <Scale>0.45 0.45</Scale>
 			  <!-- Name of the texture. Tha path is handled by the MapReader class.-->
 			  <SpriteTextureName>animated_explorer_spritesheet_red</SpriteTextureName>
 			  <Animation>
@@ -56,31 +56,31 @@
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <!-- Duration of one frame in milliseconds-->
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingRight</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingUp</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingDown</Type>
 					  <NumberOfFrames>2</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>Dead</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>250</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 			  </Animation>
 		  </Item>
