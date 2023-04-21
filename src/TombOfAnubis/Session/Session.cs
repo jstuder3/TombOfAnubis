@@ -496,7 +496,7 @@ namespace TombOfAnubis
                     {
                         if (wall)
                         {
-                            Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle);
+                            Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle, true);
                             entities.Add(newWall);
                             singleton.MapTiles[x, y] = newWall;
                             AddWallCorners(newWall, mapPosition);
@@ -519,6 +519,7 @@ namespace TombOfAnubis
                     }
                 }
             }
+            AddWallBorder(4);
             return entities;
         }
 
@@ -596,6 +597,26 @@ namespace TombOfAnubis
                 Torch torch = new Torch(transform.Position, transform.Scale, singleton.Map.TorchTexture, singleton.Map.TorchSourceRectangles[3]);
                 singleton.World.AddChild(torch);
             }
+        }
+
+        public void AddWallBorder(int borderSize)
+        {
+            Point mapDim = singleton.Map.MapDimensions;
+            Rectangle sourceRectangle = singleton.Map.GetBaseLayerSourceRectangle(15);
+
+            for (int x = -borderSize; x < mapDim.X + borderSize; x++)
+            {
+                for (int y = -borderSize; y < mapDim.Y + borderSize; y++)
+                {
+                    if (x < 0 || x >= mapDim.X || y < 0 || y >= mapDim.Y)
+                    {
+                        Vector2 position = new Vector2(x * singleton.Map.TileSize.X, y * singleton.Map.TileSize.Y);
+                        Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle, false);
+                        singleton.World.AddChild(newWall);
+                    }
+                }
+            }
+
         }
 
     }

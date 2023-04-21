@@ -146,17 +146,8 @@ namespace TombOfAnubis
 
             return CollisionLayer[mapPosition.Y * MapDimensions.X + mapPosition.X];
         }
-
-        public Rectangle GetBaseLayerSourceRectangle(Point mapPosition)
+        public Rectangle GetBaseLayerSourceRectangle(int baseLayerValue)
         {
-            // check the parameter, but out-of-bounds is nonfatal
-            if ((mapPosition.X < 0) || (mapPosition.X >= MapDimensions.X) ||
-                (mapPosition.Y < 0) || (mapPosition.Y >= MapDimensions.Y))
-            {
-                return Rectangle.Empty;
-            }
-
-            int baseLayerValue = GetBaseLayerValue(mapPosition);
             if (baseLayerValue < 0)
             {
                 return Rectangle.Empty;
@@ -180,6 +171,18 @@ namespace TombOfAnubis
                 0,
                 SourceTileSize.X, SourceTileSize.Y);
             }
+        }
+        public Rectangle GetBaseLayerSourceRectangle(Point mapPosition)
+        {
+            // check the parameter, but out-of-bounds is nonfatal
+            if ((mapPosition.X < 0) || (mapPosition.X >= MapDimensions.X) ||
+                (mapPosition.Y < 0) || (mapPosition.Y >= MapDimensions.Y))
+            {
+                return Rectangle.Empty;
+            }
+
+            return GetBaseLayerSourceRectangle(GetBaseLayerValue(mapPosition));
+            
         }
 
         public List<Rectangle> GetWallCornerRectangles()
