@@ -12,9 +12,9 @@ namespace TombOfAnubis
 {
     public class Hud
     {
-        public Vector2 MinimapScale {  get; set; }
         private Texture2D minimapBackground;
         private Texture2D minimapFrame;
+        private float minimapScale = 0.25f;
         private Viewport viewport;
         private GraphicsDevice graphics;
         private Session session;
@@ -107,15 +107,15 @@ namespace TombOfAnubis
 
         private void DrawMinimap(GameTime gameTime)
         {
-            Session.StartMinimapMode();
+            Vector2 minimapSize = new Vector2(minimapScale * viewport.Height, minimapScale * viewport.Height); 
+            Session.StartMinimapMode(minimapSize);
 
-            Vector2 mapSize = Session.GetInstance().Map.MapSize * Session.MinimapScale;
             Vector2 minimapPosition = session.World.Origin;
 
             //Minimap background
-            session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)mapSize.X + 40, (int)mapSize.Y + 40), Color.White);
+            session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)minimapSize.X + 40, (int)minimapSize.Y + 40), Color.White);
             Session.Draw(gameTime);
-            session.SpriteSystem.SpriteBatch.Draw(minimapFrame, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)mapSize.X + 40, (int)mapSize.Y + 40), Color.White);
+            session.SpriteSystem.SpriteBatch.Draw(minimapFrame, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)minimapSize.X + 40, (int)minimapSize.Y + 40), Color.White);
 
 
             Session.EndMinimapMode();

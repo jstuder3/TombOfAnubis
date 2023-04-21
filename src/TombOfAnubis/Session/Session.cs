@@ -26,7 +26,6 @@ namespace TombOfAnubis
     {
         // TEMPORARY HARD CODED PARAMETERS
         public AnubisBehaviour AnubisBehaviour { get; set; } = AnubisBehaviour.Random;
-        public static Vector2 MinimapScale { get; set; } = Vector2.One / 40;
         public static Vector2 WorldScale { get; set; } = Vector2.One;
 
         public static float TorchProbability { get; set; } = 0.3f;
@@ -423,13 +422,14 @@ namespace TombOfAnubis
             singleton.Map.UndiscoveredTexture.SetData(new[] { Color.SaddleBrown });
         }
 
-        public static void StartMinimapMode()
+        public static void StartMinimapMode(Vector2 minimapSize)
         {
+            Vector2 scale = minimapSize / singleton.Map.MapSize;
             singleton.Visibility = Visibility.Minimap;
 
             Vector2 viewportCenter = new Vector2(singleton.viewport.Width / 2f, singleton.viewport.Height / 2f);
-            singleton.World.Scale = MinimapScale;
-            Vector2 mapSize = singleton.Map.MapSize * MinimapScale;
+            singleton.World.Scale = scale;
+            Vector2 mapSize = singleton.Map.MapSize * scale;
 
             Vector2 topRightMapCenter = new Vector2(
                 singleton.viewport.X + singleton.viewport.Width - mapSize.X / 2 - 10,
