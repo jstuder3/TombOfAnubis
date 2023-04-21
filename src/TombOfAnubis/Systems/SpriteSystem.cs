@@ -18,15 +18,21 @@ namespace TombOfAnubis
             foreach (Sprite sprite in components)
             {
                 Entity entity = sprite.Entity;
-                Vector2 position = entity.DrawingPosition();
                 Vector2 entitySize = entity.DrawingSize();
                 Texture2D texture = sprite.Texture;
+                Vector2 position = entity.DrawingPosition();
+                Rectangle sourceRectangle = sprite.SourceRectangle;
+                Color color = sprite.Tint * sprite.Alpha;
+                float rotation = 0f;
+                Vector2 origin = Vector2.Zero;
+                Vector2 scale = entitySize / new Vector2(sourceRectangle.Width, sourceRectangle.Height);
+
                 Rectangle destinationRectangle = new Rectangle(
                     (int)position.X,
                     (int)position.Y,
                     (int)entitySize.X,
                     (int)entitySize.Y
-                ); 
+                );
                 if (CheckVisibility(destinationRectangle))
                 {
                     if (Session.GetInstance().Visibility == Visibility.Minimap)
@@ -34,12 +40,12 @@ namespace TombOfAnubis
                         Discovery discovery = entity.GetComponent<Discovery>();
                         if (discovery == null || discovery.Discovered) 
                         {
-                            SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, sprite.Tint * sprite.Alpha);
+                            SpriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, 0f);
                         }
                     }
                     else
                     {
-                        SpriteBatch.Draw(texture, destinationRectangle, sprite.SourceRectangle, sprite.Tint * sprite.Alpha);   
+                        SpriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, 0f);
                     }
                 }
             }
