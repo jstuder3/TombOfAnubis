@@ -339,6 +339,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Maps/Tiles.png
 
+#begin Textures/Maps/Torches.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Maps/Torches.png
+
 #begin Textures/Menu/Controller.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -29,6 +29,8 @@ namespace TombOfAnubis
         public static Vector2 MinimapScale { get; set; } = Vector2.One / 40;
         public static Vector2 WorldScale { get; set; } = Vector2.One;
 
+        public static float TorchProbability { get; set; } = 0.3f;
+
 
         // END TEMPORARY HARD CODED PARAMETERS
 
@@ -476,6 +478,7 @@ namespace TombOfAnubis
         }
         public List<Entity> CreateMapEntities()
         {
+            Random random = new Random();
             List<Entity> entities = new List<Entity>();
             singleton.MapTiles = new Entity[singleton.Map.MapDimensions.X, singleton.Map.MapDimensions.Y];
 
@@ -497,6 +500,10 @@ namespace TombOfAnubis
                             entities.Add(newWall);
                             singleton.MapTiles[x, y] = newWall;
                             AddWallCorners(newWall, mapPosition);
+                            if(random.NextDouble() < TorchProbability)
+                            {
+                                TryAddTorch(newWall, mapPosition);
+                            }
 
                         }
                         else
@@ -504,7 +511,10 @@ namespace TombOfAnubis
                             Floor newFloor = new Floor(position,  singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle);
                             entities.Add(newFloor);
                             singleton.MapTiles[x, y] = newFloor;
-
+                            if (random.NextDouble() < TorchProbability)
+                            {
+                                TryAddTorch(newFloor, mapPosition);
+                            }
                         }
                     }
                 }
@@ -551,6 +561,41 @@ namespace TombOfAnubis
                 wall.AddComponent(sprite);
             }
 
+        }
+
+        public void TryAddTorch(Wall wall, Point mapPosition)
+        {
+            Transform transform = wall.GetComponent<Transform>();
+            Point down = mapPosition + new Point(0, 1);
+            Point right = mapPosition + new Point(1, 0);
+
+            if (singleton.Map.ValidTileCoordinates(down) && singleton.Map.GetCollisionLayerValue(down) == 0)
+            {
+                Torch torch = new Torch(transform.Position, transform.Scale, singleton.Map.TorchTexture, singleton.Map.TorchSourceRectangles[0]);
+                singleton.World.AddChild(torch);
+            }
+            if (singleton.Map.ValidTileCoordinates(right) && singleton.Map.GetCollisionLayerValue(right) == 0)
+            {
+                Torch torch = new Torch(transform.Position, transform.Scale, singleton.Map.TorchTexture, singleton.Map.TorchSourceRectangles[2]);
+                singleton.World.AddChild(torch);
+            }
+
+        }
+        public void TryAddTorch(Floor floor, Point mapPosition)
+        {
+            Transform transform = floor.GetComponent<Transform>();
+            Point down = mapPosition + new Point(0, 1);
+            Point right = mapPosition + new Point(1, 0);
+            if (singleton.Map.ValidTileCoordinates(down) && singleton.Map.GetCollisionLayerValue(down) == 1)
+            {
+                Torch torch = new Torch(transform.Position, transform.Scale, singleton.Map.TorchTexture, singleton.Map.TorchSourceRectangles[1]);
+                singleton.World.AddChild(torch);
+            }
+            if (singleton.Map.ValidTileCoordinates(right) && singleton.Map.GetCollisionLayerValue(right) == 1)
+            {
+                Torch torch = new Torch(transform.Position, transform.Scale, singleton.Map.TorchTexture, singleton.Map.TorchSourceRectangles[3]);
+                singleton.World.AddChild(torch);
+            }
         }
 
     }

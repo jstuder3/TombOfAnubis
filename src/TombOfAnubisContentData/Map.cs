@@ -68,6 +68,12 @@ namespace TombOfAnubis
         [ContentSerializerIgnore]
         public Texture2D Texture { get; set; }
 
+        [ContentSerializerIgnore]
+        public Texture2D TorchTexture { get; set; }
+
+        [ContentSerializerIgnore]
+        public List<Rectangle> TorchSourceRectangles { get; set; }
+
         /// <summary>
         /// The texture of undiscovered tiles.
         /// </summary>
@@ -281,6 +287,13 @@ namespace TombOfAnubis
                 map.CollisionLayer = input.ReadObject<int[]>();
                 map.BaseLayer = input.ReadObject<int[]>();
                 map.EntityProperties = input.ReadObject<EntityProperties>();
+
+                map.TorchTexture = input.ContentManager.Load<Texture2D>(@"Textures\Maps\Torches");
+                map.TorchSourceRectangles = new List<Rectangle>() {
+                new Rectangle(0, 0, map.SourceTileSize.X, 2 * map.SourceTileSize.Y),
+                new Rectangle(0, 2 * map.SourceTileSize.Y, map.SourceTileSize.X, 2 * map.SourceTileSize.Y),
+                new Rectangle(0, 4 * map.SourceTileSize.Y, 2 * map.SourceTileSize.X, map.SourceTileSize.Y),
+                new Rectangle(0, 5 * map.SourceTileSize.Y, 2 * map.SourceTileSize.X, map.SourceTileSize.Y)};
 
                 // Characters
                 map.Characters = input.ReadObject<List<EntityDescription>>();
