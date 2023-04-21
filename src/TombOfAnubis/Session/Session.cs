@@ -109,7 +109,7 @@ namespace TombOfAnubis
         public ButtonControllerSystem ButtonControllerSystem { get; set; }
 
         public ParticleEmitterSystem ParticleEmitterSystem { get; set; }
-        public Scene Scene { get; set; }
+        public World World { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
 
@@ -140,6 +140,7 @@ namespace TombOfAnubis
             gameScreenManager = screenManager;
             this.gameplayScreen = gameplayScreen;
             this.SessionState = SessionState.Running;
+            this.World = new World(Vector2.Zero, Vector2.One);
         }
 
         /// <summary>
@@ -199,15 +200,14 @@ namespace TombOfAnubis
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
 
-            singleton.Scene = new Scene(Vector2.Zero, WorldScale, MinimapScale);
             singleton.Visibility = Visibility.Game;
 
             singleton.CollisionSystem = new CollisionSystem();
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem(screenManager);
             singleton.GameplayEffectSystem = new GameplayEffectSystem();
-            singleton.AnubisAISystem = new AISystem(singleton.Scene, AnubisBehaviour.TailPlayers);
-            singleton.DiscoverySystem = new DiscoverySystem(singleton.Scene);
+            singleton.AnubisAISystem = new AISystem(singleton.World, AnubisBehaviour.TailPlayers);
+            singleton.DiscoverySystem = new DiscoverySystem(singleton.World);
             singleton.AnimationSystem = new AnimationSystem();
             singleton.MovementSystem = new MovementSystem();
             singleton.ButtonControllerSystem = new ButtonControllerSystem();
@@ -221,7 +221,7 @@ namespace TombOfAnubis
             for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             {
                 EntityDescription character = singleton.Map.Characters[i];
-                singleton.Scene.AddChild(new Character(
+                singleton.World.AddChild(new Character(
                     i,
                     singleton.Map.CreateEntityTileCenteredPosition(character),
                     character.Scale,
@@ -232,7 +232,7 @@ namespace TombOfAnubis
                     ));
 
                 EntityDescription artefact = singleton.Map.Artefacts[i];
-                singleton.Scene.AddChild(new Artefact(
+                singleton.World.AddChild(new Artefact(
                     i,
                     singleton.Map.CreateEntityTileCenteredPosition(artefact),
                     artefact.Scale,
@@ -272,7 +272,7 @@ namespace TombOfAnubis
 
             foreach ( var dispenser in singleton.Map.Dispensers ) {
                 _ = Enum.TryParse(dispenser.Type, out DispenserType type);
-                singleton.Scene.AddChild(new Dispenser(
+                singleton.World.AddChild(new Dispenser(
                     singleton.Map.CreateEntityTileCenteredPosition(dispenser),
                     dispenser.Scale,
                     dispenser.Texture,
@@ -280,7 +280,7 @@ namespace TombOfAnubis
                     ));
             }
 
-            singleton.Scene.AddChild(new Anubis(
+            singleton.World.AddChild(new Anubis(
                                     singleton.Map.CreateEntityTileCenteredPosition(singleton.Map.Anubis),
                                     singleton.Map.Anubis.Scale,
                                     singleton.Map.Anubis.Texture,
@@ -318,10 +318,10 @@ namespace TombOfAnubis
             pec.Gravity = new Vector2(0f, 0f);
             pec.Drag = 0.5f;
 
-            singleton.Scene.GetChildrenOfType<Anubis>()[0].AddComponent(new ParticleEmitter(pec));
+            singleton.World.GetChildrenOfType<Anubis>()[0].AddComponent(new ParticleEmitter(pec));
 
 
-            singleton.Scene.AddChild(new Altar(
+            singleton.World.AddChild(new Altar(
                                     singleton.Map.CreateEntityTileCenteredPosition(singleton.Map.Altar),
                                     singleton.Map.Altar.Scale,
                                     singleton.Map.Altar.Texture,
@@ -330,7 +330,7 @@ namespace TombOfAnubis
             foreach(var trap in singleton.Map.Traps)
             {
                 _ = Enum.TryParse(trap.Type, out TrapType type);
-                singleton.Scene.AddChild(new Trap(
+                singleton.World.AddChild(new Trap(
                     type,
                     singleton.Map.CreateEntityTileCenteredPosition(trap),
                     trap.Scale,
@@ -348,7 +348,7 @@ namespace TombOfAnubis
                     connectedTraps.Add(singleton.Map.CreateEntityTileCenteredPositionSpriteless(trapEntity));
                 }
                 _ = Enum.TryParse(button.Type, out ButtonType type);
-                singleton.Scene.AddChild(new Button(
+                singleton.World.AddChild(new Button(
                     type,
                     singleton.Map.CreateEntityTileCenteredPosition(button),
                     button.Scale,
@@ -359,7 +359,7 @@ namespace TombOfAnubis
             }
 
             List<Entity> mapEntities = singleton.CreateMapEntities();
-            singleton.Scene.AddChildren(mapEntities);
+            singleton.World.AddChildren(mapEntities);
         }
 
         // <summary>
@@ -424,6 +424,7 @@ namespace TombOfAnubis
             singleton.Visibility = Visibility.Minimap;
 
             Vector2 viewportCenter = new Vector2(singleton.viewport.Width / 2f, singleton.viewport.Height / 2f);
+            singleton.World.Scale = MinimapScale;
             Vector2 mapSize = singleton.Map.MapSize * MinimapScale;
 
             Vector2 topRightMapCenter = new Vector2(
@@ -443,6 +444,7 @@ namespace TombOfAnubis
         public static void EndMinimapMode()
         {
             singleton.Visibility = Visibility.Game;
+            singleton.World.Scale = WorldScale;
         }
 
         public static void SetViewport(Viewport viewport)
@@ -457,21 +459,18 @@ namespace TombOfAnubis
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
                     Character player = playerInput.Entity as Character;
-                    Transform playerTransform = player.GetComponent<Transform>();
-                    Vector2 playerPosition = playerTransform.Position;
-                    Vector2 playerSize = player.Size(Visibility.Game);
-                    Vector2 playerCenter = new Vector2(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
+                    Vector2 playerCenter = player.CenterPosition();
 
-                    singleton.Scene.GetComponent<Transform>().Position = singleton.viewportCenter - playerCenter;
+                    singleton.World.Origin = singleton.viewportCenter - playerCenter;
                 }
             }
         }
         public static void MoveMapCenterTo(Vector2 newMapCenter)
         {
             Vector2 mapCenter = new Vector2(
-                singleton.Map.MapDimensions.X * singleton.Map.TileSize.X * singleton.Scene.GetComponent<Transform>().Scale.X / 2,
-                singleton.Map.MapDimensions.Y * singleton.Map.TileSize.Y * singleton.Scene.GetComponent<Transform>().Scale.Y / 2);
-            singleton.Scene.GetComponent<Transform>().Position = newMapCenter - mapCenter;
+                singleton.Map.MapDimensions.X * singleton.Map.TileSize.X * singleton.World.Scale.X / 2,
+                singleton.Map.MapDimensions.Y * singleton.Map.TileSize.Y * singleton.World.Scale.Y / 2);
+            singleton.World.Origin = newMapCenter - mapCenter;
         }
         public List<Entity> CreateMapEntities()
         {

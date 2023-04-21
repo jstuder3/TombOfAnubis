@@ -9,9 +9,9 @@ namespace TombOfAnubis
 {
     public class DiscoverySystem : BaseSystem<Discovery>
     {
-        public Scene Scene { get; set; }
+        public World Scene { get; set; }
         private Map map;
-        public DiscoverySystem(Scene scene) 
+        public DiscoverySystem(World scene) 
         { 
             Scene = scene;
         }
@@ -24,8 +24,8 @@ namespace TombOfAnubis
             {
                 foreach (Character character in characters)
                 {
-                    Vector2 discoveryPosition = discovery.Entity.GetComponent<Transform>().ToWorld().Position + discovery.Entity.Size(Visibility.Game) / 2f;
-                    Vector2 characterPosition = character.GetComponent<Transform>().ToWorld().Position + character.Size(Visibility.Game) / 2f;
+                    Vector2 discoveryPosition = discovery.Entity.CenterPosition();
+                    Vector2 characterPosition = character.CenterPosition();
 
                     float distance = (characterPosition - discoveryPosition).Length();
 

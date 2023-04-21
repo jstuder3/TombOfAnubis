@@ -27,7 +27,8 @@ namespace TombOfAnubis
         {
             base.Update(gameTime);
             //update location of collider based on owner
-            Position = Entity.GetComponent<Transform>().ToWorld().Position;
+            Position = Entity.TopLeftCornerPosition();
+            Size = Entity.Size();
             centerPosition = Position + new Vector2(Size.X / 2, Size.Y / 2);
         }
 

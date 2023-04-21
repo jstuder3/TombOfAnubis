@@ -178,7 +178,7 @@ namespace TombOfAnubis
             }*/
 
             bool gameover = true;
-            foreach (Character ch in Session.GetInstance().Scene.GetChildrenOfType<Character>())
+            foreach (Character ch in Session.GetInstance().World.GetChildrenOfType<Character>())
             {
                 if (!ch.GetComponent<Movement>().IsTrapped())
                 {

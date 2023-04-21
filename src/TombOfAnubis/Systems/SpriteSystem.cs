@@ -14,18 +14,16 @@ namespace TombOfAnubis
         }
         public override void Draw(GameTime gameTime)
         {
-            //SpriteBatch.Begin();
             var components = GetComponents();
             foreach (Sprite sprite in components)
             {
                 Entity entity = sprite.Entity;
-                Transform transform = entity.GetComponent<Transform>();
-                Vector2 entitySize = entity.Size(Session.GetInstance().Visibility);
-                Vector2 worldPosition = transform.ToWorld().Position;
+                Vector2 position = entity.DrawingPosition();
+                Vector2 entitySize = entity.DrawingSize();
                 Texture2D texture = sprite.Texture;
                 Rectangle destinationRectangle = new Rectangle(
-                    (int)worldPosition.X,
-                    (int)worldPosition.Y,
+                    (int)position.X,
+                    (int)position.Y,
                     (int)entitySize.X,
                     (int)entitySize.Y
                 ); 

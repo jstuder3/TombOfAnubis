@@ -143,7 +143,7 @@ namespace TombOfAnubis
             //Console.WriteLine("Total number of particles: " + ParticleList.Count);
             //Console.WriteLine("Currently alive particles: " + FirstDeadParticleIndex);
 
-            EntityPosition = Entity.GetComponent<Transform>().Position;
+            EntityPosition = Entity.TopLeftCornerPosition();
 
             //check that the overall particle effect hasn't timed out. if it has, deregister, but leave the particles that exist alive until they all run out as to not make them all disappear all at once in an ugly fashion
             if (AliveUntil == -1)
@@ -219,7 +219,7 @@ namespace TombOfAnubis
                             }
                             else
                             {
-                                Session.GetInstance().Scene.AddChild(newParticle);
+                                Session.GetInstance().World.AddChild(newParticle);
                             }
                             numParticlesToSpawn--;
                             FirstDeadParticleIndex++;
