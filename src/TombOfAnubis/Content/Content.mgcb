@@ -531,7 +531,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/treasuremap_border.png
 
-#begin Textures/Menu/treasuremap_border.png
+#begin Textures/Objects/Altar/altar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -541,19 +541,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Menu/treasuremap_border.png
-
-#begin Textures/Objects/Altar/plagiarized_table.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Altar/plagiarized_table.png
+/build:Textures/Objects/Altar/altar.png
 
 #begin Textures/Objects/Artefacts/blue_gear_icon.png
 /importer:TextureImporter
@@ -927,8 +915,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
 
-#begin Videos/SampleVideo_1280x720_1mb.mp4
+#begin Videos/IntroVideo.mp4
 /importer:H264Importer
 /processor:VideoProcessor
-/build:Videos/SampleVideo_1280x720_1mb.mp4
+/build:Videos/IntroVideo.mp4
 
