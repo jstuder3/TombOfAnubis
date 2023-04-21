@@ -5,6 +5,7 @@ namespace TombOfAnubis
 {
     public class Sprite : Component
     {
+        private long ID;
         public int Layer { get; set; }
 
         public Texture2D Texture { get; set; }
@@ -21,8 +22,9 @@ namespace TombOfAnubis
         {
             Layer = layer;
             Visibility = visibility;
+            ID = SpriteSystem.ObjectIDGenerator.GetId(this, out _);
             SpriteSystem.Register(this);
-            SpriteSystem.SortComponents((x, y) => x.Layer.CompareTo(y.Layer));
+            SpriteSystem.SortComponents(CompareSprites);
         }
 
         public Sprite(Texture2D texture, Rectangle sourceRectangle, int layer, Visibility visibility) : this(layer, visibility)
@@ -42,6 +44,15 @@ namespace TombOfAnubis
         {
             base.Delete();
             SpriteSystem.Deregister(this);
+        }
+
+        private static int CompareSprites(Sprite s1, Sprite s2)
+        {
+            if (s1.Layer < s2.Layer) return -1;
+            if (s1.Layer > s2.Layer) return 1;
+
+            if (s1.ID < s2.ID) return -1;
+            return 1;
         }
     }
 }

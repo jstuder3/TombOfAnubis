@@ -1,16 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Runtime.Serialization;
 
 namespace TombOfAnubis
 {
     public class SpriteSystem : BaseSystem<Sprite>
     {
+        public static ObjectIDGenerator ObjectIDGenerator;
         public SpriteBatch SpriteBatch { get; set; }
         public Viewport Viewport { get; set; }
         public SpriteSystem(SpriteBatch spriteBatch)
         {
             SpriteBatch = spriteBatch;
+            ObjectIDGenerator = new ObjectIDGenerator();
         }
         public override void Draw(GameTime gameTime)
         {
@@ -21,7 +24,9 @@ namespace TombOfAnubis
                 Vector2 entitySize = entity.DrawingSize();
                 Texture2D texture = sprite.Texture;
                 Vector2 position = entity.DrawingPosition();
-                Rectangle sourceRectangle = sprite.SourceRectangle;
+                
+                // Draw 1 pixel smaller than source texture. Otherwise black lines appear and flicker between tiles.
+                Rectangle sourceRectangle = new Rectangle(sprite.SourceRectangle.X+1, sprite.SourceRectangle.Y+1, sprite.SourceRectangle.Width-2, sprite.SourceRectangle.Height-2);
                 Color color = sprite.Tint * sprite.Alpha;
                 float rotation = 0f;
                 Vector2 origin = Vector2.Zero;
