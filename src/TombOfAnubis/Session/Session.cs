@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -495,6 +496,7 @@ namespace TombOfAnubis
                             Wall newWall = new Wall(position, singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle);
                             entities.Add(newWall);
                             singleton.MapTiles[x, y] = newWall;
+                            AddWallCorners(newWall, mapPosition);
 
                         }
                         else
@@ -508,6 +510,47 @@ namespace TombOfAnubis
                 }
             }
             return entities;
+        }
+
+        public void AddWallCorners(Wall wall, Point mapPosition)
+        {
+            List<Rectangle> wallCorners = singleton.Map.GetWallCornerRectangles();
+
+            int baseLayerValue = singleton.Map.GetBaseLayerValue(mapPosition);
+
+            // Wall candidates for which the corners are an option
+            int[] upLeftLayerValues = new int[] { 6, 11, 13, 15 };
+            int[] upRightLayerValues = new int[] { 7, 12, 13, 15 };
+            int[] downLeftLayerValues = new int[] { 8, 11, 14, 15 };
+            int[] downRightLayerValues = new int[] { 9, 12, 14, 15 };
+
+
+            Point upLeft = mapPosition + new Point(-1, -1);
+            Point upRight = mapPosition + new Point(1, -1);
+            Point downLeft = mapPosition + new Point(-1, 1);
+            Point downRight = mapPosition + new Point(1, 1);
+
+            if(singleton.Map.ValidTileCoordinates(upLeft) && singleton.Map.GetCollisionLayerValue(upLeft)  == 0 && upLeftLayerValues.Contains(baseLayerValue))
+            {
+                Sprite sprite = new Sprite(singleton.Map.Texture, wallCorners[0], 1, Visibility.Game);
+                wall.AddComponent(sprite);
+            }
+            if (singleton.Map.ValidTileCoordinates(upRight) && singleton.Map.GetCollisionLayerValue(upRight) == 0 && upRightLayerValues.Contains(baseLayerValue))
+            {
+                Sprite sprite = new Sprite(singleton.Map.Texture, wallCorners[1], 1, Visibility.Game);
+                wall.AddComponent(sprite);
+            }
+            if (singleton.Map.ValidTileCoordinates(downLeft) && singleton.Map.GetCollisionLayerValue(downLeft) == 0 && downLeftLayerValues.Contains(baseLayerValue))
+            {
+                Sprite sprite = new Sprite(singleton.Map.Texture, wallCorners[2], 1, Visibility.Game);
+                wall.AddComponent(sprite);
+            }
+            if (singleton.Map.ValidTileCoordinates(downRight) && singleton.Map.GetCollisionLayerValue(downRight) == 0 && downRightLayerValues.Contains(baseLayerValue))
+            {
+                Sprite sprite = new Sprite(singleton.Map.Texture, wallCorners[3], 1, Visibility.Game);
+                wall.AddComponent(sprite);
+            }
+
         }
 
     }

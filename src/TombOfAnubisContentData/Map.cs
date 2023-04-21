@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Reflection;
 using TombOfAnubisContentData;
 using static System.Formats.Asn1.AsnWriter;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -156,11 +157,11 @@ namespace TombOfAnubis
             }
             else if (baseLayerValue > 15)
             {
-                // Pick a random floor tile (Row 1)
+                // Pick a random floor tile (Row 2)
                 int index = floorTileRandom.Next(NumberOfFloorTiles);
                 return new Rectangle(
                     index * SourceTileSize.X,
-                    SourceTileSize.Y,
+                    2 * SourceTileSize.Y,
                     SourceTileSize.X,
                     SourceTileSize.Y
                     );
@@ -175,6 +176,20 @@ namespace TombOfAnubis
             }
         }
 
+        public List<Rectangle> GetWallCornerRectangles()
+        {
+            List<Rectangle> result = new List<Rectangle>();
+
+            for(int i = 0; i < 4; i++)
+            {
+                result.Add(new Rectangle(
+                    i * SourceTileSize.X,
+                    SourceTileSize.Y,
+                    SourceTileSize.X,
+                    SourceTileSize.Y));
+            }
+            return result;
+        }
         public Vector2 CreateEntityTileCenteredPosition(EntityDescription entityDescription)
         {
             Point tileCoordinates = entityDescription.SpawnTileCoordinate;
