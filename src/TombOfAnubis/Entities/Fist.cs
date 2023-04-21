@@ -57,7 +57,7 @@ namespace TombOfAnubis
             Sprite sprite = new Sprite(Texture, animation.DefaultSourceRectangle, 2, Visibility.Game);
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
             AddComponent(collider);
         }
 

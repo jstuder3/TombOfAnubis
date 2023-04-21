@@ -108,11 +108,7 @@ namespace TombOfAnubis
             }
         }
 
-        /// <summary>
-        /// Computes the size of the Entity in world coordinates.
-        /// Returns zero if the entity has no transform or no sprite component attached
-        /// </summary>
-        public Vector2 Size(Visibility visibility)
+        private Vector2 VisibleSize(Visibility visibility)
         {
             Vector2 size = Vector2.Zero;
             
@@ -142,6 +138,119 @@ namespace TombOfAnubis
             }
             
             return size;
+        }
+
+
+        /// <summary>
+        /// Computes the size of the Entity in world coordinates.
+        /// </summary>
+        /// <returns>Zero if the entity has no transform or no sprite component of Game visibility attached</returns>
+        public Vector2 Size()
+        {
+            return VisibleSize(Visibility.Game);
+        }
+
+        /// <summary>
+        /// Computes the size of the Entity on the minimap in world coordinates.
+        /// </summary>
+        /// <returns>Zero if the entity has no transform or no sprite component of Minimap visibility attached</returns>
+        public Vector2 MinimapSize()
+        {
+            return VisibleSize(Visibility.Minimap);
+        }
+
+        /// <summary>
+        /// The position of the center of this entity in world coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 CenterPosition()
+        {
+            return VisibleCenterPosition(Visibility.Game);
+        }
+        /// <summary>
+        /// The minimap position of the center of this entity in world coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 MinimapCenterPosition()
+        {
+            return VisibleCenterPosition(Visibility.Minimap);
+        }
+
+        /// <summary>
+        /// The position of the top left corner of this entity in world coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 TopLeftCornerPosition()
+        {
+            return VisibleTopLeftCornerPosition(Visibility.Game);
+        }
+
+        /// <summary>
+        /// The minimap position of the top left corner of this entity in world coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 TopLeftCornerMinimapPosition()
+        {
+            return VisibleTopLeftCornerPosition(Visibility.Minimap);
+        }
+        /// <summary>
+        /// The position where the entity is drawn by the sprite system
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 DrawingPosition()
+        {
+            Vector2 worldOrigin = Session.GetInstance().World.Origin;
+            Vector2 worldScale = Session.GetInstance().World.Scale;
+
+            if (Session.GetInstance().Visibility == Visibility.Game)
+            {
+                return worldOrigin + worldScale * TopLeftCornerPosition();
+            }
+            else
+            {
+                return worldOrigin + worldScale * TopLeftCornerMinimapPosition();
+            }
+        }
+        /// <summary>
+        /// The Size of the entity drawn by the sprite system
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 DrawingSize()
+        {
+            Vector2 worldScale = Session.GetInstance().World.Scale;
+
+            if (Session.GetInstance().Visibility == Visibility.Game)
+            {
+                return worldScale * Size();
+            }
+            else
+            {
+                return worldScale * MinimapSize();
+            }
+        }
+
+        private Vector2 VisibleCenterPosition(Visibility visibility)
+        {
+            foreach (Transform candidate in GetComponentsOfType<Transform>())
+            {
+                if (visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
+                {
+                    return candidate.ToWorld().Position + VisibleSize(visibility) / 2f;
+                }
+            }
+            return Vector2.Zero;
+        }
+
+        private Vector2 VisibleTopLeftCornerPosition(Visibility visibility)
+        {
+            foreach (Transform candidate in GetComponentsOfType<Transform>())
+            {
+                if (visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
+                {
+                    return candidate.ToWorld().Position;
+                }
+            }
+            return Vector2.Zero;
         }
     }
 }

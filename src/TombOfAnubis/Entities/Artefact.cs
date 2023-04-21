@@ -24,7 +24,7 @@ namespace TombOfAnubis
 
             if (collidable)
             {
-                RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
+                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
                 AddComponent(collider);
             }
         }

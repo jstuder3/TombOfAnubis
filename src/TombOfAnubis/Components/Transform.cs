@@ -20,10 +20,10 @@ namespace TombOfAnubis
                     {
                         if (!transform.Equals(this) && transform.Visibility == Visibility.Minimap)
                         {
-                            Vector2 entitySize = Entity.Size(Visibility.Game);
+                            Vector2 entitySize = Entity.Size();
                             Vector2 entityCenter = Position + entitySize / 2f;
 
-                            Vector2 minimapEntitySize = Entity.Size(Visibility.Minimap);
+                            Vector2 minimapEntitySize = Entity.MinimapSize();
                             Vector2 minimapEntityCenter = Position + minimapEntitySize / 2f;
 
                             transform.Position = Position + entityCenter - minimapEntityCenter;

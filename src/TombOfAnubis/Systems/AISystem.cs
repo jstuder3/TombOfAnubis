@@ -16,12 +16,12 @@ namespace TombOfAnubis
 
     public class AISystem : BaseSystem<AI>
     {
-        public Scene Scene { get; set; }
+        public World World { get; set; }
 
         public AnubisBehaviour AnubisBehaviour { get; set; }
-        public AISystem(Scene scene, AnubisBehaviour anubisBehaviour)
+        public AISystem(World world, AnubisBehaviour anubisBehaviour)
         {
-            Scene = scene;
+            World = world;
             AnubisBehaviour = anubisBehaviour;
         }
 
@@ -47,11 +47,11 @@ namespace TombOfAnubis
         public void printState(AI ai)
         {
             Entity entity = ai.Entity;
-            Transform transform = entity.GetComponent<Transform>();
-            List<Character> characters = Scene.GetChildrenOfType<Character>();
+            //Transform transform = entity.GetComponent<Transform>();
+            List<Character> characters = World.GetChildrenOfType<Character>();
 
             //Anubis:
-            Vector2 positionAnubis = transform.Position;
+            Vector2 positionAnubis = entity.TopLeftCornerPosition();
             int nodeIdAnubis = ai.MovementGraph.ToNodeID(positionAnubis);
 
             Console.WriteLine("----Print AI System State:------");
@@ -59,9 +59,9 @@ namespace TombOfAnubis
 
             foreach (Character player in characters)
             {
-                Transform transformPlayer = player.GetComponent<Transform>();
-                Vector2 positionPlayer = transformPlayer.Position;
-                int nodeIdPlayer = ai.MovementGraph.ToNodeID(transformPlayer.Position);
+                //Transform transformPlayer = player.GetComponent<Transform>();
+                Vector2 positionPlayer = player.TopLeftCornerPosition();
+                int nodeIdPlayer = ai.MovementGraph.ToNodeID(positionPlayer);
                 Console.WriteLine("Player nr: " + player.GetComponent<Player>().PlayerID + ", position " + positionPlayer + ", nodeId " + nodeIdPlayer + ", distance: " + ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer));
             }
 
@@ -128,7 +128,7 @@ namespace TombOfAnubis
         {
             //Console.WriteLine("cur no tailed player, try to change now");
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = Scene.GetChildrenOfType<Character>();
+            List<Character> characters = World.GetChildrenOfType<Character>();
 
 
             int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
@@ -140,8 +140,8 @@ namespace TombOfAnubis
 
             foreach (Character player in characters)
             {
-                Transform cur_player_transform = player.GetComponent<Transform>();
-                int nodeIdPlayer = movementGraph.ToNodeID(cur_player_transform.Position);
+                //Transform cur_player_transform = player.GetComponent<Transform>();
+                int nodeIdPlayer = movementGraph.ToNodeID(player.CenterPosition());
 
                 if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
                 {
@@ -219,8 +219,8 @@ namespace TombOfAnubis
                 if (!movement.CanMove()) continue;
 
                 MovementGraph movementGraph = ai.MovementGraph;
-                List<Character> characters = Scene.GetChildrenOfType<Character>();
-                List<Artefact> artefacts = Scene.GetChildrenOfType<Artefact>();
+                List<Character> characters = World.GetChildrenOfType<Character>();
+                List<Artefact> artefacts = World.GetChildrenOfType<Artefact>();
 
                 RectangleCollider collider = entity.GetComponent<RectangleCollider>();
 
@@ -266,7 +266,7 @@ namespace TombOfAnubis
                     if(!this.tailingPlayer)
                     {
                         //Console.WriteLine("try to find new player to tail");
-                        updateClosestPlayer(ai, transform.Position);
+                        updateClosestPlayer(ai, entity.TopLeftCornerPosition());
                     }
 
                     //update direction of anubis to tailing player
@@ -277,14 +277,14 @@ namespace TombOfAnubis
                         return;
                     }
 
-                    Vector2 positionAnubis = transform.Position;
+                    Vector2 positionAnubis = entity.TopLeftCornerPosition();
                     
                     int anubis_node_id = movementGraph.ToNodeID(positionAnubis);
 
-                    Vector2 positionPlayer = this.tailedPlayer.GetComponent<Transform>().Position;
+                    Vector2 positionPlayer = tailedPlayer.TopLeftCornerPosition();
                     int tailed_player_node_id = movementGraph.ToNodeID(positionPlayer);
 
-                    Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.GetComponent<Transform>().Position);
+                    Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.CenterPosition());
                     //Console.WriteLine("anubis, player, direction: " + positionAnubis + ", " + tailedPlayer.GetComponent<Transform>().Position + " -> " + direction);
                     newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
                     
@@ -330,8 +330,8 @@ namespace TombOfAnubis
                 Movement movement = entity.GetComponent<Movement>();
 
                 MovementGraph movementGraph = ai.MovementGraph;
-                List<Character> characters = Scene.GetChildrenOfType<Character>();
-                List<Artefact> artefacts = Scene.GetChildrenOfType<Artefact>();
+                List<Character> characters = World.GetChildrenOfType<Character>();
+                List<Artefact> artefacts = World.GetChildrenOfType<Artefact>();
 
                 RectangleCollider collider = entity.GetComponent<RectangleCollider>();
 

@@ -40,7 +40,7 @@ namespace TombOfAnubis
             graphics = graphicsDevice;
             viewport = graphics.Viewport;
             session = Session.GetInstance();
-            characters = session.Scene.GetChildrenOfType<Character>();
+            characters = session.World.GetChildrenOfType<Character>();
             characterViewports = SplitScreen.PlayerViewports;
             minimapBackground = new Texture2D(graphicsDevice, 1, 1);
             minimapBackground.SetData(new[] { Color.Black });
@@ -110,7 +110,7 @@ namespace TombOfAnubis
             Session.StartMinimapMode();
 
             Vector2 mapSize = Session.GetInstance().Map.MapSize * Session.MinimapScale;
-            Vector2 minimapPosition = session.Scene.GetComponent<Transform>().Position;
+            Vector2 minimapPosition = session.World.Origin;
 
             //Minimap background
             session.SpriteSystem.SpriteBatch.Draw(minimapBackground, new Rectangle((int)minimapPosition.X - 20, (int)minimapPosition.Y - 20, (int)mapSize.X + 40, (int)mapSize.Y + 40), Color.White);

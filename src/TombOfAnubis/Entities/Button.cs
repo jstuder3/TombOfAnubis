@@ -44,7 +44,7 @@ namespace TombOfAnubis
             }
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
             AddComponent(collider);
 
             Discovery discovery = new Discovery();
@@ -65,7 +65,7 @@ namespace TombOfAnubis
 
             // iterate over list of trap positions, add all traps that are close to those positions
             List<Trap> connectedTraps = new List<Trap>();
-            foreach (Trap trap in singleton.Scene.GetChildrenOfType<Trap>())
+            foreach (Trap trap in singleton.World.GetChildrenOfType<Trap>())
             {
                 foreach(Vector2 targetTrapPosition in positionsOfTrapsToConnect)
                 {

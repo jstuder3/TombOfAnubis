@@ -34,7 +34,7 @@ namespace TombOfAnubis
             AI ai = new AI(map);
             AddComponent(ai);
 
-            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
             AddComponent(collider);
         }
     }

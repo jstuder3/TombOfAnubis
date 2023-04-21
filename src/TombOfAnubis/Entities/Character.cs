@@ -49,7 +49,7 @@ namespace TombOfAnubis
             Inventory inventory = new Inventory(1, 3, this);
             AddComponent(inventory);
 
-            RectangleCollider collider = new RectangleCollider(position, Size(Visibility.Game));
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
             AddComponent(collider);
 
         }
