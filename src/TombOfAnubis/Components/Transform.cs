@@ -8,13 +8,16 @@ namespace TombOfAnubis
         /// <summary>
         /// Position of the top left corner of the entity relative to its parent
         /// </summary>
-        public Vector2 Position { 
-            get {
+        public Vector2 Position
+        {
+            get
+            {
                 return position;
             }
-            set{ 
+            set
+            {
                 position = value;
-                if(Entity != null && Entity.Parent != null)
+                if (Entity != null && Entity.Parent != null)
                 {
                     foreach (Transform transform in Entity.GetComponentsOfType<Transform>())
                     {
@@ -37,12 +40,6 @@ namespace TombOfAnubis
         /// </summary>
         public Vector2 Scale { get; set; }
 
-        public Transform(Vector2 position, Visibility visibility)
-        {
-            Visibility = visibility;
-            Position = position;
-            Scale = Vector2.One;
-        }
         public Transform(Vector2 position, Vector2 scale, Visibility visibility)
         {
             Visibility = visibility;

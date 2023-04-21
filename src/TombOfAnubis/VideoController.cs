@@ -63,7 +63,7 @@ namespace TombOfAnubis
                     if (!videoPlayer.IsLooped)
                     {
                         TimeSpan remaining = videoPlayer.Video.Duration - videoPlayer.PlayPosition;
-                        TimeSpan eps = new TimeSpan(0, 0, 0, 0, 100);
+                        TimeSpan eps = new TimeSpan(0, 0, 0, 0, 300);
                         if (remaining < eps)
                         {
                             previousTexture = CloneTexture(videoPlayer.GetTexture(), graphics, previousRectangle);

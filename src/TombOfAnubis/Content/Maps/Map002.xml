@@ -238,7 +238,8 @@
 		  </Item>
 	  </Artefacts>
 	  <Altar>
-		  <SpawnTileCoordinate> 10 12</SpawnTileCoordinate>
+		  <SpawnTileCoordinate> 9 12</SpawnTileCoordinate>
+		  <Offset>200 0</Offset>
 		  <Scale>1.4 1.4</Scale>
 		  <SpriteTextureName>altar</SpriteTextureName>
 	  </Altar>

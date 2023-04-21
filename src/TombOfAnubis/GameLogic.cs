@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TombOfAnubisContentData;
@@ -271,11 +270,23 @@ namespace TombOfAnubis
                 characterInventory.ClearArtefactSlots();
                 altarInventory.AddArtefact(playerID);
 
-                float artefactScale = 0.075f;
+                float artefactScale = 0.015f;
                 Texture2D artefactTexture = Session.GetInstance().Map.Artefacts[playerID].Texture;
+
+                Vector2 altarSize = altar.SpriteSize();
                 float artefactWidth = artefactTexture.Width * artefactScale;
 
-                Artefact artefact = new Artefact(playerID, new Vector2(playerID * artefactWidth, 0), Vector2.One * artefactScale, artefactTexture, false);
+                float w = altarSize.X;
+                float h = altarSize.Y;
+                Vector2[] artefactPositions = new Vector2[]
+                {
+                    new Vector2(0.06f*w, -0.1f*h),
+                    new Vector2(0.91f*w - artefactWidth, -0.1f*h),
+                    new Vector2(0.04f*w, 0.2f*h),
+                    new Vector2(0.95f*w - artefactWidth, 0.2f*h)
+                };
+
+                Artefact artefact = new Artefact(playerID, artefactPositions[playerID], Vector2.One * artefactScale, artefactTexture, false);
                 altar.AddChild(artefact);
                 Console.WriteLine("Artefact of player " + playerID + " was placed!");
                 AudioController.PlaySoundEffect("artefactPlaced");

@@ -59,6 +59,8 @@ namespace TombOfAnubis
 
             RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
             AddComponent(collider);
+
+            Initialize();
         }
 
         public static void LoadContent(GameScreenManager gameScreenManager)

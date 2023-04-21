@@ -38,6 +38,8 @@ namespace TombOfAnubis
             // set up cooldown
             this.lastUsedTime = 0.0;
             this.cooldown = 2f;
+
+            Initialize();
         }
 
         public bool TryGiveItem(Inventory inventory, double currentTime)

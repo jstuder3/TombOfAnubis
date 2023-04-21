@@ -47,6 +47,8 @@ namespace TombOfAnubis
 
             Discovery discovery = new Discovery();
             AddComponent(discovery);
+
+            Initialize();
         }
 
         public bool IsEnabled()

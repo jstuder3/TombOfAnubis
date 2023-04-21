@@ -236,6 +236,7 @@ namespace TombOfAnubis
                     i,
                     singleton.Map.CreateEntityTileCenteredPosition(artefact),
                     artefact.Scale,
+                    artefact.Scale * 10,
                     artefact.Texture,
                     true
                     ));

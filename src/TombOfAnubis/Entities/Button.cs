@@ -84,6 +84,7 @@ namespace TombOfAnubis
             ButtonController buttonController = new ButtonController(connectedTraps);
             AddComponent(buttonController);
 
+            Initialize();
         }
 
         public bool IsPressed()

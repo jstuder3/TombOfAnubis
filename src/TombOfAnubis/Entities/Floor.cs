@@ -15,6 +15,8 @@ namespace TombOfAnubis
 
             Discovery discovery = new Discovery();
             AddComponent(discovery);
+
+            Initialize();
         }
     }
 }

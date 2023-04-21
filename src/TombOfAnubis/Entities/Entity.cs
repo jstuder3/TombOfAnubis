@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace TombOfAnubis
 {
@@ -108,7 +109,7 @@ namespace TombOfAnubis
             }
         }
 
-        private Vector2 VisibleSize(Visibility visibility)
+        private Vector2 VisibleSize(Visibility visibility, bool world)
         {
             Vector2 size = Vector2.Zero;
             
@@ -120,7 +121,14 @@ namespace TombOfAnubis
             {
                 if(visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
                 {
-                    transform = candidate.ToWorld();
+                    if (world)
+                    {
+                        transform = candidate.ToWorld();
+                    }
+                    else
+                    {
+                        transform = candidate;
+                    }
 
                 }
             }
@@ -140,6 +148,26 @@ namespace TombOfAnubis
             return size;
         }
 
+        public void Initialize()
+        {
+            Transform transform = GetComponent<Transform>();
+
+            if(transform != null)
+            {
+                foreach(Transform candidate in GetComponentsOfType<Transform>())
+                {
+                    if (!transform.Equals(candidate) && candidate.Visibility == Visibility.Minimap)
+                    {
+                        Vector2 entityCenter = CenterPosition();
+
+                        Vector2 minimapEntityCenter = MinimapCenterPosition();
+
+                        candidate.Position = transform.Position + entityCenter - minimapEntityCenter;
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Computes the size of the Entity in world coordinates.
@@ -147,7 +175,7 @@ namespace TombOfAnubis
         /// <returns>Zero if the entity has no transform or no sprite component of Game visibility attached</returns>
         public Vector2 Size()
         {
-            return VisibleSize(Visibility.Game);
+            return VisibleSize(Visibility.Game, true);
         }
 
         /// <summary>
@@ -156,7 +184,31 @@ namespace TombOfAnubis
         /// <returns>Zero if the entity has no transform or no sprite component of Minimap visibility attached</returns>
         public Vector2 MinimapSize()
         {
-            return VisibleSize(Visibility.Minimap);
+            return VisibleSize(Visibility.Minimap, true);
+        }
+
+        /// <summary>
+        /// Computes the size of the Sprite texture without scaling.
+        /// </summary>
+        /// <returns>Zero if the entity has no transform or no sprite component of Game visibility attached</returns>
+        public Vector2 SpriteSize()
+        {
+            Visibility visibility = Visibility.Game;
+            Sprite sprite = null;
+            Vector2 size = Vector2.Zero;
+
+            foreach (Sprite candidate in GetComponentsOfType<Sprite>())
+            {
+                if (visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
+                {
+                    sprite = candidate;
+                }
+            }
+            if (sprite != null)
+            {
+                size = new Vector2(sprite.SourceRectangle.Width, sprite.SourceRectangle.Height);
+            }
+            return size;
         }
 
         /// <summary>
@@ -235,7 +287,7 @@ namespace TombOfAnubis
             {
                 if (visibility == candidate.Visibility || candidate.Visibility == Visibility.Both)
                 {
-                    return candidate.ToWorld().Position + VisibleSize(visibility) / 2f;
+                    return candidate.ToWorld().Position + VisibleSize(visibility, true) / 2f;
                 }
             }
             return Vector2.Zero;

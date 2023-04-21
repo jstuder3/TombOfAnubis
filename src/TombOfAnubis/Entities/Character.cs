@@ -52,6 +52,7 @@ namespace TombOfAnubis
             RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
             AddComponent(collider);
 
+            Initialize();
         }
 
     }

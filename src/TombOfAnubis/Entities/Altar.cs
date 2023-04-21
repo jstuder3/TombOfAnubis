@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace TombOfAnubis
 {
     public class Altar : Entity
@@ -25,6 +24,8 @@ namespace TombOfAnubis
 
             Discovery discovery = new Discovery();
             AddComponent(discovery);
+
+            Initialize();
         }
     }
 }
