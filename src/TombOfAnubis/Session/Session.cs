@@ -432,8 +432,8 @@ namespace TombOfAnubis
             Vector2 mapSize = singleton.Map.MapSize * scale;
 
             Vector2 topRightMapCenter = new Vector2(
-                singleton.viewport.X + singleton.viewport.Width - mapSize.X / 2 - 10,
-            singleton.viewport.Y + mapSize.Y / 2 + 10
+                singleton.viewport.X + singleton.viewport.Width - mapSize.X / 2 - 20,
+            singleton.viewport.Y + mapSize.Y / 2 + 20
                 );
 
             if (singleton.NumberOfPlayers > 1)
