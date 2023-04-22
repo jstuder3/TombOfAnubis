@@ -37,7 +37,7 @@ namespace TombOfAnubis.GameScreens
 
         private SpriteFont descriptionFont = Fonts.CascadiaFont;
 
-        private int lineThickness = 4;
+        private int lineThickness = 2;
 
         // Sprite Scales
         private float spriteScale = 0.4f;
@@ -52,7 +52,7 @@ namespace TombOfAnubis.GameScreens
         public LoginPlayersScreen() : base()
         {
             gameStartDescription = new GameStartDescription();
-            gameStartDescription.MapContentName = "Map001";
+            gameStartDescription.MapContentName = "Map002";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
             joinedPlayers = InputController.GetActiveInputs();
@@ -198,6 +198,7 @@ namespace TombOfAnubis.GameScreens
             spriteBatch.End();
         }
 
+        // Draw join instructions for empty player frames
         public void DrawOfflinePlayerFrame(Rectangle playerFrame)
         {
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
@@ -210,6 +211,7 @@ namespace TombOfAnubis.GameScreens
 
         }
 
+        // Draw player sprites and controls for joined players
         public void DrawOnlinePlayerFrame(string playerNumber, Rectangle playerFrame, Texture2D playerSprite, Texture2D playerControl, float playerControlScale)
         {
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
@@ -233,6 +235,7 @@ namespace TombOfAnubis.GameScreens
             spriteBatch.Draw(playerSprite, spritePosition, null, Color.White, 0f, Vector2.Zero, spriteScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(playerControl, playerControlPosition, null, Color.White, 0f, Vector2.Zero, playerControlScale, SpriteEffects.None, 0f);
 
+            // Draw the start button only for player 1
             if(playerNumber.Equals("Player 1"))
             {
                 offsetY = (int)(playerFrame.Y + (1.0f - startButtonHeightScale) * playerFrame.Height);

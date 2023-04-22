@@ -99,19 +99,19 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Archeologicaps.spritefont
 
-#begin Fonts/DisneyHeroic.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/DisneyHeroic.spritefont
-
 #begin Fonts/CascadiaMonoSL.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/CascadiaMonoSL.spritefont
+
+#begin Fonts/DisneyHeroic.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/DisneyHeroic.spritefont
 
 #begin Fonts/Pegypta-ALE6.spritefont
 /importer:FontDescriptionImporter
@@ -1005,6 +1005,11 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
+
+#begin Videos/IntroVideo_v2.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/IntroVideo_v2.mp4
 
 #begin Videos/IntroVideo.mp4
 /importer:H264Importer

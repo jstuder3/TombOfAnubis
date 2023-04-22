@@ -9,7 +9,7 @@ namespace TombOfAnubis
         private SpriteBatch spriteBatch;
 
         private SpriteFont statusFont = Fonts.DisneyHeroicFont;
-        private Color statusColor = Color.Red;
+        private Color statusColor = Color.Gold;
         private float fontScale = 1f;
 
         public IntroScreen()
