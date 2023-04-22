@@ -10,7 +10,6 @@ namespace TombOfAnubis
     public class LevelGenerator
     {
 
-        // Needs to be dividable by 3
         public Point LevelDimensions { get; set; }
 
         private int[,] level;
@@ -43,23 +42,23 @@ namespace TombOfAnubis
 
             this.levelPieces = levelPieces;
 
-            this.levelPieces.Add(new LevelBlock(new int[,] { 
-                { 1, 0, 1 ,1}, 
-                { 1, 0, 1, 1}, 
-                { 0, 0, 0, 1},
-                { 1, 1, 0, 1}}, 2000, "zero"));
+            //this.levelPieces.Add(new LevelBlock(new int[,] { 
+            //    { 1, 0, 1 ,1}, 
+            //    { 1, 0, 1, 1}, 
+            //    { 0, 0, 0, 1},
+            //    { 1, 1, 0, 1}}, 2, "zero"));
+            //this.levelPieces.Add(new LevelBlock(new int[,] {
+            //    { 1, 1, 1 ,1},
+            //    { 1, 1, 1, 1},
+            //    { 1, 1, 1, 1},
+            //    { 1, 1, 1, 1}}, 2, "one"));
             this.levelPieces.Add(new LevelBlock(new int[,] {
-                { 1, 1, 1 ,1},
-                { 1, 1, 1, 1},
-                { 1, 1, 1, 1},
-                { 1, 1, 1, 1}}, 2, "one"));
-            this.levelPieces.Add(new LevelBlock(new int[,] {
-                { 4, 4, 4},
-                { 4, 4, 4},
-                { 4, 4, 4}}, 2, 4, int.MaxValue));
+                { 1, 0, 1},
+                { 1, 0, 0},
+                { 1, 1, 1}}, 2, 1, int.MaxValue));
             this.levelPieces.Add(new LevelBlock(new int[,] {
                 { 1, 0, 1 ,1},
-                { 1, 88, 0, 0},
+                { 1, 0, 0, 0},
                 { 0, 0, 0, 1},
                 { 1, 0, 1, 1}}, 1, 1, 1));
 
@@ -70,31 +69,44 @@ namespace TombOfAnubis
         {
             int numAttempts = 0;
             int maxAttempts = 50;
-            for(; numAttempts < maxAttempts; numAttempts++)
+            while(numAttempts < maxAttempts)
             {
                 numAttempts++;
                 CreateLevel();
-                if (ValidateLevel()) break;
-                foreach (LevelBlock piece in levelPieces)
+                if (ValidateLevel())
                 {
-                    piece.Reset();
-                }
-                for (int i = 0; i < LevelDimensions.X; i++)
-                {
-                    for (int j = 0; j < LevelDimensions.Y; j++)
+                    PrintLevel();
+                    LevelGraph levelGraph = new LevelGraph(level);
+                    if (levelGraph.ConnectLevelBlocks())
                     {
-                        positionsToFill.Add(new Point(i, j));
+                        break;
                     }
                 }
+                ResetLevel();
+               
             }
-            Console.WriteLine("Num Attempts: " + numAttempts);
-
-            //CreatGraphFromLevel();
             PrintLevel();
+
+            Console.WriteLine("Num Attempts: " + (numAttempts + 1));
 
             return level;
         }
 
+        private void ResetLevel()
+        {
+            Populate(level, LevelBlock.InvalidValue);
+            foreach (LevelBlock piece in levelPieces)
+            {
+                piece.Reset();
+            }
+            for (int i = 0; i < LevelDimensions.X; i++)
+            {
+                for (int j = 0; j < LevelDimensions.Y; j++)
+                {
+                    positionsToFill.Add(new Point(i, j));
+                }
+            }
+        }
         private void CreateLevel()
         {
             CreateBorder();
@@ -299,22 +311,6 @@ namespace TombOfAnubis
                 return 0;
             }
 
-        }
-
-        public void FindPath(Point from, Point to)
-        {
-            Func<Edge<Point>, double> edgeCost = AlgorithmExtensions.GetIndexer(EdgeCost);
-            // Positive or negative weights
-            TryFunc<Point, System.Collections.Generic.IEnumerable<Edge<Point>>> tryGetPath = Graph.ShortestPathsDijkstra(edgeCost, from);
-
-            IEnumerable<Edge<Point>> path;
-            if (tryGetPath(to, out path))
-            {
-                Console.Write("Path found from {0} to {1}: {0}", from, to);
-                foreach (var e in path) { Console.Write(" > {0}", e.Target); }
-                Console.WriteLine();
-            }
-            else { Console.WriteLine("No path found from {0} to {1}."); }
         }
 
         public void PrintLevel()
