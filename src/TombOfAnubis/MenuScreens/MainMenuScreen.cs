@@ -111,7 +111,7 @@ namespace TombOfAnubis
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
 
             // Set the textures on each menu element and its scale
-            Animation animation = new Animation(activeScrollAnimation);
+            Animation animation = new Animation(activeScrollAnimation, Visibility.Game);
             SetAnimation(scrollTexture, scrollTextureScale, animation);
 
             // Now that they have textures, set the proper positions on the menu entries
