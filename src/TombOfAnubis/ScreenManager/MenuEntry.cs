@@ -50,12 +50,6 @@ namespace TombOfAnubis
 
 
         /// <summary>
-        /// A description of the function of the button.
-        /// </summary>
-        private string description;
-
-
-        /// <summary>
         /// An optional texture drawn with the text.
         /// </summary>
         /// <remarks>If present, the text will be centered on the texture.</remarks>
@@ -67,12 +61,13 @@ namespace TombOfAnubis
         /// Animation of texture when entry is selected
         /// </summary>
         private Animation textureAnimation;
+        private Rectangle textureSourceRectangle;
 
         /// <summary>
         /// Stores whether this entry was the most recently selected MenuEntry
         /// </summary>
         private bool prevSelected = false;
-        private GameTime prevSelectedTime;
+        private double prevSelectedTime;
 
         #endregion
 
@@ -111,16 +106,6 @@ namespace TombOfAnubis
 
 
         /// <summary>
-        /// A description of the function of the button.
-        /// </summary>
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
-
-
-        /// <summary>
         /// An optional texture drawn with the text.
         /// </summary>
         /// <remarks>If present, the text will be centered on the texture.</remarks>
@@ -145,6 +130,12 @@ namespace TombOfAnubis
             get { return textureAnimation; }
             set { textureAnimation = value; }
         }
+        
+        public Rectangle TextureSourceRectangle
+        {
+            get { return textureSourceRectangle; }
+            set { textureSourceRectangle = value; }
+        }
 
         /// <summary>
         /// Stores whether this entry was the most recently selected MenuEntry
@@ -155,7 +146,7 @@ namespace TombOfAnubis
             set { prevSelected = value; }
         }
 
-        public GameTime PrevSelectedTime
+        public double PrevSelectedTime
         {
             get { return prevSelectedTime; }
             set { prevSelectedTime = value; }
@@ -208,30 +199,66 @@ namespace TombOfAnubis
         /// Updates the menu entry.
         /// </summary>
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
-        { 
+        {
+
+            float totalTime = (float)gameTime.TotalGameTime.TotalMilliseconds;
             if (isSelected && prevSelected)
             {
-                double timeElapsedPrevSelect = gameTime.TotalGameTime.Subtract(prevSelectedTime.TotalGameTime).TotalMilliseconds;
+                double timeElapsedPrevSelect = gameTime.TotalGameTime.TotalMilliseconds - prevSelectedTime;
                 double animationDuration = textureAnimation.AnimationClips[1].GetTotalClipDuration();
+
                 if (timeElapsedPrevSelect >= animationDuration)
                 {
                     textureAnimation.SetActiveClip(AnimationClipType.ActiveEntry);
-                } 
+                }
+                UpdateAnimationFrame(timeElapsedPrevSelect);
             }
             else if (!isSelected && prevSelected)
             {
                 textureAnimation.SetActiveClip(AnimationClipType.InactiveEntry);
                 prevSelected = false;
+                UpdateAnimationFrame(totalTime);
             }
             else if (isSelected && !prevSelected)
             {
                 textureAnimation.SetActiveClip(AnimationClipType.TransitionEntry);
-                prevSelectedTime = gameTime;
+                prevSelectedTime = gameTime.TotalGameTime.TotalMilliseconds;
                 prevSelected = true;
+                UpdateAnimationFrame(totalTime);
             }
             else
             {
                 textureAnimation.SetActiveClip(AnimationClipType.InactiveEntry);
+                UpdateAnimationFrame(totalTime);
+            }
+        }
+
+        public void UpdateAnimationFrame(double timeElapsed)
+        {
+            AnimationClip activeClip = textureAnimation.ActiveClip;
+
+            if (activeClip != null)
+            {
+                if (textureSourceRectangle.Y == activeClip.SourceRectangle.Y)
+                {
+                    int frameIdx = (int)(timeElapsed / activeClip.FrameDuration) % activeClip.NumberOfFrames;
+                    textureSourceRectangle = new Rectangle(
+                        frameIdx * activeClip.FrameSize.X,
+                        activeClip.SourceRectangle.Y,
+                        activeClip.SourceRectangle.Width,
+                        activeClip.SourceRectangle.Height
+                       );
+                }
+                else
+                {
+                    textureSourceRectangle = activeClip.SourceRectangle;
+                }
+
+            }
+            else
+            {
+                textureAnimation.SetActiveClip(textureAnimation.AnimationClips[0].Type);
+                textureSourceRectangle = textureAnimation.AnimationClips[0].SourceRectangle;
             }
         }
 
@@ -251,13 +278,16 @@ namespace TombOfAnubis
             if (texture != null)
             {
                 //spriteBatch.Draw(texture, position, Color.White);
-                spriteBatch.Draw(texture, position, textureAnimation.DefaultSourceRectangle, Color.White, 0f, Vector2.Zero, textureScale, SpriteEffects.None, 0f);
+                int scaledWidth = (int)(textureSourceRectangle.Width * textureScale);
+                int scaledHeight = (int)(textureSourceRectangle.Height * textureScale);
+                Rectangle destinationRectangle = new Rectangle((int) position.X, (int) position.Y, scaledWidth, scaledHeight);
+                spriteBatch.Draw(texture, destinationRectangle, textureSourceRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1);
                 if ((spriteFont != null) && !String.IsNullOrEmpty(text))
                 {
                     Vector2 textSize = spriteFont.MeasureString(text);
                     Vector2 textPosition = position + new Vector2(
-                        (float)Math.Floor((texture.Width * textureScale - textSize.X) / 2),
-                        (float)Math.Floor((texture.Height * textureScale - textSize.Y) / 2));
+                        (float)Math.Floor((scaledWidth - textSize.X) / 2),
+                        (float)Math.Floor((scaledHeight - textSize.Y) / 2));
                     spriteBatch.DrawString(spriteFont, text, textPosition, color);
                 }
             }

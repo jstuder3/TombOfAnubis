@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TombOfAnubisContentData;
 
 namespace TombOfAnubis
 {
@@ -23,8 +24,10 @@ namespace TombOfAnubis
         private Texture2D titleTexture;
         private float titleScale = 0.4f;
 
-        private Texture2D plankTexture;
-        private float plankTextureScale = 0.75f;
+        private Texture2D scrollTexture;
+        private float scrollTextureScale = 0.4f;
+        private static List<AnimationClip> activeScrollAnimation;
+        private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
         private float marginY = 0.05f;
 
@@ -74,22 +77,36 @@ namespace TombOfAnubis
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
-            plankTexture = content.Load<Texture2D>("Textures/Menu/MenuTile");
+            scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
             titleTexture = content.Load<Texture2D>("Textures/Menu/Title_white");
-            
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            // Set the textures on each menu element and its scale
-            restartMenuEntry.Texture = plankTexture;
-            restartMenuEntry.TextureScale = plankTextureScale;
 
-            endGameMenuEntry.Texture = plankTexture;
-            endGameMenuEntry.TextureScale = plankTextureScale;
+            activeScrollAnimation = new List<AnimationClip> {
+                            new AnimationClip(AnimationClipType.InactiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
+                            new AnimationClip(AnimationClipType.TransitionEntry, 3, 30, new Point(scrollTextureWidth, scrollTextureHeight)),
+                            new AnimationClip(AnimationClipType.ActiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
+                        };
+
+            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+
+            // Set the textures on each menu element and its scale
+            Animation animation = new Animation(activeScrollAnimation);
+            SetAnimation(scrollTexture, scrollTextureScale, animation);
 
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
 
             // AudioController.PlaySong("background_music");
             base.LoadContent();
+        }
+
+        public void SetAnimation(Texture2D animationSpritesheet, float spriteScale, Animation animation)
+        {
+            foreach (MenuEntry entry in MenuEntries)
+            {
+                entry.Texture = animationSpritesheet;
+                entry.TextureScale = spriteScale;
+                entry.TextureAnimation = animation;
+            }
         }
 
         public void SetElementPosition(Viewport viewport)
@@ -105,8 +122,8 @@ namespace TombOfAnubis
             float titleWidth = titleScale * titleTexture.Width / screenWidth;
             float titleHeight = titleScale * titleTexture.Height / screenHeight;
             // Assume every entry has the same sized texture
-            float textureWidth = ((float)MenuEntries[0].Texture.Width / screenWidth) * plankTextureScale;
-            float textureHeight = ((float)MenuEntries[0].Texture.Height / screenHeight) * plankTextureScale;
+            float textureWidth = ((float)scrollTextureWidth / screenWidth) * scrollTextureScale;
+            float textureHeight = ((float)scrollTextureHeight / screenHeight) * scrollTextureScale;
 
             // Center the title according to the screen width
             float titleOffsetX = (1.0f - titleWidth) / 2;
@@ -115,11 +132,11 @@ namespace TombOfAnubis
             // Center the UI element according to the screen width
             float textureOffsetX = (1.0f - textureWidth) / 2;
             // The first MenuEntry element is drawn at this relative vertical coordinate
-            float entryStart = titleHeight + marginY + textureHeight / 2;
+            float entryStart = titleHeight + 3 * marginY;
 
             for (int i = 0; i < MenuEntries.Count; i++)
             {
-                float entrySpacing = (i == 0) ? 0.0f : textureHeight;
+                float entrySpacing = i * textureHeight;
 
                 float offsetY = entryStart + entrySpacing;
 

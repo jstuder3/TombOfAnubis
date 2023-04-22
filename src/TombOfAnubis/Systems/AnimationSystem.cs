@@ -15,6 +15,7 @@ namespace TombOfAnubis
             float totalTime = (float)gameTime.TotalGameTime.TotalMilliseconds;
             foreach (Animation animation in GetComponents())
             {
+                if (animation.Entity == null) continue;
                 Sprite sprite = animation.Entity.GetComponent<Sprite>();
                 AnimationClip activeClip = animation.ActiveClip;
 
