@@ -27,7 +27,9 @@ namespace TombOfAnubis
             loopedVideoTrashbin = new Queue<Video>();
             videos = new Dictionary<string, Video>
                 {
-                    { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")}
+                    { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")},
+                    { @"Content/Videos/IntroVideo_v2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo_v2.mp4")}
+
                 };
             videoPlayer = new VideoPlayer(graphics);
 
