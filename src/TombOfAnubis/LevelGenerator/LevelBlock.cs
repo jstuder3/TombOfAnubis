@@ -14,8 +14,7 @@ namespace TombOfAnubis
         public static readonly int EmptyValue = 2;
         public static readonly int InvalidValue = 8;
 
-        public static readonly LevelBlock Road = new LevelBlock(new int[,] { { EmptyValue, EmptyValue }, { EmptyValue, EmptyValue } }, 1);
-        public static readonly LevelBlock Empty = new LevelBlock(new int[,] { { EmptyValue } }, 1);
+        public static readonly LevelBlock Empty = new LevelBlock(new int[,] { { EmptyValue } }, 1, "Empty");
 
         public int MaxOccurences { get; set; }
         public int MinOccurences { get; set; }
@@ -24,11 +23,11 @@ namespace TombOfAnubis
         public int Priority { get; set; }
         public int[,] Values { get; set; }
 
-
+        public string Name { get; set; }
         private int basePriority;
 
 
-        public LevelBlock(int[,] values, int priority, int minOccurences = 0, int maxOccurences = int.MaxValue) 
+        public LevelBlock(int[,] values, int priority, int minOccurences, int maxOccurences) 
         {
             Occurences = 0;
             Priority = priority;
@@ -38,6 +37,8 @@ namespace TombOfAnubis
             this.Values = values;
             Dimensions = new Point(values.GetLength(0), values.GetLength(1));
         }
+        public LevelBlock(int[,] values, int priority, string name) : this(values, priority, 0, int.MaxValue) { Name = name; }
+
 
         public int GetValue(Point coord)
         {
@@ -77,10 +78,10 @@ namespace TombOfAnubis
         public bool Valid()
         {
             bool valid = Occurences >= MinOccurences && Occurences <= MaxOccurences;
-            if (!valid)
-            {
-                Console.WriteLine("Occurences: " + Occurences + ", Min: " + MinOccurences + ", Max: " + MaxOccurences);
-            }
+            //if (!valid)
+            //{
+            //    Console.WriteLine("Occurences: " + Occurences + ", Min: " + MinOccurences + ", Max: " + MaxOccurences);
+            //}
             return valid;
         }
 

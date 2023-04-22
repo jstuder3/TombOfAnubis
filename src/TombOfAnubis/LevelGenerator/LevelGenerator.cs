@@ -3,6 +3,7 @@ using QuikGraph;
 using QuikGraph.Algorithms;
 using System;
 using System.Collections.Generic;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace TombOfAnubis
 {
@@ -13,6 +14,7 @@ namespace TombOfAnubis
         public Point LevelDimensions { get; set; }
 
         private int[,] level;
+        private List<Point> positionsToFill;
         //private LevelBlock[,] levelBlockGrid;
         private List<LevelBlock> levelPieces;
         //private LevelPiece fillerPiece;
@@ -29,34 +31,38 @@ namespace TombOfAnubis
             LevelDimensions = levelDimensions;
             level = new int[levelDimensions.X, levelDimensions.Y];
             Populate(level, LevelBlock.InvalidValue);
-            //levelBlockGrid = new LevelBlock[levelDimensions.X / 3, levelDimensions.Y / 3];
+            positionsToFill = new List<Point>();
+
+            for (int i = 0; i < LevelDimensions.X; i++)
+            {
+                for(int j = 0;  j < LevelDimensions.Y; j++)
+                {
+                    positionsToFill.Add(new Point(i, j));
+                }
+            }
 
             this.levelPieces = levelPieces;
-            //this.levelPieces.Add(LevelPiece.Empty);
-            //this.levelPieces.Add(new LevelPiece(new int[,] { {1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } }, 2));
+
             this.levelPieces.Add(new LevelBlock(new int[,] { 
                 { 1, 0, 1 ,1}, 
                 { 1, 0, 1, 1}, 
                 { 0, 0, 0, 1},
-                { 1, 1, 0, 1}}, 2));
+                { 1, 1, 0, 1}}, 2000, "zero"));
+            this.levelPieces.Add(new LevelBlock(new int[,] {
+                { 1, 1, 1 ,1},
+                { 1, 1, 1, 1},
+                { 1, 1, 1, 1},
+                { 1, 1, 1, 1}}, 2, "one"));
+            this.levelPieces.Add(new LevelBlock(new int[,] {
+                { 4, 4, 4},
+                { 4, 4, 4},
+                { 4, 4, 4}}, 2, 4, int.MaxValue));
             this.levelPieces.Add(new LevelBlock(new int[,] {
                 { 1, 0, 1 ,1},
                 { 1, 88, 0, 0},
                 { 0, 0, 0, 1},
                 { 1, 0, 1, 1}}, 1, 1, 1));
-            //this.levelPieces.Add(LevelBlock.TwoByOne(1));
-            //this.levelPieces.Add(LevelBlock.TwoByTwo(1));
-            //this.levelPieces.Add(LevelBlock.Altar());
-            //this.levelPieces.Add(LevelBlock.Artefakt(numPlayers));
-            //this.levelPieces.Add(LevelBlock.SpawnLocation(numPlayers));
 
-            //fillerBlock = new LevelBlock();
-            //fillerBlock.Dimensions = new Point(LevelBlock.BlockSize.X,LevelBlock.BlockSize.Y);
-            //fillerBlock.Values = new int[LevelBlock.BlockSize.X, LevelBlock.BlockSize.Y];
-            //fillerBlock.Name = "f";
-            //Populate(fillerBlock.Values, 2);
-
-            //fillerBlock.Priority = 1;
             rand = new Random();
 
         }
@@ -73,11 +79,16 @@ namespace TombOfAnubis
                 {
                     piece.Reset();
                 }
+                for (int i = 0; i < LevelDimensions.X; i++)
+                {
+                    for (int j = 0; j < LevelDimensions.Y; j++)
+                    {
+                        positionsToFill.Add(new Point(i, j));
+                    }
+                }
             }
             Console.WriteLine("Num Attempts: " + numAttempts);
 
-            //PrintBlockGrid();
-            //MapBlockGridToLevel();
             //CreatGraphFromLevel();
             PrintLevel();
 
@@ -87,47 +98,77 @@ namespace TombOfAnubis
         private void CreateLevel()
         {
             CreateBorder();
-            for (int x = 0; x < LevelDimensions.X; x++)
+            int roundsWithoutPlacement = 0;
+            int maxRoundsWithoutPlacement = 2 * LevelDimensions.X * LevelDimensions.Y;
+            int placedBlocks = 0;
+            while (positionsToFill.Count != 0)
             {
-                for(int y = 0; y < LevelDimensions.Y; y++)
+                Point coord = SelectRandomPosition();
+                List<LevelBlock> candidates = GetCandidates(coord);
+                if (candidates.Count == 0)
                 {
-                    Point coord = new Point(x, y);
-
-                    List<LevelBlock> candidates = GetCandidates(coord);
-                    if (candidates.Count == 0)
+                    if (roundsWithoutPlacement >= maxRoundsWithoutPlacement && CanPlace(LevelBlock.Empty, coord))
                     {
-                        if(CanPlace(LevelBlock.Empty, coord))
-                         {
-                            Place(LevelBlock.Empty, coord);
-                        }
-                        else
-                        {
-                            continue;
-                        }
+                        //PrintLevel();
+                        Place(LevelBlock.Empty, coord);
                     }
                     else
                     {
-                        LevelBlock winner = PickCandidateBasedOnPriority(candidates);
-                        Place(winner, coord);
-                        CreateBorder(coord, winner);
-                        UpdateLevelPieces(winner);
+                        roundsWithoutPlacement++;
+                        continue;
                     }
                 }
-                    
+                else
+                {
+                    LevelBlock winner;
+                    candidates.Sort(CompareCandidates);
+                    if (!candidates[0].Valid())
+                    {
+                        winner = candidates[0];
+                    }
+                    else
+                    {
+                        winner = PickCandidateBasedOnPriority(candidates);
+                    }
+                    Place(winner, coord);
+                    placedBlocks++;
+                    CreateBorder(coord, winner);
+                    UpdateLevelPieces(winner);
+                }
+
             }
         }
         private void CreateBorder()
         {
-            for(int i = 0; i < LevelDimensions.X; i += LevelBlock.Road.Dimensions.X)
+            for(int i = 0; i < LevelDimensions.X; i += LevelBlock.Empty.Dimensions.X)
             {
-                for(int j =0; j < LevelDimensions.Y; j += LevelBlock.Road.Dimensions.Y)
+                for(int j =0; j < LevelDimensions.Y; j += LevelBlock.Empty.Dimensions.Y)
                 {
-                    if(i == 0 || i == LevelDimensions.X - LevelBlock.Road.Dimensions.X || j == 0 || j == LevelDimensions.Y - LevelBlock.Road.Dimensions.Y)
+                    if(i == 0 || i == LevelDimensions.X - LevelBlock.Empty.Dimensions.X || j == 0 || j == LevelDimensions.Y - LevelBlock.Empty.Dimensions.Y)
                     {
-                        if(CanPlace(LevelBlock.Road, new Point(j, i)))
+                        if(CanPlace(LevelBlock.Empty, new Point(j, i)))
                         {
-                            Place(LevelBlock.Road, new Point(j, i));
+                            Place(LevelBlock.Empty, new Point(j, i));
                         }
+                    }
+                }
+            }
+        }
+        private void CreateBorder(Point coord, LevelBlock piece)
+        {
+            int w = piece.Dimensions.X;
+            int h = piece.Dimensions.Y;
+            int x = coord.X;
+            int y = coord.Y;
+            int emptyW = LevelBlock.Empty.Dimensions.X;
+            int emptyH = LevelBlock.Empty.Dimensions.Y;
+            for (int i = x - emptyW; i < x + w + emptyW; i++)
+            {
+                for (int j = y - emptyH; j < y + h + emptyH; j++)
+                {
+                    if (CanPlace(LevelBlock.Empty, new Point(i, j)))
+                    {
+                        Place(LevelBlock.Empty, new Point(i, j));
                     }
                 }
             }
@@ -138,12 +179,17 @@ namespace TombOfAnubis
             List<LevelBlock> candidates = new List<LevelBlock>();
             foreach (LevelBlock piece in levelPieces) 
             {
-                if(CanPlace(piece, coord))
+                if(CanPlace(piece, coord) && piece.Occurences < piece.MaxOccurences)
                 {
                     candidates.Add(piece);
                 }
             }
             return candidates;
+        }
+
+        private Point SelectRandomPosition()
+        {
+            return positionsToFill[rand.Next(positionsToFill.Count)];
         }
 
         private bool CanPlace(LevelBlock piece, Point coord)
@@ -178,25 +224,7 @@ namespace TombOfAnubis
                     if (ValidCoords(dest))
                     {
                         level[dest.X, dest.Y] = levelPiece.GetValue(new Point(i, j));
-                    }
-                }
-            }
-        }
-        private void CreateBorder(Point coord, LevelBlock piece)
-        {
-            int w = piece.Dimensions.X;
-            int h = piece.Dimensions.Y;
-            int x = coord.X;
-            int y = coord.Y;
-            int emptyW = LevelBlock.Road.Dimensions.X;
-            int emptyH = LevelBlock.Road.Dimensions.Y;
-            for (int i = x - emptyW; i < x + w + emptyW; i++)
-            {
-                for (int j = y - emptyH; j < y + h + emptyH; j++)
-                {
-                    if (CanPlace(LevelBlock.Road, new Point(i, j)))
-                    {
-                        Place(LevelBlock.Road, new Point(i, j));
+                        positionsToFill.Remove(dest);
                     }
                 }
             }
@@ -212,132 +240,12 @@ namespace TombOfAnubis
         //    }
         //}
 
-        //private void MapBlockGridToLevel()
-        //{
-        //    for (int i = 0; i < levelBlockGrid.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < levelBlockGrid.GetLength(1); j++)
-        //        {
-        //            LevelBlock block = levelBlockGrid[i, j];
-        //            if (block.Written) { continue; }
-        //            Point levelCoordinate = new Point(i * LevelBlock.BlockSize.X, j * LevelBlock.BlockSize.Y);
-
-        //            for (int k = 0; k < block.Dimensions.X; k++)
-        //            {
-        //                for (int l = 0; l < block.Dimensions.Y; l++)
-        //                {
-        //                    Point p = new Point(levelCoordinate.X + k, levelCoordinate.Y + l);
-        //                    level[p.X, p.Y] = block.Values[k, l];
-        //                }
-        //            }
-        //            block.Written = true;
-        //        }
-        //    }
-        //}
-
-        //private void GenerateBlockGrid()
-        //{
-        //    levelBlockGrid = new LevelBlock[LevelDimensions.X / 3, LevelDimensions.Y / 3];
-        //    // Outermost border are only filler blocks
-        //    for (int i = 0; i < levelBlockGrid.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < levelBlockGrid.GetLength(1); j++)
-        //        {
-        //            if (i == 0 || j == 0 || i == levelBlockGrid.GetLength(0) - 1 || j == levelBlockGrid.GetLength(1) - 1)
-        //            {
-        //                levelBlockGrid[i, j] = fillerBlock.Clone();
-        //            }
-        //        }
-        //    }
-
-        //    // Fill the inside grid with LevelBuildingBlocks
-        //    for (int i = 0; i < levelBlockGrid.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < levelBlockGrid.GetLength(1); j++)
-        //        {
-        //            if(levelBlockGrid[i, j] == null)
-        //            {
-        //                List<LevelBlock> blockCandidates = GetBlockCandidates(new Point(i, j));
-        //                if (blockCandidates.Count > 0)
-        //                {
-        //                    LevelBlock winner = PickCandidateBasedOnPriority(blockCandidates);
-        //                    Place(new Point(i, j), winner);
-        //                    foreach(LevelBlock block in levelPieces)
-        //                    {
-        //                        block.Update();
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    levelBlockGrid[i, j] = fillerBlock.Clone();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private List<LevelBlock> GetBlockCandidates(Point blockGridCoord)
-        //{
-        //    List<LevelBlock> res = new List<LevelBlock>();
-        //    foreach(LevelBlock block in levelPieces)
-        //    {
-        //        if(CanPlace(blockGridCoord, block))
-        //        {
-        //            res.Add(block);
-        //        }
-        //    }
-        //    return res;
-        //}
-
         private void Populate(int[,] arr, int value)
         {
             for (int i = 0; i < arr.GetLength(0); i++)
                 for (int j = 0; j < arr.GetLength(1); j++)
                     arr[i, j] = value;
         }
-
-        //private bool CanPlace(Point blockGridCoord, LevelBlock block)
-        //{
-        //    for(int i = 0; i < block.BlockGridDimensions.X; i++)
-        //    {
-        //        for(int j = 0; j < block.BlockGridDimensions.Y; j++)
-        //        {
-        //            Point destBlockGoord = blockGridCoord + new Point(i, j);
-        //            if(!ValidBlockGridLocation(destBlockGoord) || levelBlockGrid[destBlockGoord.X, destBlockGoord.Y] != null){
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
-        //private void Place(Point blockGridCoord, LevelBlock block)
-        //{
-        //    LevelBlock placedBlock = block.Clone();
-        //    // Place block
-        //    for (int i = 0; i < block.BlockGridDimensions.X; i++)
-        //    {
-        //        for (int j = 0; j < block.BlockGridDimensions.Y; j++)
-        //        {
-        //            Point destBlockGoord = blockGridCoord + new Point(i, j);
-        //            levelBlockGrid[destBlockGoord.X, destBlockGoord.Y] = placedBlock;
-        //        }
-        //    }
-
-        //    // Place a border of fillerblocks around the placed block
-        //    Point borderStart = new Point(blockGridCoord.X - 1, blockGridCoord.Y - 1);
-        //    for (int i = 0; i < block.BlockGridDimensions.X + 2; i++)
-        //    {
-        //        for (int j = 0; j < block.BlockGridDimensions.Y + 2; j++)
-        //        {
-        //            Point destBlockGoord = borderStart + new Point(i, j);
-        //            if(ValidBlockGridLocation(destBlockGoord) && levelBlockGrid[destBlockGoord.X, destBlockGoord.Y] == null)
-        //            {
-        //                levelBlockGrid[destBlockGoord.X, destBlockGoord.Y] = fillerBlock.Clone();
-        //            }
-        //        }
-        //    }
-
-        //}
         private bool ValidCoords(Point levelCoord)
         {
             return levelCoord.X >= 0 && levelCoord.X < LevelDimensions.X && levelCoord.Y >= 0 && levelCoord.Y < LevelDimensions.Y;
@@ -353,7 +261,6 @@ namespace TombOfAnubis
             }
             return true;
         }
-
         private LevelBlock PickCandidateBasedOnPriority(List<LevelBlock> blocks)
         {
             int sum = 0;
@@ -372,6 +279,26 @@ namespace TombOfAnubis
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Invalid blocks have highest priority
+        /// </summary>
+        private int CompareCandidates(LevelBlock b1, LevelBlock b2)
+        {
+            if (!b1.Valid() && b2.Valid())
+            {
+                return -1;
+            }
+            else if (b1.Valid() && !b2.Valid())
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+
         }
 
         public void FindPath(Point from, Point to)
@@ -404,20 +331,5 @@ namespace TombOfAnubis
             Console.WriteLine("----------------Level----------------");
 
         }
-
-        //public void PrintBlockGrid()
-        //{
-        //    Console.WriteLine("----------------BlockGrid----------------");
-        //    for (int i = 0; i < levelBlockGrid.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < levelBlockGrid.GetLength(1); j++)
-        //        {
-        //            Console.Write(levelBlockGrid[i, j]?.Name + ",");
-        //        }
-        //        Console.WriteLine();
-        //    }
-        //    Console.WriteLine("----------------BlockGrid----------------");
-
-        //}
     }
 }
