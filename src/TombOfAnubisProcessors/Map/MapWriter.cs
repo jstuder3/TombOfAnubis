@@ -1,14 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content.Pipeline;
+﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace TombOfAnubis
 {

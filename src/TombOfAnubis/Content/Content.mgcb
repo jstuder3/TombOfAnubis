@@ -130,6 +130,11 @@
 /processor:MapProcessor
 /build:Maps/Map002.xml
 
+#begin Maps/MapBlock001.xml
+/importer:XmlImporter
+/processor:MapBlockProcessor
+/build:Maps/MapBlock001.xml
+
 #begin Textures/Characters/animated_explorer_spritesheet_blue.png
 /importer:TextureImporter
 /processor:TextureProcessor

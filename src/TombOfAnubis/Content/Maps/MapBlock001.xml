@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+	<Asset Type="TombOfAnubis.MapBlock">
+		<!-- Optional: Min times this block has to appear on the map: Default 0-->
+		<MinOccurences>1</MinOccurences>
+		<!-- Optional: Max times this block is allowed to appear on the map: Default int.MaxValue-->
+		<MaxOccurences>1</MaxOccurences>
+		<!-- Priority: Controlls how likely this block is picked: Higher priority means higher likelihood and the block will appear more often.-->
+		<Priority>1</Priority>
+		<!-- Dimensions of the Tiles array (x: num Rows, y: num Cols)-->
+		<Dimensions>4 3</Dimensions>
+		<!-- Array to describe the block layout: 1 is wall, 0 is floor-->
+		<Tiles>
+			1   1   1  
+			0   0   1  
+			1   0   0  
+			1   0   1    
+		</Tiles>
+	</Asset>
+</XnaContent>

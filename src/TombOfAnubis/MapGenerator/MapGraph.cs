@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace TombOfAnubis
 {
-    public class LevelGraph
+    public class MapGraph
     {
         private static readonly int EdgeCostFloorFloor = 10;
         private static readonly int EdgeCostRoad = 0;
@@ -27,12 +27,11 @@ namespace TombOfAnubis
         private List<Dictionary<Point, Edge<Point>>> doors;
 
         // Graph to complete the paths between the building blocks
-        //private BidirectionalGraph<Point, Edge<Point>> Graph;
         private UndirectedBidirectionalGraph<Point, Edge<Point>> Graph;
 
         private Dictionary<Edge<Point>, double> EdgeCost;
 
-        public LevelGraph(int[,] level)
+        public MapGraph(int[,] level)
         { 
             this.level = level;
             levelDim = new Point(level.GetLength(0), level.GetLength(1));
@@ -57,15 +56,15 @@ namespace TombOfAnubis
             {
                 for (int j = 0; j < levelDim.Y; j++)
                 {
-                    if (level[i, j] == LevelBlock.FloorValue)
+                    if (level[i, j] == MapBlock.FloorValue)
                     {
                         floors.Add(new Point(i, j));
                     }
-                    else if (level[i, j] == LevelBlock.WallValue)
+                    else if (level[i, j] == MapBlock.WallValue)
                     {
                         walls.Add(new Point(i, j));
                     }
-                    else if(level[i, j] == LevelBlock.EmptyValue)
+                    else if(level[i, j] == MapBlock.EmptyValue)
                     {
                         emptys.Add(new Point(i, j));
                     }
@@ -97,13 +96,13 @@ namespace TombOfAnubis
                 foreach (Point neighbour in neighbours)
                 {
                     if (!ValidCoord(neighbour)) { continue; }
-                    if (level[neighbour.X, neighbour.Y] == LevelBlock.FloorValue)
+                    if (level[neighbour.X, neighbour.Y] == MapBlock.FloorValue)
                     {
                         Edge<Point> edge = new Edge<Point>(floor, neighbour);
                         EdgeCost.Add(edge, EdgeCostFloorFloor);
                         directedGraph.AddEdge(edge);
                     }
-                    else if (level[neighbour.X, neighbour.Y] == LevelBlock.EmptyValue)
+                    else if (level[neighbour.X, neighbour.Y] == MapBlock.EmptyValue)
                     {
                         Edge<Point> edge = new Edge<Point>(floor, neighbour);
                         EdgeCost.Add(edge, EdgeCostFloorEmpty);
@@ -123,7 +122,7 @@ namespace TombOfAnubis
                 foreach (Point neighbour in neighbours)
                 {
                     if (!ValidCoord(neighbour)) { continue; }
-                    if (level[neighbour.X, neighbour.Y] == LevelBlock.EmptyValue)
+                    if (level[neighbour.X, neighbour.Y] == MapBlock.EmptyValue)
                     {
                         Edge<Point> edge = new Edge<Point>(empty, neighbour);
                         EdgeCost.Add(edge, EdgeCostEmptyEmpty);
@@ -150,9 +149,9 @@ namespace TombOfAnubis
                     foreach(Edge<Point> edge in path)
                     {
                         Point v = edge.Target;
-                        if (level[v.X, v.Y] == LevelBlock.EmptyValue)
+                        if (level[v.X, v.Y] == MapBlock.EmptyValue)
                         {
-                            level[v.X, v.Y] = LevelBlock.FloorValue;
+                            level[v.X, v.Y] = MapBlock.FloorValue;
                             EdgeCost[edge] = EdgeCostRoad;
                             emptys.Remove(v);
                         }
@@ -166,7 +165,7 @@ namespace TombOfAnubis
         {
             foreach (Point empty in emptys)
             {
-                level[empty.X, empty.Y] = LevelBlock.WallValue;
+                level[empty.X, empty.Y] = MapBlock.WallValue;
             }
         }
 
@@ -174,19 +173,12 @@ namespace TombOfAnubis
         private  IEnumerable<Edge<Point>> FindPath(Point from, Point to)
         {
             Func<Edge<Point>, double> edgeCost = AlgorithmExtensions.GetIndexer(EdgeCost);
-            // Positive or negative weights
-            TryFunc<Point, System.Collections.Generic.IEnumerable<Edge<Point>>> tryGetPath = Graph.ShortestPathsDijkstra(edgeCost, from);
+            TryFunc<Point, IEnumerable<Edge<Point>>> tryGetPath = Graph.ShortestPathsDijkstra(edgeCost, from);
 
             IEnumerable<Edge<Point>> path;
             tryGetPath(to, out path);
             return path;
-            //{
-               
-            //    Console.Write("Path found from {0} to {1}: {0}", from, to);
-            //    foreach (var e in path) { Console.Write(" > {0}", e.Target); }
-            //    Console.WriteLine();
-            //}
-            //else { Console.WriteLine("No path found from {0} to {1}."); }
+
         }
 
         private bool ValidCoord(Point coord)

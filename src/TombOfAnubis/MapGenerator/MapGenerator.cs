@@ -1,35 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
 using QuikGraph;
-using QuikGraph.Algorithms;
 using System;
 using System.Collections.Generic;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace TombOfAnubis
 {
-    public class LevelGenerator
+    public class MapGenerator
     {
 
         public Point LevelDimensions { get; set; }
 
         private int[,] level;
         private List<Point> positionsToFill;
-        //private LevelBlock[,] levelBlockGrid;
-        private List<LevelBlock> levelPieces;
-        //private LevelPiece fillerPiece;
+        private List<MapBlock> mapBlocks;
         private Random rand;
         private int numPlayers;
 
-        // Graph to complete the paths between the building blocks
-        private UndirectedBidirectionalGraph<Point, Edge<Point>> Graph;
-        private Dictionary<Edge<Point>, double> EdgeCost;
-
-        public LevelGenerator(Point levelDimensions, List<LevelBlock> levelPieces, int numPlayers)
+        public MapGenerator(Point levelDimensions, List<MapBlock> mapBlocks, int numPlayers)
         {
             this.numPlayers = numPlayers;
             LevelDimensions = levelDimensions;
             level = new int[levelDimensions.X, levelDimensions.Y];
-            Populate(level, LevelBlock.InvalidValue);
+            Populate(level, MapBlock.InvalidValue);
             positionsToFill = new List<Point>();
 
             for (int i = 0; i < LevelDimensions.X; i++)
@@ -40,27 +32,7 @@ namespace TombOfAnubis
                 }
             }
 
-            this.levelPieces = levelPieces;
-
-            //this.levelPieces.Add(new LevelBlock(new int[,] { 
-            //    { 1, 0, 1 ,1}, 
-            //    { 1, 0, 1, 1}, 
-            //    { 0, 0, 0, 1},
-            //    { 1, 1, 0, 1}}, 2, "zero"));
-            //this.levelPieces.Add(new LevelBlock(new int[,] {
-            //    { 1, 1, 1 ,1},
-            //    { 1, 1, 1, 1},
-            //    { 1, 1, 1, 1},
-            //    { 1, 1, 1, 1}}, 2, "one"));
-            this.levelPieces.Add(new LevelBlock(new int[,] {
-                { 1, 0, 1},
-                { 1, 0, 0},
-                { 1, 1, 1}}, 2, 1, int.MaxValue));
-            this.levelPieces.Add(new LevelBlock(new int[,] {
-                { 1, 0, 1 ,1},
-                { 1, 0, 0, 0},
-                { 0, 0, 0, 1},
-                { 1, 0, 1, 1}}, 1, 1, 1));
+            this.mapBlocks = mapBlocks;
 
             rand = new Random();
 
@@ -76,7 +48,7 @@ namespace TombOfAnubis
                 if (ValidateLevel())
                 {
                     PrintLevel();
-                    LevelGraph levelGraph = new LevelGraph(level);
+                    MapGraph levelGraph = new MapGraph(level);
                     if (levelGraph.ConnectLevelBlocks())
                     {
                         break;
@@ -94,8 +66,8 @@ namespace TombOfAnubis
 
         private void ResetLevel()
         {
-            Populate(level, LevelBlock.InvalidValue);
-            foreach (LevelBlock piece in levelPieces)
+            Populate(level, MapBlock.InvalidValue);
+            foreach (MapBlock piece in mapBlocks)
             {
                 piece.Reset();
             }
@@ -116,13 +88,13 @@ namespace TombOfAnubis
             while (positionsToFill.Count != 0)
             {
                 Point coord = SelectRandomPosition();
-                List<LevelBlock> candidates = GetCandidates(coord);
+                List<MapBlock> candidates = GetCandidates(coord);
                 if (candidates.Count == 0)
                 {
-                    if (roundsWithoutPlacement >= maxRoundsWithoutPlacement && CanPlace(LevelBlock.Empty, coord))
+                    if (roundsWithoutPlacement >= maxRoundsWithoutPlacement && CanPlace(MapBlock.Empty, coord))
                     {
                         //PrintLevel();
-                        Place(LevelBlock.Empty, coord);
+                        Place(MapBlock.Empty, coord);
                     }
                     else
                     {
@@ -132,7 +104,7 @@ namespace TombOfAnubis
                 }
                 else
                 {
-                    LevelBlock winner;
+                    MapBlock winner;
                     candidates.Sort(CompareCandidates);
                     if (!candidates[0].Valid())
                     {
@@ -152,44 +124,44 @@ namespace TombOfAnubis
         }
         private void CreateBorder()
         {
-            for(int i = 0; i < LevelDimensions.X; i += LevelBlock.Empty.Dimensions.X)
+            for(int i = 0; i < LevelDimensions.X; i += MapBlock.Empty.Dimensions.X)
             {
-                for(int j =0; j < LevelDimensions.Y; j += LevelBlock.Empty.Dimensions.Y)
+                for(int j =0; j < LevelDimensions.Y; j += MapBlock.Empty.Dimensions.Y)
                 {
-                    if(i == 0 || i == LevelDimensions.X - LevelBlock.Empty.Dimensions.X || j == 0 || j == LevelDimensions.Y - LevelBlock.Empty.Dimensions.Y)
+                    if(i == 0 || i == LevelDimensions.X - MapBlock.Empty.Dimensions.X || j == 0 || j == LevelDimensions.Y - MapBlock.Empty.Dimensions.Y)
                     {
-                        if(CanPlace(LevelBlock.Empty, new Point(j, i)))
+                        if(CanPlace(MapBlock.Empty, new Point(j, i)))
                         {
-                            Place(LevelBlock.Empty, new Point(j, i));
+                            Place(MapBlock.Empty, new Point(j, i));
                         }
                     }
                 }
             }
         }
-        private void CreateBorder(Point coord, LevelBlock piece)
+        private void CreateBorder(Point coord, MapBlock piece)
         {
             int w = piece.Dimensions.X;
             int h = piece.Dimensions.Y;
             int x = coord.X;
             int y = coord.Y;
-            int emptyW = LevelBlock.Empty.Dimensions.X;
-            int emptyH = LevelBlock.Empty.Dimensions.Y;
+            int emptyW = MapBlock.Empty.Dimensions.X;
+            int emptyH = MapBlock.Empty.Dimensions.Y;
             for (int i = x - emptyW; i < x + w + emptyW; i++)
             {
                 for (int j = y - emptyH; j < y + h + emptyH; j++)
                 {
-                    if (CanPlace(LevelBlock.Empty, new Point(i, j)))
+                    if (CanPlace(MapBlock.Empty, new Point(i, j)))
                     {
-                        Place(LevelBlock.Empty, new Point(i, j));
+                        Place(MapBlock.Empty, new Point(i, j));
                     }
                 }
             }
         }
 
-        private List<LevelBlock> GetCandidates(Point coord)
+        private List<MapBlock> GetCandidates(Point coord)
         {
-            List<LevelBlock> candidates = new List<LevelBlock>();
-            foreach (LevelBlock piece in levelPieces) 
+            List<MapBlock> candidates = new List<MapBlock>();
+            foreach (MapBlock piece in mapBlocks) 
             {
                 if(CanPlace(piece, coord) && piece.Occurences < piece.MaxOccurences)
                 {
@@ -204,14 +176,14 @@ namespace TombOfAnubis
             return positionsToFill[rand.Next(positionsToFill.Count)];
         }
 
-        private bool CanPlace(LevelBlock piece, Point coord)
+        private bool CanPlace(MapBlock piece, Point coord)
         {
             for (int i = 0; i < piece.Dimensions.X; i++)
             {
                 for (int j = 0; j < piece.Dimensions.Y; j++)
                 {
                     Point dst = coord + new Point(i, j);
-                    if (!ValidCoords(dst) || level[dst.X, dst.Y] != LevelBlock.InvalidValue)
+                    if (!ValidCoords(dst) || level[dst.X, dst.Y] != MapBlock.InvalidValue)
                     {
                         return false;
                     }
@@ -219,14 +191,14 @@ namespace TombOfAnubis
             }
             return true;
         }
-        private void UpdateLevelPieces(LevelBlock winner)
+        private void UpdateLevelPieces(MapBlock winner)
         {
-            foreach (LevelBlock piece in levelPieces)
+            foreach (MapBlock piece in mapBlocks)
             {
                 piece.Update(winner.Equals(piece));
             }
         }
-        private void Place(LevelBlock levelPiece, Point coord)
+        private void Place(MapBlock levelPiece, Point coord)
         {
             for (int i = 0; i < levelPiece.Dimensions.X; i++)
             {
@@ -242,16 +214,6 @@ namespace TombOfAnubis
             }
         }
 
-        //private void CreatGraphFromLevel()
-        //{
-        //    for (int i = 0; i < levelBlockGrid.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < levelBlockGrid.GetLength(1); j++)
-        //        {
-        //        }
-        //    }
-        //}
-
         private void Populate(int[,] arr, int value)
         {
             for (int i = 0; i < arr.GetLength(0); i++)
@@ -264,7 +226,7 @@ namespace TombOfAnubis
         }
         private bool ValidateLevel()
         {
-            foreach (LevelBlock levelPiece in levelPieces)
+            foreach (MapBlock levelPiece in mapBlocks)
             {
                 if (!levelPiece.Valid())
                 {
@@ -273,16 +235,16 @@ namespace TombOfAnubis
             }
             return true;
         }
-        private LevelBlock PickCandidateBasedOnPriority(List<LevelBlock> blocks)
+        private MapBlock PickCandidateBasedOnPriority(List<MapBlock> blocks)
         {
             int sum = 0;
-            foreach (LevelBlock block in blocks)
+            foreach (MapBlock block in blocks)
             {
                 sum += block.Priority;
             }
             int selection = rand.Next(sum);
             sum = 0;
-            foreach (LevelBlock block in blocks)
+            foreach (MapBlock block in blocks)
             {
                 sum += block.Priority;
                 if (selection < sum)
@@ -296,7 +258,7 @@ namespace TombOfAnubis
         /// <summary>
         /// Invalid blocks have highest priority
         /// </summary>
-        private int CompareCandidates(LevelBlock b1, LevelBlock b2)
+        private int CompareCandidates(MapBlock b1, MapBlock b2)
         {
             if (!b1.Valid() && b2.Valid())
             {
