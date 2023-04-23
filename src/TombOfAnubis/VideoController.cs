@@ -11,8 +11,6 @@ namespace TombOfAnubis
     {
         private static VideoPlayer videoPlayer;
         private static Dictionary<string, Video> videos;
-        private static Texture2D previousTexture;
-        private static Rectangle previousRectangle;
 
         private static bool active;
         private static GraphicsDevice graphics;
@@ -27,7 +25,9 @@ namespace TombOfAnubis
             loopedVideoTrashbin = new Queue<Video>();
             videos = new Dictionary<string, Video>
                 {
-                    { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")}
+                    { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")},
+                    { @"Content/Videos/IntroVideo_v2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo_v2.mp4")}
+
                 };
             videoPlayer = new VideoPlayer(graphics);
 
@@ -58,21 +58,7 @@ namespace TombOfAnubis
         {
             if( videoPlayer?.Video != null && active)
             {
-                if (videoStarted)
-                {
-                    if (!videoPlayer.IsLooped)
-                    {
-                        TimeSpan remaining = videoPlayer.Video.Duration - videoPlayer.PlayPosition;
-                        TimeSpan eps = new TimeSpan(0, 0, 0, 0, 300);
-                        if (remaining < eps)
-                        {
-                            previousTexture = CloneTexture(videoPlayer.GetTexture(), graphics, previousRectangle);
-
-                            videoPlayer.Stop();
-                        }
-                    }
-                }
-                else
+                if (!videoStarted)
                 {
                     startCounter += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (startCounter > startDelay)
@@ -94,20 +80,9 @@ namespace TombOfAnubis
             if (active & videoStarted)
             {
                 var videoTexture = videoPlayer.GetTexture();
-                previousRectangle = destRectangle;
-
-                if (videoTexture != null && videoPlayer.Video != null)
-                {
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(videoTexture, destRectangle, Color.White);
-                    spriteBatch.End();
-                }
-                else
-                {
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(previousTexture, destRectangle, Color.White);
-                    spriteBatch.End();
-                }
+                spriteBatch.Begin();
+                spriteBatch.Draw(videoTexture, destRectangle, Color.White);
+                spriteBatch.End();
             }
         }
         public static void StopVideo()
@@ -123,15 +98,6 @@ namespace TombOfAnubis
         public static void ResumeVideo()
         {
             videoPlayer.Resume();
-        }
-        private static Texture2D CloneTexture(this Texture2D src, GraphicsDevice graphics, Rectangle rect)
-        {
-            Texture2D tex = new Texture2D(graphics, rect.Width, rect.Height);
-            int count = rect.Width * rect.Height;
-            Color[] data = new Color[count];
-            src.GetData(0, rect, data, 0, count);
-            tex.SetData(data);
-            return tex;
         }
     }
 }
