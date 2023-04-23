@@ -11,6 +11,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Sdcb.FFmpeg.Raw;
 using System;
 using System.Collections.Generic;
@@ -37,14 +38,35 @@ namespace TombOfAnubis
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
-        private float titleScale = 0.3f;
+        private float titleScale = 0.55f;
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.4f;
         private static List<AnimationClip> activeScrollAnimation;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
-        private float marginX = 0.15f, marginY = 0.05f;
+        private float marginX = 0.25f, marginY = 0.05f;
+
+        #endregion
+
+        #region QuitConfirmationDialog
+
+
+        private bool dialogVisible = false;
+        private bool confirmationStatus = false;
+        private Color activeColor = Color.Red;
+        private Color inactiveColor = Color.White;
+        private SpriteFont dialogFont;
+
+        private Texture2D dialogTexture;
+        private float dialogTransparency = 0.8f;
+        private Rectangle dialogDimension;
+
+        private Texture2D buttonTexture;
+        private float buttonTransparency = 0.8f;
+        private int dialogWidth = 700, dialogHeight = 300;
+        private float marginBottom = 0.1f, buttonSpacing = 0.15f;
+        private int buttonOptionWidth = 150, buttonOptionHeight = 50;
 
         #endregion
 
@@ -52,7 +74,7 @@ namespace TombOfAnubis
         #region Menu Entries
 
 
-        MenuEntry newGameMenuEntry, controlsMenuEntry, creditsMenuEntry;
+        MenuEntry newGameMenuEntry, settingsMenuEntry, quitMenuEntry;
 
 
         #endregion
@@ -77,16 +99,16 @@ namespace TombOfAnubis
             MenuEntries.Add(newGameMenuEntry);
 
             // Create the Controls menu entry
-            controlsMenuEntry = new MenuEntry("Controls");
-            controlsMenuEntry.Font = Fonts.DisneyHeroicFont;
-            controlsMenuEntry.Selected += ControlsMenuEntrySelected;
-            MenuEntries.Add(controlsMenuEntry);
+            settingsMenuEntry = new MenuEntry("Settings");
+            settingsMenuEntry.Font = Fonts.DisneyHeroicFont;
+            settingsMenuEntry.Selected += SettingsMenuEntrySelected;
+            MenuEntries.Add(settingsMenuEntry);
 
             // Create the Credits menu entry
-            creditsMenuEntry = new MenuEntry("Credits");
-            creditsMenuEntry.Font = Fonts.DisneyHeroicFont;
-            creditsMenuEntry.Selected += CreditsMenuEntrySelected;
-            MenuEntries.Add(creditsMenuEntry);
+            quitMenuEntry = new MenuEntry("Quit");
+            quitMenuEntry.Font = Fonts.DisneyHeroicFont;
+            quitMenuEntry.Selected += QuitMenuEntrySelected;
+            MenuEntries.Add(quitMenuEntry);
         }
 
 
@@ -100,7 +122,7 @@ namespace TombOfAnubis
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
-            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_white");
+            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 
             activeScrollAnimation = new List<AnimationClip> {
                             new AnimationClip(AnimationClipType.InactiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
@@ -116,6 +138,13 @@ namespace TombOfAnubis
 
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
+
+            // Dialog Content
+            dialogTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+            dialogTexture.SetData(new[] { Color.Black });
+            buttonTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+            buttonTexture.SetData(new[] { Color.Gray });
+            dialogFont = Fonts.DisneyHeroicFont;
 
             AudioController.PlaySong("background_music");
             base.LoadContent();
@@ -161,6 +190,10 @@ namespace TombOfAnubis
 
                 MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
             }
+
+            int posOffsetX = (int)(screenWidth - dialogWidth) / 2;
+            int posOffsetY = (int)(screenHeight - dialogHeight) / 2;
+            dialogDimension = new Rectangle(posOffsetX, posOffsetY, dialogWidth, dialogHeight);
         }
 
         /// <summary>
@@ -196,28 +229,62 @@ namespace TombOfAnubis
         /// <summary>
         /// Event handler for when the Controls menu entry is selected.
         /// </summary>
-        void ControlsMenuEntrySelected(object sender, EventArgs e)
+        void SettingsMenuEntrySelected(object sender, EventArgs e)
         {
-            controlsMenuEntry.Text = "Controls";
+            settingsMenuEntry.Text = "Settings";
         }
 
         /// <summary>
         /// Event handler for when the Credits menu entry is selected.
         /// </summary>
-        void CreditsMenuEntrySelected(object sender, EventArgs e)
+        void QuitMenuEntrySelected(object sender, EventArgs e)
         {
-            creditsMenuEntry.Text = "Credits";
-        }
-
-        /// <summary>
-        /// Event handler for when the user selects Yes 
-        /// on the "Are you sure?" message box.
-        /// </summary>
-        void ConfirmExitMessageBoxAccepted(object sender, EventArgs e)
-        {
+            dialogVisible = true;
             //GameScreenManager.Game.Exit();
         }
 
+        #endregion
+
+        #region HandleInput
+
+        public override void HandleInput()
+        {
+            if(dialogVisible)
+            {
+                if(!buttonCooldown)
+                {
+                    if(InputController.IsleftTriggered())
+                    {
+                        buttonPressed = true;
+                        confirmationStatus = true;
+                    }
+                    
+                    if(InputController.IsRightTriggered())
+                    {
+                        buttonPressed = true;
+                        confirmationStatus = false;
+                    }
+
+                    if(InputController.IsUseTriggered())
+                    {
+                        if(confirmationStatus)
+                        {
+                            GameScreenManager.Game.Exit();
+                        }
+                        else
+                        {
+                            dialogVisible = false;
+                            buttonPressed = true;
+                            confirmationStatus = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                base.HandleInput();
+            }
+        }
 
         #endregion
 
@@ -247,7 +314,48 @@ namespace TombOfAnubis
                 menuEntry.Draw(this, isSelected, gameTime);
             }
 
+            if (dialogVisible) DrawDialog();
+
             spriteBatch.End();
+        }
+
+        void DrawDialog()
+        {
+            SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
+            spriteBatch.Draw(dialogTexture, dialogDimension, Color.White * dialogTransparency);
+
+            string confirmationMessage = "Are you sure you want to quit?";
+            string positive = "Yes", negative = "No";
+
+            // Draw Confirmation message
+            Vector2 textDim = dialogFont.MeasureString(confirmationMessage);
+            int posOffsetX = (int)(dialogDimension.X + (dialogWidth - textDim.X) / 2);
+            int posOffsetY = (int)(dialogDimension.Y + (dialogHeight - textDim.Y) / 2);
+            Vector2 textPosition = new Vector2(posOffsetX, posOffsetY);
+            spriteBatch.DrawString(dialogFont, confirmationMessage, textPosition, Color.White);
+
+            // Draw Yes Button
+            int buttonOffsetX = (int)(dialogDimension.X + ((1 - buttonSpacing) * dialogWidth - 2 * buttonOptionWidth) / 2);
+            int buttonOffsetY = (int)(dialogDimension.Y + (1 - marginBottom) * dialogHeight - buttonOptionHeight);
+            Rectangle yesButtonPosition = new Rectangle(buttonOffsetX, buttonOffsetY, buttonOptionWidth, buttonOptionHeight);
+            textDim = dialogFont.MeasureString(positive);
+            posOffsetX = (int)(buttonOffsetX + (buttonOptionWidth - textDim.X) / 2);
+            posOffsetY = (int)(buttonOffsetY + (buttonOptionHeight - textDim.Y) / 2);
+            textPosition = new Vector2(posOffsetX, posOffsetY);
+            spriteBatch.Draw(buttonTexture, yesButtonPosition, Color.White * buttonTransparency);
+            Color textColor = confirmationStatus ? activeColor : inactiveColor;
+            spriteBatch.DrawString(dialogFont, positive, textPosition, textColor);
+
+            // Draw No Button
+            buttonOffsetX = (int)(buttonOffsetX + buttonOptionWidth + buttonSpacing * dialogWidth);
+            Rectangle noButtonPosition = new Rectangle(buttonOffsetX, buttonOffsetY, buttonOptionWidth, buttonOptionHeight);
+            textDim = dialogFont.MeasureString(negative);
+            posOffsetX = (int)(buttonOffsetX + (buttonOptionWidth - textDim.X) / 2);
+            posOffsetY = (int)(buttonOffsetY + (buttonOptionHeight - textDim.Y) / 2);
+            textPosition = new Vector2(posOffsetX, posOffsetY);
+            spriteBatch.Draw(buttonTexture, noButtonPosition, Color.White * buttonTransparency);
+            textColor = !confirmationStatus ? activeColor : inactiveColor;
+            spriteBatch.DrawString(dialogFont, negative, textPosition, textColor);
         }
 
         #endregion

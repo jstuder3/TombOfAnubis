@@ -22,7 +22,7 @@ namespace TombOfAnubis
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
-        private float titleScale = 0.4f;
+        private float titleScale = 0.55f;
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.4f;
@@ -78,7 +78,7 @@ namespace TombOfAnubis
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
-            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_white");
+            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 
             activeScrollAnimation = new List<AnimationClip> {
                             new AnimationClip(AnimationClipType.InactiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
