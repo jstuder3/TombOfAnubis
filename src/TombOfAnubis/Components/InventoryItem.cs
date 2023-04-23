@@ -5,9 +5,42 @@ using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 using TombOfAnubisContentData;
+using Microsoft.Xna.Framework.Content;
 
 namespace TombOfAnubis
 {
+    public struct ItemTextureLibrary
+    {
+        public static Texture2D Speedup { get; set; }
+        public static Texture2D Resurrection { get; set; }
+        public static Texture2D Fist { get; set; }
+        //public static Texture2D Artefact { get; set; }
+
+        public static Texture2D GetTexture(ItemType itemType)
+        {
+            switch(itemType)
+            {
+                case ItemType.Speedup: return Speedup;
+                case ItemType.Resurrection: return Resurrection;
+                case ItemType.Fist: return Fist;
+                //case ItemType.Artefact: return Artefact;
+            }
+            return null;
+        }
+
+        public static void LoadContent(GameScreenManager gameScreenManager)
+        {
+            ContentManager content = gameScreenManager.Game.Content;
+
+            // load textures into static variables of ParticleTextureLibrary, so they can be used as a texture library
+            string item_base_path = "Textures/Objects/Items/PowerUp/";
+            ItemTextureLibrary.Speedup = content.Load<Texture2D>(item_base_path + "SpeedUp");
+            ItemTextureLibrary.Resurrection = content.Load<Texture2D>(item_base_path + "Resurrection");
+            ItemTextureLibrary.Fist = content.Load<Texture2D>(item_base_path + "Fist");
+            //ItemTextureLibrary.Artefact = ???
+        }
+    }
+
     public enum ItemType
     {
         None,
@@ -89,6 +122,25 @@ namespace TombOfAnubis
                     break;
             }
             return false;
+        }
+
+        public void DropItem()
+        {
+            if(ItemType == ItemType.None) return;
+            Transform transform = Entity.GetComponent<Transform>();
+            Movement movement = Entity.GetComponent<Movement>();
+
+            Vector2 forwardVector = movement.GetForwardVector();
+
+            Session.GetInstance().World.AddChild(new WorldItem(transform.Position + forwardVector * 100f, transform.Scale, ItemType));
+            ItemType = ItemType.None;
+            Console.WriteLine("Dropped item!");
+
+        }
+
+        public Texture2D GetTexture()
+        {
+            return ItemTextureLibrary.GetTexture(ItemType);
         }
 
     }

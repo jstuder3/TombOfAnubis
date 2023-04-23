@@ -23,6 +23,12 @@
         {
             Item.ItemType = ItemType.None;
         }
+
+        public void SetItem(ItemType itemType)
+        {
+            Item.ItemType = itemType;
+        }
+
         public bool IsEmpty()
         {
             return Item == null || Item.ItemType == ItemType.None;
@@ -31,6 +37,11 @@
         public bool TryUseItem()
         {
             return Item.TryUse();
+        }
+
+        public void DropItem()
+        {
+            Item.DropItem();
         }
 
     }

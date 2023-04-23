@@ -9,9 +9,8 @@ namespace TombOfAnubis
     public enum PlayerAction
     {
         UseObject,
-        UseBodyPowerup,
-        UseWisdomPowerup,
-        PauseGame
+        PauseGame,
+        DropObject
     }
 
     public class PlayerInput
@@ -26,11 +25,14 @@ namespace TombOfAnubis
         public Keys RightKey { get; set; }
         public Keys UseKey { get; set; }
         public Keys PauseKey { get; set; }
+        public Keys DropKey { get; set; }
 
         public Buttons UseButton { get; set; }
+        public Buttons DropButton { get; set; }
         public Buttons PauseButton { get; set; }
 
-        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause) {
+        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause, Keys dropKey)
+        {
             IsKeyboard = true;
             UpKey = up;
             DownKey = down;
@@ -38,6 +40,7 @@ namespace TombOfAnubis
             RightKey = right;
             UseKey = use;
             PauseKey = pause;
+            DropKey = dropKey;
         }
         public PlayerInput(Buttons use, int controllerID)
         {
@@ -45,6 +48,7 @@ namespace TombOfAnubis
             IsKeyboard = false;
             UseButton = use;
             PauseButton = Buttons.Start;
+            DropButton = Buttons.B;
         }
 
         public void Update()
@@ -86,6 +90,10 @@ namespace TombOfAnubis
                     {
                         InputController.PlayerActions[PlayerID].Add(PlayerAction.PauseGame);
                     }
+                    if (key == DropKey)
+                    {
+                        InputController.PlayerActions[PlayerID].Add(PlayerAction.DropObject);
+                    }
                 }
             }
             else if(IsActive)
@@ -99,6 +107,10 @@ namespace TombOfAnubis
                 if (gamePadState.IsButtonDown(PauseButton) && !InputController.ButtonCooldowns.ContainsKey(PauseButton))
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.PauseGame);
+                }
+                if(gamePadState.IsButtonDown(DropButton) && !InputController.ButtonCooldowns.ContainsKey(DropButton))
+                {
+                    InputController.PlayerActions[PlayerID].Add(PlayerAction.DropObject);
                 }
             }
         }
@@ -118,10 +130,10 @@ namespace TombOfAnubis
     public static class InputController
     {
         public static PlayerInput[] PlayerInputs = new PlayerInput[] { 
-            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E, Keys.Escape),
-            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z, Keys.Escape),
-            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O, Keys.Escape),
-            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus, Keys.Escape),
+            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E, Keys.Escape, Keys.Q),
+            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z, Keys.Escape, Keys.R),
+            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O, Keys.Escape, Keys.U),
+            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus, Keys.Escape, Keys.OemPeriod),
             new PlayerInput(Buttons.A, 0),
             new PlayerInput(Buttons.A, 1),
             new PlayerInput(Buttons.A, 2),

@@ -47,7 +47,9 @@ namespace TombOfAnubis
             //load item sprites and vfx sprites (this must happen before creating a session if this content should be able to be used on startup)
             Fist.LoadContent(GameScreenManager);
             //load particle effect base sprites
-            ParticleEmitter.LoadContent(GameScreenManager);
+            ParticleTextureLibrary.LoadContent(GameScreenManager);
+            //load item sprites
+            ItemTextureLibrary.LoadContent(GameScreenManager);
 
             if (this.gameStartDescription == null)
             {

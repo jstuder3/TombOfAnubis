@@ -74,6 +74,18 @@ namespace TombOfAnubis
                 case(nameof(Button), nameof(Character)):
                     OnCollision((Character)target, (Button)source);
                     break;
+                case(nameof(Character), nameof(WorldItem)):
+                    OnCollision((Character)source, (WorldItem)target);
+                    break;
+                case(nameof(WorldItem), nameof(Character)):
+                    OnCollision((Character)target, (WorldItem)source);
+                    break;
+                case (nameof(WorldItem), nameof(Wall)):
+                    OnCollision((WorldItem)source, (Wall)target);
+                    break;
+                case (nameof(Wall), nameof(WorldItem)):
+                    OnCollision((WorldItem)target, (Wall)source);
+                    break;
             }
         }
         public static void OnCollision(Character character1, Character character2)
@@ -110,7 +122,7 @@ namespace TombOfAnubis
                 ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
                 pec.LocalPosition = new Vector2(30f, 30f);
                 pec.RandomizedSpawnPositionRadius = 40f;
-                pec.Texture = ParticleTextureLibrary.PlusFilledWtihOutline;
+                pec.Texture = ParticleTextureLibrary.PlusFilledWithOutline;
                 pec.SpriteLayer = 3;
                 pec.RandomizedTintMin = Color.Chartreuse;
                 pec.RandomizedTintMax = Color.Green;
@@ -141,7 +153,7 @@ namespace TombOfAnubis
                 ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
                 pec.LocalPosition = new Vector2(30f, 30f);
                 pec.RandomizedSpawnPositionRadius = 40f;
-                pec.Texture = ParticleTextureLibrary.PlusFilledWtihOutline;
+                pec.Texture = ParticleTextureLibrary.PlusFilledWithOutline;
                 pec.SpriteLayer = 3;
                 pec.RandomizedTintMin = Color.Chartreuse;
                 pec.RandomizedTintMax = Color.Green;
@@ -222,6 +234,7 @@ namespace TombOfAnubis
                 pec.Scale = Vector2.One * 0.4f;
                 pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
                 pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                pec.AlphaMode = AlphaMode.Constant;
                 pec.EmitterDuration = 0.1f;
                 pec.ParticleDuration = 1f;
                 pec.EmissionFrequency = 30f;
@@ -311,6 +324,22 @@ namespace TombOfAnubis
         public static void OnCollision(Character character, Button button)
         {
             //do nothing; all of this is handled in the ButtonController
+        }
+
+        public static void OnCollision(Character character, WorldItem worldItem)
+        {
+            //Console.WriteLine("Character and worlditem colliding!");
+            InventorySlot inventorySlot = character.GetComponent<Inventory>().GetEmptyItemSlot();
+            if (inventorySlot == null || !inventorySlot.IsEmpty()) return;
+
+            inventorySlot.SetItem(worldItem.ItemType);
+            //worldItem.Delete();
+            worldItem.AddComponent(new GameplayEffect(EffectType.Lifetime, 0f, Visibility.Game));
+        }
+
+        public static void OnCollision(WorldItem worldItem, Wall wall)
+        {
+            StaticCollision(worldItem, wall);
         }
 
         public static void PlaceArtefactIfPossible(Character character, Altar altar)

@@ -21,7 +21,26 @@ namespace TombOfAnubis
         public static Texture2D FourCornerStarWithOutline;
         public static Texture2D Plus;
         public static Texture2D PlusFilled;
-        public static Texture2D PlusFilledWtihOutline;
+        public static Texture2D PlusFilledWithOutline;
+
+        public static void LoadContent(GameScreenManager gameScreenManager)
+        {
+            ContentManager content = gameScreenManager.Game.Content;
+
+            // load textures into static variables of ParticleTextureLibrary, so they can be used as a texture library
+            string particles_base_path = "Textures/Objects/Particles/";
+            ParticleTextureLibrary.BasicParticle = content.Load<Texture2D>(particles_base_path + "basic_particle");
+            ParticleTextureLibrary.Circle = content.Load<Texture2D>(particles_base_path + "circle");
+            ParticleTextureLibrary.CircleFilled = content.Load<Texture2D>(particles_base_path + "circle_filled");
+            ParticleTextureLibrary.CircleFilledWithOutline = content.Load<Texture2D>(particles_base_path + "circle_filled_with_outline");
+            ParticleTextureLibrary.SquareFilled = content.Load<Texture2D>(particles_base_path + "square_filled");
+            ParticleTextureLibrary.FourCornerStar = content.Load<Texture2D>(particles_base_path + "four_corner_star");
+            ParticleTextureLibrary.FourCornerStarWithOutline = content.Load<Texture2D>(particles_base_path + "four_corner_star_with_outline");
+            ParticleTextureLibrary.Plus = content.Load<Texture2D>(particles_base_path + "plus"); ;
+            ParticleTextureLibrary.PlusFilled = content.Load<Texture2D>(particles_base_path + "plus_filled"); ;
+            ParticleTextureLibrary.PlusFilledWithOutline = content.Load<Texture2D>(particles_base_path + "plus_filled_with_outline"); ;
+        }
+
     }
 
     //determine how particle sizes should change over their lifespan
@@ -115,24 +134,6 @@ namespace TombOfAnubis
             ParticleList = new List<Particle>();
             ParticleEmitterSystem.Register(this);
         }
-
-        public static void LoadContent(GameScreenManager gameScreenManager)
-        {
-            ContentManager content = gameScreenManager.Game.Content;
-
-            // load textures into static variables of ParticleTextureLibrary, so they can be used as a texture library
-            string particles_base_path = "Textures/Objects/Particles/";
-            ParticleTextureLibrary.BasicParticle = content.Load<Texture2D>(particles_base_path+"basic_particle");
-            ParticleTextureLibrary.Circle = content.Load<Texture2D>(particles_base_path + "circle");
-            ParticleTextureLibrary.CircleFilled = content.Load<Texture2D>(particles_base_path + "circle_filled");
-            ParticleTextureLibrary.CircleFilledWithOutline = content.Load<Texture2D>(particles_base_path + "circle_filled_with_outline");
-            ParticleTextureLibrary.SquareFilled = content.Load<Texture2D>(particles_base_path + "square_filled");
-            ParticleTextureLibrary.FourCornerStar = content.Load<Texture2D>(particles_base_path + "four_corner_star");
-            ParticleTextureLibrary.FourCornerStarWithOutline = content.Load<Texture2D>(particles_base_path + "four_corner_star_with_outline");
-            ParticleTextureLibrary.Plus = content.Load<Texture2D>(particles_base_path + "plus"); ;
-            ParticleTextureLibrary.PlusFilled = content.Load<Texture2D>(particles_base_path + "plus_filled"); ;
-            ParticleTextureLibrary.PlusFilledWtihOutline = content.Load<Texture2D>(particles_base_path + "plus_filled_with_outline"); ;
-    }
 
         public override void Delete()
         {
