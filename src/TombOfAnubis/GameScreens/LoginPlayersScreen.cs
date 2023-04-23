@@ -40,7 +40,7 @@ namespace TombOfAnubis.GameScreens
         private int lineThickness = 2;
 
         // Sprite Scales
-        private float spriteScale = 0.4f;
+        private float spriteScale = 0.7f;
         private float keyboardScale = 0.4f, controllerScale = 0.3f;
         private float instructionScale = 0.4f;
 
@@ -62,10 +62,10 @@ namespace TombOfAnubis.GameScreens
         public override void LoadContent()
         {
             ContentManager content = GameScreenManager.Game.Content;
-            Texture2D playerOne = content.Load<Texture2D>("Textures/Characters/red_plagiarized_explorer");
-            Texture2D playerTwo = content.Load<Texture2D>("Textures/Characters/green_plagiarized_explorer");
-            Texture2D playerThree = content.Load<Texture2D>("Textures/Characters/blue_plagiarized_explorer");
-            Texture2D playerFour = content.Load<Texture2D>("Textures/Characters/purple_plagiarized_explorer");
+            Texture2D playerOne = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_red");
+            Texture2D playerTwo = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_green");
+            Texture2D playerThree = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_blue");
+            Texture2D playerFour = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_purple");
             playerSprites = new List<Texture2D> { playerOne, playerTwo, playerThree, playerFour };
 
             Texture2D inputOne = content.Load<Texture2D>("Textures/Menu/LoginScreen/Keyboard1");

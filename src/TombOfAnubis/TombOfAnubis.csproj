@@ -11,6 +11,15 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Textures\Menu\Controller.png" />
+    <None Remove="Content\Textures\Menu\Empty.png" />
+    <None Remove="Content\Textures\Menu\Keyboard.png" />
+    <None Remove="Content\Textures\Menu\Player1.png" />
+    <None Remove="Content\Textures\Menu\Player2.png" />
+    <None Remove="Content\Textures\Menu\Player3.png" />
+    <None Remove="Content\Textures\Menu\Player4.png" />
+    <None Remove="Content\Textures\Menu\Title_mix.png" />
+    <None Remove="Content\Textures\Menu\Title_white.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
