@@ -25,11 +25,6 @@ namespace TombOfAnubis
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            List<MapBlock> blocks = new List<MapBlock>();
-            blocks.Add(Content.Load<MapBlock>(@"Maps\MapBlock001"));
- 
-            MapGenerator gen = new MapGenerator(new Point(10, 10), blocks, 4);
-            gen.GenerateLevel();
             base.Initialize();
 
             screenManager.AddScreen(new IntroScreen());

@@ -125,11 +125,6 @@
 /processor:MapProcessor
 /build:Maps/Map001.xml
 
-#begin Maps/Map002.xml
-/importer:XmlImporter
-/processor:MapProcessor
-/build:Maps/Map002.xml
-
 #begin Maps/MapBlock001.xml
 /importer:XmlImporter
 /processor:MapBlockProcessor

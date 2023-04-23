@@ -47,7 +47,7 @@ namespace TombOfAnubis
             {
                 ExitScreen();
                 GameStartDescription gameStartDescription = new GameStartDescription();
-                gameStartDescription.MapContentName = "Map002";
+                gameStartDescription.MapContentName = "Map001";
                 gameStartDescription.NumberOfPlayers = 4;
                 int activeInputs = 0;
                 foreach(PlayerInput input in InputController.PlayerInputs)

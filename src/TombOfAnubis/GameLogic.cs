@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TombOfAnubisContentData;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis

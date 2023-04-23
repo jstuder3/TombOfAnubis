@@ -3,12 +3,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
-using TombOfAnubisContentData;
 
 namespace TombOfAnubis
 {
     public class EntityDescription
     {
+        [ContentSerializer(Optional = true)]
+        public string ClassName;
         public Point SpawnTileCoordinate;
 
         [ContentSerializer(Optional = true)]

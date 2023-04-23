@@ -13,13 +13,9 @@ namespace TombOfAnubis
 
         protected override void Write(ContentWriter output, MapBlock value)
         {
-            output.Write(value.MinOccurences);
-            output.Write(value.MaxOccurences);
-            output.Write(value.Priority);
             output.WriteObject(value.Dimensions);
             output.WriteObject(value.Tiles);
             output.WriteObject(value.Entities);
-            output.Write(value.BasePriority);
         }
     }
 }

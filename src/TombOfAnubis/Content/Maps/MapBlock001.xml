@@ -1,20 +1,189 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <XnaContent>
 	<Asset Type="TombOfAnubis.MapBlock">
-		<!-- Optional: Min times this block has to appear on the map: Default 0-->
-		<MinOccurences>1</MinOccurences>
-		<!-- Optional: Max times this block is allowed to appear on the map: Default int.MaxValue-->
-		<MaxOccurences>1</MaxOccurences>
-		<!-- Priority: Controlls how likely this block is picked: Higher priority means higher likelihood and the block will appear more often.-->
-		<Priority>1</Priority>
 		<!-- Dimensions of the Tiles array (x: num Rows, y: num Cols)-->
-		<Dimensions>4 3</Dimensions>
+		<Dimensions>5 5</Dimensions>
 		<!-- Array to describe the block layout: 1 is wall, 0 is floor-->
 		<Tiles>
-			1   1   1  
-			0   0   1  
-			1   0   0  
-			1   0   1    
+			1   1   0	1	1
+			1   0   0	0	1
+			0   0   0	0	0
+			1   0   0	0	1
+			1	1	0	1	1
 		</Tiles>
+		<Entities>
+			<Item>
+				<ClassName>TombOfAnubis.Character</ClassName>
+				<SpawnTileCoordinate> 2 0</SpawnTileCoordinate>
+				<Scale>0.5 0.5</Scale>
+				<SpriteTextureName>animated_explorer_spritesheet_red</SpriteTextureName>
+				<Animation>
+					<Item>
+						<Type>WalkingLeft</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingRight</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingUp</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingDown</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>Dead</Type>
+						<NumberOfFrames>2</NumberOfFrames>
+						<FrameDuration>500</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Character</ClassName>
+				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
+				<Scale>0.5 0.5</Scale>
+				<SpriteTextureName>animated_explorer_spritesheet_green</SpriteTextureName>
+				<Animation>
+					<Item>
+						<Type>WalkingLeft</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingRight</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingUp</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingDown</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>Dead</Type>
+						<NumberOfFrames>2</NumberOfFrames>
+						<FrameDuration>500</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Character</ClassName>
+				<SpawnTileCoordinate> 4 2</SpawnTileCoordinate>
+				<Scale>0.5 0.5</Scale>
+				<SpriteTextureName>animated_explorer_spritesheet_blue</SpriteTextureName>
+				<Animation>
+					<Item>
+						<Type>WalkingLeft</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingRight</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingUp</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingDown</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>Dead</Type>
+						<NumberOfFrames>2</NumberOfFrames>
+						<FrameDuration>500</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Character</ClassName>
+				<SpawnTileCoordinate> 2 4</SpawnTileCoordinate>
+				<Scale>0.5 0.5</Scale>
+				<SpriteTextureName>animated_explorer_spritesheet_purple</SpriteTextureName>
+				<Animation>
+					<Item>
+						<Type>WalkingLeft</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingRight</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingUp</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>WalkingDown</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+					<Item>
+						<Type>Dead</Type>
+						<NumberOfFrames>2</NumberOfFrames>
+						<FrameDuration>500</FrameDuration>
+						<FrameSize>180 260</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Altar</ClassName>
+				<SpawnTileCoordinate> 2 2</SpawnTileCoordinate>
+				<Scale>1.4 1.4</Scale>
+				<SpriteTextureName>altar</SpriteTextureName>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Anubis</ClassName>
+				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
+				<Scale>1.05 1.05</Scale>
+				<SpriteTextureName>anubis</SpriteTextureName>
+				<Animation>
+					<Item>
+						<Type>Idle</Type>
+						<NumberOfFrames>2</NumberOfFrames>
+						<FrameDuration>400</FrameDuration>
+						<FrameSize>130 200</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+		</Entities>
 	</Asset>
 </XnaContent>

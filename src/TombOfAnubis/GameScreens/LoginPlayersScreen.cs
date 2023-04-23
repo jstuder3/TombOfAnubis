@@ -52,7 +52,7 @@ namespace TombOfAnubis.GameScreens
         public LoginPlayersScreen() : base()
         {
             gameStartDescription = new GameStartDescription();
-            gameStartDescription.MapContentName = "Map002";
+            gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
             joinedPlayers = InputController.GetActiveInputs();

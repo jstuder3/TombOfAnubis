@@ -5,7 +5,6 @@ using Sdcb.FFmpeg.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
-using TombOfAnubisContentData;
 
 namespace TombOfAnubis
 {

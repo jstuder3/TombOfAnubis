@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
-using TombOfAnubisContentData;
+
 using Microsoft.Xna.Framework.Content;
 
 namespace TombOfAnubis

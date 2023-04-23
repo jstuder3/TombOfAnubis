@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Reflection;
-using TombOfAnubisContentData;
 using static System.Formats.Asn1.AsnWriter;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
@@ -93,6 +92,7 @@ namespace TombOfAnubis
         /// <summary>
         /// Spatial array for the collision tiles for this map.
         /// </summary>
+        [ContentSerializerIgnore]
         public int[] CollisionLayer { get; set; }
 
         #endregion
@@ -103,19 +103,34 @@ namespace TombOfAnubis
         /// Properties such as movement speeds are stored here
         /// </summary>
         public EntityProperties EntityProperties { get; set; }
+
+        public List<MapBlockDescription> MapBlockDescriptions { get; set; }
+
+        [ContentSerializerIgnore]
+        public List<MapBlock> MapBlocks { get; set; }
+
+        [ContentSerializerIgnore]
         public List<EntityDescription> Characters { get; set; }
+
+        [ContentSerializerIgnore]
         public EntityDescription Anubis { get; set; }
 
+        [ContentSerializerIgnore]
         public List<EntityDescription> Artefacts { get; set; }
 
+        [ContentSerializerIgnore]
         public EntityDescription Altar { get; set; }
 
+        [ContentSerializerIgnore]
         public List<EntityDescription> Dispensers { get; set; }
 
-        //public EntityDescription Fist { get; set; }
+        [ContentSerializerIgnore]
+        public EntityDescription Fist { get; set; }
 
+        [ContentSerializerIgnore]
         public List<EntityDescription> Traps { get; set; }
 
+        [ContentSerializerIgnore]
         public List<EntityDescription> Buttons { get; set; }
 
         #endregion
@@ -259,6 +274,194 @@ namespace TombOfAnubis
             return coords.X >= 0 && coords.Y >= 0 && coords.X < MapDimensions.X && coords.Y < MapDimensions.Y;
         }
 
+        public void TranslateCollisionToBaseLayer()
+        {
+            BaseLayer = new int[CollisionLayer.Length];
+            int mapDimensionsX = MapDimensions.X;
+            int mapDimensionsY = MapDimensions.Y;
+            for (int x = 0; x < mapDimensionsX; x++)
+            {
+                for (int y = 0; y < mapDimensionsY; y++)
+                {
+                    bool center, up, down, left, right;
+                    if (ValidTileCoordinates(new Point(x, y)))                  {
+                        center = CollisionLayer[y * mapDimensionsX + x] != 0;
+                    }
+                    else
+                    {
+                        center = true;
+                    }
+                    if (ValidTileCoordinates(new Point(x, y - 1)))
+                    {
+                        up = CollisionLayer[(y - 1) * mapDimensionsX + x] != 0;
+                    }
+                    else
+                    {
+                        up = true;
+                    }
+                    if (ValidTileCoordinates(new Point(x, y + 1)))
+                    {
+                        down = CollisionLayer[(y + 1) * mapDimensionsX + x] != 0;
+                    }
+                    else
+                    {
+                        down = true;
+                    }
+                    if (ValidTileCoordinates(new Point(x - 1, y)))
+                    {
+                        left = CollisionLayer[y * mapDimensionsX + x - 1] != 0;
+                    }
+                    else
+                    {
+                        left = true;
+                    }
+
+                    if (ValidTileCoordinates(new Point(x + 1, y)))
+                    {
+                        right = CollisionLayer[y * mapDimensionsX + x + 1] != 0;
+                    }
+                    else
+                    {
+                        right = true;
+                    }
+                    if (center)
+                    {
+                        if (!up & !down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 0;
+                        }
+                        if (up & !down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 1;
+                        }
+                        if (!up & down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 2;
+                        }
+                        if (!up & !down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 3;
+                        }
+                        if (!up & !down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 4;
+                        }
+                        if (up & down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 5;
+                        }
+                        if (up & !down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 6;
+                        }
+                        if (up & !down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 7;
+                        }
+                        if (!up & down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 8;
+                        }
+                        if (!up & down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 9;
+                        }
+                        if (!up & !down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 10;
+                        }
+                        if (up & down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 11;
+                        }
+                        if (up & down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 12;
+                        }
+                        if (up & !down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 13;
+                        }
+                        if (!up & down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 14;
+                        }
+                        if (up & down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 15;
+                        }
+                    }
+                    else
+                    {
+                        if (!up & !down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 16;
+                        }
+                        if (up & !down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 17;
+                        }
+                        if (!up & down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 18;
+                        }
+                        if (!up & !down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 19;
+                        }
+                        if (!up & !down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 20;
+                        }
+                        if (up & down & !left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 21;
+                        }
+                        if (up & !down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 22;
+                        }
+                        if (up & !down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 23;
+                        }
+                        if (!up & down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 24;
+                        }
+                        if (!up & down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 25;
+                        }
+                        if (!up & !down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 26;
+                        }
+                        if (up & down & left & !right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 27;
+                        }
+                        if (up & down & !left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 28;
+                        }
+                        if (up & !down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 29;
+                        }
+                        if (!up & down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 30;
+                        }
+                        if (up & down & left & right)
+                        {
+                            BaseLayer[y * mapDimensionsX + x] = 31;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Read a Map object from the content pipeline.
         /// </summary>
@@ -279,7 +482,6 @@ namespace TombOfAnubis
                 map.MapDimensions = input.ReadObject<Point>();
                 map.SourceTileSize = input.ReadObject<Point>();
                 map.TileScale = input.ReadObject<Vector2>();
-                //map.SpawnMapPosition = input.ReadObject<Point>();
                 
                 map.TextureName = input.ReadString();
                 map.Texture = input.ContentManager.Load<Texture2D>(
@@ -298,52 +500,53 @@ namespace TombOfAnubis
                 new Rectangle(0, 4 * map.SourceTileSize.Y, 2 * map.SourceTileSize.X, map.SourceTileSize.Y),
                 new Rectangle(0, 5 * map.SourceTileSize.Y, 2 * map.SourceTileSize.X, map.SourceTileSize.Y)};
 
+                map.MapBlockDescriptions = input.ReadObject<List<MapBlockDescription>>();
                 // Characters
-                map.Characters = input.ReadObject<List<EntityDescription>>();
-                foreach(EntityDescription ed in map.Characters)
-                {
-                    ed.Load(input.ContentManager, @"Textures\Characters");
-                }
+                //map.Characters = input.ReadObject<List<EntityDescription>>();
+                //foreach(EntityDescription ed in map.Characters)
+                //{
+                //    ed.Load(input.ContentManager, @"Textures\Characters");
+                //}
 
-                // Anubis
-                map.Anubis = input.ReadObject<EntityDescription>();
-                map.Anubis.Load(input.ContentManager, @"Textures\Characters");
-                map.Anubis.Texture = input.ContentManager.Load<Texture2D>(
-                        Path.Combine(@"Textures\Characters",
-                        map.Anubis.SpriteTextureName));
+                //// Anubis
+                //map.Anubis = input.ReadObject<EntityDescription>();
+                //map.Anubis.Load(input.ContentManager, @"Textures\Characters");
+                //map.Anubis.Texture = input.ContentManager.Load<Texture2D>(
+                //        Path.Combine(@"Textures\Characters",
+                //        map.Anubis.SpriteTextureName));
 
-                // Artefacts
-                map.Artefacts = input.ReadObject<List<EntityDescription>>();
-                foreach (EntityDescription ed in map.Artefacts)
-                {
-                    ed.Load(input.ContentManager, @"Textures\Objects\Artefacts");
+                //// Artefacts
+                //map.Artefacts = input.ReadObject<List<EntityDescription>>();
+                //foreach (EntityDescription ed in map.Artefacts)
+                //{
+                //    ed.Load(input.ContentManager, @"Textures\Objects\Artefacts");
 
-                }
+                //}
 
-                // Altar
-                map.Altar = input.ReadObject<EntityDescription>();
-                map.Altar.Load(input.ContentManager, @"Textures\Objects\Altar");
+                //// Altar
+                //map.Altar = input.ReadObject<EntityDescription>();
+                //map.Altar.Load(input.ContentManager, @"Textures\Objects\Altar");
 
-                // Dispensers
-                map.Dispensers = input.ReadObject<List<EntityDescription>>();
-                foreach (EntityDescription ed in map.Dispensers)
-                {
-                    ed.Load(input.ContentManager, @"Textures\Objects\Dispensers");
-                }
+                //// Dispensers
+                //map.Dispensers = input.ReadObject<List<EntityDescription>>();
+                //foreach (EntityDescription ed in map.Dispensers)
+                //{
+                //    ed.Load(input.ContentManager, @"Textures\Objects\Dispensers");
+                //}
 
-                // Traps
-                map.Traps = input.ReadObject<List<EntityDescription>>();
-                foreach(EntityDescription ed in map.Traps)
-                {
-                    ed.Load(input.ContentManager, @"Textures\Objects\Traps");
-                }
+                //// Traps
+                //map.Traps = input.ReadObject<List<EntityDescription>>();
+                //foreach(EntityDescription ed in map.Traps)
+                //{
+                //    ed.Load(input.ContentManager, @"Textures\Objects\Traps");
+                //}
 
-                // Buttons
-                map.Buttons = input.ReadObject<List<EntityDescription>>();
-                foreach (EntityDescription ed in map.Buttons)
-                {
-                    ed.Load(input.ContentManager, @"Textures\Objects\Buttons");
-                }
+                //// Buttons
+                //map.Buttons = input.ReadObject<List<EntityDescription>>();
+                //foreach (EntityDescription ed in map.Buttons)
+                //{
+                //    ed.Load(input.ContentManager, @"Textures\Objects\Buttons");
+                //}
 
                 // Fist
                 //map.Fist = input.ReadObject<EntityDescription>();

@@ -11,16 +11,19 @@ namespace TombOfAnubis
         public Point LevelDimensions { get; set; }
 
         private int[,] level;
+        private Map map;
+        private List<EntityDescription> entitiyDescriptions;
         private List<Point> positionsToFill;
         private List<MapBlock> mapBlocks;
         private Random rand;
         private int numPlayers;
 
-        public MapGenerator(Point levelDimensions, List<MapBlock> mapBlocks, int numPlayers)
+        public MapGenerator(Map map, int numPlayers)
         {
+            this.map = map;
             this.numPlayers = numPlayers;
-            LevelDimensions = levelDimensions;
-            level = new int[levelDimensions.X, levelDimensions.Y];
+            LevelDimensions = map.MapDimensions;
+            level = new int[LevelDimensions.X, LevelDimensions.Y];
             Populate(level, MapBlock.InvalidValue);
             positionsToFill = new List<Point>();
 
@@ -32,12 +35,13 @@ namespace TombOfAnubis
                 }
             }
 
-            this.mapBlocks = mapBlocks;
+            mapBlocks = map.MapBlocks;
+            entitiyDescriptions = new List<EntityDescription>();
 
             rand = new Random();
 
         }
-        public int[,] GenerateLevel()
+        public List<EntityDescription> GenerateMap()
         {
             int numAttempts = 0;
             int maxAttempts = 50;
@@ -59,9 +63,11 @@ namespace TombOfAnubis
             }
             PrintLevel();
 
-            Console.WriteLine("Num Attempts: " + (numAttempts + 1));
+            Console.WriteLine("Num Attempts: " + (numAttempts));
+            map.CollisionLayer = Flatten(level);
+            map.TranslateCollisionToBaseLayer();
 
-            return level;
+            return entitiyDescriptions;
         }
 
         private void ResetLevel()
@@ -288,6 +294,22 @@ namespace TombOfAnubis
             }
             Console.WriteLine("----------------Level----------------");
 
+        }
+
+        private static int[] Flatten(int[,] input)
+        {
+            int size = input.Length;
+            int[] result = new int[size];
+
+            int write = 0;
+            for (int i = 0; i <= input.GetUpperBound(0); i++)
+            {
+                for (int z = 0; z <= input.GetUpperBound(1); z++)
+                {
+                    result[write++] = input[i, z];
+                }
+            }
+            return result;
         }
     }
 }

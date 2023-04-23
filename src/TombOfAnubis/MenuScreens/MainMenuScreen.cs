@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using TombOfAnubis.GameScreens;
-using TombOfAnubisContentData;
 #endregion
 
 namespace TombOfAnubis
@@ -89,7 +88,7 @@ namespace TombOfAnubis
             : base()
         {
             gameStartDescription = new GameStartDescription();
-            gameStartDescription.MapContentName = "Map002";
+            gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
             // Add the New Game entry

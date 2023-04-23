@@ -13,12 +13,6 @@ namespace TombOfAnubis
     public class MapBlock
     {
         #region serializable
-        [ContentSerializer(Optional = true)]
-        public int MinOccurences { get; set; } = -1;
-
-        [ContentSerializer(Optional = true)]
-        public int MaxOccurences { get; set; } = -1;
-        public int Priority { get; set; }
         public Point Dimensions { get; set; }
         public int[] Tiles { get; set; }
         [ContentSerializer(Optional = true)]
@@ -27,6 +21,12 @@ namespace TombOfAnubis
 
 
         #region non serializable
+        [ContentSerializerIgnore]
+        public int MinOccurences { get; set; } = -1;
+        [ContentSerializerIgnore]
+        public int MaxOccurences { get; set; } = -1;
+        [ContentSerializerIgnore]
+        public int Priority { get; set; }
         [ContentSerializerIgnore]
         public int Occurences { get; set; }
         [ContentSerializerIgnore]
@@ -112,13 +112,9 @@ namespace TombOfAnubis
                 {
                     mapBlock = new MapBlock();
                 }
-                mapBlock.MinOccurences = input.ReadInt32();
-                mapBlock.MaxOccurences = input.ReadInt32();
-                mapBlock.Priority = input.ReadInt32();
                 mapBlock.Dimensions = input.ReadObject<Point>();
                 mapBlock.Tiles = input.ReadObject<int[]>();
                 mapBlock.Entities = input.ReadObject<List<EntityDescription>>();
-                mapBlock.BasePriority = input.ReadInt32();
                 return mapBlock;
             }
         }

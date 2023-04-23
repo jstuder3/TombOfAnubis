@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Framework.Media;
 using MonoGame.Extended.VideoPlayback;
-using TombOfAnubisContentData;
 
 namespace TombOfAnubis
 {
@@ -53,7 +52,7 @@ namespace TombOfAnubis
         public PauseMenuScreen() : base()
         {
             gameStartDescription = new GameStartDescription();
-            gameStartDescription.MapContentName = "Map002";
+            gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
 
             // Add the Resume entry
