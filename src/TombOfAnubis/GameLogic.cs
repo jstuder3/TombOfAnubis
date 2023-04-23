@@ -203,21 +203,36 @@ namespace TombOfAnubis
             if (!character.GetComponent<Movement>().IsTrapped())
             {
                 AudioController.PlaySoundEffect("anubisRoar");
+                character.GetComponent<Movement>().State = MovementState.Trapped;
+                character.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Dead);
+                // AISystem.DetailAPlayer(character);
+
+                foreach (ParticleEmitter pe in character.GetComponentsOfType<ParticleEmitter>())
+                {
+                    pe.EndEmitter();
+                }
+
+                ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                pec.LocalPosition = new Vector2(30f, 30f);
+                pec.RandomizedSpawnPositionRadius = 40f;
+                pec.Texture = ParticleTextureLibrary.FourCornerStarWithOutline;
+                pec.SpriteLayer = 3;
+                pec.RandomizedTintMin = Color.Orange;
+                pec.RandomizedTintMax = Color.Red;
+                pec.Scale = Vector2.One * 0.4f;
+                pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                pec.EmitterDuration = 0.1f;
+                pec.ParticleDuration = 1f;
+                pec.EmissionFrequency = 30f;
+                pec.EmissionRate = 5f;
+                pec.InitialSpeed = 40f;
+                pec.SpawnDirection = new Vector2(0f, -1f);
+                pec.SpawnConeDegrees = 360f;
+                pec.Drag = 0.5f;
+
+                anubis.AddComponent(new ParticleEmitter(pec));
             }
-
-            character.GetComponent<Movement>().State = MovementState.Trapped;
-            character.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Dead);
-           // AISystem.DetailAPlayer(character);
-
-            foreach(ParticleEmitter pe in character.GetComponentsOfType<ParticleEmitter>())
-            {
-                pe.EndEmitter();
-            }
-
-            /*if(character.GetComponent<Movement>().CanMove()) //use CanMove instead of IsVisibleToAnubis(), because when the player is invisible, there should still be a collision
-            {
-                StaticCollision(character, anubis); //treat Anubis like a wall (i.e. he is so much stronger than the player that he can push the player, but the player cannot push him)
-            }*/
 
             bool gameover = true;
             foreach (Character ch in Session.GetInstance().World.GetChildrenOfType<Character>())
