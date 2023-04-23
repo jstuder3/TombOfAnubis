@@ -107,6 +107,28 @@ namespace TombOfAnubis
                 character2.GetComponent<Movement>().State = MovementState.Idle;
                 character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
+                ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                pec.LocalPosition = new Vector2(30f, 30f);
+                pec.RandomizedSpawnPositionRadius = 40f;
+                pec.Texture = ParticleTextureLibrary.PlusFilledWtihOutline;
+                pec.SpriteLayer = 3;
+                pec.RandomizedTintMin = Color.Chartreuse;
+                pec.RandomizedTintMax = Color.Green;
+                pec.Scale = Vector2.One * 0.4f;
+                pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                pec.EmitterDuration = 1f;
+                pec.ParticleDuration = 1f;
+                pec.EmissionFrequency = 30f;
+                pec.EmissionRate = 1f;
+                pec.InitialSpeed = 40f;
+                pec.SpawnDirection = new Vector2(0f, -1f);
+                pec.SpawnConeDegrees = 360f;
+                pec.Drag = 0.5f;
+
+                character2.AddComponent(new ParticleEmitter(pec));
+
+
             }
             else if (character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Inventory>().HasResurrectItem())
             {
@@ -115,6 +137,27 @@ namespace TombOfAnubis
 
                 character1.GetComponent<Movement>().State = MovementState.Idle;
                 character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
+
+                ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                pec.LocalPosition = new Vector2(30f, 30f);
+                pec.RandomizedSpawnPositionRadius = 40f;
+                pec.Texture = ParticleTextureLibrary.PlusFilledWtihOutline;
+                pec.SpriteLayer = 3;
+                pec.RandomizedTintMin = Color.Chartreuse;
+                pec.RandomizedTintMax = Color.Green;
+                pec.Scale = Vector2.One * 0.4f;
+                pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                pec.EmitterDuration = 1f;
+                pec.ParticleDuration = 1f;
+                pec.EmissionFrequency = 30f;
+                pec.EmissionRate = 1f;
+                pec.InitialSpeed = 40f;
+                pec.SpawnDirection = new Vector2(0f, -1f);
+                pec.SpawnConeDegrees = 360f;
+                pec.Drag = 0.5f;
+
+                character1.AddComponent(new ParticleEmitter(pec));
 
             }
 

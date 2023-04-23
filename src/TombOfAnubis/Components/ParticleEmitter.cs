@@ -19,6 +19,9 @@ namespace TombOfAnubis
         public static Texture2D SquareFilled;
         public static Texture2D FourCornerStar;
         public static Texture2D FourCornerStarWithOutline;
+        public static Texture2D Plus;
+        public static Texture2D PlusFilled;
+        public static Texture2D PlusFilledWtihOutline;
     }
 
     //determine how particle sizes should change over their lifespan
@@ -37,33 +40,52 @@ namespace TombOfAnubis
     //this takes a LocalPosition, as it can move with the Parent Entity's Position
     public struct ParticleEmitterConfiguration
     {
+        //local offset w.r.t. the parent entity
         public Vector2 LocalPosition { get; set; }
+        //in how large of a radius around the position of the center should particles be spawned
         public float RandomizedSpawnPositionRadius { get; set; }
-        //doesn't work yet. set this to false for correct behaviour
+        //whether particles should move when the parent entity moves, rather than be attached to the world. doesn't work yet
         public bool ParticlesMoveWithEntity { get; set; }
+        // give the particle a texture that will be used for the sprites
         public Texture2D Texture { get; set; }
+        // the layer that the particle sprites will be drawn on
         public int SpriteLayer { get; set; }
+        //how transparent the particle should be at the start of its life. 0 means fully transparent, 1 means opaque
         public float InitialAlpha { get; set; }
+        //the alpha can either be fixed, or reduce to zero over the lifespan of the particle
         public AlphaMode AlphaMode { get; set; }
+        //define a range of colors the particles can spawn with. If you only want one color, set both to the same value
         public Color RandomizedTintMin { get; set; }
         public Color RandomizedTintMax { get; set; }
-        public Color TintOverLifetimeStart { get; set; }
-        public Color TintOverLifetimeEnd { get; set; }
+        //scale of the particle
         public Vector2 Scale { get; set; }
+        //the scale can either be fixed, or reduce to zero over the lifespan of the particle
         public ScalingMode ScalingMode { get; set; }
+        //by how much the scale can differ from the base scale, relatively. 0 means no variation, 1 means the scale can be 0-2x the base scale. anything outside 0-1 is undefined
         public Vector2 RelativeScaleVariation { get; set; }
+        //how long the emitter should be active for. 0 means infinite
         public float EmitterDuration {get; set;}
+        //how long each particle should exist for
         public float ParticleDuration { get; set; }
+        //how often the emitter should emit particles per second. recommended range: 0.1-60
         public float EmissionFrequency { get; set; }
+        //how many particles should be emitted per burst. recommended range: 1-10
         public float EmissionRate { get; set; }
+        //how fast the particles should move when they spawn. 0 means no initial movement
         public float InitialSpeed { get; set; }
+        //direction in which the particles should be shot in.
         public Vector2 SpawnDirection { get; set; }
+        //how much the actual spawn direction is allowed to differ from the provided spawn direction. 0 means they all spawn in the same direction, 360 means they spawn in all directions
         public float SpawnConeDegrees { get; set; }
-
+        //acceleration into a specific direction
         public Vector2 Gravity { get; set; }
+        //define point force that can attract/push away particles. currently, this just stays in place for every particle. later, this should move with the attached entity (e.g. so particles are attracted by the player)
         public Vector2 LocalPointForcePosition { get; set; }
+        //positive means attracting, negative means repelling
         public float PointForceStrength { get; set; }
+        //whether the force should be constant regardless of distance, or whether it should behave move like real gravity, where the force reduces quadratically with distance. currently doesn't really behave controllably, so just leave off.
         public bool PointForceUsesQuadraticFalloff { get; set; }
+        //by how much the particles should lose velocity per second. 0 means they don't lose velocity, 0.5 means they lose half their velocity per second, 1 means they lose all of their velocity in one second
         public float Drag { get; set; }
 
     }
@@ -107,7 +129,10 @@ namespace TombOfAnubis
             ParticleTextureLibrary.SquareFilled = content.Load<Texture2D>(particles_base_path + "square_filled");
             ParticleTextureLibrary.FourCornerStar = content.Load<Texture2D>(particles_base_path + "four_corner_star");
             ParticleTextureLibrary.FourCornerStarWithOutline = content.Load<Texture2D>(particles_base_path + "four_corner_star_with_outline");
-        }
+            ParticleTextureLibrary.Plus = content.Load<Texture2D>(particles_base_path + "plus"); ;
+            ParticleTextureLibrary.PlusFilled = content.Load<Texture2D>(particles_base_path + "plus_filled"); ;
+            ParticleTextureLibrary.PlusFilledWtihOutline = content.Load<Texture2D>(particles_base_path + "plus_filled_with_outline"); ;
+    }
 
         public override void Delete()
         {
