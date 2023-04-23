@@ -79,14 +79,14 @@
 				  <Item>
 					  <Type>Dead</Type>
 					  <NumberOfFrames>2</NumberOfFrames>
-					  <FrameDuration>250</FrameDuration>
+					  <FrameDuration>500</FrameDuration>
 					  <FrameSize>180 260</FrameSize>
 				  </Item>
 			  </Animation>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 6 10</SpawnTileCoordinate>
-			  <Scale>0.17 0.17</Scale>
+			  <Scale>0.5 0.5</Scale>
 			  <SpriteTextureName>animated_explorer_spritesheet_green</SpriteTextureName>
 			  <Animation>
 				  <Item>
@@ -94,37 +94,37 @@
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <!-- Duration of one frame in milliseconds-->
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingRight</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingUp</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingDown</Type>
-					  <NumberOfFrames>2</NumberOfFrames>
+					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>Dead</Type>
-					  <NumberOfFrames>4</NumberOfFrames>
-					  <FrameDuration>250</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <NumberOfFrames>2</NumberOfFrames>
+					  <FrameDuration>500</FrameDuration>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 			  </Animation>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 9 6</SpawnTileCoordinate>
-			  <Scale>0.17 0.17</Scale>
+			  <Scale>0.5 0.5</Scale>
 			  <SpriteTextureName>animated_explorer_spritesheet_blue</SpriteTextureName>
 			  <Animation>
 				  <Item>
@@ -132,37 +132,37 @@
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <!-- Duration of one frame in milliseconds-->
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingRight</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingUp</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingDown</Type>
-					  <NumberOfFrames>2</NumberOfFrames>
+					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>Dead</Type>
-					  <NumberOfFrames>4</NumberOfFrames>
-					  <FrameDuration>250</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <NumberOfFrames>2</NumberOfFrames>
+					  <FrameDuration>500</FrameDuration>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 			  </Animation>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 9 10</SpawnTileCoordinate>
-			  <Scale>0.17 0.17</Scale>
+			  <Scale>0.5 0.5</Scale>
 			  <SpriteTextureName>animated_explorer_spritesheet_purple</SpriteTextureName>
 			  <Animation>
 				  <Item>
@@ -170,38 +170,38 @@
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <!-- Duration of one frame in milliseconds-->
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingRight</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingUp</Type>
 					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>WalkingDown</Type>
-					  <NumberOfFrames>2</NumberOfFrames>
+					  <NumberOfFrames>4</NumberOfFrames>
 					  <FrameDuration>200</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 				  <Item>
 					  <Type>Dead</Type>
-					  <NumberOfFrames>4</NumberOfFrames>
-					  <FrameDuration>250</FrameDuration>
-					  <FrameSize>380 520</FrameSize>
+					  <NumberOfFrames>2</NumberOfFrames>
+					  <FrameDuration>500</FrameDuration>
+					  <FrameSize>180 260</FrameSize>
 				  </Item>
 			  </Animation>
 		  </Item>
 	  </Characters>
 	  <Anubis>
 		  <SpawnTileCoordinate> 8 8</SpawnTileCoordinate>
-		  <Scale>0.9 0.9</Scale>
+		  <Scale>1.05 1.05</Scale>
 		  <SpriteTextureName>anubis</SpriteTextureName>
 			  <Animation>
 				  <Item>

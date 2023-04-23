@@ -178,18 +178,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Characters/animated_explorer_spritesheet_red.png
 
-#begin Textures/Characters/animated_explorer_spritesheet_yellow.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/animated_explorer_spritesheet_yellow.png
-
 #begin Textures/Characters/anubis.png
 /importer:TextureImporter
 /processor:TextureProcessor
