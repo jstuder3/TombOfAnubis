@@ -410,8 +410,11 @@ namespace TombOfAnubis
                 ButtonControllerSystem.Clear();
                 ParticleEmitterSystem.Clear();
 
-        // clear the singleton
-        singleton = null;
+                // Reset map
+                singleton.Map.Reset();
+
+                // clear the singleton
+                singleton = null;
 
                 if (gameplayScreen != null)
                 {

@@ -135,6 +135,25 @@ namespace TombOfAnubis
 
         #endregion
 
+        public void Reset()
+        {
+            BaseLayer = null;
+            CollisionLayer = null;
+            foreach(MapBlockDescription desc in MapBlockDescriptions)
+            {
+                desc.Reset();
+            }
+            MapBlocks = null;
+            Characters = null;
+            Anubis = null;
+            Artefacts = null;
+            Altar = null;
+            Dispensers = null;
+            Fist = null;
+            Traps = null;
+            Buttons = null;
+        }
+
         /// <summary>
         /// Retrieves the base layer value for the given map position.
         /// </summary>

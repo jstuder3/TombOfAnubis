@@ -123,5 +123,13 @@ namespace TombOfAnubis
             // TODO: Implement
             return false;
         }
+
+        public static new void Clear()
+        {
+            components.Clear();
+            StaticColliders.Clear();
+            DynamicColliders.Clear();
+            SkippedCollisions.Clear();
+        }
     }
 }

@@ -183,6 +183,7 @@ namespace TombOfAnubis
             {
                 ExitScreen();
             }
+            Session.EndSession();
             LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
         }
 
