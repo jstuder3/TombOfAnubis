@@ -13,7 +13,8 @@ namespace TombOfAnubis {
         LinearAutoMove,
         Lifetime,
         Stunned,
-        Hidden
+        Hidden,
+        OnCooldown,
     }
 
     /**
@@ -40,6 +41,8 @@ namespace TombOfAnubis {
         //effect-dependent additional variables
         private List<float> effectFloatParameters;
         private List<Vector2> effectVectorParameters;
+
+        private ParticleEmitter stunnedEmitter;
 
         public EffectType Type { get; set; }
 
@@ -126,6 +129,26 @@ namespace TombOfAnubis {
                     {
                         //set the "stunned" flag of the entity
                         Entity.GetComponent<Movement>().State = MovementState.Stunned;
+                        ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                        pec.LocalPosition = new Vector2(30f, 30f);
+                        pec.RandomizedSpawnPositionRadius = 40f;
+                        pec.Texture = ParticleTextureLibrary.Circle;
+                        pec.SpriteLayer = 3;
+                        pec.RandomizedTintMin = Color.Yellow;
+                        pec.RandomizedTintMax = Color.LightYellow;
+                        pec.Scale = Vector2.One * 0.4f;
+                        pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                        pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                        pec.EmitterDuration = 0f;
+                        pec.ParticleDuration = 1f;
+                        pec.EmissionFrequency = 30f;
+                        pec.EmissionRate = 1f;
+                        pec.InitialSpeed = 10f;
+                        pec.SpawnDirection = new Vector2(0f, -1f);
+                        pec.SpawnConeDegrees = 360f;
+                        pec.Drag = 0.5f;
+                        stunnedEmitter = new ParticleEmitter(pec);
+                        Entity.AddComponent(stunnedEmitter);
                     }
                     break;
                 case EffectType.Hidden:
@@ -135,7 +158,12 @@ namespace TombOfAnubis {
                         movement = Entity.GetComponent<Movement>();
                         movement.State = MovementState.Hiding;
                         movement.HiddenFromAnubis = true;
-
+                    }
+                    break;
+                case EffectType.OnCooldown:
+                    if (!applied)
+                    {
+                        ((ICooldown)Entity).PutOnCooldown();
                     }
                     break;
             }
@@ -175,11 +203,15 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.Stunned:
                     Entity.GetComponent<Movement>().State = MovementState.Idle;
+                    stunnedEmitter.EndEmitter();
                     break;
                 case EffectType.Hidden:
                     movement = Entity.GetComponent<Movement>();
                     movement.State = MovementState.Idle;
                     movement.HiddenFromAnubis = false;
+                    break;
+                case EffectType.OnCooldown:
+                     ((ICooldown)Entity).EndCooldown();
                     break;
             }
 

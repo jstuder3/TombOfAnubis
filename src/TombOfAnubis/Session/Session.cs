@@ -279,6 +279,7 @@ namespace TombOfAnubis
                     singleton.Map.CreateEntityTileCenteredPosition(dispenser),
                     dispenser.Scale,
                     dispenser.Texture,
+                    dispenser.Animation,
                     type
                     ));
             }

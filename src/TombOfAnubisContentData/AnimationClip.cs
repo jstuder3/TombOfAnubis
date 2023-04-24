@@ -31,6 +31,9 @@ namespace TombOfAnubisContentData
         InactiveEntry,
         TransitionEntry,
         ActiveEntry,
+        //Treasure chest / item dispenser
+        Open,
+        Closed,
     }
 
     public class AnimationClip

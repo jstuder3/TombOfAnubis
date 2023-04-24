@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using TombOfAnubisContentData;
 
 namespace TombOfAnubis
 {
@@ -12,12 +14,22 @@ namespace TombOfAnubis
         ResurrectionPowerup,*/
         None
     }
-    public class Dispenser : Entity
+    public class Dispenser : Entity, ICooldown
     {
         DispenserType dispenserType = DispenserType.None;
-        double lastUsedTime;
-        float cooldown;
-        public Dispenser(Vector2 position, Vector2 scale, Texture2D texture, DispenserType dispenserType)
+        private bool isOnCooldown = false;
+
+        public float CooldownDuration { get; set; }
+
+        private ParticleEmitter particleEmitter { get; set; }
+
+        public ItemType ItemType { get; set; }
+        //public Sprite ItemSprite { get; set; }
+        private ParticleEmitter itemEmitter { get; set; }
+
+        private Random random;
+
+        public Dispenser(Vector2 position, Vector2 scale, Texture2D texture, List<AnimationClip> animationClips, DispenserType dispenserType)
         {
             Transform transform = new Transform(position, scale, Visibility.Game);
             AddComponent(transform);
@@ -25,7 +37,20 @@ namespace TombOfAnubis
             Transform minimapTransform = new Transform(position, 4f * scale, Visibility.Minimap);
             AddComponent(minimapTransform);
 
-            Sprite sprite = new Sprite(texture, 1, Visibility.Both);
+            Sprite sprite;
+            if (animationClips != null)
+            {
+                Animation animation = new Animation(animationClips, Visibility.Both);
+                AddComponent(animation);
+
+                animation.SetActiveClip(AnimationClipType.Open);
+
+                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
+            }
+            else
+            {
+                sprite = new Sprite(texture, 2, Visibility.Both);
+            }
             AddComponent(sprite);
 
             RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
@@ -37,8 +62,11 @@ namespace TombOfAnubis
             this.dispenserType = dispenserType;
 
             // set up cooldown
-            this.lastUsedTime = 0.0;
-            this.cooldown = 2f;
+            this.CooldownDuration = 5f;
+
+            this.random = new Random();
+
+            EndCooldown();
 
             Initialize();
         }
@@ -46,11 +74,9 @@ namespace TombOfAnubis
         public bool TryGiveItem(Inventory inventory, double currentTime)
         {
             //only give an item if the dispenser isn't on cooldown
-            if (IsOnCooldown(currentTime)) return false;
+            if (IsOnCooldown()) return false;
 
             InventorySlot emptyItemSlot;
-
-            Random random = new Random();
 
             //if there is space, put an item in the empty slot according to which type of dispenser this is
 
@@ -61,96 +87,111 @@ namespace TombOfAnubis
                 return false;
             }
 
-            //if(dispenserType == DispenserType.BodyPowerup)
-            /*{
+            emptyItemSlot.Item = new InventoryItem(ItemType, emptyItemSlot.Entity);
 
-                switch(random.Next(0, 2))
-                {
-                    case 0:
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
-                        Console.WriteLine("Put Speedup in somebody's inventory!");
-                        break;
-                    case 1:
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Fist, emptyItemSlot.Entity);
-                        Console.WriteLine("Put Fist in somebody's inventory!");
-                        break;
-                    case 2:
-                        emptyItemSlot.Item = new InventoryItem(ItemType.HidingCloak, emptyItemSlot.Entity);
-                        Console.WriteLine("Put HidingCloak in somebody's inventory!");
-                        break;
-                    default:
-                        return false;
-                }
-                //Console.WriteLine("Put BodyPowerup in somebody's inventory!");
-            }*/
-            /*else if(dispenserType == DispenserType.WisdomPowerup)
-            {
-                Console.WriteLine("WisdomPowerups are not yet implemented!");
-                switch (random.Next(0, 1))
-                {
-                    case (0):
-                        emptyItemSlot.Item = new InventoryItem(ItemType.IncreaseViewDistance, emptyItemSlot.Entity);
-                        Console.WriteLine("Put IncreaseViewDistance in somebody's inventory!");
-                        break;
-                    default:
-                        return false; 
-                }
-
-            }*/
-            /*
-            else if(dispenserType == DispenserType.ResurrectionPowerup)
-            {
-
-                emptyItemSlot.Item = new InventoryItem(ItemType.Resurrection, emptyItemSlot.Entity);
-                Console.WriteLine("Put ResurrectionPowerup in somebody's inventory!");
-            }
-            else
-            {
-                Console.WriteLine("Unknown dispenser type!");
-                return false;
-            }*/
-
-            if(dispenserType == DispenserType.ItemDispenser) 
-            {
-
-                switch (random.Next(0, 3))
-                {
-                    case 0: //Speedup
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
-                        Console.WriteLine("Put Speedup in somebody's inventory!");
-                        break;
-                    case 1: //Fist
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Fist, emptyItemSlot.Entity);
-                        Console.WriteLine("Put Fist in somebody's inventory!");
-                        break;
-                    case 2: //Resurrection
-                        emptyItemSlot.Item = new InventoryItem(ItemType.Resurrection, emptyItemSlot.Entity);
-                        Console.WriteLine("Put ResurrectionPowerup in somebody's inventory!");
-                        break;
-                    case 3: //Hiding Cloak (not yet implemented)
-                        emptyItemSlot.Item = new InventoryItem(ItemType.HidingCloak, emptyItemSlot.Entity);
-                        Console.WriteLine("Put HidingCloak in somebody's inventory!");
-                        break;
-                    default:
-                        return false;
-                }
-            }
-            else
-            {
-                Console.WriteLine("Unknown dispenser type!");
-                return false;
-            }
+            ItemType = ItemType.None;
+            itemEmitter.EndEmitter();
 
             // put dispenser on cooldown
-            lastUsedTime = currentTime;
+            AddComponent(new GameplayEffect(EffectType.OnCooldown, CooldownDuration, Visibility.Both));
 
             return true;
 
         }
 
-        public bool IsOnCooldown(double currentTime)
+        public bool IsOnCooldown()
         {
-            return lastUsedTime + cooldown > currentTime;
+            return isOnCooldown;
+        }
+
+        public void PutOnCooldown()
+        {
+            isOnCooldown = true;
+
+            GetComponent<Animation>().SetActiveClip(AnimationClipType.Closed);
+            particleEmitter.EndEmitter();
+
+        }
+
+        public void EndCooldown()
+        {
+            isOnCooldown = false;
+            GetComponent<Animation>().SetActiveClip(AnimationClipType.Open);
+
+            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+            pec.LocalPosition = new Vector2(65f, 30f);
+            pec.RandomizedSpawnPositionRadius = 40f;
+            pec.Texture = ParticleTextureLibrary.BasicParticle;
+            pec.SpriteLayer = 4;
+            pec.RandomizedTintMin = Color.Yellow;
+            pec.RandomizedTintMax = Color.LightYellow;
+            pec.Scale = Vector2.One * 0.2f;
+            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+            pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+            pec.EmitterDuration = 0f;
+            pec.ParticleDuration = 3f;
+            pec.EmissionFrequency = 5f;
+            pec.EmissionRate = 1f;
+            pec.InitialSpeed = 10f;
+            pec.SpawnDirection = new Vector2(0f, -1f);
+            pec.SpawnConeDegrees = 360f;
+            pec.Drag = 0.5f;
+
+            particleEmitter = new ParticleEmitter(pec);
+
+            AddComponent(particleEmitter);
+
+            Texture2D itemTexture = ItemTextureLibrary.Speedup;
+
+            if (dispenserType == DispenserType.ItemDispenser)
+            {
+
+                switch (random.Next(0, 3))
+                {
+                    case 0: //Speedup
+                        ItemType = ItemType.Speedup;
+                        itemTexture = ItemTextureLibrary.Speedup;
+                        break;
+                    case 1: //Fist
+                        ItemType = ItemType.Fist;
+                        itemTexture = ItemTextureLibrary.Fist;
+                        break;
+                    case 2: //Resurrection
+                        ItemType = ItemType.Resurrection;
+                        itemTexture = ItemTextureLibrary.Resurrection;
+                        break;
+                    case 3: //Hiding Cloak (not yet implemented)
+                        ItemType = ItemType.HidingCloak;
+                        //ItemSprite = new Sprite(ItemTextureLibrary.HidingCloak, 3, Visibility.Game);
+                        break;
+                    default:
+                        return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Unknown dispenser type!");
+                return;
+            }
+
+            ParticleEmitterConfiguration item_pec = new ParticleEmitterConfiguration();
+            item_pec.LocalPosition = new Vector2(50f, 10f);
+            item_pec.RandomizedSpawnPositionRadius = 0f;
+            item_pec.Texture = itemTexture;
+            item_pec.SpriteLayer = 3;
+            item_pec.RandomizedTintMin = Color.White;
+            item_pec.RandomizedTintMax = Color.White;
+            item_pec.Scale = Vector2.One * 0.3f;
+            item_pec.EmitterDuration = 0f;
+            item_pec.ParticleDuration = 0.06f;
+            item_pec.EmissionFrequency = 20f;
+            item_pec.EmissionRate = 1f;
+
+            itemEmitter = new ParticleEmitter(item_pec);
+            AddComponent(itemEmitter);
+
+
+
         }
 
     }

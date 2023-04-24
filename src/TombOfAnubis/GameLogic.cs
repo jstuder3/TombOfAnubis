@@ -62,6 +62,12 @@ namespace TombOfAnubis
                 case (nameof(Anubis), nameof(Fist)):
                     OnCollision((Fist)target, (Anubis)source);
                     break;
+                case (nameof(Fist), nameof(Wall)):
+                    OnCollision((Fist)source, (Wall)target);
+                    break;
+                case (nameof(Wall), nameof(Fist)):
+                    OnCollision((Fist)target, (Wall)source);
+                    break;
                 case (nameof(Character), nameof(Trap)):
                     OnCollision((Character)source, (Trap)target);
                     break;
@@ -172,9 +178,6 @@ namespace TombOfAnubis
                 character1.AddComponent(new ParticleEmitter(pec));
 
             }
-
-
-
         }
         public static void OnCollision(Character character, Wall wall)
         {
@@ -195,6 +198,36 @@ namespace TombOfAnubis
             //else: collide with artefact
 
             StaticCollision(character, artefact);
+
+        }
+
+        public static void OnCollision(Fist fist, Wall wall)
+        {
+            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+            pec.LocalPosition = fist.CenterPosition();
+            pec.RandomizedSpawnPositionRadius = 40f;
+            pec.Texture = ParticleTextureLibrary.FourCornerStar;
+            pec.SpriteLayer = 3;
+            pec.RandomizedTintMin = Color.Yellow;
+            pec.RandomizedTintMax = Color.Orange;
+            pec.Scale = Vector2.One * 0.4f;
+            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+            pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+            pec.EmitterDuration = 0.1f;
+            pec.ParticleDuration = 0.5f;
+            pec.EmissionFrequency = 60f;
+            pec.EmissionRate = 1f;
+            pec.InitialSpeed = 40f;
+            pec.SpawnDirection = new Vector2(0f, -1f);
+            pec.SpawnConeDegrees = 360f;
+            pec.Drag = 0.5f;
+
+            Session.GetInstance().World.AddComponent(new ParticleEmitter(pec));
+
+            foreach (GameplayEffect gameplayEffect in fist.GetComponentsOfType<GameplayEffect>())
+            {
+                gameplayEffect.EndGameplayEffect();
+            }
 
         }
 
@@ -289,27 +322,6 @@ namespace TombOfAnubis
             }
 
             anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f, Visibility.Game));
-
-            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
-            pec.LocalPosition = new Vector2(30f, 30f);
-            pec.RandomizedSpawnPositionRadius = 40f;
-            pec.Texture = ParticleTextureLibrary.Circle;
-            pec.SpriteLayer = 3;
-            pec.RandomizedTintMin = Color.Yellow;
-            pec.RandomizedTintMax = Color.LightYellow;
-            pec.Scale = Vector2.One * 0.4f;
-            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
-            pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
-            pec.EmitterDuration = 2f;
-            pec.ParticleDuration = 1f;
-            pec.EmissionFrequency = 30f;
-            pec.EmissionRate = 1f;
-            pec.InitialSpeed = 10f;
-            pec.SpawnDirection = new Vector2(0f, -1f);
-            pec.SpawnConeDegrees = 360f;
-            pec.Drag = 0.5f;
-
-            anubis.AddComponent(new ParticleEmitter(pec));
 
         }
 

@@ -247,27 +247,82 @@
 		  <Item>
 			  <SpawnTileCoordinate> 6 10</SpawnTileCoordinate>
 			  <Scale>0.3 0.3</Scale>
-			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <SpriteTextureName>treasure_chest</SpriteTextureName>
 			  <Type>ItemDispenser</Type>
+			  <Animation>
+				  <Item>
+					  <Type>Open</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+				  <Item>
+					  <Type>Closed</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+			  </Animation>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 11 6</SpawnTileCoordinate>
 			  <Scale>0.3 0.3</Scale>
-			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <SpriteTextureName>treasure_chest</SpriteTextureName>
 			  <Type>ItemDispenser</Type>
+			  <Animation>
+				  <Item>
+					  <Type>Open</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+				  <Item>
+					  <Type>Closed</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+			  </Animation>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 2 17</SpawnTileCoordinate>
 			  <Scale>0.3 0.3</Scale>
-			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
-			  <!-- (Optional) Type of the entity, will be converted in the session to an enum type -->
+			  <SpriteTextureName>treasure_chest</SpriteTextureName>
 			  <Type>ItemDispenser</Type>
+			  <Animation>
+				  <Item>
+					  <Type>Open</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+				  <Item>
+					  <Type>Closed</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+			  </Animation>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 12 23</SpawnTileCoordinate>
 			  <Scale>0.3 0.3</Scale>
-			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <SpriteTextureName>treasure_chest</SpriteTextureName>
 			  <Type>ItemDispenser</Type>
+			  <Animation>
+				  <Item>
+					  <Type>Open</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+				  <Item>
+					  <Type>Closed</Type>
+					  <NumberOfFrames>1</NumberOfFrames>
+					  <FrameDuration>200</FrameDuration>
+					  <FrameSize>475 475</FrameSize>
+				  </Item>
+			  </Animation>
 		  </Item>
 	  </Dispensers>
 	  <Traps>
