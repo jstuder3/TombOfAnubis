@@ -25,8 +25,6 @@ namespace TombOfAnubisContentData
         NotPressed,
         // Character death
         Dead,
-        // Anubis-Fist collision
-        VFX_01,
         // MenuEntry scroll state
         InactiveEntry,
         TransitionEntry,

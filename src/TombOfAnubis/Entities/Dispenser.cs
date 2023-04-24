@@ -129,7 +129,7 @@ namespace TombOfAnubis
             pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
             pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
             pec.EmitterDuration = 0f;
-            pec.ParticleDuration = 3f;
+            pec.ParticleDuration = 2f;
             pec.EmissionFrequency = 5f;
             pec.EmissionRate = 1f;
             pec.InitialSpeed = 10f;

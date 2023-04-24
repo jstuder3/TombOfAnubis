@@ -312,9 +312,6 @@ namespace TombOfAnubis
             //When Anubis collides with the fist, the fist is destroyed (by ending its lifetime GameEffect), a smoke effect is spawned and Anubis is stunned for 2 seconds
 
             Session singleton = Session.GetInstance();
-            //VFX vfx = new VFX(anubis.GetComponent<Transform>().Position, Fist.Scale * 2f, Fist.Texture, Fist.AnimationClipList, 2, AnimationClipType.VFX_01);
-            //singleton.Scene.AddChild(vfx);
-            //vfx.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.5f));
 
             foreach(GameplayEffect gameplayEffect in fist.GetComponentsOfType<GameplayEffect>())
             {

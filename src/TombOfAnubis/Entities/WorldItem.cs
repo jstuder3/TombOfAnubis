@@ -25,6 +25,28 @@ namespace TombOfAnubis
             ItemType = itemType;
 
             Initialize();
+
+            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+            pec.LocalPosition = new Vector2(20f, 20f);
+            pec.RandomizedSpawnPositionRadius = 40f;
+            pec.Texture = ParticleTextureLibrary.BasicParticle;
+            pec.SpriteLayer = 4;
+            pec.RandomizedTintMin = Color.Yellow;
+            pec.RandomizedTintMax = Color.LightYellow;
+            pec.Scale = Vector2.One * 0.2f;
+            pec.ScalingMode = ScalingMode.LinearDecreaseToZero;
+            pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+            pec.EmitterDuration = 0f;
+            pec.ParticleDuration = 2f;
+            pec.EmissionFrequency = 5f;
+            pec.EmissionRate = 1f;
+            pec.InitialSpeed = 10f;
+            pec.SpawnDirection = new Vector2(0f, -1f);
+            pec.SpawnConeDegrees = 360f;
+            pec.Drag = 0.5f;
+
+            AddComponent(new ParticleEmitter(pec));
+
         }
     }
 }

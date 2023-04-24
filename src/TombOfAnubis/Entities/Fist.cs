@@ -73,8 +73,7 @@ namespace TombOfAnubis
                             new AnimationClip(AnimationClipType.WalkingLeft, 1, 200, new Point(400, 400)),
                             new AnimationClip(AnimationClipType.WalkingRight, 1, 200, new Point(400, 400)),
                             new AnimationClip(AnimationClipType.WalkingUp, 1, 200, new Point(400, 400)),
-                            new AnimationClip(AnimationClipType.WalkingDown, 1, 200, new Point(400, 400)),
-                            new AnimationClip(AnimationClipType.VFX_01, 5, 100, new Point(400, 400))
+                            new AnimationClip(AnimationClipType.WalkingDown, 1, 200, new Point(400, 400))
                         };
 
         }
