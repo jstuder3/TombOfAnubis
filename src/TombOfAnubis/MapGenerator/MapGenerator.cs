@@ -134,13 +134,24 @@ namespace TombOfAnubis
             {
                 for(int j =0; j < LevelDimensions.Y; j += MapBlock.Empty.Dimensions.Y)
                 {
-                    if(i == 0 || i == LevelDimensions.X - MapBlock.Empty.Dimensions.X || j == 0 || j == LevelDimensions.Y - MapBlock.Empty.Dimensions.Y)
+                    if(i == 0 || i == LevelDimensions.X - MapBlock.Wall.Dimensions.X || j == 0 || j == LevelDimensions.Y - MapBlock.Wall.Dimensions.Y)
                     {
-                        if(CanPlace(MapBlock.Empty, new Point(j, i)))
+                        if(CanPlace(MapBlock.Wall, new Point(j, i)))
+                        {
+                            Place(MapBlock.Wall, new Point(j, i));
+                        }
+                    }
+                    if (i == MapBlock.Empty.Dimensions.X || 
+                        i == LevelDimensions.X - MapBlock.Empty.Dimensions.X - MapBlock.Wall.Dimensions.X  || 
+                        j == MapBlock.Empty.Dimensions.Y || 
+                        j == LevelDimensions.Y - MapBlock.Empty.Dimensions.Y - MapBlock.Wall.Dimensions.Y)
+                    {
+                        if (CanPlace(MapBlock.Empty, new Point(j, i)))
                         {
                             Place(MapBlock.Empty, new Point(j, i));
                         }
                     }
+
                 }
             }
         }

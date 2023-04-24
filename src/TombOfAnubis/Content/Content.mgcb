@@ -125,10 +125,30 @@
 /processor:MapProcessor
 /build:Maps/Map001.xml
 
-#begin Maps/MapBlock001.xml
+#begin Maps/MapBlocks/Altar001.xml
 /importer:XmlImporter
-/processor:MapBlockProcessor
-/build:Maps/MapBlock001.xml
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Altar001.xml
+
+#begin Maps/MapBlocks/ArtefactFour001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/ArtefactFour001.xml
+
+#begin Maps/MapBlocks/ArtefactOne001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/ArtefactOne001.xml
+
+#begin Maps/MapBlocks/ArtefactThree001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/ArtefactThree001.xml
+
+#begin Maps/MapBlocks/ArtefactTwo001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/ArtefactTwo001.xml
 
 #begin Textures/Characters/animated_explorer_spritesheet_blue.png
 /importer:TextureImporter

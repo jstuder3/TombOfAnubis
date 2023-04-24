@@ -63,6 +63,7 @@ namespace TombOfAnubis
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
             Hud = new Hud(GameScreenManager.GraphicsDevice, GameScreenManager);
 
+            Console.WriteLine("done");
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's

@@ -3,7 +3,7 @@
   <Asset Type="TombOfAnubis.Map">
       <Name>Map001</Name>
 	  <!-- Number of tiles in x(right) and y(down) of the map-->
-	  <MapDimensions>10 10</MapDimensions>
+	  <MapDimensions>30 30</MapDimensions>
 	  <!-- Size of one tile in the Texture source. -->
 	  <SourceTileSize>400 400</SourceTileSize>
 	  <!-- Scale here to increase the in game size of the tiles (Walls and floors) -->
@@ -17,7 +17,31 @@
 	  </EntityProperties>
 	  <MapBlockDescriptions>
 		  <Item>
-			  <Name>MapBlock001</Name>
+			  <Name>Altar001</Name>
+			  <Priority>1</Priority>
+			  <MinOccurences>1</MinOccurences>
+			  <MaxOccurences>1</MaxOccurences>
+		  </Item>
+		  <Item>
+			  <Name>ArtefactOne001</Name>
+			  <Priority>1</Priority>
+			  <MinOccurences>1</MinOccurences>
+			  <MaxOccurences>1</MaxOccurences>
+		  </Item>
+		  <Item>
+			  <Name>ArtefactTwo001</Name>
+			  <Priority>1</Priority>
+			  <MinOccurences>1</MinOccurences>
+			  <MaxOccurences>1</MaxOccurences>
+		  </Item>
+		  <Item>
+			  <Name>ArtefactThree001</Name>
+			  <Priority>1</Priority>
+			  <MinOccurences>1</MinOccurences>
+			  <MaxOccurences>1</MaxOccurences>
+		  </Item>
+		  <Item>
+			  <Name>ArtefactFour001</Name>
 			  <Priority>1</Priority>
 			  <MinOccurences>1</MinOccurences>
 			  <MaxOccurences>1</MaxOccurences>

@@ -70,7 +70,17 @@ namespace TombOfAnubis
         }
         public static Entity SpawnArtefact(EntityDescription entityDescription)
         {
-            return null;
+            entityDescription.Load(content, @"Textures\Objects\Artefacts");
+            Enum.TryParse(entityDescription.Type, out CharacterType type);
+
+            return new Artefact(
+                    (int)type,
+                    Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
+                    entityDescription.Scale,
+                    entityDescription.Scale * 10,
+                    entityDescription.Texture,
+                    true
+                    );
         }
         public static Entity SpawnDispenser(EntityDescription entityDescription)
         {

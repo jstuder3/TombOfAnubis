@@ -42,6 +42,8 @@ namespace TombOfAnubis
         public static readonly int InvalidValue = 8;
         [ContentSerializerIgnore]
         public static readonly MapBlock Empty = new MapBlock(new Point(1, 1), new int[] { EmptyValue }, 1);
+        public static readonly MapBlock Wall = new MapBlock(new Point(1, 1), new int[] { WallValue }, 1);
+
 
         #endregion
 

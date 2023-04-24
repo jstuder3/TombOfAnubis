@@ -14,14 +14,6 @@ namespace TombOfAnubis
     {
         public override MapBlock Process(MapBlock input, ContentProcessorContext context)
         {
-            input.BasePriority = input.Priority;
-            if(input.MinOccurences == -1){
-                input.MinOccurences = 0;
-            }
-            if (input.MaxOccurences == -1)
-            {
-                input.MaxOccurences = int.MaxValue;
-            }
             return input;
         }
     }

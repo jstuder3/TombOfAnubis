@@ -627,7 +627,7 @@ namespace TombOfAnubis
             singleton.Map.MapBlocks = new List<MapBlock>();
             foreach(MapBlockDescription mapBlockDesc in singleton.Map.MapBlockDescriptions)
             {
-                MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\"+mapBlockDesc.Name);
+                MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\MapBlocks\"+mapBlockDesc.Name);
                 block.MinOccurences = mapBlockDesc.MinOccurences;
                 block.MaxOccurences = mapBlockDesc.MaxOccurences;
                 block.Priority = mapBlockDesc.Priority;
