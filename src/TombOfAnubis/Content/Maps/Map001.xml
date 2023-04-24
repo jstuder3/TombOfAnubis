@@ -35,13 +35,21 @@
 		  </Item>
 		  <Item>
 			  <MinOccurences>0</MinOccurences>
-			  <MaxOccurences>10</MaxOccurences>
+			  <MaxOccurences>0</MaxOccurences>
 			  <Priority>1</Priority>
 			  <BlockNames>
 				  <Item>Deadend001</Item>
 				  <Item>Deadend002</Item>
 				  <Item>Deadend003</Item>
 				  <Item>Deadend004</Item>
+			  </BlockNames>
+		  </Item>
+		  <Item>
+			  <MinOccurences>0</MinOccurences>
+			  <MaxOccurences>5</MaxOccurences>
+			  <Priority>1</Priority>
+			  <BlockNames>
+				  <Item>Dispenser001</Item>
 			  </BlockNames>
 		  </Item>
 	  </MapBlockDescriptions>

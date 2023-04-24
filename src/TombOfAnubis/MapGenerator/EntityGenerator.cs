@@ -89,7 +89,16 @@ namespace TombOfAnubis
         }
         public static Entity SpawnDispenser(EntityDescription entityDescription)
         {
-            return null;
+            entityDescription.Load(content, @"Textures\Objects\Dispensers");
+
+            _ = Enum.TryParse(entityDescription.Type, out DispenserType type);
+            return new Dispenser(
+                Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
+                entityDescription.Scale,
+                entityDescription.Texture,
+                entityDescription.Animation,
+                type
+                );
         }
         public static Entity SpawnAnubis(EntityDescription entityDescription)
         {
