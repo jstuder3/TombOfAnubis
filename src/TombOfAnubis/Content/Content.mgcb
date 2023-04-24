@@ -130,6 +130,16 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Altar001.xml
 
+#begin Maps/MapBlocks/Altar001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Altar001.xml
+
+#begin Maps/MapBlocks/Artefact001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Artefact001.xml
+
 #begin Maps/MapBlocks/Artefact001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -140,10 +150,45 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Artefact002.xml
 
+#begin Maps/MapBlocks/Artefact002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Artefact002.xml
+
 #begin Maps/MapBlocks/Artefact003.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Artefact003.xml
+
+#begin Maps/MapBlocks/Artefact003.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Artefact003.xml
+
+#begin Maps/MapBlocks/Deadend001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend001.xml
+
+#begin Maps/MapBlocks/Deadend001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend001.xml
+
+#begin Maps/MapBlocks/Deadend002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend002.xml
+
+#begin Maps/MapBlocks/Deadend003.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend003.xml
+
+#begin Maps/MapBlocks/Deadend004.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend004.xml
 
 #begin Textures/Characters/animated_explorer_spritesheet_blue.png
 /importer:TextureImporter
