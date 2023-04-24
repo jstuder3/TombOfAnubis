@@ -7,6 +7,34 @@ namespace TombOfAnubis
     public class CollisionSystem : BaseSystem<Collider>
     {
         public static HashSet<Tuple<Collider, Collider>> SkippedCollisions;
+        public static List<Collider> StaticColliders = new List<Collider>();
+        public static List<Collider> DynamicColliders = new List<Collider>();
+
+        new public static void Register(Collider collider)
+        {
+            components.Add(collider);
+            if (collider.IsStatic())
+            {
+                StaticColliders.Add(collider);
+            }
+            else
+            {
+                DynamicColliders.Add(collider);
+            }
+        }
+        new public static void Deregister(Collider collider)
+        {
+            components.Remove(collider);
+            if (collider.IsStatic())
+            {
+                StaticColliders.Remove(collider);
+            }
+            else
+            {
+                DynamicColliders.Remove(collider);
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             GameLogic.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -22,20 +50,39 @@ namespace TombOfAnubis
         private static void HandleAllCollisions()
         {
             SkippedCollisions = new HashSet<Tuple<Collider, Collider>>();
-            var components = GetComponents();
-            for (int i = 0; i < components.Count; i++)
-            {
-                for (int j = i + 1; j < components.Count; j++)
-                {
-                    if (Intersect(components[i], components[j]))
-                    {
-                        components[i].AddOverlap(components[j]);
-                        components[j].AddOverlap(components[i]);
+            var visibleStaticColliders = GetComponents(StaticColliders);
+            var visibleDynamicColliders = GetComponents(DynamicColliders);
 
-                        GameLogic.OnCollision(components[i].Entity, components[j].Entity);
+            //run static-to-dynamic collision detection
+            for (int i = 0; i < visibleStaticColliders.Count; i++)
+            {
+                for (int j = 0; j < visibleDynamicColliders.Count; j++)
+                {
+                    if (Intersect(visibleStaticColliders[i], visibleDynamicColliders[j]))
+                    {
+                        visibleStaticColliders[i].AddOverlap(visibleDynamicColliders[j]);
+                        visibleDynamicColliders[j].AddOverlap(visibleStaticColliders[i]);
+
+                        GameLogic.OnCollision(visibleStaticColliders[i].Entity, visibleDynamicColliders[j].Entity);
                     }
                 }
             }
+
+            //run dynamic-to-dynamic collision detection
+            for(int i = 0; i< visibleDynamicColliders.Count; i++)
+            {
+                for (int j = i + 1; j < visibleDynamicColliders.Count; j++)
+                {
+                    if (Intersect(visibleDynamicColliders[i], visibleDynamicColliders[j]))
+                    {
+                        visibleDynamicColliders[i].AddOverlap(visibleDynamicColliders[j]);
+                        visibleDynamicColliders[j].AddOverlap(visibleDynamicColliders[i]);
+
+                        GameLogic.OnCollision(visibleDynamicColliders[i].Entity, visibleDynamicColliders[j].Entity);
+                    }
+                }
+            }
+
             // Try skipped collisions again if the still collide
             foreach (Tuple<Collider, Collider> tuple in SkippedCollisions)
             {

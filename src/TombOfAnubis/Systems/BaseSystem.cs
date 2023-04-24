@@ -6,7 +6,7 @@ namespace TombOfAnubis
 {
     public class BaseSystem<T> where T : Component
     {
-        private static List<T> components = new List<T>();
+        protected static List<T> components = new List<T>();
 
         public static void Register(T component)
         {
@@ -29,6 +29,19 @@ namespace TombOfAnubis
             List<T> res = new List<T>();
             foreach (T component in components) {
                 if(component.Visible())
+                {
+                    res.Add(component);
+                }
+            }
+            return res;
+        }
+
+        public static List<T> GetComponents(List<T> localComponents)
+        {
+            List<T> res = new List<T>();
+            foreach (T component in localComponents)
+            {
+                if (component.Visible())
                 {
                     res.Add(component);
                 }
