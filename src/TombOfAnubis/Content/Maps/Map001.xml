@@ -243,27 +243,27 @@
 		  <Item>
 			  <SpawnTileCoordinate> 3 1</SpawnTileCoordinate>
 			  <Scale>0.1 0.1</Scale>
-			  <SpriteTextureName>red_plagiarized_minecraft_dispenser</SpriteTextureName>
-			  <Type>BodyPowerup</Type>
+			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <Type>ItemDispenser</Type>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 6 4</SpawnTileCoordinate>
 			  <Scale>0.1 0.1</Scale>
-			  <SpriteTextureName>blue_plagiarized_minecraft_dispenser</SpriteTextureName>
-			  <Type>WisdomPowerup</Type>
+			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <Type>ItemDispenser</Type>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 6 17</SpawnTileCoordinate>
 			  <Scale>0.1 0.1</Scale>
-			  <SpriteTextureName>green_plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
 			  <!-- (Optional) Type of the entity, will be converted in the session to an enum type -->
-			  <Type>ResurrectionPowerup</Type>
+			  <Type>ItemDispenser</Type>
 		  </Item>
 		  <Item>
 			  <SpawnTileCoordinate> 7 7</SpawnTileCoordinate>
 			  <Scale>0.1 0.1</Scale>
-			  <SpriteTextureName>red_plagiarized_minecraft_dispenser</SpriteTextureName>
-			  <Type>BodyPowerup</Type>
+			  <SpriteTextureName>plagiarized_minecraft_dispenser</SpriteTextureName>
+			  <Type>ItemDispenser</Type>
 		  </Item>
 	  </Dispensers>
 	  <Traps>

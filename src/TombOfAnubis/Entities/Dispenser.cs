@@ -6,9 +6,10 @@ namespace TombOfAnubis
 {
     public enum DispenserType
     {
-        BodyPowerup,
+        ItemDispenser,
+        /*BodyPowerup,
         WisdomPowerup,
-        ResurrectionPowerup,
+        ResurrectionPowerup,*/
         None
     }
     public class Dispenser : Entity
@@ -60,8 +61,8 @@ namespace TombOfAnubis
                 return false;
             }
 
-            if(dispenserType == DispenserType.BodyPowerup)
-            {
+            //if(dispenserType == DispenserType.BodyPowerup)
+            /*{
 
                 switch(random.Next(0, 2))
                 {
@@ -81,11 +82,11 @@ namespace TombOfAnubis
                         return false;
                 }
                 //Console.WriteLine("Put BodyPowerup in somebody's inventory!");
-            }
-            else if(dispenserType == DispenserType.WisdomPowerup)
+            }*/
+            /*else if(dispenserType == DispenserType.WisdomPowerup)
             {
                 Console.WriteLine("WisdomPowerups are not yet implemented!");
-                /*switch (random.Next(0, 1))
+                switch (random.Next(0, 1))
                 {
                     case (0):
                         emptyItemSlot.Item = new InventoryItem(ItemType.IncreaseViewDistance, emptyItemSlot.Entity);
@@ -93,14 +94,46 @@ namespace TombOfAnubis
                         break;
                     default:
                         return false; 
-                }*/
+                }
 
-            }
+            }*/
+            /*
             else if(dispenserType == DispenserType.ResurrectionPowerup)
             {
 
                 emptyItemSlot.Item = new InventoryItem(ItemType.Resurrection, emptyItemSlot.Entity);
                 Console.WriteLine("Put ResurrectionPowerup in somebody's inventory!");
+            }
+            else
+            {
+                Console.WriteLine("Unknown dispenser type!");
+                return false;
+            }*/
+
+            if(dispenserType == DispenserType.ItemDispenser) 
+            {
+
+                switch (random.Next(0, 3))
+                {
+                    case 0: //Speedup
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Speedup, emptyItemSlot.Entity);
+                        Console.WriteLine("Put Speedup in somebody's inventory!");
+                        break;
+                    case 1: //Fist
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Fist, emptyItemSlot.Entity);
+                        Console.WriteLine("Put Fist in somebody's inventory!");
+                        break;
+                    case 2: //Resurrection
+                        emptyItemSlot.Item = new InventoryItem(ItemType.Resurrection, emptyItemSlot.Entity);
+                        Console.WriteLine("Put ResurrectionPowerup in somebody's inventory!");
+                        break;
+                    case 3: //Hiding Cloak (not yet implemented)
+                        emptyItemSlot.Item = new InventoryItem(ItemType.HidingCloak, emptyItemSlot.Entity);
+                        Console.WriteLine("Put HidingCloak in somebody's inventory!");
+                        break;
+                    default:
+                        return false;
+                }
             }
             else
             {
