@@ -366,7 +366,7 @@ namespace TombOfAnubis
                 altarInventory.AddArtefact(playerID);
 
                 float artefactScale = 0.015f;
-                Texture2D artefactTexture = Session.GetInstance().Map.Artefacts[playerID].Texture;
+                Texture2D artefactTexture = Session.GetInstance().ArtefactTextures[playerID];
 
                 Vector2 altarSize = altar.SpriteSize();
                 float artefactWidth = artefactTexture.Width * artefactScale;

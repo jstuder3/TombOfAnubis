@@ -2,6 +2,7 @@
 using QuikGraph;
 using System;
 using System.Collections.Generic;
+using static TombOfAnubis.Character;
 
 namespace TombOfAnubis
 {
@@ -14,7 +15,7 @@ namespace TombOfAnubis
         private Map map;
         private List<EntityDescription> entitiyDescriptions;
         private List<Point> positionsToFill;
-        private List<MapBlock> mapBlocks;
+        private List<MapBlockDescription> mapBlocksDescriptions;
         private Random rand;
         private int numPlayers;
 
@@ -35,7 +36,7 @@ namespace TombOfAnubis
                 }
             }
 
-            mapBlocks = map.MapBlocks;
+            mapBlocksDescriptions = map.MapBlockDescriptions;
             entitiyDescriptions = new List<EntityDescription>();
 
             rand = new Random();
@@ -73,9 +74,9 @@ namespace TombOfAnubis
         private void ResetLevel()
         {
             Populate(level, MapBlock.InvalidValue);
-            foreach (MapBlock piece in mapBlocks)
+            foreach (MapBlockDescription desc in mapBlocksDescriptions)
             {
-                piece.Reset();
+                desc.Reset();
             }
             for (int i = 0; i < LevelDimensions.X; i++)
             {
@@ -112,7 +113,7 @@ namespace TombOfAnubis
                 {
                     MapBlock winner;
                     candidates.Sort(CompareCandidates);
-                    if (!candidates[0].Valid())
+                    if (!candidates[0].Parent.Valid())
                     {
                         winner = candidates[0];
                     }
@@ -178,13 +179,17 @@ namespace TombOfAnubis
         private List<MapBlock> GetCandidates(Point coord)
         {
             List<MapBlock> candidates = new List<MapBlock>();
-            foreach (MapBlock piece in mapBlocks) 
+            foreach(MapBlockDescription mapBlockDescription in mapBlocksDescriptions)
             {
-                if(CanPlace(piece, coord) && piece.Occurences < piece.MaxOccurences)
+                foreach (MapBlock piece in mapBlockDescription.Blocks)
                 {
-                    candidates.Add(piece);
+                    if (CanPlace(piece, coord) && mapBlockDescription.Occurences < mapBlockDescription.MaxOccurences)
+                    {
+                        candidates.Add(piece);
+                    }
                 }
             }
+            
             return candidates;
         }
 
@@ -210,9 +215,9 @@ namespace TombOfAnubis
         }
         private void UpdateLevelPieces(MapBlock winner)
         {
-            foreach (MapBlock piece in mapBlocks)
+            foreach (MapBlockDescription piece in mapBlocksDescriptions)
             {
-                piece.Update(winner.Equals(piece));
+                piece.Update(piece.Blocks.Contains(winner));
             }
         }
         private void Place(MapBlock levelPiece, Point coord)
@@ -236,6 +241,10 @@ namespace TombOfAnubis
                     EntityDescription ed = entityDescription.Clone();
                     ed.SpawnTileCoordinate += coord;
                     ed.SpawnTileCoordinate = new Point(ed.SpawnTileCoordinate.Y, ed.SpawnTileCoordinate.X);
+                    if (entityDescription.ClassName == "TombOfAnubis.Artefact")
+                    {
+                        ed.Type = Enum.GetNames(typeof(CharacterType))[levelPiece.Parent.Occurences];
+                    }
                     entitiyDescriptions.Add(ed);
                 }
             }
@@ -253,7 +262,7 @@ namespace TombOfAnubis
         }
         private bool ValidateLevel()
         {
-            foreach (MapBlock levelPiece in mapBlocks)
+            foreach (MapBlockDescription levelPiece in mapBlocksDescriptions)
             {
                 if (!levelPiece.Valid())
                 {
@@ -267,13 +276,13 @@ namespace TombOfAnubis
             int sum = 0;
             foreach (MapBlock block in blocks)
             {
-                sum += block.Priority;
+                sum += block.Parent.Priority;
             }
             int selection = rand.Next(sum);
             sum = 0;
             foreach (MapBlock block in blocks)
             {
-                sum += block.Priority;
+                sum += block.Parent.Priority;
                 if (selection < sum)
                 {
                     return block;
@@ -287,11 +296,11 @@ namespace TombOfAnubis
         /// </summary>
         private int CompareCandidates(MapBlock b1, MapBlock b2)
         {
-            if (!b1.Valid() && b2.Valid())
+            if (!b1.Parent.Valid() && b2.Parent.Valid())
             {
                 return -1;
             }
-            else if (b1.Valid() && !b2.Valid())
+            else if (b1.Parent.Valid() && !b2.Parent.Valid())
             {
                 return 1;
             }

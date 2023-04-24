@@ -114,10 +114,12 @@ namespace TombOfAnubis
         public World World { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
+        public List<Texture2D> CharacterTextures { get; set; }
 
         public int NumberOfPlayers { get; set; }
 
         public Entity[,] MapTiles { get; set; } 
+
 
 
         // <summary>
@@ -202,6 +204,22 @@ namespace TombOfAnubis
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
             singleton.NumberOfPlayers = gameStartDescription.NumberOfPlayers;
+            var content = singleton.gameScreenManager.Game.Content;
+
+            singleton.CharacterTextures = new List<Texture2D>()
+            {
+                content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_red"),
+                content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_green"),
+                content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_blue"),
+                content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_purple")
+            };
+            singleton.ArtefactTextures = new List<Texture2D>()
+            {
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\red_gear_icon"),
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\green_gear_icon"),
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\blue_gear_icon"),
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\purple_gear_icon")
+            };
 
             singleton.Visibility = Visibility.Game;
 
@@ -625,14 +643,22 @@ namespace TombOfAnubis
         public List<Entity> GenerateMapEntities()
         {
             singleton.Map.MapBlocks = new List<MapBlock>();
-            foreach(MapBlockDescription mapBlockDesc in singleton.Map.MapBlockDescriptions)
+            foreach (MapBlockDescription mapBlockDesc in singleton.Map.MapBlockDescriptions)
             {
-                MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\MapBlocks\"+mapBlockDesc.Name);
-                block.MinOccurences = mapBlockDesc.MinOccurences;
-                block.MaxOccurences = mapBlockDesc.MaxOccurences;
-                block.Priority = mapBlockDesc.Priority;
-                block.BasePriority = mapBlockDesc.Priority;
-                singleton.Map.MapBlocks.Add(block);
+                mapBlockDesc.BasePriority = mapBlockDesc.Priority;
+                mapBlockDesc.Blocks = new List<MapBlock>();
+                if (mapBlockDesc.OccursNPlayerOften)
+                {
+                    mapBlockDesc.MinOccurences = NumberOfPlayers;
+                    mapBlockDesc.MaxOccurences = NumberOfPlayers;
+                }
+                foreach (string mapBlockName in mapBlockDesc.BlockNames)
+                {
+                    MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\MapBlocks\" + mapBlockName);
+                    block.Parent = mapBlockDesc;
+                    mapBlockDesc.Blocks.Add(block);
+                    singleton.Map.MapBlocks.Add(block);
+                }
             }
             MapGenerator gen = new MapGenerator(singleton.Map, NumberOfPlayers);
             List<EntityDescription> entityDescs = gen.GenerateMap();

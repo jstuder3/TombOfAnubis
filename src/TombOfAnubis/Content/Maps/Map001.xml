@@ -17,34 +17,21 @@
 	  </EntityProperties>
 	  <MapBlockDescriptions>
 		  <Item>
-			  <Name>Altar001</Name>
-			  <Priority>1</Priority>
 			  <MinOccurences>1</MinOccurences>
 			  <MaxOccurences>1</MaxOccurences>
+			  <Priority>1</Priority>
+			  <BlockNames>
+				  <Item>Altar001</Item>
+			  </BlockNames>
 		  </Item>
 		  <Item>
-			  <Name>ArtefactOne001</Name>
+			  <OccursNPlayerOften>true</OccursNPlayerOften>
 			  <Priority>1</Priority>
-			  <MinOccurences>1</MinOccurences>
-			  <MaxOccurences>1</MaxOccurences>
-		  </Item>
-		  <Item>
-			  <Name>ArtefactTwo001</Name>
-			  <Priority>1</Priority>
-			  <MinOccurences>1</MinOccurences>
-			  <MaxOccurences>1</MaxOccurences>
-		  </Item>
-		  <Item>
-			  <Name>ArtefactThree001</Name>
-			  <Priority>1</Priority>
-			  <MinOccurences>1</MinOccurences>
-			  <MaxOccurences>1</MaxOccurences>
-		  </Item>
-		  <Item>
-			  <Name>ArtefactFour001</Name>
-			  <Priority>1</Priority>
-			  <MinOccurences>1</MinOccurences>
-			  <MaxOccurences>1</MaxOccurences>
+			  <BlockNames>
+				  <Item>Artefact001</Item>
+				  <Item>Artefact002</Item>
+				  <Item>Artefact003</Item>
+			  </BlockNames>
 		  </Item>
 	  </MapBlockDescriptions>
   </Asset>

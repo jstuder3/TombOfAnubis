@@ -16,8 +16,6 @@
 				<ClassName>TombOfAnubis.Artefact</ClassName>
 				<SpawnTileCoordinate> 1 1</SpawnTileCoordinate>
 				<Scale>0.02 0.02</Scale>
-				<SpriteTextureName>red_gear_icon</SpriteTextureName>
-				<Type>PlayerOne</Type>
 			</Item>
 		</Entities>
 	</Asset>

@@ -2,22 +2,21 @@
 <XnaContent>
 	<Asset Type="TombOfAnubis.MapBlock">
 		<!-- Dimensions of the Tiles array (x: num Rows, y: num Cols)-->
-		<Dimensions>4 3</Dimensions>
+		<Dimensions>5 4</Dimensions>
 		<!-- Array to describe the block layout: 1 is wall, 0 is floor-->
 		<Tiles>
-			1   1   1
-			1   0   1
-			0   0   1
-			1   1   1
+			1   1   1	0
+			1   0   1	1
+			1   0   0	0
+			1   0   1	1
+			1	1	0	1
 		</Tiles>
 		<Entities>
 
 			<Item>
 				<ClassName>TombOfAnubis.Artefact</ClassName>
-				<SpawnTileCoordinate> 1 1</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 1</SpawnTileCoordinate>
 				<Scale>0.02 0.02</Scale>
-				<SpriteTextureName>purple_gear_icon</SpriteTextureName>
-				<Type>PlayerFour</Type>
 			</Item>
 		</Entities>
 	</Asset>

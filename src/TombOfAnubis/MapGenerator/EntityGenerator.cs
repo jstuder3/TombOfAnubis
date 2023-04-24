@@ -19,9 +19,8 @@ namespace TombOfAnubis
         }
         public static List<Entity> GenerateEntities(List<EntityDescription> EntityDescriptions) 
         {
-            //Session.GetInstance().Map.Artefacts.Clear();
+            Session.GetInstance().Map.Artefacts = new List<EntityDescription>();
 
-            //TODO: Generate entities, Fill out Map.Artefacts etc
             List<Entity> entities = new List<Entity>();
 
             foreach (EntityDescription entityDescription in EntityDescriptions)
@@ -31,7 +30,9 @@ namespace TombOfAnubis
                 {
                     Enum.TryParse(entityDescription.Type, out CharacterType type);
                     if ((int)type < Session.GetInstance().NumberOfPlayers)
-                    entities.Add(SpawnCharacter(entityDescription));
+                    {
+                        entities.Add(SpawnCharacter(entityDescription));
+                    }
                 }
                 else if(t == typeof(Artefact)) {
                     entities.Add(SpawnArtefact(entityDescription));
@@ -56,8 +57,10 @@ namespace TombOfAnubis
         }
         public static Entity SpawnCharacter(EntityDescription entityDescription)
         {
-            entityDescription.Load(content, @"Textures\Characters");
+            
             Enum.TryParse(entityDescription.Type, out CharacterType type);
+            entityDescription.SpriteTextureName = Session.GetInstance().CharacterTextures[(int)type].Name;
+            entityDescription.Load(content, "");
             return new Character(
                 type,
                 Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
@@ -69,9 +72,11 @@ namespace TombOfAnubis
                 );
         }
         public static Entity SpawnArtefact(EntityDescription entityDescription)
-        {
-            entityDescription.Load(content, @"Textures\Objects\Artefacts");
+        {   
+            Session.GetInstance().Map.Artefacts.Add(entityDescription);
             Enum.TryParse(entityDescription.Type, out CharacterType type);
+            entityDescription.SpriteTextureName = Session.GetInstance().ArtefactTextures[(int)type].Name;
+            entityDescription.Load(content, "");
 
             return new Artefact(
                     (int)type,

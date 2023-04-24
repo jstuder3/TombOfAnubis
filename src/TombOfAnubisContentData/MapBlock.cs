@@ -21,16 +21,9 @@ namespace TombOfAnubis
 
 
         #region non serializable
+
         [ContentSerializerIgnore]
-        public int MinOccurences { get; set; } = -1;
-        [ContentSerializerIgnore]
-        public int MaxOccurences { get; set; } = -1;
-        [ContentSerializerIgnore]
-        public int Priority { get; set; }
-        [ContentSerializerIgnore]
-        public int Occurences { get; set; }
-        [ContentSerializerIgnore]
-        public int BasePriority {get; set; }
+        public MapBlockDescription Parent { get; set; }
 
         [ContentSerializerIgnore]
         public static readonly int FloorValue = 0;
@@ -51,57 +44,11 @@ namespace TombOfAnubis
         private MapBlock(Point dimensions, int[] values, int priority) {
             Dimensions = dimensions;
             Tiles = values;
-            Priority = priority;
+            //Priority = priority;
         }
         public int GetValue(Point coord)
         {
             return Tiles[coord.X * Dimensions.Y + coord.Y];
-        }
-
-        public void Update(bool placed)
-        {
-            if(placed)
-            {
-                Occurences++;
-                if (Occurences < MinOccurences)
-                {
-                    Priority = 1;
-                }
-                else if (Occurences < MaxOccurences)
-                {
-                    Priority = BasePriority;
-                }
-                else
-                {
-                    Priority = 0;
-                }
-            }
-            else
-            {
-                if (Occurences < MinOccurences)
-                {
-                    Priority++;
-                }
-                else if(Occurences < MaxOccurences)
-                {
-                    Priority = BasePriority;
-                }
-            }
-        }
-        public bool Valid()
-        {
-            bool valid = Occurences >= MinOccurences && Occurences <= MaxOccurences;
-            //if (!valid)
-            //{
-            //    Console.WriteLine("Occurences: " + Occurences + ", Min: " + MinOccurences + ", Max: " + MaxOccurences);
-            //}
-            return valid;
-        }
-
-        public void Reset()
-        {
-            Occurences = 0;
-            Priority = BasePriority;
         }
 
         public class MapBlockReader : ContentTypeReader<MapBlock>
