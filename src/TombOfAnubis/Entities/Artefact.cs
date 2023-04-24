@@ -21,7 +21,7 @@ namespace TombOfAnubis
 
             if (collidable)
             {
-                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
                 AddComponent(collider);
             }
             Initialize();
@@ -46,7 +46,7 @@ namespace TombOfAnubis
 
             if (collidable)
             {
-                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
                 AddComponent(collider);
             }
             Initialize();

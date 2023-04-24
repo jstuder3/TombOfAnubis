@@ -44,7 +44,7 @@ namespace TombOfAnubis
             }
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
             AddComponent(collider);
 
             Discovery discovery = new Discovery();

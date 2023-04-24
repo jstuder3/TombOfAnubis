@@ -7,8 +7,11 @@ namespace TombOfAnubis
     {
         public List<Collider> OverlappingColliders = new List<Collider>();
 
-        public Collider()
+        public bool IsStaticCollider = false;
+
+        public Collider(bool isStatic)
         {
+            IsStaticCollider = isStatic;
             CollisionSystem.Register(this);
         }
 
@@ -30,6 +33,13 @@ namespace TombOfAnubis
             base.Delete();
             CollisionSystem.Deregister(this);
         }
+
+        public virtual bool IsStatic()
+        {
+            return IsStaticCollider;
+        }
+
+
 
     }
 }

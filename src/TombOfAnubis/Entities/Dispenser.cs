@@ -27,7 +27,7 @@ namespace TombOfAnubis
             Sprite sprite = new Sprite(texture, 1, Visibility.Both);
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
             AddComponent(collider);
 
             Discovery discovery = new Discovery();
@@ -84,8 +84,8 @@ namespace TombOfAnubis
             }
             else if(dispenserType == DispenserType.WisdomPowerup)
             {
-
-                switch (random.Next(0, 1))
+                Console.WriteLine("WisdomPowerups are not yet implemented!");
+                /*switch (random.Next(0, 1))
                 {
                     case (0):
                         emptyItemSlot.Item = new InventoryItem(ItemType.IncreaseViewDistance, emptyItemSlot.Entity);
@@ -93,7 +93,7 @@ namespace TombOfAnubis
                         break;
                     default:
                         return false; 
-                }
+                }*/
 
             }
             else if(dispenserType == DispenserType.ResurrectionPowerup)

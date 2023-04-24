@@ -48,6 +48,8 @@ namespace TombOfAnubis
 
         private static bool Intersect(Collider c1, Collider c2)
         {
+            if (c1.IsStatic() && c2.IsStatic()) return false;
+
             switch (c1.GetType().Name, c2.GetType().Name)
             {
                 case (nameof(RectangleCollider), nameof(RectangleCollider)):

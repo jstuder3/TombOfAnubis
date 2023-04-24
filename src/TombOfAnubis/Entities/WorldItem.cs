@@ -19,7 +19,7 @@ namespace TombOfAnubis
             Sprite sprite = new Sprite(ItemTextureLibrary.GetTexture(itemType), 0, Visibility.Game);
             AddComponent(sprite);
 
-            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), false);
             AddComponent(collider);
 
             ItemType = itemType;

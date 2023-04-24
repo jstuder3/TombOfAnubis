@@ -16,7 +16,14 @@ namespace TombOfAnubis
         private Vector2 centerPosition { get; set; }
 
 
-        public RectangleCollider(Vector2 position, Vector2 size) : base()
+        public RectangleCollider(Vector2 position, Vector2 size) : base(false)
+        {
+            Size = size;
+            Position = position;
+            centerPosition = position + new Vector2(size.X / 2, size.Y / 2);
+        }
+
+        public RectangleCollider(Vector2 position, Vector2 size, bool isStaticCollider = false) : base(isStaticCollider)
         {
             Size = size;
             Position = position;

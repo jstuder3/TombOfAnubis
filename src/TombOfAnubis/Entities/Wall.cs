@@ -14,7 +14,7 @@ namespace TombOfAnubis
             AddComponent(sprite);
             if (collidable)
             {
-                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+                RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
                 AddComponent(collider);
             }
 

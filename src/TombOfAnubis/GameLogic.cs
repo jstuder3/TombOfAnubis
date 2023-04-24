@@ -48,7 +48,7 @@ namespace TombOfAnubis
                     OnCollision((Anubis)source, (Wall)target);
                     break;
                 case (nameof(Wall), nameof(Anubis)):
-                    OnCollision((Wall)target, (Anubis)source);
+                    OnCollision((Anubis)target, (Wall)source);
                     break;
                 case (nameof(Character), nameof(Altar)):
                     OnCollision((Character)source, (Altar)target);

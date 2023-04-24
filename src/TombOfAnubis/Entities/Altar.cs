@@ -19,7 +19,7 @@ namespace TombOfAnubis
             Inventory inventory = new Inventory(numPlayers, 0, this);
             AddComponent(inventory);
 
-            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), true);
             AddComponent(collider);
 
             Discovery discovery = new Discovery();

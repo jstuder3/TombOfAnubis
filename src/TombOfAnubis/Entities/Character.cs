@@ -49,7 +49,7 @@ namespace TombOfAnubis
             Inventory inventory = new Inventory(1, 3, this);
             AddComponent(inventory);
 
-            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size());
+            RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), false);
             AddComponent(collider);
 
             Initialize();
