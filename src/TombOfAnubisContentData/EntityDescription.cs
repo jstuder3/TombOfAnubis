@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
@@ -45,6 +46,11 @@ namespace TombOfAnubis
                     startPosition += Animation[i].FrameSize.Y;
                 }
             }
+        }
+        public EntityDescription Clone()
+        {
+            var serialized = JsonConvert.SerializeObject(this);
+            return JsonConvert.DeserializeObject<EntityDescription>(serialized);
         }
     }
 }

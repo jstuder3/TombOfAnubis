@@ -6,7 +6,11 @@ namespace TombOfAnubis
 {
     public class Character : Entity
     {
-        public Character(int playerID, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed, List<AnimationClip> animationClips, List<AnimationClip> minimapAnimationClips)
+        public enum CharacterType
+        {
+            PlayerOne, PlayerTwo, PlayerThree, PlayerFour
+        }
+        public Character(CharacterType type, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed, List<AnimationClip> animationClips, List<AnimationClip> minimapAnimationClips)
         {
             Transform transform = new Transform(position, scale, Visibility.Game);
             AddComponent(transform);
@@ -35,8 +39,7 @@ namespace TombOfAnubis
                 animation.SetActiveClip(AnimationClipType.Idle);
             }
             AddComponent(sprite);
-
-            Player player = new Player(playerID);
+            Player player = new Player((int)type);
             AddComponent(player);
 
             Input input = new Input();

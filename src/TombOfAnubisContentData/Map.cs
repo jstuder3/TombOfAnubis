@@ -501,58 +501,6 @@ namespace TombOfAnubis
                 new Rectangle(0, 5 * map.SourceTileSize.Y, 2 * map.SourceTileSize.X, map.SourceTileSize.Y)};
 
                 map.MapBlockDescriptions = input.ReadObject<List<MapBlockDescription>>();
-                // Characters
-                //map.Characters = input.ReadObject<List<EntityDescription>>();
-                //foreach(EntityDescription ed in map.Characters)
-                //{
-                //    ed.Load(input.ContentManager, @"Textures\Characters");
-                //}
-
-                //// Anubis
-                //map.Anubis = input.ReadObject<EntityDescription>();
-                //map.Anubis.Load(input.ContentManager, @"Textures\Characters");
-                //map.Anubis.Texture = input.ContentManager.Load<Texture2D>(
-                //        Path.Combine(@"Textures\Characters",
-                //        map.Anubis.SpriteTextureName));
-
-                //// Artefacts
-                //map.Artefacts = input.ReadObject<List<EntityDescription>>();
-                //foreach (EntityDescription ed in map.Artefacts)
-                //{
-                //    ed.Load(input.ContentManager, @"Textures\Objects\Artefacts");
-
-                //}
-
-                //// Altar
-                //map.Altar = input.ReadObject<EntityDescription>();
-                //map.Altar.Load(input.ContentManager, @"Textures\Objects\Altar");
-
-                //// Dispensers
-                //map.Dispensers = input.ReadObject<List<EntityDescription>>();
-                //foreach (EntityDescription ed in map.Dispensers)
-                //{
-                //    ed.Load(input.ContentManager, @"Textures\Objects\Dispensers");
-                //}
-
-                //// Traps
-                //map.Traps = input.ReadObject<List<EntityDescription>>();
-                //foreach(EntityDescription ed in map.Traps)
-                //{
-                //    ed.Load(input.ContentManager, @"Textures\Objects\Traps");
-                //}
-
-                //// Buttons
-                //map.Buttons = input.ReadObject<List<EntityDescription>>();
-                //foreach (EntityDescription ed in map.Buttons)
-                //{
-                //    ed.Load(input.ContentManager, @"Textures\Objects\Buttons");
-                //}
-
-                // Fist
-                //map.Fist = input.ReadObject<EntityDescription>();
-                //map.Fist.Load(input.ContentManager, @"Textures\Objects\Items");
-
-
                 return map;
             }
         }

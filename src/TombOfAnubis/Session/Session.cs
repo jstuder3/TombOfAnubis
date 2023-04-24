@@ -201,6 +201,7 @@ namespace TombOfAnubis
 
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
+            singleton.NumberOfPlayers = gameStartDescription.NumberOfPlayers;
 
             singleton.Visibility = Visibility.Game;
 
@@ -217,8 +218,10 @@ namespace TombOfAnubis
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
+            EntityGenerator.Initialize(singleton.gameScreenManager.Game.Content);
+            List<Entity> entities = singleton.GenerateMapEntities();
+            singleton.World.AddChildren(entities);
 
-            singleton.NumberOfPlayers = gameStartDescription.NumberOfPlayers;
 
             //for (int i = 0; i < gameStartDescription.NumberOfPlayers; i++)
             //{
@@ -329,7 +332,7 @@ namespace TombOfAnubis
             //                        singleton.Map.Altar.Scale,
             //                        singleton.Map.Altar.Texture,
             //                        singleton.NumberOfPlayers));
-            
+
             //foreach(var trap in singleton.Map.Traps)
             //{
             //    _ = Enum.TryParse(trap.Type, out TrapType type);
@@ -420,8 +423,6 @@ namespace TombOfAnubis
             // Create the undiscovered texture. This should be loaded from a png and prettier than just a black square.
             singleton.Map.UndiscoveredTexture = new Texture2D(singleton.gameScreenManager.GraphicsDevice, 1, 1);
             singleton.Map.UndiscoveredTexture.SetData(new[] { Color.SaddleBrown });
-
-            singleton.GenerateMapEntities();
 
         }
 

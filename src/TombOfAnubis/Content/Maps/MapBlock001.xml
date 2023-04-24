@@ -17,6 +17,7 @@
 				<SpawnTileCoordinate> 2 0</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<SpriteTextureName>animated_explorer_spritesheet_red</SpriteTextureName>
+				<Type>PlayerOne</Type>
 				<Animation>
 					<Item>
 						<Type>WalkingLeft</Type>
@@ -55,6 +56,7 @@
 				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<SpriteTextureName>animated_explorer_spritesheet_green</SpriteTextureName>
+				<Type>PlayerTwo</Type>
 				<Animation>
 					<Item>
 						<Type>WalkingLeft</Type>
@@ -93,6 +95,7 @@
 				<SpawnTileCoordinate> 4 2</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<SpriteTextureName>animated_explorer_spritesheet_blue</SpriteTextureName>
+				<Type>PlayerThree</Type>
 				<Animation>
 					<Item>
 						<Type>WalkingLeft</Type>
@@ -131,6 +134,7 @@
 				<SpawnTileCoordinate> 2 4</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<SpriteTextureName>animated_explorer_spritesheet_purple</SpriteTextureName>
+				<Type>PlayerFour</Type>
 				<Animation>
 					<Item>
 						<Type>WalkingLeft</Type>

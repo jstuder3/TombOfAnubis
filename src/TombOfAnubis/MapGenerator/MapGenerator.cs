@@ -218,6 +218,16 @@ namespace TombOfAnubis
                     }
                 }
             }
+            if(levelPiece.Entities != null)
+            {
+                foreach (EntityDescription entityDescription in levelPiece.Entities)
+                {
+                    EntityDescription ed = entityDescription.Clone();
+                    ed.SpawnTileCoordinate += coord;
+                    ed.SpawnTileCoordinate = new Point(ed.SpawnTileCoordinate.Y, ed.SpawnTileCoordinate.X);
+                    entitiyDescriptions.Add(ed);
+                }
+            }
         }
 
         private void Populate(int[,] arr, int value)
