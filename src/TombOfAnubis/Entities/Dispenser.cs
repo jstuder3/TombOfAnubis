@@ -111,6 +111,8 @@ namespace TombOfAnubis
             GetComponent<Animation>().SetActiveClip(AnimationClipType.Closed);
             particleEmitter.EndEmitter();
 
+            itemEmitter.EndEmitter();
+
         }
 
         public void EndCooldown()
