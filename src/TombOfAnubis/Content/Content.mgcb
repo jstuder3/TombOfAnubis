@@ -130,10 +130,25 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Altar001.xml
 
+#begin Maps/MapBlocks/Altar001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Altar001.xml
+
 #begin Maps/MapBlocks/Artefact001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Artefact001.xml
+
+#begin Maps/MapBlocks/Artefact001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Artefact001.xml
+
+#begin Maps/MapBlocks/Artefact002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Artefact002.xml
 
 #begin Maps/MapBlocks/Artefact002.xml
 /importer:XmlImporter
@@ -145,10 +160,25 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Artefact003.xml
 
+#begin Maps/MapBlocks/Artefact003.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Artefact003.xml
+
 #begin Maps/MapBlocks/Deadend001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Deadend001.xml
+
+#begin Maps/MapBlocks/Deadend001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend001.xml
+
+#begin Maps/MapBlocks/Deadend002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend002.xml
 
 #begin Maps/MapBlocks/Deadend002.xml
 /importer:XmlImporter
@@ -160,6 +190,16 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Deadend003.xml
 
+#begin Maps/MapBlocks/Deadend003.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend003.xml
+
+#begin Maps/MapBlocks/Deadend004.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Deadend004.xml
+
 #begin Maps/MapBlocks/Deadend004.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -170,10 +210,35 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Dispenser001.xml
 
-#begin Maps/MapBlocks/Trap001.xml
+#begin Maps/MapBlocks/Dispenser001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
-/build:Maps/MapBlocks/Trap001.xml
+/build:Maps/MapBlocks/Dispenser001.xml
+
+#begin Maps/MapBlocks/Dispenser002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Dispenser002.xml
+
+#begin Maps/MapBlocks/TrappedArtefact001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/TrappedArtefact001.xml
+
+#begin Maps/MapBlocks/TrappedArtefact001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/TrappedArtefact001.xml
+
+#begin Maps/MapBlocks/TrappedDispenser001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/TrappedDispenser001.xml
+
+#begin Maps/MapBlocks/TrappedDispenser001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/TrappedDispenser001.xml
 
 #begin Textures/Characters/animated_explorer_spritesheet_blue.png
 /importer:TextureImporter

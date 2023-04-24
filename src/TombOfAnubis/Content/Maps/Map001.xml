@@ -31,11 +31,12 @@
 				  <Item>Artefact001</Item>
 				  <Item>Artefact002</Item>
 				  <Item>Artefact003</Item>
+				  <Item>TrappedArtefact001</Item>
 			  </BlockNames>
 		  </Item>
 		  <Item>
 			  <MinOccurences>0</MinOccurences>
-			  <MaxOccurences>0</MaxOccurences>
+			  <MaxOccurences>100</MaxOccurences>
 			  <Priority>1</Priority>
 			  <BlockNames>
 				  <Item>Deadend001</Item>
@@ -46,18 +47,12 @@
 		  </Item>
 		  <Item>
 			  <MinOccurences>0</MinOccurences>
-			  <MaxOccurences>0</MaxOccurences>
-			  <Priority>1</Priority>
+			  <MaxOccurences>5</MaxOccurences>
+			  <Priority>4</Priority>
 			  <BlockNames>
 				  <Item>Dispenser001</Item>
-			  </BlockNames>
-		  </Item>
-		  <Item>
-			  <MinOccurences>0</MinOccurences>
-			  <MaxOccurences>5</MaxOccurences>
-			  <Priority>1</Priority>
-			  <BlockNames>
-				  <Item>Trap001</Item>
+				  <Item>Dispenser002</Item>
+				  <Item>TrappedDispenser001</Item>
 			  </BlockNames>
 		  </Item>
 	  </MapBlockDescriptions>
