@@ -170,6 +170,11 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Dispenser001.xml
 
+#begin Maps/MapBlocks/Trap001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Trap001.xml
+
 #begin Textures/Characters/animated_explorer_spritesheet_blue.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -13,6 +14,7 @@ namespace TombOfAnubis
     public static class EntityGenerator
     {
         private static ContentManager content;
+        private static List<Entity> entities;
         public static void Initialize(ContentManager _content)
         {
             content = _content;
@@ -21,7 +23,7 @@ namespace TombOfAnubis
         {
             Session.GetInstance().Map.Artefacts = new List<EntityDescription>();
 
-            List<Entity> entities = new List<Entity>();
+            entities = new List<Entity>();
 
             foreach (EntityDescription entityDescription in EntityDescriptions)
             {
@@ -122,11 +124,36 @@ namespace TombOfAnubis
         }
         public static Entity SpawnTrap(EntityDescription entityDescription)
         {
-            return null;
+            entityDescription.Load(content, @"Textures\Objects\Traps");
+            _ = Enum.TryParse(entityDescription.Type, out TrapType type);
+            return new Trap(
+                type,
+                Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
+                entityDescription.Scale,
+                entityDescription.Texture,
+                entityDescription.Animation
+                );
         }
         public static Entity SpawnButton(EntityDescription entityDescription)
         {
-            return null;
+            entityDescription.Load(content, @"Textures\Objects\Buttons");
+
+            List<Vector2> connectedTraps = new List<Vector2>();
+
+            foreach (EntityDescription trapEntity in entityDescription.ConnectedTrapPositions)
+            {
+                connectedTraps.Add(Session.GetInstance().Map.CreateEntityTileCenteredPositionSpriteless(trapEntity));
+            }
+            _ = Enum.TryParse(entityDescription.Type, out ButtonType type);
+            return new Button(
+                type,
+                Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
+                entityDescription.Scale,
+                entityDescription.Texture,
+                entityDescription.Animation,
+                connectedTraps,
+                entities
+                );
         }
     }
 }

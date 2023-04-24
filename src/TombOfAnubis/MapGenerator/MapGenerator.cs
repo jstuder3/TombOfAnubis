@@ -245,6 +245,18 @@ namespace TombOfAnubis
                     {
                         ed.Type = Enum.GetNames(typeof(CharacterType))[levelPiece.Parent.Occurences];
                     }
+                    if(entityDescription.ClassName == "TombOfAnubis.Button")
+                    {
+                        List<EntityDescription> connectedTraps = new List<EntityDescription>();
+                        foreach(EntityDescription connectedTrap in entityDescription.ConnectedTrapPositions)
+                        {
+                            EntityDescription con = connectedTrap.Clone();
+                            con.SpawnTileCoordinate += coord;
+                            con.SpawnTileCoordinate = new Point(con.SpawnTileCoordinate.Y, con.SpawnTileCoordinate.X);
+                            connectedTraps.Add(con);
+                        }
+                        ed.ConnectedTrapPositions = connectedTraps;
+                    }
                     entitiyDescriptions.Add(ed);
                 }
             }

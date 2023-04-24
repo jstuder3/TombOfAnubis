@@ -46,10 +46,18 @@
 		  </Item>
 		  <Item>
 			  <MinOccurences>0</MinOccurences>
-			  <MaxOccurences>5</MaxOccurences>
+			  <MaxOccurences>0</MaxOccurences>
 			  <Priority>1</Priority>
 			  <BlockNames>
 				  <Item>Dispenser001</Item>
+			  </BlockNames>
+		  </Item>
+		  <Item>
+			  <MinOccurences>0</MinOccurences>
+			  <MaxOccurences>5</MaxOccurences>
+			  <Priority>1</Priority>
+			  <BlockNames>
+				  <Item>Trap001</Item>
 			  </BlockNames>
 		  </Item>
 	  </MapBlockDescriptions>

@@ -20,7 +20,7 @@ namespace TombOfAnubis
     {
         public ButtonType Type;
 
-        public Button(ButtonType type, Vector2 position, Vector2 scale, Texture2D texture, List<AnimationClip> animationClips, List<Vector2> positionsOfTrapsToConnect)
+        public Button(ButtonType type, Vector2 position, Vector2 scale, Texture2D texture, List<AnimationClip> animationClips, List<Vector2> positionsOfTrapsToConnect, List<Entity> existingEntities)
         {
             Type = type;
 
@@ -64,19 +64,24 @@ namespace TombOfAnubis
 
             // iterate over list of trap positions, add all traps that are close to those positions
             List<Trap> connectedTraps = new List<Trap>();
-            foreach (Trap trap in singleton.World.GetChildrenOfType<Trap>())
+            foreach (Entity e in existingEntities)
             {
-                foreach(Vector2 targetTrapPosition in positionsOfTrapsToConnect)
+                if(e.GetType() == typeof(Trap))
                 {
-                    float distance = (trap.GetComponent<RectangleCollider>().GetCenter() - targetTrapPosition).Length();
-                    if (distance <= tolerance)
+                    Trap trap = (Trap)e;
+                    foreach (Vector2 targetTrapPosition in positionsOfTrapsToConnect)
                     {
-                        if (!connectedTraps.Contains<Trap>(trap))
+                        float distance = (trap.GetComponent<RectangleCollider>().GetCenter() - targetTrapPosition).Length();
+                        if (distance <= tolerance)
                         {
-                            connectedTraps.Add(trap);
-                            trap.ConnectButton(this);
+                            if (!connectedTraps.Contains<Trap>(trap))
+                            {
+                                connectedTraps.Add(trap);
+                                trap.ConnectButton(this);
+                            }
                         }
                     }
+                
                 }
             }
 
