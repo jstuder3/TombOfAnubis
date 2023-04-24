@@ -244,7 +244,7 @@ namespace TombOfAnubis
                 pec.SpawnConeDegrees = 360f;
                 pec.Drag = 0.5f;
 
-                anubis.AddComponent(new ParticleEmitter(pec));
+                character.AddComponent(new ParticleEmitter(pec));
             }
 
             bool gameover = true;
