@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using QuikGraph.Algorithms;
-using QuikGraph.Collections;
 using QuikGraph;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,6 @@ namespace TombOfAnubis
         private static readonly int EdgeCostRoad = 0;
         private static readonly int EdgeCostFloorEmpty = 1;
         private static readonly int EdgeCostEmptyEmpty = 1;
-        private static readonly int EdgeCostDoor = 1;
 
 
         private int[,] level;
@@ -23,7 +21,6 @@ namespace TombOfAnubis
         private HashSet<Point> floors;
         private HashSet<Point> walls;
         private HashSet<Point> emptys;
-        // Empty -> Edge(floor, floor)
         private List<Dictionary<Point, Edge<Point>>> doors;
 
         // Graph to complete the paths between the building blocks

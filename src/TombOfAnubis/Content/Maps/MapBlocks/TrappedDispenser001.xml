@@ -37,8 +37,8 @@
 			<Item>
 				<ClassName>TombOfAnubis.Trap</ClassName>
 				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
-				<Offset>-130 0</Offset>
-				<Scale>0.5 0.5</Scale>
+				<Offset>-105 0</Offset>
+				<Scale>0.42 0.42</Scale>
 				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
 				<Type>StaticSpikes</Type>
 				<Animation>
@@ -62,7 +62,7 @@
 				<ClassName>TombOfAnubis.Trap</ClassName>
 				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
 				<Offset>0 0</Offset>
-				<Scale>0.5 0.5</Scale>
+				<Scale>0.42 0.42</Scale>
 				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
 				<Type>StaticSpikes</Type>
 				<Animation>
@@ -85,8 +85,8 @@
 			<Item>
 				<ClassName>TombOfAnubis.Trap</ClassName>
 				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
-				<Offset>130 0</Offset>
-				<Scale>0.5 0.5</Scale>
+				<Offset>105 0</Offset>
+				<Scale>0.42 0.42</Scale>
 				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
 				<Type>StaticSpikes</Type>
 				<Animation>
@@ -115,7 +115,7 @@
 				<ConnectedTrapPositions>
 					<Item>
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
-						<Offset>-130 0</Offset>
+						<Offset>-105 0</Offset>
 					</Item>
 					<Item>
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
@@ -123,7 +123,7 @@
 					</Item>
 					<Item>
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
-						<Offset>130 0</Offset>
+						<Offset>105 0</Offset>
 					</Item>
 				</ConnectedTrapPositions>
 				<Animation>
@@ -152,7 +152,7 @@
 				<ConnectedTrapPositions>
 					<Item>
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
-						<Offset>-130 0</Offset>
+						<Offset>-105 0</Offset>
 					</Item>
 					<Item>
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
@@ -160,7 +160,7 @@
 					</Item>
 					<Item>
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
-						<Offset>130 0</Offset>
+						<Offset>105 0</Offset>
 					</Item>
 				</ConnectedTrapPositions>
 				<Animation>

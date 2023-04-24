@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using QuikGraph;
 using System;
 using System.Collections.Generic;
 using static TombOfAnubis.Character;
@@ -9,28 +8,26 @@ namespace TombOfAnubis
     public class MapGenerator
     {
 
-        public Point LevelDimensions { get; set; }
+        public Point MapDimensions { get; set; }
 
-        private int[,] level;
+        private int[,] collisionLayer;
         private Map map;
         private List<EntityDescription> entitiyDescriptions;
         private List<Point> positionsToFill;
         private List<MapBlockDescription> mapBlocksDescriptions;
         private Random rand;
-        private int numPlayers;
 
-        public MapGenerator(Map map, int numPlayers)
+        public MapGenerator(Map map)
         {
             this.map = map;
-            this.numPlayers = numPlayers;
-            LevelDimensions = map.MapDimensions;
-            level = new int[LevelDimensions.X, LevelDimensions.Y];
-            Populate(level, MapBlock.InvalidValue);
+            MapDimensions = map.MapDimensions;
+            collisionLayer = new int[MapDimensions.X, MapDimensions.Y];
+            Populate(collisionLayer, MapBlock.InvalidValue);
             positionsToFill = new List<Point>();
 
-            for (int i = 0; i < LevelDimensions.X; i++)
+            for (int i = 0; i < MapDimensions.X; i++)
             {
-                for(int j = 0;  j < LevelDimensions.Y; j++)
+                for(int j = 0;  j < MapDimensions.Y; j++)
                 {
                     positionsToFill.Add(new Point(i, j));
                 }
@@ -44,53 +41,60 @@ namespace TombOfAnubis
         }
         public List<EntityDescription> GenerateMap()
         {
+            Console.WriteLine("Level generation started ...");
             int numAttempts = 0;
             int maxAttempts = 50;
             while(numAttempts < maxAttempts)
             {
                 numAttempts++;
-                CreateLevel();
-                if (ValidateLevel())
+                Createmap();
+                if (ValidateMap())
                 {
-                    PrintLevel();
-                    MapGraph levelGraph = new MapGraph(level);
-                    if (levelGraph.ConnectLevelBlocks())
+                    MapGraph mapGraph = new MapGraph(collisionLayer);
+                    if (mapGraph.ConnectLevelBlocks())
                     {
                         break;
                     }
                 }
-                ResetLevel();
+                ResetMap();
                
+            }
+            if(numAttempts < maxAttempts)
+            {
+                Console.WriteLine("Generated level in " + (numAttempts) + " attempt(s).");
+            }
+            else
+            {
+                Console.WriteLine("Level generation failed.");
             }
             PrintLevel();
 
-            Console.WriteLine("Num Attempts: " + (numAttempts));
-            map.CollisionLayer = Flatten(level);
+            map.CollisionLayer = Flatten(collisionLayer);
             map.TranslateCollisionToBaseLayer();
 
             return entitiyDescriptions;
         }
 
-        private void ResetLevel()
+        private void ResetMap()
         {
-            Populate(level, MapBlock.InvalidValue);
+            Populate(collisionLayer, MapBlock.InvalidValue);
             foreach (MapBlockDescription desc in mapBlocksDescriptions)
             {
                 desc.Reset();
             }
-            for (int i = 0; i < LevelDimensions.X; i++)
+            for (int i = 0; i < MapDimensions.X; i++)
             {
-                for (int j = 0; j < LevelDimensions.Y; j++)
+                for (int j = 0; j < MapDimensions.Y; j++)
                 {
                     positionsToFill.Add(new Point(i, j));
                 }
             }
         }
-        private void CreateLevel()
+        private void Createmap()
         {
             CreateBorder();
             int roundsWithoutPlacement = 0;
-            int maxRoundsWithoutPlacement = 2 * LevelDimensions.X * LevelDimensions.Y;
+            int maxRoundsWithoutPlacement = 2 * MapDimensions.X * MapDimensions.Y;
             int placedBlocks = 0;
             while (positionsToFill.Count != 0)
             {
@@ -100,7 +104,6 @@ namespace TombOfAnubis
                 {
                     if (roundsWithoutPlacement >= maxRoundsWithoutPlacement && CanPlace(MapBlock.Empty, coord))
                     {
-                        //PrintLevel();
                         Place(MapBlock.Empty, coord);
                     }
                     else
@@ -131,11 +134,11 @@ namespace TombOfAnubis
         }
         private void CreateBorder()
         {
-            for(int i = 0; i < LevelDimensions.X; i += MapBlock.Empty.Dimensions.X)
+            for(int i = 0; i < MapDimensions.X; i += MapBlock.Empty.Dimensions.X)
             {
-                for(int j =0; j < LevelDimensions.Y; j += MapBlock.Empty.Dimensions.Y)
+                for(int j =0; j < MapDimensions.Y; j += MapBlock.Empty.Dimensions.Y)
                 {
-                    if(i == 0 || i == LevelDimensions.X - MapBlock.Wall.Dimensions.X || j == 0 || j == LevelDimensions.Y - MapBlock.Wall.Dimensions.Y)
+                    if(i == 0 || i == MapDimensions.X - MapBlock.Wall.Dimensions.X || j == 0 || j == MapDimensions.Y - MapBlock.Wall.Dimensions.Y)
                     {
                         if(CanPlace(MapBlock.Wall, new Point(j, i)))
                         {
@@ -143,9 +146,9 @@ namespace TombOfAnubis
                         }
                     }
                     if (i == MapBlock.Empty.Dimensions.X || 
-                        i == LevelDimensions.X - MapBlock.Empty.Dimensions.X - MapBlock.Wall.Dimensions.X  || 
+                        i == MapDimensions.X - MapBlock.Empty.Dimensions.X - MapBlock.Wall.Dimensions.X  || 
                         j == MapBlock.Empty.Dimensions.Y || 
-                        j == LevelDimensions.Y - MapBlock.Empty.Dimensions.Y - MapBlock.Wall.Dimensions.Y)
+                        j == MapDimensions.Y - MapBlock.Empty.Dimensions.Y - MapBlock.Wall.Dimensions.Y)
                     {
                         if (CanPlace(MapBlock.Empty, new Point(j, i)))
                         {
@@ -198,14 +201,14 @@ namespace TombOfAnubis
             return positionsToFill[rand.Next(positionsToFill.Count)];
         }
 
-        private bool CanPlace(MapBlock piece, Point coord)
+        private bool CanPlace(MapBlock block, Point coord)
         {
-            for (int i = 0; i < piece.Dimensions.X; i++)
+            for (int i = 0; i < block.Dimensions.X; i++)
             {
-                for (int j = 0; j < piece.Dimensions.Y; j++)
+                for (int j = 0; j < block.Dimensions.Y; j++)
                 {
                     Point dst = coord + new Point(i, j);
-                    if (!ValidCoords(dst) || level[dst.X, dst.Y] != MapBlock.InvalidValue)
+                    if (!ValidCoords(dst) || collisionLayer[dst.X, dst.Y] != MapBlock.InvalidValue)
                     {
                         return false;
                     }
@@ -215,37 +218,38 @@ namespace TombOfAnubis
         }
         private void UpdateLevelPieces(MapBlock winner)
         {
-            foreach (MapBlockDescription piece in mapBlocksDescriptions)
+            foreach (MapBlockDescription block in mapBlocksDescriptions)
             {
-                piece.Update(piece.Blocks.Contains(winner));
+                block.Update(block.Blocks.Contains(winner));
             }
         }
-        private void Place(MapBlock levelPiece, Point coord)
+        private void Place(MapBlock block, Point coord)
         {
-            for (int i = 0; i < levelPiece.Dimensions.X; i++)
+            for (int i = 0; i < block.Dimensions.X; i++)
             {
-                for(int j = 0; j < levelPiece.Dimensions.Y; j++)
+                for(int j = 0; j < block.Dimensions.Y; j++)
                 {
                     Point dest = coord + new Point(i, j);
                     if (ValidCoords(dest))
                     {
-                        level[dest.X, dest.Y] = levelPiece.GetValue(new Point(i, j));
+                        collisionLayer[dest.X, dest.Y] = block.GetValue(new Point(i, j));
                         positionsToFill.Remove(dest);
                     }
                 }
             }
-            if(levelPiece.Entities != null)
+            if(block.Entities != null)
             {
-                foreach (EntityDescription entityDescription in levelPiece.Entities)
+                foreach (EntityDescription entityDescription in block.Entities)
                 {
                     EntityDescription ed = entityDescription.Clone();
                     ed.SpawnTileCoordinate += coord;
                     ed.SpawnTileCoordinate = new Point(ed.SpawnTileCoordinate.Y, ed.SpawnTileCoordinate.X);
-                    if (entityDescription.ClassName == "TombOfAnubis.Artefact")
+                    Type t = Type.GetType(entityDescription.ClassName);
+                    if (t == typeof(Artefact))
                     {
-                        ed.Type = Enum.GetNames(typeof(CharacterType))[levelPiece.Parent.Occurences];
+                        ed.Type = Enum.GetNames(typeof(CharacterType))[block.Parent.Occurences];
                     }
-                    if(entityDescription.ClassName == "TombOfAnubis.Button")
+                    if(t == typeof(Button))
                     {
                         List<EntityDescription> connectedTraps = new List<EntityDescription>();
                         foreach(EntityDescription connectedTrap in entityDescription.ConnectedTrapPositions)
@@ -270,13 +274,13 @@ namespace TombOfAnubis
         }
         private bool ValidCoords(Point levelCoord)
         {
-            return levelCoord.X >= 0 && levelCoord.X < LevelDimensions.X && levelCoord.Y >= 0 && levelCoord.Y < LevelDimensions.Y;
+            return levelCoord.X >= 0 && levelCoord.X < MapDimensions.X && levelCoord.Y >= 0 && levelCoord.Y < MapDimensions.Y;
         }
-        private bool ValidateLevel()
+        private bool ValidateMap()
         {
-            foreach (MapBlockDescription levelPiece in mapBlocksDescriptions)
+            foreach (MapBlockDescription mapBlockDescription in mapBlocksDescriptions)
             {
-                if (!levelPiece.Valid())
+                if (!mapBlockDescription.Valid())
                 {
                     return false;
                 }
@@ -326,11 +330,11 @@ namespace TombOfAnubis
         public void PrintLevel()
         {
             Console.WriteLine("----------------Level----------------");
-            for (int i = 0; i < level.GetLength(0); i++)
+            for (int i = 0; i < collisionLayer.GetLength(0); i++)
             {
-                for (int j = 0; j < level.GetLength(1); j++)
+                for (int j = 0; j < collisionLayer.GetLength(1); j++)
                 {
-                    Console.Write(level[i, j] + ",");
+                    Console.Write(collisionLayer[i, j] + ",");
                 }
                 Console.WriteLine();
             }
