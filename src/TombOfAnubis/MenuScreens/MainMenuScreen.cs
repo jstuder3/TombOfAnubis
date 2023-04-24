@@ -59,13 +59,13 @@ namespace TombOfAnubis
         private SpriteFont dialogFont;
 
         private Texture2D dialogTexture;
-        private float dialogTransparency = 0.8f;
+        private float dialogTransparency = 1.0f;
         private Rectangle dialogDimension;
 
         private Texture2D buttonTexture;
-        private float buttonTransparency = 0.8f;
-        private int dialogWidth = 700, dialogHeight = 300;
-        private float marginBottom = 0.1f, buttonSpacing = 0.15f;
+        private float buttonTransparency = 0.0f;
+        private int dialogWidth = 800, dialogHeight = 400;
+        private float marginTop = 0.35f, marginBottom = 0.3f, buttonSpacing = 0.15f;
         private int buttonOptionWidth = 150, buttonOptionHeight = 50;
 
         #endregion
@@ -140,8 +140,9 @@ namespace TombOfAnubis
             SetElementPosition(viewport);
 
             // Dialog Content
-            dialogTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
-            dialogTexture.SetData(new[] { Color.Black });
+            //dialogTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+            //dialogTexture.SetData(new[] { Color.Black });
+            dialogTexture = scrollTexture;
             buttonTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
             buttonTexture.SetData(new[] { Color.Gray });
             dialogFont = Fonts.DisneyHeroicFont;
@@ -322,7 +323,9 @@ namespace TombOfAnubis
         void DrawDialog()
         {
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
-            spriteBatch.Draw(dialogTexture, dialogDimension, Color.White * dialogTransparency);
+            //spriteBatch.Draw(dialogTexture, dialogDimension, Color.White * dialogTransparency);
+            Rectangle sourceRectangle = new Rectangle(0, 800, 800, 400);
+            spriteBatch.Draw(dialogTexture, dialogDimension, sourceRectangle, Color.White * dialogTransparency);
 
             string confirmationMessage = "Are you sure you want to quit?";
             string positive = "Yes", negative = "No";
@@ -330,7 +333,8 @@ namespace TombOfAnubis
             // Draw Confirmation message
             Vector2 textDim = dialogFont.MeasureString(confirmationMessage);
             int posOffsetX = (int)(dialogDimension.X + (dialogWidth - textDim.X) / 2);
-            int posOffsetY = (int)(dialogDimension.Y + (dialogHeight - textDim.Y) / 2);
+            //int posOffsetY = (int)(dialogDimension.Y + (dialogHeight - textDim.Y) / 2);
+            int posOffsetY = (int)(dialogDimension.Y + marginTop * dialogHeight);
             Vector2 textPosition = new Vector2(posOffsetX, posOffsetY);
             spriteBatch.DrawString(dialogFont, confirmationMessage, textPosition, Color.White);
 
