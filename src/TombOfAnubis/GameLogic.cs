@@ -347,7 +347,29 @@ namespace TombOfAnubis
 
         public static void OnCollision(WorldItem worldItem, Wall wall)
         {
-            StaticCollision(worldItem, wall);
+            //find direction towsrds the closest player
+            Vector2 direction = Vector2.Zero;
+
+            foreach(Character character in Session.GetInstance().World.GetChildrenOfType<Character>()){
+                if(character.GetComponent<Movement>().IsTrapped()) continue;
+                if(direction == Vector2.Zero)
+                {
+                    direction = character.CenterPosition() - worldItem.CenterPosition();
+                } else
+                {
+                    Vector2 newDirection = character.CenterPosition() - worldItem.CenterPosition();
+                    if(newDirection.Length() < direction.Length())
+                    {
+                        direction = newDirection;
+                    }
+                }
+            }
+
+            direction.Normalize();
+
+            worldItem.GetComponent<Transform>().Position += 300 * direction * (float)GameTime.ElapsedGameTime.TotalSeconds;
+
+           // StaticCollision(worldItem, wall);
         }
 
         public static void PlaceArtefactIfPossible(Character character, Altar altar)
