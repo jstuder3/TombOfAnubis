@@ -132,7 +132,7 @@ namespace TombOfAnubis
 
             Vector2 forwardVector = movement.GetForwardVector();
 
-            Session.GetInstance().World.AddChild(new WorldItem(transform.Position + forwardVector * 100f, transform.Scale, ItemType));
+            Session.GetInstance().World.AddChild(new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType));
             ItemType = ItemType.None;
             Console.WriteLine("Dropped item!");
 
