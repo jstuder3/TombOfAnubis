@@ -7,6 +7,7 @@ using QuikGraph;
 using static Microsoft.Xna.Framework.Graphics.SpriteFont;
 using QuikGraph.Algorithms.ShortestPath;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace TombOfAnubis
 {
@@ -33,6 +34,10 @@ namespace TombOfAnubis
             }
             this.map = map;
             //Console.WriteLine("start initiating graph");
+
+            //try to get map info
+
+
             
             CreateNodeTileCoordinateMapping();
             CreateGraph();
@@ -175,8 +180,9 @@ namespace TombOfAnubis
         public Vector2 ToPosition(int nodeID)
         {
             Point tileCoordinates = ToTileCoordinate(nodeID);
+            Vector2 offset = new Vector2(200, 200);
             if (map.ValidTileCoordinates(tileCoordinates)){
-                return map.TileCoordinateToPosition(tileCoordinates);
+                return map.TileCoordinateToPosition(tileCoordinates) + offset;
             }
             else
             {
@@ -200,6 +206,13 @@ namespace TombOfAnubis
         public bool PathExists(int source, int target)
         {
             return fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+        }
+
+        public IEnumerable<Edge<int>> GetNextNEdges(int source, int target, int n)
+        {
+
+            fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+            return path.Take(n);
         }
 
         public IEnumerable<Edge<int>> GetPath(int source, int target)
@@ -238,10 +251,9 @@ namespace TombOfAnubis
 
             Console.WriteLine("Error: MovementGraph 34");
             return new Vector2(0, 0);
-
-
-
         }
+
+        
 
         public int GetDistance(int source, int target)
         {
@@ -264,6 +276,101 @@ namespace TombOfAnubis
                 return true;
             }
             return false;
+        }
+    }
+
+    public class MovementGraph2
+    {
+        public readonly Map map;
+        private int binSize;
+        private int WorldSizeHeight;
+        private int WorldSizeWidth;
+        private int nBinsPerColumn;
+        private int nBinsPerRow;
+
+        public MovementGraph2(Map map, World world)
+        {
+
+            if (map is null)
+            {
+                throw new ArgumentNullException("MapArgument");
+            }
+            this.map = map;
+
+            //compute fieldBinSize:
+            Character player = world.GetChildrenOfType<Character>().First();
+            Vector2 topLeftPosition = player.TopLeftCornerPosition();
+            Vector2 centrePosition = player.CenterPosition();
+            Vector2 halfDiag = centrePosition - topLeftPosition;
+            float halfDist = halfDiag.Length();
+            //one sidelength is: 2^0.5*halfDist
+            float characterSideLength = (float)1.14142 * halfDist;
+
+            int nBinsPerCharacterSideLength = 4;
+            //round binsize up to next multiple of characterSieLength
+            int sideLength = (int)characterSideLength + (nBinsPerCharacterSideLength - (int)characterSideLength % nBinsPerCharacterSideLength);
+            this.binSize = sideLength / nBinsPerCharacterSideLength;
+            Console.WriteLine("binSize: " + this.binSize);
+
+            //needs to be variable
+            int WorldSizeHeight = 10000;
+            int WorldSizeWidth = 8000;
+
+            //round up to be multiple of binSize
+            this.WorldSizeHeight += this.binSize - (WorldSizeHeight % this.binSize);
+            this.WorldSizeWidth += this.binSize - (WorldSizeWidth % this.binSize);
+            Console.WriteLine("WorldSize: " + this.WorldSizeWidth + ", " + this.WorldSizeHeight);
+
+            this.nBinsPerColumn = WorldSizeHeight / this.binSize;
+            this.nBinsPerRow = WorldSizeWidth / this.binSize;
+            Console.WriteLine("nBins: " + this.nBinsPerRow + ", " + this.nBinsPerColumn);
+
+
+            //createGraph();
+
+
+        }
+
+        Point ToIndex(int binNr)
+        {
+            return new Point(binNr % this.nBinsPerRow, (int)binNr / this.nBinsPerRow);
+        }
+
+        Point ToIndex(Vector2 position)
+        {
+            int rowIndex = (int)position.X / this.binSize;
+            int colIndex = (int)position.Y / this.binSize;
+            return new Point(rowIndex, colIndex);
+        }
+
+        int ToBinNr(Point index)
+        {
+            return index.Y * this.nBinsPerRow + index.X;
+        }
+
+        int ToBinNr(Vector2 position)
+        {
+            return ToBinNr(ToIndex(position));
+        }
+
+        Vector2 ToPosition(Point index)
+        {
+            int offset = (int)this.binSize / 2;
+            return new Vector2(index.X * this.binSize + offset, index.Y * this.binSize + offset);
+        }
+
+        Vector2 ToPosition(int binNr)
+        {
+            return ToPosition(ToIndex(binNr));
+        }
+
+        private void CreateGraph()
+        {
+            //1. make boolean matrix for all bins, mark all wall(&other stuff)bins as inactive
+            //default is false, thus setting all to true if a wall is in that bin, then use all bins who are still false as graph nodes
+            bool[,] arr = new bool[this.nBinsPerColumn, this.nBinsPerRow];
+
+            //iterate over all map objects
         }
     }
 }
