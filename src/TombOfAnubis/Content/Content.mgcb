@@ -14,11 +14,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../4. Semester/Game Lab/Graphics/UI/IntroVideo_v2.mp4
-/importer:H264Importer
-/processor:VideoProcessor
-/build:../../../../4. Semester/Game Lab/Graphics/UI/IntroVideo_v2.mp4;Videos/IntroVideo_v2.mp4
-
 #begin Audio/SoundFX/AnubisRoar.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -1171,6 +1166,11 @@
 /importer:H264Importer
 /processor:VideoProcessor
 /build:Videos/GameWon.mp4
+
+#begin Videos/IntroVideo_v2.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/IntroVideo_v2.mp4
 
 #begin Videos/IntroVideo_v2.mp4
 /importer:H264Importer
