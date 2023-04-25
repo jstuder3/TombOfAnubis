@@ -76,7 +76,188 @@ namespace TombOfAnubis
 
         }
 
-        private Vector2 getDirection(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
+        bool wallDetected()
+        {
+            return this.wallTopRight || this.wallTopLeft || this.wallBottomRight || this.wallBottomLeft;
+        }
+
+        Vector2 wallDirectionAugmentation(Vector2 direction)
+        {
+            
+            //adapt direction if walls are close
+            bool wallRight = this.wallTopRight && this.wallBottomRight;
+            bool wallLeft = this.wallTopLeft && this.wallBottomLeft;
+            bool wallBottom = this.wallBottomLeft && this.wallBottomRight;
+            bool wallTop = this.wallTopLeft && this.wallTopRight;
+
+            if (wallTop)
+            {
+                direction.Y = Math.Max(0, direction.Y);
+            }
+            else if (wallBottom)
+            {
+                direction.Y = Math.Min(0, direction.Y);
+            }
+            else if (wallLeft)
+            {
+                direction.X = Math.Max(0, direction.X);
+            }
+            else if (wallRight)
+            {
+                direction.X = Math.Min(0, direction.X);
+            }
+            else if (this.wallTopLeft)
+            {
+                //cannot move to the left&top
+                if (direction.X < direction.Y)
+                {
+                    //more to the left than top, thus wall to the left, walk down until no wall
+                    direction = new Vector2(0, 1);
+                }
+                else
+                {
+                    //more to the top than left, thus wall to the top, walk right until no wall
+                    direction = new Vector2(1, 0);
+                }
+            }
+            else if (this.wallTopRight)
+            {
+                if (direction.X > -1 * direction.Y)
+                {
+                    //more to the right than top, thus wall to the right, walk down until no wall
+                    direction = new Vector2(0, 1);
+                }
+                else
+                {
+                    //more to the top than right, thus wall to the top, walk left until no wall
+                    direction = new Vector2(-1, 0);
+                }
+            }
+            else if (this.wallBottomLeft)
+            {
+                if (-1 * direction.X > direction.Y)
+                {
+                    //more to the left than bottom, thus wall to the left, walk up until no wall
+                    direction = new Vector2(0, -1);
+                }
+                else
+                {
+                    //more to the bottom than left, thus wall to the bottom, walk right until no wall
+                    direction = new Vector2(1, 0);
+                }
+            }
+            else if (this.wallBottomRight)
+            {
+                if (direction.X > direction.Y)
+                {
+                    //more to the right than bottom, thus wall to the right, walk up until no wall
+                    direction = new Vector2(0, -1);
+                }
+                else
+                {
+                    //more to the bottom than right, thus wall to the bottom, walk left until no wall
+                    direction = new Vector2(-1, 0);
+                }
+            }
+            return direction;
+        }
+
+        private Vector2 getDirection2(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
+        {
+
+            int nodeIdAnubis = ai.MovementGraph.ToNodeID(anubisPosition);
+            int nodeIdPlayer = ai.MovementGraph.ToNodeID(playerPosition);
+
+            Point tileCoordinateAnubis = ai.MovementGraph.ToTileCoordinate(nodeIdAnubis);
+            Point tileCoordinatePlayer = ai.MovementGraph.ToTileCoordinate(nodeIdPlayer);
+
+            Vector2 direction = new Vector2(0, 0);
+
+
+            if (nodeIdAnubis == nodeIdPlayer || ai.MovementGraph.isTileNeighbor(tileCoordinateAnubis, tileCoordinatePlayer))
+            {
+                //directly walk towards the player 
+                direction = playerPosition - anubisPosition;
+            } else
+            {
+                //walk along the path of tile nodes
+                if (!ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
+                {
+                    Console.WriteLine("Error: Anbuis cound not find a Path to cur tailed player");
+
+                    //use random movement
+                    direction = getRandomDirection();
+                } else
+                {
+                    int smoothness = 2;
+                    if (wallDetected()) { smoothness = 1; } //needed to correctly augment direction
+                    
+                    
+                    IEnumerable<Edge<int>> targets = ai.MovementGraph.GetNextNEdges(nodeIdAnubis, nodeIdPlayer, smoothness);
+                    //take mean of all targets
+                    int weight = 0;
+                    foreach(Edge<int> target in targets)
+                    {
+                        Vector2 edgeDirection = (ai.MovementGraph.ToPosition(target.Target) - ai.MovementGraph.ToPosition(target.Source));
+                        edgeDirection.Normalize();
+                        direction += edgeDirection / (float)Math.Pow(2,weight++);
+                    }
+                    direction.Normalize();
+                }
+
+            }
+            //normalization after raw direction claculation
+            direction.Normalize();
+            /*
+            //somehow sometimes anubis position is already at target position??? try hotfix
+            if (direction.LengthSquared() < 1000)
+            {
+                //Console.WriteLine("AI: movement HotFix needed, tile distance too small");
+                if (ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer) > 1)
+                {
+
+                    target = ai.MovementGraph.getNthTargetToWalkTo(nodeIdAnubis, nodeIdPlayer, 2);
+                    direction = target - anubisPosition;
+                }
+                else
+                {
+                    direction = playerPosition - anubisPosition;
+                }
+
+            }
+            direction.Normalize()
+            */
+
+
+            //print stuff
+            bool print_stuff = false;
+            if (print_stuff && (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft))
+            {
+                Console.WriteLine("direction augmentation, direction before: " + direction);
+                if (this.wallTopLeft) { Console.WriteLine("Wall TopLeft"); };
+                if (this.wallTopRight) { Console.WriteLine("Wall TopRight"); };
+                if (this.wallBottomRight) { Console.WriteLine("Wall BottomRight"); };
+                if (this.wallBottomLeft) { Console.WriteLine("Wall BottomLeft"); };
+            }
+
+
+            
+            direction = wallDirectionAugmentation(direction) ;
+
+            direction.Normalize();
+            if (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft)
+            {
+                //Console.WriteLine("diretion after: " + direction);
+                //Console.WriteLine("direction augmentation");
+            }
+            else
+            {
+                //Console.WriteLine("no wall direction augmentation, direction: " + direction);
+            }
+            return direction;
+        }
+
+            private Vector2 getDirection(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
         {
 
             int nodeIdAnubis = ai.MovementGraph.ToNodeID(anubisPosition);
@@ -136,7 +317,7 @@ namespace TombOfAnubis
             direction.Normalize();
             //Console.WriteLine("State: direcToTile, anubis, player, target, direction, direciton norml.: " + anubisPosition + ", " + playerPosition + ", " + target + ", " + temp + ", " + direction);
             //Console.WriteLine("direction length: " + temp.LengthSquared());
-            bool print_stuff = false;
+            bool print_stuff = true;
             if (print_stuff && (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft))
             {
                 Console.WriteLine("direction augmentation, direction before: " + direction);
@@ -225,7 +406,7 @@ namespace TombOfAnubis
             direction.Normalize();
             if (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft)
             {
-                //Console.WriteLine("diretion after: " + direction);
+                Console.WriteLine("diretion after: " + direction);
             } else
             {
                 //Console.WriteLine("no wall direction augmentation");
@@ -251,7 +432,7 @@ namespace TombOfAnubis
             {
                 //Transform cur_player_transform = player.GetComponent<Transform>();
                 int nodeIdPlayer = movementGraph.ToNodeID(player.CenterPosition());
-                Console.WriteLine("player position: " + player.CenterPosition());
+                //Console.WriteLine("player position: " + player.CenterPosition());
 
                 if (!player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
                 {
@@ -323,9 +504,10 @@ namespace TombOfAnubis
             //Console.WriteLine("length test: " + new Vector2((float)Math.Cos(0.5 * Math.PI), (float)-Math.Sin(0.5 * Math.PI)).LengthSquared());
             float increaser = (float)1.05;
             float decreaser = (float)1;
+            Vector2 topIncreaser = new Vector2(0, -10);
 
-            Vector2 topLeft = pos + increaser*diagVec;
-            Vector2 topRight = pos + increaser*new Vector2(-1 * diagVec.X, diagVec.Y);
+            Vector2 topLeft = pos + increaser*diagVec + topIncreaser;
+            Vector2 topRight = pos + increaser*new Vector2(-1 * diagVec.X, diagVec.Y) + topIncreaser;
             Vector2 bottomLeft = pos + increaser*new Vector2(diagVec.X, -1 * diagVec.Y);
             Vector2 bottomRight = pos - increaser*diagVec;
 
@@ -346,72 +528,6 @@ namespace TombOfAnubis
 
             }
 
-        }
-
-
-
-
-
-
-        void debugSystem(AI ai)
-        {
-            // wall system for a player
-            List<Character> characters = World.GetChildrenOfType<Character>();
-            MovementGraph movementGraph = ai.MovementGraph;
-
-            foreach (Character player in characters)
-            {
-                //Transform cur_player_transform = player.GetComponent<Transform>();
-                int nodeIdPlayer = movementGraph.ToNodeID(player.CenterPosition());
-                Console.WriteLine("player position: " + player.CenterPosition());
-                Vector2 pos = player.CenterPosition();
-
-                float offset = (float)1.3 * (player.CenterPosition() - player.TopLeftCornerPosition()).Length();
-                Console.WriteLine("offset: " + offset);
-
-
-                Vector2 top = pos + offset * new Vector2((float)0, (float)-1);
-                Vector2 left = pos + offset * new Vector2((float)-1, (float)0);
-                Vector2 bottom = pos + offset * new Vector2((float)0, (float)1);
-                Vector2 right = pos + offset * new Vector2((float)1, 0);
-                
-                
-                //Vector2 bottomRight = pos + offset * new Vector2((float)Math.Cos(1.75 * Math.PI), (float)-Math.Sin(1.75 * Math.PI));
-                //Vector2 bottomLeft = pos + offset * new Vector2((float)Math.Cos(1.25 * Math.PI), (float)-Math.Sin(1.25 * Math.PI));
-                //Vector2 topRight = pos + offset * new Vector2((float)Math.Cos(0.25 * Math.PI), (float)-Math.Sin(0.25 * Math.PI));
-                //Vector2 topLeft = pos + offset * new Vector2((float)Math.Cos(0.75 * Math.PI), (float)-Math.Sin(0.75 * Math.PI));
-
-
-                bool wallBottom = !this.validPosition(bottom);
-                bool wallLeft = !this.validPosition(left);
-                bool wallTop = !this.validPosition(top);
-                bool wallRight = !this.validPosition(right);
-                Console.WriteLine("Player Walls: ");
-                if (wallLeft) { Console.WriteLine("Wall Left"); };
-                if (wallRight) { Console.WriteLine("Wall Right"); };
-                if (wallTop) { Console.WriteLine("Wall Top"); };
-                if (wallBottom) { Console.WriteLine("Wall Bottom"); };
-                Console.WriteLine("----------");
-
-
-
-
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-        private float vecAngle(Vector2 vec)
-        {
-            Vector2 zeroVec = new Vector2(1, 0);
-            return (float) Math.Acos(vec.X / vec.Length());
         }
 
         public override void Update(GameTime deltaTime)
@@ -458,6 +574,8 @@ namespace TombOfAnubis
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
                 //Vector2 newPosition = transform.Position;
                 Vector2 newPosition = entity.CenterPosition();
+
+                
 
                 if (AnubisBehaviour.Random == this.AnubisBehaviour)
                 {
@@ -513,8 +631,11 @@ namespace TombOfAnubis
                     Vector2 positionPlayer = tailedPlayer.CenterPosition();
                     int tailed_player_node_id = movementGraph.ToNodeID(positionPlayer);
 
-                    Vector2 direction = this.getDirection(ai, positionAnubis, tailedPlayer.CenterPosition());
-                    //this.debugSystem(ai);
+                    Vector2 direction;
+                    //direction = this.getDirection(ai, positionAnubis, tailedPlayer.CenterPosition());
+                    Vector2 direction2 = this.getDirection2(ai, positionAnubis, tailedPlayer.CenterPosition());
+                    //Console.WriteLine("directions: " + direction + ", --- " + direction2);
+                    direction = direction2;
 
 
 
