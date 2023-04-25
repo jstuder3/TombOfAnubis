@@ -16,7 +16,7 @@
 			<Item>
 				<ClassName>TombOfAnubis.Artefact</ClassName>
 				<SpawnTileCoordinate> 2 1</SpawnTileCoordinate>
-				<Scale>0.02 0.02</Scale>
+				<Scale>0.4 0.4</Scale>
 			</Item>
 		</Entities>
 	</Asset>

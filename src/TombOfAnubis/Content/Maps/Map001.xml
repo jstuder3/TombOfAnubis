@@ -3,7 +3,7 @@
   <Asset Type="TombOfAnubis.Map">
       <Name>Map001</Name>
 	  <!-- Number of tiles in x(right) and y(down) of the map-->
-	  <MapDimensions>30 30</MapDimensions>
+	  <MapDimensions>20 20</MapDimensions>
 	  <!-- Size of one tile in the Texture source. -->
 	  <SourceTileSize>400 400</SourceTileSize>
 	  <!-- Scale here to increase the in game size of the tiles (Walls and floors) -->

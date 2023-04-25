@@ -33,6 +33,7 @@ namespace TombOfAnubis
         private string itemSlotFiller = "Power Up";
         private Dictionary<ItemType, Texture2D> itemTextures = new Dictionary<ItemType, Texture2D>();
         private float itemDisplayScale = 0.3f;
+        private float artefactDisplayScale = 0.4f;
 
 
         public Hud(GraphicsDevice graphicsDevice, GameScreenManager gameScreenManager)
@@ -215,8 +216,8 @@ namespace TombOfAnubis
             Texture2D artefactTexture = session.Map.Artefacts[playerID].Texture;
             Vector2 artefactScale = session.Map.Artefacts[playerID].Scale;
 
-            int artefactWidth = (int)(artefactTexture.Width * artefactScale.X);
-            int artefactHeight = (int)(artefactTexture.Height * artefactScale.Y);
+            int artefactWidth = (int)(artefactTexture.Width * artefactScale.X * artefactDisplayScale);
+            int artefactHeight = (int)(artefactTexture.Height * artefactScale.Y * artefactDisplayScale);
 
             Vector2 artefactPositionOffSet = new Vector2((frameWidth - artefactWidth) / 4, (frameHeight - artefactHeight) / 2);
             Vector2 artefactDisplayPosition = new Vector2(framePositionX, framePositionY) + artefactPositionOffSet;

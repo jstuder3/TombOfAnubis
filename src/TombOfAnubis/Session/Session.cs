@@ -215,10 +215,10 @@ namespace TombOfAnubis
             };
             singleton.ArtefactTextures = new List<Texture2D>()
             {
-                content.Load<Texture2D>(@"Textures\Objects\Artefacts\red_gear_icon"),
-                content.Load<Texture2D>(@"Textures\Objects\Artefacts\green_gear_icon"),
-                content.Load<Texture2D>(@"Textures\Objects\Artefacts\blue_gear_icon"),
-                content.Load<Texture2D>(@"Textures\Objects\Artefacts\purple_gear_icon")
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\red_artefact"),
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\green_artefact"),
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\blue_artefact"),
+                content.Load<Texture2D>(@"Textures\Objects\Artefacts\purple_artefact")
             };
 
             singleton.Visibility = Visibility.Game;
