@@ -43,6 +43,7 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             // TODO: Will be removed and called directly from Menu
+            AudioController.PlaySong("gameSlowTrack");
 
             //load item sprites and vfx sprites (this must happen before creating a session if this content should be able to be used on startup)
             Fist.LoadContent(GameScreenManager);

@@ -14,41 +14,70 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Audio/amazing_soundeffect.mp3
+#begin ../../../../4. Semester/Game Lab/Graphics/UI/IntroVideo_v2.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:../../../../4. Semester/Game Lab/Graphics/UI/IntroVideo_v2.mp4;Videos/IntroVideo_v2.mp4
+
+#begin Audio/SoundFX/AnubisRoar.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/amazing_soundeffect.mp3
+/build:Audio/SoundFX/AnubisRoar.mp3
 
-#begin Audio/AnubisRoar.mp3
+#begin Audio/SoundFX/ArtefactPickup.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/AnubisRoar.mp3
+/build:Audio/SoundFX/ArtefactPickup.mp3
 
-#begin Audio/ArtefactPickup.mp3
+#begin Audio/SoundFX/ArtefactPlaced.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/ArtefactPickup.mp3
+/build:Audio/SoundFX/ArtefactPlaced.mp3
 
-#begin Audio/ArtefactPlaced.mp3
+#begin Audio/SoundFX/IntroSound.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/ArtefactPlaced.mp3
+/build:Audio/SoundFX/IntroSound.mp3
 
-#begin Audio/background_music.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/background_music.mp3
-
-#begin Audio/ItemPickup.mp3
+#begin Audio/SoundFX/ItemPickup_v2.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/ItemPickup.mp3
+/build:Audio/SoundFX/ItemPickup_v2.mp3
+
+#begin Audio/SoundFX/ItemPickup_v3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/ItemPickup_v3.mp3
+
+#begin Audio/SoundFX/ItemPickup.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/ItemPickup.mp3
+
+#begin Audio/SoundFX/MenuAccept.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/MenuAccept.mp3
+
+#begin Audio/SoundFX/MenuSelect.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/MenuSelect.mp3
+
+#begin Audio/SoundFX/Revival.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/Revival.mp3
 
 #begin Audio/Soundtrack/Fast1_115bpm.wav
 /importer:WavImporter
@@ -413,6 +442,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/GameControlls_1.png
 
+#begin Textures/Menu/GameOverBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/GameOverBG.png
+
 #begin Textures/Menu/LoginScreen/Controller.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -532,6 +573,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/LoginScreen/Keyboard4.png
+
+#begin Textures/Menu/LoginScreen/login_screen_bg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/LoginScreen/login_screen_bg.png
+
+#begin Textures/Menu/main_menu_bg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/main_menu_bg.png
 
 #begin Textures/Menu/MenuTile.png
 /importer:TextureImporter
@@ -1096,6 +1161,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
+
+#begin Videos/GameOver.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/GameOver.mp4
+
+#begin Videos/GameWon.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/GameWon.mp4
 
 #begin Videos/IntroVideo_v2.mp4
 /importer:H264Importer

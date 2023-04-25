@@ -20,7 +20,7 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             spriteBatch = GameScreenManager.SpriteBatch;
-            VideoController.PlayVideo(@"Content/Videos/IntroVideo_v2.mp4", false, true);
+            VideoController.PlayVideo(@"Content/Videos/IntroVideo_v2.mp4", false, false);
         }
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)

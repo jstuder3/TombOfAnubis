@@ -26,7 +26,9 @@ namespace TombOfAnubis
             videos = new Dictionary<string, Video>
                 {
                     { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")},
-                    { @"Content/Videos/IntroVideo_v2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo_v2.mp4")}
+                    { @"Content/Videos/IntroVideo_v2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo_v2.mp4")},
+                    { @"Content/Videos/GameWon.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameWon.mp4")},
+                    { @"Content/Videos/GameOver.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameOver.mp4")},
 
                 };
             videoPlayer = new VideoPlayer(graphics);
@@ -98,6 +100,11 @@ namespace TombOfAnubis
         public static void ResumeVideo()
         {
             videoPlayer.Resume();
+        }
+
+        public static Microsoft.Xna.Framework.Media.MediaState GetState()
+        {
+            return videoPlayer.State;
         }
     }
 }

@@ -23,14 +23,14 @@ namespace TombOfAnubis
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
-        private float titleScale = 0.55f;
+        private float titleScale = 0.6f;
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.4f;
         private static List<AnimationClip> activeScrollAnimation;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
-        private float marginY = 0.05f;
+        private float marginY = 0.04f;
 
         #endregion
 
@@ -80,6 +80,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
+
+            AudioController.PauseSong();
 
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
@@ -171,6 +173,7 @@ namespace TombOfAnubis
         /// </summary>
         void ResumeMenuEntrySelected(object sender, EventArgs e)
         {
+            AudioController.ResumeSong();
             ExitScreen();
         }
 

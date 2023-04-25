@@ -15,6 +15,9 @@ namespace TombOfAnubis.GameScreens
     {
         private GameStartDescription gameStartDescription;
 
+        private Texture2D backgroundTexture;
+        private Rectangle backgroundPosition;
+
         private int startCoolDown;
 
         private List<Texture2D> keyboardInput;
@@ -62,6 +65,8 @@ namespace TombOfAnubis.GameScreens
         public override void LoadContent()
         {
             ContentManager content = GameScreenManager.Game.Content;
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/LoginScreen/login_screen_bg");
+
             Texture2D playerOne = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_red");
             Texture2D playerTwo = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_green");
             Texture2D playerThree = content.Load<Texture2D>("Textures/Menu/LoginScreen/explorer_blue");
@@ -78,17 +83,19 @@ namespace TombOfAnubis.GameScreens
             joinInstruction = content.Load<Texture2D>("Textures/Menu/LoginScreen/JoinInstruction");
 
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            int totalWidth = viewport.Width;
-            int totalHeight = viewport.Height;
+            int screenWidth = viewport.Width;
+            int screenHeight = viewport.Height;
+
+            backgroundPosition = new Rectangle(0,0, screenWidth, screenHeight);
 
             lineTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
             lineTexture.SetData(new[] { lineColor });
 
-            playerFrameWidth = (int)((totalWidth - lineThickness) / 2);
-            playerFrameHeight = (int)((totalHeight - lineThickness) / 2);
+            playerFrameWidth = (int)((screenWidth - lineThickness) / 2);
+            playerFrameHeight = (int)((screenHeight - lineThickness) / 2);
 
-            verticalLinePos = new Rectangle(playerFrameWidth, 0, lineThickness, totalHeight);
-            horizontalLinePos = new Rectangle(0, playerFrameHeight, totalWidth, lineThickness);
+            verticalLinePos = new Rectangle(playerFrameWidth, 0, lineThickness, screenHeight);
+            horizontalLinePos = new Rectangle(0, playerFrameHeight, screenWidth, lineThickness);
 
             startButtonTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1,1);
             startButtonTexture.SetData(new[] { buttonColor });
@@ -126,6 +133,7 @@ namespace TombOfAnubis.GameScreens
             // Start the game if the first player pressed the use button
             if (joinedPlayers[0].UseTriggered() && startCoolDown <= 0)
             {
+                AudioController.StopSong();
                 LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
             }
         }
@@ -141,6 +149,7 @@ namespace TombOfAnubis.GameScreens
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
             spriteBatch.Begin();
+            spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
 
             spriteBatch.Draw(lineTexture, verticalLinePos, Color.White);
             spriteBatch.Draw(lineTexture, horizontalLinePos, Color.White);

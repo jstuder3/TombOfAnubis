@@ -20,6 +20,7 @@
     <None Remove="Content\Textures\Menu\Player4.png" />
     <None Remove="Content\Textures\Menu\Title_mix.png" />
     <None Remove="Content\Textures\Menu\Title_white.png" />
+    <None Remove="Content\Videos\SampleVideo_1280x720_1mb.mp4" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
