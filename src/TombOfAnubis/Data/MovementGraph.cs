@@ -208,6 +208,13 @@ namespace TombOfAnubis
             return fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
         }
 
+        public IEnumerable<Edge<int>> GetNextNEdges(int source, int target, int n)
+        {
+
+            fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
+            return path.Take(n);
+        }
+
         public IEnumerable<Edge<int>> GetPath(int source, int target)
         {
             fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path);
@@ -244,10 +251,9 @@ namespace TombOfAnubis
 
             Console.WriteLine("Error: MovementGraph 34");
             return new Vector2(0, 0);
-
-
-
         }
+
+        
 
         public int GetDistance(int source, int target)
         {
