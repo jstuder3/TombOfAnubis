@@ -259,6 +259,10 @@ namespace TombOfAnubis
 
         public int GetDistance(int source, int target)
         {
+            if(source == target)
+            {
+                return 0;
+            }
             if(fwGraph.TryGetPath(source, target, out IEnumerable<Edge<int>> path)) 
             {
                 return path.Count();
