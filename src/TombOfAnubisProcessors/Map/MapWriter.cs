@@ -28,6 +28,8 @@ namespace TombOfAnubis
             output.WriteObject(value.TileScale);
             output.Write(value.TextureName);
             output.Write(value.NumberOfFloorTiles);
+            output.WriteObject(value.WorldScale);
+            output.Write(value.TorchProbability);
             output.WriteObject(value.CollisionLayer);
             output.WriteObject(value.BaseLayer);
             output.WriteObject(value.EntityProperties);

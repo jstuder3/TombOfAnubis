@@ -81,6 +81,10 @@ namespace TombOfAnubis
 
         public int NumberOfFloorTiles { get; set; }
 
+        public Vector2 WorldScale { get; set; }
+
+        public float TorchProbability { get; set; }
+
         [ContentSerializerIgnore]
         private Random floorTileRandom = new Random();
         /// <summary>
@@ -508,6 +512,8 @@ namespace TombOfAnubis
                     map.TextureName));
                 map.TilesPerRow = map.Texture.Width / map.SourceTileSize.X;
                 map.NumberOfFloorTiles = input.ReadInt32();
+                map.WorldScale = input.ReadObject<Vector2>();
+                map.TorchProbability = input.ReadSingle();
                 map.CollisionLayer = input.ReadObject<int[]>();
                 map.BaseLayer = input.ReadObject<int[]>();
                 map.EntityProperties = input.ReadObject<EntityProperties>();
