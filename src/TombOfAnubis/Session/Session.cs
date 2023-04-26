@@ -25,11 +25,6 @@ namespace TombOfAnubis
     class Session
     {
         // TEMPORARY HARD CODED PARAMETERS
-        public AnubisBehaviour AnubisBehaviour { get; set; } = AnubisBehaviour.Random;
-        public static Vector2 WorldScale { get; set; } = Vector2.One;
-
-        public static float TorchProbability { get; set; } = 0.3f;
-
 
         // END TEMPORARY HARD CODED PARAMETERS
 
@@ -227,7 +222,7 @@ namespace TombOfAnubis
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem(screenManager);
             singleton.GameplayEffectSystem = new GameplayEffectSystem();
-            singleton.AnubisAISystem = new AISystem(singleton.World, AnubisBehaviour.TailPlayers);
+            singleton.AnubisAISystem = new AISystem(singleton.World, AnubisBehaviour.TrueAI);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.World);
             singleton.AnimationSystem = new AnimationSystem();
             singleton.MovementSystem = new MovementSystem();
@@ -298,6 +293,7 @@ namespace TombOfAnubis
             // load the map
             ContentManager content = singleton.gameScreenManager.Game.Content;
             singleton.Map = content.Load<Map>(mapContentName);
+            singleton.World.Scale = singleton.Map.WorldScale * SplitScreen.WorldScaleFactorsBasedOnNPlayers[singleton.NumberOfPlayers - 1];
 
             // Create the undiscovered texture. This should be loaded from a png and prettier than just a black square.
             singleton.Map.UndiscoveredTexture = new Texture2D(singleton.gameScreenManager.GraphicsDevice, 1, 1);
@@ -331,7 +327,7 @@ namespace TombOfAnubis
         public static void EndMinimapMode()
         {
             singleton.Visibility = Visibility.Game;
-            singleton.World.Scale = WorldScale;
+            singleton.World.Scale = singleton.Map.WorldScale * SplitScreen.WorldScaleFactorsBasedOnNPlayers[singleton.NumberOfPlayers - 1];
         }
 
         public static void SetViewport(Viewport viewport)
@@ -346,7 +342,7 @@ namespace TombOfAnubis
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
                     Character player = playerInput.Entity as Character;
-                    Vector2 playerCenter = player.CenterPosition();
+                    Vector2 playerCenter = singleton.World.Scale * player.CenterPosition();
 
                     singleton.World.Origin = singleton.viewportCenter - playerCenter;
                 }
@@ -383,7 +379,7 @@ namespace TombOfAnubis
                             entities.Add(newWall);
                             singleton.MapTiles[x, y] = newWall;
                             AddWallCorners(newWall, mapPosition);
-                            if(random.NextDouble() < TorchProbability)
+                            if(random.NextDouble() < singleton.Map.TorchProbability)
                             {
                                 TryAddTorch(newWall, mapPosition);
                             }
@@ -394,7 +390,7 @@ namespace TombOfAnubis
                             Floor newFloor = new Floor(position,  singleton.Map.TileScale, singleton.Map.Texture, singleton.Map.UndiscoveredTexture, sourceRectangle);
                             entities.Add(newFloor);
                             singleton.MapTiles[x, y] = newFloor;
-                            if (random.NextDouble() < TorchProbability)
+                            if (random.NextDouble() < singleton.Map.TorchProbability)
                             {
                                 TryAddTorch(newFloor, mapPosition);
                             }

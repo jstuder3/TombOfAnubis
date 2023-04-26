@@ -78,6 +78,7 @@ namespace TombOfAnubis
         private void ResetMap()
         {
             Populate(collisionLayer, MapBlock.InvalidValue);
+            entitiyDescriptions.Clear();
             foreach (MapBlockDescription desc in mapBlocksDescriptions)
             {
                 desc.Reset();

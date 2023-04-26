@@ -20,7 +20,7 @@ namespace TombOfAnubis
 
                 if(activeClip != null)
                 {
-                    if(sprite.SourceRectangle.Y == activeClip.SourceRectangle.Y)
+                    if(sprite.SourceRectangle.Y == activeClip.SourceRectangle.Y && !animation.IsStopped)
                     {
                         int frameIdx = (int)(totalTime / activeClip.FrameDuration) % activeClip.NumberOfFrames;
                         sprite.SourceRectangle = new Rectangle(

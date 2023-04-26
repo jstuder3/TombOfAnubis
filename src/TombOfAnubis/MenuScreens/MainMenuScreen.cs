@@ -33,18 +33,18 @@ namespace TombOfAnubis
 
 
         private Texture2D backgroundTexture;
-        private Vector2 backgroundPosition;
+        private Rectangle backgroundPosition;
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
-        private float titleScale = 0.55f;
+        private float titleScale = 0.6f;
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.4f;
         private static List<AnimationClip> activeScrollAnimation;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
-        private float marginX = 0.25f, marginY = 0.05f;
+        private float marginX = 0.25f, marginY = 0.04f;
 
         #endregion
 
@@ -117,9 +117,11 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
 
+            AudioController.PlaySong("menuScreen");
+
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/main_menu_bg");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
             titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 
@@ -146,7 +148,6 @@ namespace TombOfAnubis
             buttonTexture.SetData(new[] { Color.Gray });
             dialogFont = Fonts.DisneyHeroicFont;
 
-            AudioController.PlaySong("background_music");
             base.LoadContent();
         }
 
@@ -165,10 +166,7 @@ namespace TombOfAnubis
             int screenWidth = viewport.Width;
             int screenHeight = viewport.Height;
 
-            // Center background image around viewport
-            backgroundPosition = new Vector2(
-                (screenWidth - backgroundTexture.Width) / 2,
-                (screenHeight - backgroundTexture.Height) / 2);
+            backgroundPosition = new Rectangle(0, 0, screenWidth, screenHeight);
 
             float titleWidth = titleScale * titleTexture.Width / screenWidth;
             float titleHeight = titleScale * titleTexture.Height / screenHeight;
@@ -255,19 +253,23 @@ namespace TombOfAnubis
                 {
                     if(InputController.IsleftTriggered())
                     {
+                        if (!confirmationStatus) { AudioController.PlaySoundEffect("menuSelect"); }
                         buttonPressed = true;
                         confirmationStatus = true;
+                        
                     }
                     
                     if(InputController.IsRightTriggered())
                     {
+                        if (confirmationStatus) { AudioController.PlaySoundEffect("menuSelect"); }
                         buttonPressed = true;
                         confirmationStatus = false;
                     }
 
                     if(InputController.IsUseTriggered())
                     {
-                        if(confirmationStatus)
+                        AudioController.PlaySoundEffect("menuAccept");
+                        if (confirmationStatus)
                         {
                             GameScreenManager.Game.Exit();
                         }

@@ -142,6 +142,7 @@ namespace TombOfAnubis
                 pec.Drag = 0.5f;
 
                 character2.AddComponent(new ParticleEmitter(pec));
+                AudioController.PlaySoundEffect("revival");
 
 
             }
@@ -231,7 +232,7 @@ namespace TombOfAnubis
             bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
             if (newItem)
             {
-                AudioController.PlaySoundEffect("itemPickup");
+                AudioController.PlaySoundEffect("itemPickup2");
             }
 
             StaticCollision(character, dispenser);

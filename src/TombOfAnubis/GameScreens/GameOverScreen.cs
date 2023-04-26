@@ -17,18 +17,16 @@ namespace TombOfAnubis
 
 
         private Texture2D backgroundTexture;
-        private Vector2 backgroundPosition;
-
-        private Vector2 titlePosition;
-        private Texture2D titleTexture;
-        private float titleScale = 0.55f;
+        private Rectangle backgroundPosition;
 
         private Texture2D scrollTexture;
-        private float scrollTextureScale = 0.4f;
+        private float scrollTextureScale = 0.5f;
         private static List<AnimationClip> activeScrollAnimation;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
-        private float marginY = 0.05f;
+        private float buttonSpacing = 0.1f, buttonOffsetY = 0.6f;
+
+        private float marginY = 0.04f;
 
         #endregion
 
@@ -73,11 +71,12 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
 
+            AudioController.StopSong();
+
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/GameOverBG");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
-            titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 
             activeScrollAnimation = new List<AnimationClip> {
                             new AnimationClip(AnimationClipType.InactiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
@@ -94,7 +93,6 @@ namespace TombOfAnubis
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
 
-            // AudioController.PlaySong("background_music");
             base.LoadContent();
         }
 
@@ -112,34 +110,25 @@ namespace TombOfAnubis
         {
             int screenWidth = viewport.Width;
             int screenHeight = viewport.Height;
+            int numButtons = MenuEntries.Count;
 
             // Center background image around viewport
-            backgroundPosition = new Vector2(
-                (screenWidth - backgroundTexture.Width) / 2,
-                (screenHeight - backgroundTexture.Height) / 2);
+            backgroundPosition = new Rectangle(0,0,screenWidth,screenHeight);
 
-            float titleWidth = titleScale * titleTexture.Width / screenWidth;
-            float titleHeight = titleScale * titleTexture.Height / screenHeight;
             // Assume every entry has the same sized texture
             float textureWidth = ((float)scrollTextureWidth / screenWidth) * scrollTextureScale;
             float textureHeight = ((float)scrollTextureHeight / screenHeight) * scrollTextureScale;
 
-            // Center the title according to the screen width
-            float titleOffsetX = (1.0f - titleWidth) / 2;
-            titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
-
             // Center the UI element according to the screen width
-            float textureOffsetX = (1.0f - textureWidth) / 2;
-            // The first MenuEntry element is drawn at this relative vertical coordinate
-            float entryStart = titleHeight + 3 * marginY;
+            float textureOffsetX = (1.0f - numButtons * textureWidth - (numButtons - 1) * buttonSpacing) / 2;
 
-            for (int i = 0; i < MenuEntries.Count; i++)
+            for (int i = 0; i < numButtons; i++)
             {
-                float entrySpacing = i * textureHeight;
+                float entrySpacing = i * (textureWidth + buttonSpacing);
 
-                float offsetY = entryStart + entrySpacing;
+                float offSetX = textureOffsetX + entrySpacing;
 
-                MenuEntries[i].Position = GetRelativePosition(viewport, textureOffsetX, offsetY);
+                MenuEntries[i].Position = GetRelativePosition(viewport, offSetX, buttonOffsetY);
             }
         }
 
@@ -156,6 +145,44 @@ namespace TombOfAnubis
         }
 
         #endregion
+
+        /// <summary>
+        /// Responds to user input, changing the selected entry and accepting
+        /// or cancelling the menu.
+        /// </summary>
+        public override void HandleInput()
+        {
+            if (!buttonCooldown)
+            {
+                // Move to the previous menu entry
+                if (InputController.IsleftTriggered())
+                {
+                    AudioController.PlaySoundEffect("menuSelect");
+                    selectedEntry--;
+                    if (selectedEntry < 0)
+                        selectedEntry = 0;
+                    buttonPressed = true;
+                }
+
+                // Move to the next menu entry
+                if (InputController.IsRightTriggered())
+                {
+                    AudioController.PlaySoundEffect("menuSelect");
+                    selectedEntry++;
+                    if (selectedEntry > MenuEntries.Count - 1)
+                        selectedEntry = MenuEntries.Count - 1;
+                    buttonPressed = true;
+                }
+
+                // Button pressed
+                if (InputController.IsUseTriggered())
+                {
+                    AudioController.PlaySoundEffect("menuAccept");
+                    OnSelectEntry(selectedEntry);
+                    buttonPressed = true;
+                }
+            }
+        }
 
 
         #region Updating
@@ -212,7 +239,6 @@ namespace TombOfAnubis
 
             // draw the background images
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < MenuEntries.Count; i++)

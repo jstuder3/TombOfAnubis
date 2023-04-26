@@ -103,6 +103,7 @@ namespace TombOfAnubis
                 // Move to the previous menu entry
                 if (InputController.IsUpTriggered())
                 {
+                    AudioController.PlaySoundEffect("menuSelect");
                     selectedEntry--;
                     if (selectedEntry < 0)
                         selectedEntry = menuEntries.Count - 1;
@@ -112,6 +113,7 @@ namespace TombOfAnubis
                 // Move to the next menu entry
                 if (InputController.IsDownTriggered())
                 {
+                    AudioController.PlaySoundEffect("menuSelect");
                     selectedEntry = (selectedEntry + 1) % menuEntries.Count;
                     buttonPressed = true;
                 }
@@ -119,7 +121,7 @@ namespace TombOfAnubis
                 // Button pressed
                 if(InputController.IsUseTriggered()) 
                 {
-                    // AudioManager.PlayCue("Continue");
+                    AudioController.PlaySoundEffect("menuAccept");
                     OnSelectEntry(selectedEntry);
                     buttonPressed = true;
                 }

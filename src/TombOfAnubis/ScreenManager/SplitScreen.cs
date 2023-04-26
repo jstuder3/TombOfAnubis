@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -23,6 +24,14 @@ namespace TombOfAnubis
             get { return playerViewports; }
             private set { playerViewports = value; }
         }
+
+        public static List<Vector2> WorldScaleFactorsBasedOnNPlayers = new List<Vector2>()
+        {
+            new Vector2(1, 1),
+            new Vector2(0.5f, 0.5f),
+            new Vector2(0.5f, 0.5f),
+            new Vector2(0.5f, 0.5f),
+        };
 
         private static Viewport gameScreenViewport;
 

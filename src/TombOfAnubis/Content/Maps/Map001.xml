@@ -11,9 +11,11 @@
 	  <TextureName>Tiles</TextureName>
 	  <!--The tile png needs 16 wall rectangles in the first row and NumFloorTiles many floor rectangles in the second row-->
 	  <NumberOfFloorTiles>4</NumberOfFloorTiles>
+	  <WorldScale>1.5 1.5</WorldScale>
+	  <TorchProbability>0.3</TorchProbability>
 	  <EntityProperties>
 		  <MaxCharacterMovementSpeed>400</MaxCharacterMovementSpeed>
-		  <MaxAnubisMovementSpeed>50</MaxAnubisMovementSpeed>
+		  <MaxAnubisMovementSpeed>250</MaxAnubisMovementSpeed>
 	  </EntityProperties>
 	  <MapBlockDescriptions>
 		  <Item>

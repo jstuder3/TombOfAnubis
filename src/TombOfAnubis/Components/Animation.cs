@@ -10,6 +10,8 @@ namespace TombOfAnubis
 
         public Rectangle DefaultSourceRectangle { get; set; }
 
+        public bool IsStopped { get; private set; } = false;
+
         public Animation(List<AnimationClip> animationClips, Visibility visibility)
         {
             AnimationClips = animationClips;
@@ -24,6 +26,16 @@ namespace TombOfAnubis
         {
             AnimationSystem.Deregister(this);
             base.Delete();
+        }
+
+        public void Stop()
+        {
+            IsStopped = true;
+        }
+
+        public void Resume()
+        {
+            IsStopped = false;
         }
 
         public void ComputeAnimationClipRectangles()
