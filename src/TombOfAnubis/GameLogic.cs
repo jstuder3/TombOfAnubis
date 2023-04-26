@@ -115,11 +115,9 @@ namespace TombOfAnubis
 
             //if both are trapped, do nothing
             else if (character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped()) { }
-            //if at least one character is trapped, check if one can revive the other
-            else if (!character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped() && character1.GetComponent<Inventory>().HasResurrectItem())
+            //if exactly one is trapped, revive the other
+            else if (!character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped())
             {
-                InventorySlot slot = character1.GetComponent<Inventory>().GetResurrectionSlot();
-                slot.ClearItem();
 
                 character2.GetComponent<Movement>().State = MovementState.Idle;
                 character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
@@ -147,10 +145,8 @@ namespace TombOfAnubis
 
 
             }
-            else if (character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Inventory>().HasResurrectItem())
+            else if (character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped())
             {
-                InventorySlot slot = character2.GetComponent<Inventory>().GetResurrectionSlot();
-                slot.ClearItem();
 
                 character1.GetComponent<Movement>().State = MovementState.Idle;
                 character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
