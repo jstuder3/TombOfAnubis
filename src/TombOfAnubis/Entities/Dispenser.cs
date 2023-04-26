@@ -157,7 +157,7 @@ namespace TombOfAnubis
                         ItemType = ItemType.Fist;
                         itemTexture = ItemTextureLibrary.Fist;
                         break;
-                    case 2: //Resurrection
+                    case 2: //Resurrection (is now a self-revive item)
                         ItemType = ItemType.Resurrection;
                         itemTexture = ItemTextureLibrary.Resurrection;
                         break;

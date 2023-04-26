@@ -222,7 +222,7 @@ namespace TombOfAnubis
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem(screenManager);
             singleton.GameplayEffectSystem = new GameplayEffectSystem();
-            singleton.AnubisAISystem = new AISystem(singleton.World, AnubisBehaviour.TailPlayers);
+            singleton.AnubisAISystem = new AISystem(singleton.World, AnubisBehaviour.TrueAI);
             singleton.DiscoverySystem = new DiscoverySystem(singleton.World);
             singleton.AnimationSystem = new AnimationSystem();
             singleton.MovementSystem = new MovementSystem();
