@@ -241,7 +241,7 @@ namespace TombOfAnubis
         public static void OnCollision(Character character, Anubis anubis)
         {
 
-            if (!character.GetComponent<Movement>().IsTrapped() && anubis.GetComponent<Movement>().CanMove())
+            if (!character.GetComponent<Movement>().IsTrapped() && anubis.GetComponent<Movement>().CanMove() && character.GetComponent<Movement>().IsVisibleToAnubis())
             {
                 AudioController.PlaySoundEffect("anubisRoar");
                 character.GetComponent<Movement>().State = MovementState.Trapped;
