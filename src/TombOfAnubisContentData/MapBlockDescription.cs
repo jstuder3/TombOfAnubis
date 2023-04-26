@@ -7,10 +7,10 @@ namespace TombOfAnubis
     public class MapBlockDescription
     {
         [ContentSerializer(Optional = true)]
-        public int MinOccurences { get; set; } = -1;
+        public int MinOccurences { get; set; } = 0;
 
         [ContentSerializer(Optional = true)]
-        public int MaxOccurences { get; set; } = -1;
+        public int MaxOccurences { get; set; } = int.MaxValue;
 
         [ContentSerializer(Optional = true)]
         public bool OccursNPlayerOften { get; set; } = false;

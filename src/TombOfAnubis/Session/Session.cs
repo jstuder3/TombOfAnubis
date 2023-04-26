@@ -512,6 +512,7 @@ namespace TombOfAnubis
                 foreach (string mapBlockName in mapBlockDesc.BlockNames)
                 {
                     MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\MapBlocks\" + mapBlockName);
+                    block.Name = mapBlockName;
                     block.Parent = mapBlockDesc;
                     mapBlockDesc.Blocks.Add(block);
                     singleton.Map.MapBlocks.Add(block);

@@ -199,6 +199,31 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Dispenser002.xml
 
+#begin Maps/MapBlocks/Dispenser003.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Dispenser003.xml
+
+#begin Maps/MapBlocks/Dispenser004.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Dispenser004.xml
+
+#begin Maps/MapBlocks/Dispenser005.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Dispenser005.xml
+
+#begin Maps/MapBlocks/Intersection001.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Intersection001.xml
+
+#begin Maps/MapBlocks/Intersection002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/Intersection002.xml
+
 #begin Maps/MapBlocks/TrappedArtefact001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -1166,11 +1191,6 @@
 /importer:H264Importer
 /processor:VideoProcessor
 /build:Videos/GameWon.mp4
-
-#begin Videos/IntroVideo_v2.mp4
-/importer:H264Importer
-/processor:VideoProcessor
-/build:Videos/IntroVideo_v2.mp4
 
 #begin Videos/IntroVideo_v2.mp4
 /importer:H264Importer

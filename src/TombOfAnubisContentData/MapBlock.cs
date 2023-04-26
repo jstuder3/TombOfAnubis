@@ -21,6 +21,8 @@ namespace TombOfAnubis
 
 
         #region non serializable
+        [ContentSerializerIgnore]
+        public string Name { get; set; }
 
         [ContentSerializerIgnore]
         public MapBlockDescription Parent { get; set; }
@@ -66,6 +68,11 @@ namespace TombOfAnubis
                 mapBlock.Entities = input.ReadObject<List<EntityDescription>>();
                 return mapBlock;
             }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace TombOfAnubis
         private List<Point> positionsToFill;
         private List<MapBlockDescription> mapBlocksDescriptions;
         private Random rand;
+        private Dictionary<string, int> placedBlockNames;
 
         public MapGenerator(Map map)
         {
@@ -35,7 +36,7 @@ namespace TombOfAnubis
 
             mapBlocksDescriptions = map.MapBlockDescriptions;
             entitiyDescriptions = new List<EntityDescription>();
-
+            placedBlockNames = new Dictionary<string, int>();
             rand = new Random();
 
         }
@@ -68,6 +69,7 @@ namespace TombOfAnubis
                 Console.WriteLine("Level generation failed.");
             }
             PrintLevel();
+            PrintPlacedBlockInformation();
 
             map.CollisionLayer = Flatten(collisionLayer);
             map.TranslateCollisionToBaseLayer();
@@ -79,6 +81,7 @@ namespace TombOfAnubis
         {
             Populate(collisionLayer, MapBlock.InvalidValue);
             entitiyDescriptions.Clear();
+            placedBlockNames.Clear();
             foreach (MapBlockDescription desc in mapBlocksDescriptions)
             {
                 desc.Reset();
@@ -95,13 +98,13 @@ namespace TombOfAnubis
         {
             CreateBorder();
             int roundsWithoutPlacement = 0;
-            int maxRoundsWithoutPlacement = 2 * MapDimensions.X * MapDimensions.Y;
+            int maxRoundsWithoutPlacement = 4 * MapDimensions.X * MapDimensions.Y;
             int placedBlocks = 0;
             while (positionsToFill.Count != 0)
             {
                 Point coord = SelectRandomPosition();
-                List<MapBlock> candidates = GetCandidates(coord);
-                if (candidates.Count == 0)
+                MapBlock candidate = GetCandidate(coord);
+                if (candidate == null)
                 {
                     if (roundsWithoutPlacement >= maxRoundsWithoutPlacement && CanPlace(MapBlock.Empty, coord))
                     {
@@ -115,20 +118,10 @@ namespace TombOfAnubis
                 }
                 else
                 {
-                    MapBlock winner;
-                    candidates.Sort(CompareCandidates);
-                    if (!candidates[0].Parent.Valid())
-                    {
-                        winner = candidates[0];
-                    }
-                    else
-                    {
-                        winner = PickCandidateBasedOnPriority(candidates);
-                    }
-                    Place(winner, coord);
+                    Place(candidate, coord);
                     placedBlocks++;
-                    CreateBorder(coord, winner);
-                    UpdateLevelPieces(winner);
+                    CreateBorder(coord, candidate);
+                    UpdateLevelPieces(candidate);
                 }
 
             }
@@ -180,7 +173,7 @@ namespace TombOfAnubis
             }
         }
 
-        private List<MapBlock> GetCandidates(Point coord)
+        private MapBlock GetCandidate(Point coord)
         {
             List<MapBlock> candidates = new List<MapBlock>();
             foreach(MapBlockDescription mapBlockDescription in mapBlocksDescriptions)
@@ -193,8 +186,36 @@ namespace TombOfAnubis
                     }
                 }
             }
-            
-            return candidates;
+            if(candidates.Count == 0)
+            {
+                return null;
+            }
+            List<MapBlock> validCandidates = new List<MapBlock>();
+            List<MapBlock> invalidCandidates = new List<MapBlock>();
+            foreach (var candidate in candidates)
+            {
+                if (candidate.Parent.Valid())
+                {
+                    validCandidates.Add(candidate);
+                }
+                else
+                {
+                    invalidCandidates.Add(candidate);
+                }
+            }
+            if(invalidCandidates.Count > 0)
+            {
+                return PickCandidateBasedOnSize(invalidCandidates);
+            }
+            else if(!HasInvalidBlockDescriptions() && validCandidates.Count > 0)
+            {
+                return PickCandidateBasedOnPriority(validCandidates);
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         private Point SelectRandomPosition()
@@ -226,6 +247,14 @@ namespace TombOfAnubis
         }
         private void Place(MapBlock block, Point coord)
         {
+            if(block.Name != null && placedBlockNames.ContainsKey(block.Name))
+            {
+                placedBlockNames[block.Name]++;
+            }
+            else if(block.Name != null)
+            {
+                placedBlockNames[block.Name] = 1;
+            }
             for (int i = 0; i < block.Dimensions.X; i++)
             {
                 for(int j = 0; j < block.Dimensions.Y; j++)
@@ -266,7 +295,17 @@ namespace TombOfAnubis
                 }
             }
         }
-
+        private bool HasInvalidBlockDescriptions()
+        {
+            foreach(MapBlockDescription mapBlockDescription in mapBlocksDescriptions) 
+            {
+                if (!mapBlockDescription.Valid())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void Populate(int[,] arr, int value)
         {
             for (int i = 0; i < arr.GetLength(0); i++)
@@ -308,6 +347,28 @@ namespace TombOfAnubis
             return null;
         }
 
+        private MapBlock PickCandidateBasedOnSize(List<MapBlock> blocks)
+        {
+            //PrintBlockList(blocks);
+            int sum = 0;
+            foreach (MapBlock block in blocks)
+            {
+                sum += block.Dimensions.X * block.Dimensions.Y;
+            }
+            int selection = rand.Next(sum);
+            sum = 0;
+            foreach (MapBlock block in blocks)
+            {
+                sum += block.Dimensions.X * block.Dimensions.Y;
+                if (selection < sum)
+                {
+                    //Console.WriteLine("Winner: " + block.Name);
+                    return block;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Invalid blocks have highest priority
         /// </summary>
@@ -341,6 +402,24 @@ namespace TombOfAnubis
             }
             Console.WriteLine("----------------Level----------------");
 
+        }
+        public void PrintPlacedBlockInformation()
+        {
+            foreach(var k in placedBlockNames.Keys)
+            {
+                Console.WriteLine(placedBlockNames[k] + " " + k);
+            }
+        }
+
+        public void PrintBlockList(List<MapBlock> blocks)
+        {
+            Console.Write("[ ");
+            foreach (var block in blocks)
+            {
+                Console.Write(block.ToString()+", ");
+            }
+            Console.Write(" ]");
+            Console.WriteLine();
         }
 
         private static int[] Flatten(int[,] input)

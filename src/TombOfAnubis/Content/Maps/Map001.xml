@@ -37,24 +37,32 @@
 			  </BlockNames>
 		  </Item>
 		  <Item>
-			  <MinOccurences>0</MinOccurences>
-			  <MaxOccurences>100</MaxOccurences>
 			  <Priority>1</Priority>
 			  <BlockNames>
 				  <Item>Deadend001</Item>
 				  <Item>Deadend002</Item>
-				  <Item>Deadend003</Item>
-				  <Item>Deadend004</Item>
 			  </BlockNames>
 		  </Item>
 		  <Item>
-			  <MinOccurences>0</MinOccurences>
+			  <MinOccurences>3</MinOccurences>
 			  <MaxOccurences>5</MaxOccurences>
 			  <Priority>4</Priority>
 			  <BlockNames>
 				  <Item>Dispenser001</Item>
 				  <Item>Dispenser002</Item>
+				  <Item>Dispenser003</Item>
+				  <Item>Dispenser004</Item>
+				  <Item>Dispenser005</Item>
 				  <Item>TrappedDispenser001</Item>
+			  </BlockNames>
+		  </Item>
+		  <Item>
+			  <MinOccurences>0</MinOccurences>
+			  <MaxOccurences>3</MaxOccurences>
+			  <Priority>3</Priority>
+			  <BlockNames>
+				  <Item>Intersection001</Item>
+				  <Item>Intersection002</Item>
 			  </BlockNames>
 		  </Item>
 	  </MapBlockDescriptions>
