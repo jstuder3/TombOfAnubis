@@ -23,6 +23,8 @@ namespace TombOfAnubis
         private int nGraphNodes;
         private int nGraphEdges;
 
+        private Random rnd = new Random();
+
         private int nNodesPerTile = 9;
 
         public MovementGraph(Map map)
@@ -262,7 +264,7 @@ namespace TombOfAnubis
                 return path.Count();
             } else
             {
-                return -1;
+                return 999999;
             }
 
         }
@@ -276,6 +278,32 @@ namespace TombOfAnubis
                 return true;
             }
             return false;
+        }
+
+        public int GetRandomTileNr(int source)
+        {
+            int target = this.rnd.Next(this.nGraphNodes);
+            while (target == source) { target = this.rnd.Next(this.nGraphNodes); }
+            return target;
+        }
+
+        public bool atSameTile(int tileNr, Vector2 pos)
+        {
+            return tileNr == ToNodeID(pos);
+        }
+
+        public IEnumerable<Edge<int>> pathToRandomNode(int source)
+        {
+            IEnumerable<Edge<int>> path;
+            int target = this.rnd.Next(this.nGraphNodes);
+            //ensurce not the same node and node reachable
+            while ( target == source || !fwGraph.TryGetPath(source, target, out path)) { target = this.rnd.Next(this.nGraphNodes); };
+            return path;
+        }
+
+        public IEnumerable<Edge<int>> nthTargetToRandomNode(int source, int n)
+        {
+            return pathToRandomNode(source).Take(n);
         }
     }
 

@@ -41,10 +41,20 @@ namespace TombOfAnubis
 
         
         //variables to tail players
-        private int MaxTailDistance { get; set; } = 10;
+        private int MaxTailDistance { get; set; } = 5;
+        private int DetailDistance { get; set; } = 8;
         public bool tailingPlayer { get; set; } = false;
         public int tailedPlayerId { get; set; } = default;
         Character tailedPlayer { get; set; } = default;
+
+        //Rage Level System
+        //public int rageLevel = 0;
+
+
+        //True AI logic:
+        private int randomTileNr = default;
+        private bool randomTileNrSet = false;
+
 
         //avoidWallSystem:
         public bool wallBottomLeft = false;
@@ -75,6 +85,8 @@ namespace TombOfAnubis
 
 
         }
+
+        
 
         bool wallDetected()
         {
@@ -414,6 +426,67 @@ namespace TombOfAnubis
             return direction;
         }
 
+        public int GetDistToclosestPlayer(AI ai, Vector2 positionAnubis)
+        {
+            MovementGraph movementGraph = ai.MovementGraph;
+            List<Character> characters = World.GetChildrenOfType<Character>();
+            int nodeIdAnubis = movementGraph.ToNodeID(positionAnubis);
+            int minDist = 999999;
+
+            foreach (Character player in characters)
+            {
+                if (!player.GetComponent<Movement>().IsVisibleToAnubis())
+                {
+                    continue;
+                }
+                int nodeIdPlayer = movementGraph.ToNodeID(player.CenterPosition());
+                int dist = movementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer);
+                if (dist >= 0 && dist < minDist)
+                {
+                    minDist = dist;
+                }
+            }
+            return minDist;
+        }
+
+        public Character GetClosestPlayer(AI ai, Vector2 anubisPosition)
+        {
+            MovementGraph movementGraph = ai.MovementGraph;
+            List<Character> characters = World.GetChildrenOfType<Character>();
+
+            int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
+            int closestPlayerDist = 999999;
+            bool foundAPlayer = false;
+            Character closestPlayer = default;
+
+            foreach (Character player in characters)
+            {
+                //Transform cur_player_transform = player.GetComponent<Transform>();
+                int nodeIdPlayer = movementGraph.ToNodeID(player.CenterPosition());
+                //Console.WriteLine("player position: " + player.CenterPosition());
+
+                if (player.GetComponent<Movement>().IsVisibleToAnubis() && !player.GetComponent<Movement>().IsTrapped() && ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
+                {
+
+                    int dist = ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer);
+                    if (nodeIdPlayer >= 0 && dist >= 0 && dist < closestPlayerDist)
+                    {
+                        foundAPlayer = true;
+                        closestPlayerDist = dist;
+                        closestPlayer = player;
+                    }
+                }
+            }
+            if (!foundAPlayer)
+            {
+                Console.WriteLine("GetClosestPlayer failed");
+                //return default, unknown behaviour
+                return closestPlayer;
+            }
+            return closestPlayer;
+
+        }
+
         public bool updateClosestPlayer(AI ai, Vector2 anubisPosition)
         {
             //Console.WriteLine("cur no tailed player, try to change now");
@@ -502,7 +575,7 @@ namespace TombOfAnubis
         void updateWallSystem(Vector2 pos, Vector2 diagVec, float offset, int verbose)
         {
             //Console.WriteLine("length test: " + new Vector2((float)Math.Cos(0.5 * Math.PI), (float)-Math.Sin(0.5 * Math.PI)).LengthSquared());
-            float increaser = (float)1.05;
+            float increaser = (float)1.075;
             float decreaser = (float)1;
             Vector2 topIncreaser = new Vector2(0, -10);
 
@@ -626,10 +699,9 @@ namespace TombOfAnubis
                     float offset = (float)1.1 * (entity.CenterPosition() - entity.TopLeftCornerPosition()).Length();
                     updateWallSystem(positionAnubis, entity.TopLeftCornerPosition() - entity.CenterPosition(), offset, 0);
 
-                    int anubis_node_id = movementGraph.ToNodeID(positionAnubis);
 
                     Vector2 positionPlayer = tailedPlayer.CenterPosition();
-                    int tailed_player_node_id = movementGraph.ToNodeID(positionPlayer);
+                    //int tailed_player_node_id = movementGraph.ToNodeID(positionPlayer);
 
                     Vector2 direction;
                     //direction = this.getDirection(ai, positionAnubis, tailedPlayer.CenterPosition());
@@ -648,10 +720,79 @@ namespace TombOfAnubis
                     //newPosition = newPosition;
 
                     
+                } else if (this.AnubisBehaviour == AnubisBehaviour.TrueAI)
+                {
+                    //moves randomly until a player too close
+                    //random movement: determend movement to a random place in the labyrinth
+
+                    //initialization stuff
+                    Vector2 positionAnubis = entity.CenterPosition();
+
+
+                    //first updated trueAI system (tailing player, check distances usw)
+                    //first check if a valid tailing 
+                    if(this.tailingPlayer)
+                    {
+                        Vector2 positionTailedPlayer = this.tailedPlayer.CenterPosition();
+                        int nodeIdTailedPlayer = movementGraph.ToNodeID(positionTailedPlayer);
+                        int nodeIdAnubis = movementGraph.ToNodeID(positionAnubis);
+
+                        if(!this.tailedPlayer.GetComponent<Movement>().IsVisibleToAnubis() || movementGraph.GetDistance(nodeIdAnubis, nodeIdTailedPlayer) >= this.DetailDistance)
+                        {
+                            this.tailingPlayer = false;
+                            Console.WriteLine("AI: tailed Player not visible or too far, detailed");
+                        }
+                    }
+
+                    if(!this.tailingPlayer) {
+                        //check if a visible palyer is close enough
+                        int distToClosestPlayer = GetDistToclosestPlayer(ai, positionAnubis);
+                        if (distToClosestPlayer <= this.MaxTailDistance)
+                        {
+                            this.tailedPlayer = GetClosestPlayer(ai, positionAnubis);
+                            this.tailingPlayer = true;
+                            Console.WriteLine("AI: found player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                        }
+
+
+                    }
+
+                    if (this.tailingPlayer)
+                    {
+                        Vector2 positionTailedPlayer = this.tailedPlayer.CenterPosition();
+                        int nodeIdTailedPlayer = movementGraph.ToNodeID(positionTailedPlayer);
+                        int nodeIdAnubis = movementGraph.ToNodeID(positionAnubis);
+
+                        float offset = (float)1.1 * (entity.CenterPosition() - entity.TopLeftCornerPosition()).Length();
+                        updateWallSystem(positionAnubis, entity.TopLeftCornerPosition() - entity.CenterPosition(), offset, 0);
+
+                        Vector2 direction = this.getDirection2(ai, positionAnubis, positionTailedPlayer);
+                        newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
+
+                    } else
+                    {
+                        //walk to a random tile
+                        //first check if at the tile
+                        if (!this.randomTileNrSet || movementGraph.atSameTile(this.randomTileNr, positionAnubis))
+                        {
+                            //choose new tile to walk to
+                            this.randomTileNr = movementGraph.GetRandomTileNr(movementGraph.ToNodeID(positionAnubis));
+                            this.randomTileNrSet = true;
+                        }
+
+                        //update wall system befor e direction fkt called
+                        float offset = (float)1.1 * (entity.CenterPosition() - entity.TopLeftCornerPosition()).Length();
+                        updateWallSystem(positionAnubis, entity.TopLeftCornerPosition() - entity.CenterPosition(), offset, 0);
+                        //now valid tile nr as a goal is set, walk towards it
+                        Vector2 direction = this.getDirection2(ai, positionAnubis, movementGraph.ToCenterTilePosition(this.randomTileNr));
+
+                        newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
+
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("AI: this AI mode is not implemented yet");
+                    Console.WriteLine("AI: unknown AI mode");
 
                 }
                 //if (currentActions.Contains(PlayerActions.UseObject))
