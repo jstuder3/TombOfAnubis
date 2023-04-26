@@ -189,10 +189,12 @@ namespace TombOfAnubis
             if (nodeIdAnubis == nodeIdPlayer || ai.MovementGraph.isTileNeighbor(tileCoordinateAnubis, tileCoordinatePlayer))
             {
                 //directly walk towards the player 
+                //Console.WriteLine("Anubis walks directly to Player");
                 direction = playerPosition - anubisPosition;
             } else
             {
                 //walk along the path of tile nodes
+                //Console.WriteLine("Anubis walks towards Nodes");
                 if (!ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
                 {
                     Console.WriteLine("Error: Anbuis cound not find a Path to cur tailed player");

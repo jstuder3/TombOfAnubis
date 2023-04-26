@@ -15,6 +15,7 @@ namespace TombOfAnubis
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
+            //graphics.IsFullScreen = true;
 
             screenManager = new GameScreenManager(this);
             Components.Add(screenManager);

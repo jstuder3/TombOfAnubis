@@ -399,6 +399,9 @@ namespace TombOfAnubis
             bool[,] arr = new bool[this.nBinsPerColumn, this.nBinsPerRow];
 
             //iterate over all map objects
+
+
+
         }
     }
 }
