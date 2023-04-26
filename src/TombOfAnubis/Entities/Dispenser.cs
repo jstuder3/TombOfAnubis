@@ -147,7 +147,7 @@ namespace TombOfAnubis
             if (dispenserType == DispenserType.ItemDispenser)
             {
 
-                switch (random.Next(0, 2))
+                switch (random.Next(0, 3))
                 {
                     case 0: //Speedup
                         ItemType = ItemType.Speedup;
@@ -157,14 +157,14 @@ namespace TombOfAnubis
                         ItemType = ItemType.Fist;
                         itemTexture = ItemTextureLibrary.Fist;
                         break;
-                    case 2: //Hiding Cloak (not yet implemented)
+                    case 2: //Resurrection (is now a self-revive item)
+                        ItemType = ItemType.Resurrection;
+                        itemTexture = ItemTextureLibrary.Resurrection;
+                        break;
+                    case 3: //Hiding Cloak (not yet implemented)
                         ItemType = ItemType.HidingCloak;
                         //ItemSprite = new Sprite(ItemTextureLibrary.HidingCloak, 3, Visibility.Game);
                         break;
-                    /*case 2: //Resurrection (scrapped because of feedback)
-                        ItemType = ItemType.Resurrection;
-                        itemTexture = ItemTextureLibrary.Resurrection;
-                        break;*/
                     default:
                         return;
                 }

@@ -120,6 +120,37 @@ namespace TombOfAnubis
                     ItemType = ItemType.None;
                     Console.WriteLine("Used HidingCloak!");
                     break;
+                case ItemType.Resurrection:
+                    if(Entity.GetComponent<Movement>().State == MovementState.Trapped)
+                    {
+                        ItemType = ItemType.None;
+
+                        Entity.GetComponent<Movement>().State = MovementState.Idle;
+                        Entity.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
+
+                        ParticleEmitterConfiguration pec2 = new ParticleEmitterConfiguration();
+                        pec2.LocalPosition = new Vector2(30f, 30f);
+                        pec2.RandomizedSpawnPositionRadius = 40f;
+                        pec2.Texture = ParticleTextureLibrary.PlusFilledWithOutline;
+                        pec2.SpriteLayer = 3;
+                        pec2.RandomizedTintMin = Color.Chartreuse;
+                        pec2.RandomizedTintMax = Color.Green;
+                        pec2.Scale = Vector2.One * 0.4f;
+                        pec2.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                        pec2.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                        pec2.EmitterDuration = 1f;
+                        pec2.ParticleDuration = 1f;
+                        pec2.EmissionFrequency = 30f;
+                        pec2.EmissionRate = 1f;
+                        pec2.InitialSpeed = 40f;
+                        pec2.SpawnDirection = new Vector2(0f, -1f);
+                        pec2.SpawnConeDegrees = 360f;
+                        pec2.Drag = 0.5f;
+
+                        Entity.AddComponent(new ParticleEmitter(pec2));
+
+                    }
+                    break;
             }
             return false;
         }

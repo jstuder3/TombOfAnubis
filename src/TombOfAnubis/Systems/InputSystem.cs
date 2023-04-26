@@ -75,6 +75,13 @@ namespace TombOfAnubis
                     transform.Position = newPosition;
 
                 }
+                //if the player has self-revive item, he can also use it when he's dead
+                //use item, if there is one
+                else if (InputController.PlayerActions[character.GetComponent<Player>().PlayerID].Contains(PlayerAction.UseObject) && character.GetComponent<Inventory>().GetFullItemSlot()?.Item.ItemType == ItemType.Resurrection)
+                {
+                    character.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
+                }
+
             }
         }
     }
