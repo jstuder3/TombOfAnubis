@@ -212,10 +212,10 @@ namespace TombOfAnubis
             };
             singleton.GhostCharacterTextures = new List<Texture2D>()
             {
-                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost"),
-                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost"),
-                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost"),
-                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost")
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost_red"),
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost_green"),
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost_blue"),
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost_purple")
             };
             singleton.ArtefactTextures = new List<Texture2D>()
             {
