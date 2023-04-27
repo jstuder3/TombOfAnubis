@@ -54,7 +54,6 @@ namespace TombOfAnubis
         }
         public static Entity SpawnCharacter(EntityDescription entityDescription)
         {
-            
             Enum.TryParse(entityDescription.Type, out CharacterType type);
             entityDescription.SpriteTextureName = Session.GetInstance().CharacterTextures[(int)type].Name;
             entityDescription.GhostSpriteTextureName = Session.GetInstance().GhostCharacterTextures[(int)type].Name;

@@ -35,13 +35,13 @@ namespace TombOfAnubis
             {
                 sprite = new Sprite(character.EntityDescription.GhostTexture, 2, Visibility.Both);
             }
+            AddComponent(sprite);
             if (character.EntityDescription.GhostAnimation != null)
             {
                 Animation animation = new Animation(character.EntityDescription.GhostAnimation, Visibility.Minimap);
                 AddComponent(animation);
                 animation.SetActiveClip(AnimationClipType.Idle);
             }
-            AddComponent(sprite);
             Player player = new Player((int)character.GetComponent<Player>().PlayerID);
             AddComponent(player);
 

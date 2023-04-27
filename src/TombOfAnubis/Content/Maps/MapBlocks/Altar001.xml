@@ -51,30 +51,6 @@
 				</Animation>
 				<GhostAnimation>
 					<Item>
-						<Type>WalkingLeft</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingRight</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingUp</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingDown</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
 						<Type>Dead</Type>
 						<NumberOfFrames>2</NumberOfFrames>
 						<FrameDuration>500</FrameDuration>
