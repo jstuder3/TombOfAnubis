@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Sdcb.FFmpeg.Raw;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace TombOfAnubis
                             Orientation.Up, Orientation.Right, Orientation.Down, Orientation.Left,
                         };
 
-                        movement.Orientation = orientations[costhetas.IndexOf(costhetas.Max())];
+                        movement.Orientation = ChooseOrientation(costhetas, orientations);
                         newPosition += movementVector * movement.MaxSpeed * deltaTimeSeconds;
 
                     }
@@ -82,6 +83,53 @@ namespace TombOfAnubis
                     entity.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
                 }
 
+            }
+        }
+
+        private Orientation ChooseOrientation(List<float> cosThetas, List<Orientation> orientation)
+        {
+            float eps = 0.001f;
+            float maxValue = cosThetas.Max();
+            List<Orientation> competingOrientations = new List<Orientation>();
+            for(int i = 0; i < cosThetas.Count; i++)
+            {
+                if (Math.Abs(cosThetas[i] - maxValue) < eps)
+                {
+                    competingOrientations.Add(orientation[i]);
+                }
+            }
+            if(competingOrientations.Count == 1)
+            {
+                return competingOrientations[0];
+            }
+            else if (competingOrientations.Count == 2)
+            {
+                Orientation o1 = competingOrientations[0];
+                Orientation o2 = competingOrientations[1];
+                if(o1 == Orientation.Up && o2 == Orientation.Left)
+                {
+                    return Orientation.Up;
+                }
+                if (o1 == Orientation.Up && o2 == Orientation.Right)
+                {
+                    return Orientation.Up;
+                }
+                if (o1 == Orientation.Down && o2 == Orientation.Left)
+                {
+                    return Orientation.Down;
+                }
+                if (o1 == Orientation.Down && o2 == Orientation.Right)
+                {
+                    return Orientation.Down;
+                }
+                else
+                {
+                    return Orientation.Down;
+                }
+            }
+            else
+            {
+                return Orientation.Down;
             }
         }
     }
