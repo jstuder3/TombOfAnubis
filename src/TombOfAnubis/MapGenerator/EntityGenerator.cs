@@ -79,7 +79,7 @@ namespace TombOfAnubis
                     (int)type,
                     Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
                     entityDescription.Scale,
-                    entityDescription.Scale * 10,
+                    entityDescription.Scale * 5,
                     entityDescription.Texture,
                     true
                     );

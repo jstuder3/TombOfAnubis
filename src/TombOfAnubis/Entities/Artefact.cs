@@ -7,7 +7,7 @@ namespace TombOfAnubis
     {
         public Artefact(int playerID, Vector2 position, Vector2 scale, Texture2D texture, bool collidable)
         {
-            Transform transform = new Transform(position, scale * 0.2f, Visibility.Game); //note that scale is much smaller when the artefact is placed on the altar
+            Transform transform = new Transform(position, scale, Visibility.Game); //note that scale is much smaller when the artefact is placed on the altar
             AddComponent(transform);
 
             Player player = new Player(playerID);

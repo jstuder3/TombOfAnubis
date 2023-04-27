@@ -384,7 +384,7 @@ namespace TombOfAnubis
                 characterInventory.ClearArtefactSlots();
                 altarInventory.AddArtefact(playerID);
 
-                float artefactScale = 0.5f;
+                float artefactScale = 0.1f;
                 Texture2D artefactTexture = Session.GetInstance().ArtefactTextures[playerID];
 
                 Vector2 altarSize = altar.SpriteSize();
@@ -394,10 +394,10 @@ namespace TombOfAnubis
                 float h = altarSize.Y;
                 Vector2[] artefactPositions = new Vector2[]
                 {
-                    new Vector2(0.06f*w, -0.1f*h),
-                    new Vector2(0.91f*w - artefactWidth, -0.1f*h),
-                    new Vector2(0.04f*w, 0.2f*h),
-                    new Vector2(0.95f*w - artefactWidth, 0.2f*h)
+                    new Vector2(0.05f*w, -0.17f*h),
+                    new Vector2(0.93f*w - artefactWidth, -0.17f*h),
+                    new Vector2(0.02f*w, 0.14f*h),
+                    new Vector2(0.98f*w - artefactWidth, 0.14f*h)
                 };
 
                 Artefact artefact = new Artefact(playerID, artefactPositions[playerID], Vector2.One * artefactScale, artefactTexture, false);
