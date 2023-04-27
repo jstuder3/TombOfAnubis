@@ -16,7 +16,6 @@
 				<ClassName>TombOfAnubis.Character</ClassName>
 				<SpawnTileCoordinate> 2 0</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
-				<SpriteTextureName>animated_explorer_spritesheet_red</SpriteTextureName>
 				<Type>PlayerOne</Type>
 				<Animation>
 					<Item>
@@ -50,7 +49,6 @@
 						<FrameSize>180 260</FrameSize>
 					</Item>
 				</Animation>
-				<GhostSpriteTextureName>animated_explorer_spritesheet_red</GhostSpriteTextureName>
 				<GhostAnimation>
 					<Item>
 						<Type>WalkingLeft</Type>
@@ -88,7 +86,6 @@
 				<ClassName>TombOfAnubis.Character</ClassName>
 				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
-				<SpriteTextureName>animated_explorer_spritesheet_green</SpriteTextureName>
 				<Type>PlayerTwo</Type>
 				<Animation>
 					<Item>
@@ -122,32 +119,7 @@
 						<FrameSize>180 260</FrameSize>
 					</Item>
 				</Animation>
-				<GhostSpriteTextureName>animated_explorer_spritesheet_green</GhostSpriteTextureName>
 				<GhostAnimation>
-					<Item>
-						<Type>WalkingLeft</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingRight</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingUp</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingDown</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
 					<Item>
 						<Type>Dead</Type>
 						<NumberOfFrames>2</NumberOfFrames>
@@ -160,7 +132,6 @@
 				<ClassName>TombOfAnubis.Character</ClassName>
 				<SpawnTileCoordinate> 4 2</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
-				<SpriteTextureName>animated_explorer_spritesheet_blue</SpriteTextureName>
 				<Type>PlayerThree</Type>
 				<Animation>
 					<Item>
@@ -194,32 +165,7 @@
 						<FrameSize>180 260</FrameSize>
 					</Item>
 				</Animation>
-				<GhostSpriteTextureName>animated_explorer_spritesheet_blue</GhostSpriteTextureName>
 				<GhostAnimation>
-					<Item>
-						<Type>WalkingLeft</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingRight</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingUp</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingDown</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
 					<Item>
 						<Type>Dead</Type>
 						<NumberOfFrames>2</NumberOfFrames>
@@ -232,7 +178,6 @@
 				<ClassName>TombOfAnubis.Character</ClassName>
 				<SpawnTileCoordinate> 2 4</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
-				<SpriteTextureName>animated_explorer_spritesheet_purple</SpriteTextureName>
 				<Type>PlayerFour</Type>
 				<Animation>
 					<Item>
@@ -266,32 +211,7 @@
 						<FrameSize>180 260</FrameSize>
 					</Item>
 				</Animation>
-				<GhostSpriteTextureName>animated_explorer_spritesheet_purple</GhostSpriteTextureName>
 				<GhostAnimation>
-					<Item>
-						<Type>WalkingLeft</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingRight</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingUp</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
-					<Item>
-						<Type>WalkingDown</Type>
-						<NumberOfFrames>4</NumberOfFrames>
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>180 260</FrameSize>
-					</Item>
 					<Item>
 						<Type>Dead</Type>
 						<NumberOfFrames>2</NumberOfFrames>

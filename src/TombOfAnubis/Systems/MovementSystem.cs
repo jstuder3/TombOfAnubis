@@ -15,7 +15,7 @@ namespace TombOfAnubis
             {
                 Entity entity = movement.Entity;
                 Animation animation = entity.GetComponent<Animation>();
-                if (animation != null)
+                if (animation != null && entity.GetType() != typeof(Ghost))
                 {
                     if(movement.State == MovementState.Walking)
                     {

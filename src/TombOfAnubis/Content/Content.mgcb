@@ -154,25 +154,10 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Altar001.xml
 
-#begin Maps/MapBlocks/Altar001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Altar001.xml
-
 #begin Maps/MapBlocks/Artefact001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Artefact001.xml
-
-#begin Maps/MapBlocks/Artefact001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Artefact001.xml
-
-#begin Maps/MapBlocks/Artefact002.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Artefact002.xml
 
 #begin Maps/MapBlocks/Artefact002.xml
 /importer:XmlImporter
@@ -184,25 +169,10 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Artefact003.xml
 
-#begin Maps/MapBlocks/Artefact003.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Artefact003.xml
-
 #begin Maps/MapBlocks/Deadend001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Deadend001.xml
-
-#begin Maps/MapBlocks/Deadend001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Deadend001.xml
-
-#begin Maps/MapBlocks/Deadend002.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Deadend002.xml
 
 #begin Maps/MapBlocks/Deadend002.xml
 /importer:XmlImporter
@@ -214,25 +184,10 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Deadend003.xml
 
-#begin Maps/MapBlocks/Deadend003.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Deadend003.xml
-
 #begin Maps/MapBlocks/Deadend004.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Deadend004.xml
-
-#begin Maps/MapBlocks/Deadend004.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Deadend004.xml
-
-#begin Maps/MapBlocks/Dispenser001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Dispenser001.xml
 
 #begin Maps/MapBlocks/Dispenser001.xml
 /importer:XmlImporter
@@ -244,25 +199,10 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Dispenser002.xml
 
-#begin Maps/MapBlocks/Dispenser002.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Dispenser002.xml
-
 #begin Maps/MapBlocks/Dispenser003.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Dispenser003.xml
-
-#begin Maps/MapBlocks/Dispenser003.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Dispenser003.xml
-
-#begin Maps/MapBlocks/Dispenser004.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Dispenser004.xml
 
 #begin Maps/MapBlocks/Dispenser004.xml
 /importer:XmlImporter
@@ -274,16 +214,6 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Dispenser005.xml
 
-#begin Maps/MapBlocks/Dispenser005.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Dispenser005.xml
-
-#begin Maps/MapBlocks/Intersection001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Intersection001.xml
-
 #begin Maps/MapBlocks/Intersection001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -293,16 +223,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/Intersection002.xml
-
-#begin Maps/MapBlocks/Intersection002.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/Intersection002.xml
-
-#begin Maps/MapBlocks/TrappedArtefact001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/TrappedArtefact001.xml
 
 #begin Maps/MapBlocks/TrappedArtefact001.xml
 /importer:XmlImporter
@@ -313,11 +233,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/TrappedArtefactSP001.xml
-
-#begin Maps/MapBlocks/TrappedDispenser001.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Maps/MapBlocks/TrappedDispenser001.xml
 
 #begin Maps/MapBlocks/TrappedDispenser001.xml
 /importer:XmlImporter
@@ -400,6 +315,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Characters/blue_plagiarized_explorer.png
+
+#begin Textures/Characters/explorer_ghost.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Characters/explorer_ghost.png
 
 #begin Textures/Characters/green_plagiarized_explorer.png
 /importer:TextureImporter

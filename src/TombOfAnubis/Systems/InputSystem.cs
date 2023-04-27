@@ -61,12 +61,12 @@ namespace TombOfAnubis
                     }
 
                     //use item, if there is one
-                    if (currentActions.Contains(PlayerAction.UseObject))
+                    if (currentActions.Contains(PlayerAction.UseObject) && entity.GetComponent<Inventory>() != null)
                     {
                         entity.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
                     }
                     //drop item, if there is one
-                    if (currentActions.Contains(PlayerAction.DropObject)) {
+                    if (currentActions.Contains(PlayerAction.DropObject) && entity.GetComponent<Inventory>() != null) {
                         InventorySlot inventorySlot = entity.GetComponent<Inventory>().GetFullItemSlot();
                         if (inventorySlot != null)
                         {

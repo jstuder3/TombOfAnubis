@@ -110,6 +110,8 @@ namespace TombOfAnubis
 
         public List<Texture2D> ArtefactTextures { get; set; }
         public List<Texture2D> CharacterTextures { get; set; }
+        public List<Texture2D> GhostCharacterTextures { get; set; }
+
 
         public int NumberOfPlayers { get; set; }
 
@@ -207,6 +209,13 @@ namespace TombOfAnubis
                 content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_green"),
                 content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_blue"),
                 content.Load<Texture2D>(@"Textures\Characters\animated_explorer_spritesheet_purple")
+            };
+            singleton.GhostCharacterTextures = new List<Texture2D>()
+            {
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost"),
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost"),
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost"),
+                content.Load<Texture2D>(@"Textures\Characters\explorer_ghost")
             };
             singleton.ArtefactTextures = new List<Texture2D>()
             {

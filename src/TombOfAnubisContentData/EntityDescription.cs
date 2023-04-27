@@ -60,7 +60,7 @@ namespace TombOfAnubis
             }
             if (GhostSpriteTextureName != null)
             {
-                GhostTexture = content.Load<Texture2D>(Path.Combine(textureDirectory, SpriteTextureName));
+                GhostTexture = content.Load<Texture2D>(Path.Combine(textureDirectory, GhostSpriteTextureName));
             }
             startPosition = 0;
             if (GhostAnimation != null)

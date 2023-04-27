@@ -27,7 +27,7 @@ namespace TombOfAnubis
             {
                 Animation animation = new Animation(character.EntityDescription.GhostAnimation, Visibility.Game);
                 AddComponent(animation);
-                animation.SetActiveClip(AnimationClipType.Idle);
+                animation.SetActiveClip(AnimationClipType.Dead);
 
                 sprite = new Sprite(character.EntityDescription.GhostTexture, animation.DefaultSourceRectangle, 2, Visibility.Game);
             }
@@ -41,7 +41,6 @@ namespace TombOfAnubis
                 AddComponent(animation);
                 animation.SetActiveClip(AnimationClipType.Idle);
             }
-            sprite.Alpha = 0.4f;
             AddComponent(sprite);
             Player player = new Player((int)character.GetComponent<Player>().PlayerID);
             AddComponent(player);
