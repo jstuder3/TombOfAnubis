@@ -347,8 +347,8 @@ namespace TombOfAnubis
             if (inventorySlot == null || !inventorySlot.IsEmpty()) return;
 
             inventorySlot.SetItem(worldItem.ItemType);
-            //worldItem.Delete();
-            worldItem.AddComponent(new GameplayEffect(EffectType.Lifetime, 0f, Visibility.Game));
+            worldItem.Delete();
+            //worldItem.AddComponent(new GameplayEffect(EffectType.Lifetime, 0f, Visibility.Game));
         }
 
         public static void OnCollision(WorldItem worldItem, Wall wall)

@@ -70,7 +70,7 @@ namespace TombOfAnubis
                         InventorySlot inventorySlot = entity.GetComponent<Inventory>().GetFullItemSlot();
                         if (inventorySlot != null)
                         {
-                            inventorySlot.DropItem();
+                            inventorySlot.DropItem(deltaTime);
                         }
                     }
                     transform.Position = newPosition;

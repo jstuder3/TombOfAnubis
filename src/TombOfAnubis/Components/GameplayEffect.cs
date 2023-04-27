@@ -238,6 +238,11 @@ namespace TombOfAnubis {
             GameplayEffectSystem.Deregister(this);
         }
 
+        public void DeleteWithoutRevertingEffect()
+        {
+            GameplayEffectSystem.Deregister(this);
+        }
+
         private bool CheckHasFloatParameters(int numRequiredParameters)
         {
             if (effectFloatParameters.Count >= numRequiredParameters) return true;

@@ -34,6 +34,11 @@ namespace TombOfAnubis
         public void Delete()
         {
 
+            foreach(GameplayEffect gameplayEffect in GetComponentsOfType<GameplayEffect>())
+            {
+                gameplayEffect.DeleteWithoutRevertingEffect();
+            }
+
             foreach (Component component in components)
             {
                 component.Delete();

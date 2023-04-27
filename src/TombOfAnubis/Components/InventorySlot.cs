@@ -1,4 +1,6 @@
-﻿namespace TombOfAnubis
+﻿using Microsoft.Xna.Framework;
+
+namespace TombOfAnubis
 {
     public enum SlotType
     {
@@ -39,9 +41,9 @@
             return Item.TryUse();
         }
 
-        public void DropItem()
+        public void DropItem(GameTime gameTime)
         {
-            Item.DropItem();
+            Item.DropItem(gameTime);
         }
 
     }

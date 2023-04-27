@@ -69,6 +69,8 @@ namespace TombOfAnubis
         public bool isInWorld = false;
         public bool isInInventory = false;
 
+        private float lastTimeDropped = 0f;
+
         public InventoryItem(ItemType itemType, Entity entity)
         {
             ItemType = itemType;
@@ -196,19 +198,25 @@ namespace TombOfAnubis
             return false;
         }
 
-        public void DropItem()
+        public void DropItem(GameTime gameTime)
         {
             if(ItemType == ItemType.None) return;
-            Transform transform = Entity.GetComponent<Transform>();
-            Movement movement = Entity.GetComponent<Movement>();
 
-            Vector2 forwardVector = movement.GetForwardVector();
-            WorldItem wi = new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType);
-            Session.GetInstance().World.AddChild(wi);
-            wi.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
-            ItemType = ItemType.None;
-            Console.WriteLine("Dropped item!");
+            //if ((float)gameTime.TotalGameTime.TotalSeconds - lastTimeDropped > 0.5f)
+            {
+                lastTimeDropped = (float)gameTime.TotalGameTime.TotalSeconds;
 
+                Transform transform = Entity.GetComponent<Transform>();
+                Movement movement = Entity.GetComponent<Movement>();
+
+                Vector2 forwardVector = movement.GetForwardVector();
+                WorldItem wi = new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType);
+                Session.GetInstance().World.AddChild(wi);
+                //wi.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
+                ItemType = ItemType.None;
+                Console.WriteLine("Dropped item!");
+            }
+            return;
         }
 
         public Texture2D GetTexture()
