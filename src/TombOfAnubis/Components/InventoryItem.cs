@@ -203,8 +203,9 @@ namespace TombOfAnubis
             Movement movement = Entity.GetComponent<Movement>();
 
             Vector2 forwardVector = movement.GetForwardVector();
-
-            Session.GetInstance().World.AddChild(new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType));
+            WorldItem wi = new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType);
+            Session.GetInstance().World.AddChild(wi);
+            wi.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
             ItemType = ItemType.None;
             Console.WriteLine("Dropped item!");
 
