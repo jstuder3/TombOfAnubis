@@ -341,7 +341,15 @@ namespace TombOfAnubis
             {
                 if (playerInput.Entity.GetComponent<Player>().PlayerID == playerIdx)
                 {
-                    Character player = playerInput.Entity as Character;
+                    Entity player = playerInput.Entity;
+                    if(player.GetType() == typeof(Character))
+                    {
+                        Character character = (Character)player;
+                        if(character.Ghost != null)
+                        {
+                            continue;
+                        }
+                    }
                     Vector2 playerCenter = singleton.World.Scale * player.CenterPosition();
 
                     singleton.World.Origin = singleton.viewportCenter - playerCenter;

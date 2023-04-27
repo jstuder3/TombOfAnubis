@@ -118,7 +118,11 @@ namespace TombOfAnubis
             //if exactly one is trapped, revive the other
             else if (!character1.GetComponent<Movement>().IsTrapped() && character2.GetComponent<Movement>().IsTrapped())
             {
-
+                if(character2.Ghost != null)
+                {
+                    character2.Ghost.Delete();
+                    character2.Ghost = null;
+                }
                 character2.GetComponent<Movement>().State = MovementState.Idle;
                 character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
@@ -148,7 +152,11 @@ namespace TombOfAnubis
             }
             else if (character1.GetComponent<Movement>().IsTrapped() && !character2.GetComponent<Movement>().IsTrapped())
             {
-
+                if (character1.Ghost != null)
+                {
+                    character1.Ghost.Delete();
+                    character1.Ghost = null;
+                }
                 character1.GetComponent<Movement>().State = MovementState.Idle;
                 character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
@@ -246,6 +254,7 @@ namespace TombOfAnubis
                 AudioController.PlaySoundEffect("anubisRoar");
                 character.GetComponent<Movement>().State = MovementState.Trapped;
                 character.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Dead);
+                Session.GetInstance().World.AddChild(new Ghost(character));
                 // AISystem.DetailAPlayer(character);
 
                 foreach (ParticleEmitter pe in character.GetComponentsOfType<ParticleEmitter>())

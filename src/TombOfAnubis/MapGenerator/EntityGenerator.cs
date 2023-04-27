@@ -58,15 +58,7 @@ namespace TombOfAnubis
             Enum.TryParse(entityDescription.Type, out CharacterType type);
             entityDescription.SpriteTextureName = Session.GetInstance().CharacterTextures[(int)type].Name;
             entityDescription.Load(content, "");
-            return new Character(
-                type,
-                Session.GetInstance().Map.CreateEntityTileCenteredPosition(entityDescription),
-                entityDescription.Scale,
-                entityDescription.Texture,
-                Session.GetInstance().Map.EntityProperties.MaxCharacterMovementSpeed,
-                entityDescription.Animation,
-                entityDescription.Animation
-                );
+            return new Character( entityDescription);
         }
         public static Entity SpawnArtefact(EntityDescription entityDescription)
         {   

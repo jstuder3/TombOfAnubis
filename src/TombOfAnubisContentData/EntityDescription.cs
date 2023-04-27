@@ -34,9 +34,21 @@ namespace TombOfAnubis
         [ContentSerializer(Optional = true)]
         public List<AnimationClip> Animation;
 
+        [ContentSerializerIgnore]
+        public Texture2D GhostTexture;
+
+        [ContentSerializer(Optional = true)]
+        public string GhostSpriteTextureName;
+
+        [ContentSerializer(Optional = true)]
+        public List<AnimationClip> GhostAnimation;
+
         public void Load(ContentManager content, string textureDirectory)
         {
-            Texture = content.Load<Texture2D>(Path.Combine(textureDirectory, SpriteTextureName));
+            if(SpriteTextureName != null)
+            {
+                Texture = content.Load<Texture2D>(Path.Combine(textureDirectory, SpriteTextureName));
+            }
             int startPosition = 0; 
             if (Animation != null)
             {
@@ -46,6 +58,20 @@ namespace TombOfAnubis
                     startPosition += Animation[i].FrameSize.Y;
                 }
             }
+            if (GhostSpriteTextureName != null)
+            {
+                GhostTexture = content.Load<Texture2D>(Path.Combine(textureDirectory, SpriteTextureName));
+            }
+            startPosition = 0;
+            if (GhostAnimation != null)
+            {
+                for (int i = 0; i < GhostAnimation.Count; i++)
+                {
+                    GhostAnimation[i].SourceRectangle = new Rectangle(0, startPosition, GhostAnimation[i].FrameSize.X, GhostAnimation[i].FrameSize.Y);
+                    startPosition += GhostAnimation[i].FrameSize.Y;
+                }
+            }
+
         }
         public EntityDescription Clone()
         {

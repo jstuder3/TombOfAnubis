@@ -1,51 +1,59 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace TombOfAnubis
 {
+    public enum CharacterType
+    {
+        PlayerOne, PlayerTwo, PlayerThree, PlayerFour
+    }
     public class Character : Entity
     {
-        public enum CharacterType
+        public EntityDescription EntityDescription { get; set; }
+        public Ghost Ghost { get; set; }
+        public Character(EntityDescription entityDescription)
         {
-            PlayerOne, PlayerTwo, PlayerThree, PlayerFour
-        }
-        public Character(CharacterType type, Vector2 position, Vector2 scale, Texture2D texture, int maxMovementSpeed, List<AnimationClip> animationClips, List<AnimationClip> minimapAnimationClips)
-        {
-            Transform transform = new Transform(position, scale, Visibility.Game);
+            EntityDescription = entityDescription;
+            Vector2 position = Session.GetInstance().Map.CreateEntityTileCenteredPosition(EntityDescription);
+
+            Transform transform = new Transform(position, EntityDescription.Scale, Visibility.Game);
             AddComponent(transform);
 
-            Transform minimapTransform = new Transform(position, 10f * scale, Visibility.Minimap);
+            Transform minimapTransform = new Transform(position, 10f * EntityDescription.Scale, Visibility.Minimap);
             AddComponent(minimapTransform);
 
             Sprite sprite;
-            if(animationClips != null)
+            if(EntityDescription.Animation != null)
             {
-                Animation animation = new Animation(animationClips, Visibility.Game);
+                Animation animation = new Animation(EntityDescription.Animation, Visibility.Game);
                 AddComponent(animation);
 
                 animation.SetActiveClip(AnimationClipType.Idle);
 
-                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
+                sprite = new Sprite(EntityDescription.Texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
             }
             else
             {
-                sprite = new Sprite(texture, 2, Visibility.Both);
+                sprite = new Sprite(EntityDescription.Texture, 2, Visibility.Both);
             }
-            if(minimapAnimationClips != null)
+            if (EntityDescription.Animation != null)
             {
-                Animation animation = new Animation(minimapAnimationClips, Visibility.Minimap);
+                Animation animation = new Animation(EntityDescription.Animation, Visibility.Minimap);
                 AddComponent(animation);
                 animation.SetActiveClip(AnimationClipType.Idle);
             }
             AddComponent(sprite);
+
+            Enum.TryParse(EntityDescription.Type, out CharacterType type);
             Player player = new Player((int)type);
             AddComponent(player);
 
             Input input = new Input();
             AddComponent(input);
 
-            Movement movement = new Movement(maxMovementSpeed);
+            Movement movement = new Movement(Session.GetInstance().Map.EntityProperties.MaxCharacterMovementSpeed);
             AddComponent(movement);
 
             Inventory inventory = new Inventory(1, 3, this);

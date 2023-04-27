@@ -21,16 +21,16 @@ namespace TombOfAnubis
             }
             foreach (Input input in GetComponents())
             {
-                Character character = (Character)input.Entity;
-                Transform transform = character.GetComponent<Transform>();
-                Movement movement = character.GetComponent<Movement>();
-                RectangleCollider collider = character.GetComponent<RectangleCollider>();
+                Entity entity = input.Entity;
+                Transform transform = entity.GetComponent<Transform>();
+                Movement movement = entity.GetComponent<Movement>();
+                RectangleCollider collider = entity.GetComponent<RectangleCollider>();
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
                 if (movement.CanMove())
                 {
                     movement.State = MovementState.Idle;
-                    int playerID = character.GetComponent<Player>().PlayerID;
+                    int playerID = entity.GetComponent<Player>().PlayerID;
                     HashSet<PlayerAction> currentActions = InputController.PlayerActions[playerID];
 
                     Vector2 newPosition = transform.Position;
@@ -62,11 +62,11 @@ namespace TombOfAnubis
                     //use item, if there is one
                     if (currentActions.Contains(PlayerAction.UseObject))
                     {
-                        character.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
+                        entity.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
                     }
                     //drop item, if there is one
                     if (currentActions.Contains(PlayerAction.DropObject)) {
-                        InventorySlot inventorySlot = character.GetComponent<Inventory>().GetFullItemSlot();
+                        InventorySlot inventorySlot = entity.GetComponent<Inventory>().GetFullItemSlot();
                         if (inventorySlot != null)
                         {
                             inventorySlot.DropItem();
@@ -77,9 +77,9 @@ namespace TombOfAnubis
                 }
                 //if the player has self-revive item, he can also use it when he's dead
                 //use item, if there is one
-                else if (InputController.PlayerActions[character.GetComponent<Player>().PlayerID].Contains(PlayerAction.UseObject) && character.GetComponent<Inventory>().GetFullItemSlot()?.Item.ItemType == ItemType.Resurrection)
+                else if (InputController.PlayerActions[entity.GetComponent<Player>().PlayerID].Contains(PlayerAction.UseObject) && entity.GetComponent<Inventory>().GetFullItemSlot()?.Item.ItemType == ItemType.Resurrection)
                 {
-                    character.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
+                    entity.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
                 }
 
             }
