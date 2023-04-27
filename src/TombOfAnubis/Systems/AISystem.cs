@@ -49,6 +49,7 @@ namespace TombOfAnubis
 
         //Rage Level System
         //public int rageLevel = 0;
+        private bool rageMode = false;
 
 
         //True AI logic:
@@ -84,6 +85,11 @@ namespace TombOfAnubis
             }
 
 
+        }
+
+        bool rageModeActivated()
+        {
+            return this.rageMode;
         }
 
         
@@ -203,8 +209,8 @@ namespace TombOfAnubis
                     direction = getRandomDirection();
                 } else
                 {
-                    int smoothness = 2;
-                    if (wallDetected()) { smoothness = 1; } //needed to correctly augment direction
+                    int smoothness = 3;
+                    if (wallDetected()) { smoothness = 2; } //needed to correctly augment direction
                     
                     
                     IEnumerable<Edge<int>> targets = ai.MovementGraph.GetNextNEdges(nodeIdAnubis, nodeIdPlayer, smoothness);
@@ -271,7 +277,7 @@ namespace TombOfAnubis
             return direction;
         }
 
-            private Vector2 getDirection(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
+        private Vector2 getDirection(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
         {
 
             int nodeIdAnubis = ai.MovementGraph.ToNodeID(anubisPosition);
@@ -331,7 +337,7 @@ namespace TombOfAnubis
             direction.Normalize();
             //Console.WriteLine("State: direcToTile, anubis, player, target, direction, direciton norml.: " + anubisPosition + ", " + playerPosition + ", " + target + ", " + temp + ", " + direction);
             //Console.WriteLine("direction length: " + temp.LengthSquared());
-            bool print_stuff = true;
+            bool print_stuff = false;
             if (print_stuff && (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft))
             {
                 Console.WriteLine("direction augmentation, direction before: " + direction);
@@ -743,6 +749,16 @@ namespace TombOfAnubis
                         {
                             this.tailingPlayer = false;
                             Console.WriteLine("AI: tailed Player not visible or too far, detailed");
+                        } else
+                        {
+                            //check if other player is closer
+                            int tailingPlayerDist = movementGraph.GetDistance(nodeIdAnubis, nodeIdTailedPlayer);
+                            int distToClosestPlayer = GetDistToclosestPlayer(ai, positionAnubis);
+                            if(distToClosestPlayer < tailingPlayerDist)
+                            {
+                                this.tailedPlayer = GetClosestPlayer(ai, positionAnubis);
+                                Console.WriteLine("AI: switched tailing to closer Player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                            }
                         }
                     }
 
