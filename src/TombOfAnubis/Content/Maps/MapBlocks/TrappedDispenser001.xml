@@ -195,6 +195,18 @@
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
 						<Offset>105 0</Offset>
 					</Item>
+					<Item>
+						<SpawnTileCoordinate>0 2</SpawnTileCoordinate>
+						<Offset>-105 0</Offset>
+					</Item>
+					<Item>
+						<SpawnTileCoordinate>0 2</SpawnTileCoordinate>
+						<Offset>0 0</Offset>
+					</Item>
+					<Item>
+						<SpawnTileCoordinate>0 2</SpawnTileCoordinate>
+						<Offset>105 0</Offset>
+					</Item>
 				</ConnectedTrapPositions>
 				<Animation>
 					<Item>
