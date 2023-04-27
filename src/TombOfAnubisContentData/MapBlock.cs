@@ -13,6 +13,11 @@ namespace TombOfAnubis
     public class MapBlock
     {
         #region serializable
+        [ContentSerializer(Optional = true)]
+        public int MinPlayers { get; set; }
+        [ContentSerializer(Optional = true)]
+        public int MaxPlayers { get; set; } = 4;
+
         public Point Dimensions { get; set; }
         public int[] Tiles { get; set; }
         [ContentSerializer(Optional = true)]
@@ -63,6 +68,8 @@ namespace TombOfAnubis
                 {
                     mapBlock = new MapBlock();
                 }
+                mapBlock.MinPlayers = input.ReadInt32();
+                mapBlock.MaxPlayers = input.ReadInt32();
                 mapBlock.Dimensions = input.ReadObject<Point>();
                 mapBlock.Tiles = input.ReadObject<int[]>();
                 mapBlock.Entities = input.ReadObject<List<EntityDescription>>();

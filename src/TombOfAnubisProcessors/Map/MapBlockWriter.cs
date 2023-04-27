@@ -13,6 +13,8 @@ namespace TombOfAnubis
 
         protected override void Write(ContentWriter output, MapBlock value)
         {
+            output.Write(value.MinPlayers);
+            output.Write(value.MaxPlayers);
             output.WriteObject(value.Dimensions);
             output.WriteObject(value.Tiles);
             output.WriteObject(value.Entities);

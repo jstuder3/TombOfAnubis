@@ -1,22 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <XnaContent>
 	<Asset Type="TombOfAnubis.MapBlock">
-		<MinPlayers>2</MinPlayers>
+		<MinPlayers>1</MinPlayers>
+		<MaxPlayers>1</MaxPlayers>
 		<!-- Dimensions of the Tiles array (x: num Rows, y: num Cols)-->
-		<Dimensions>4 4</Dimensions>
+		<Dimensions>4 5</Dimensions>
 		<!-- Array to describe the block layout: 1 is wall, 0 is floor-->
 		<Tiles>
-			1   1	1	1
-			0   1	1	1
-			1   1	0	1
-			0	1	0	1
-			
+			1   1	0	1	1
+			0   1	0	0	1
+			1   1	0	1	1
+			1	1	0	1	1
 		</Tiles>
 		<Entities>
 			<Item>
-				<ClassName>TombOfAnubis.Artefact</ClassName>
-				<SpawnTileCoordinate> 2 2</SpawnTileCoordinate>
-				<Scale>0.4 0.4</Scale>
+				<ClassName>TombOfAnubis.Dispenser</ClassName>
+				<SpawnTileCoordinate> 1 3</SpawnTileCoordinate>
+				<Scale>0.3 0.3</Scale>
+				<SpriteTextureName>treasure_chest</SpriteTextureName>
+				<Type>ItemDispenser</Type>
+				<Animation>
+					<Item>
+						<Type>Open</Type>
+						<NumberOfFrames>1</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>475 475</FrameSize>
+					</Item>
+					<Item>
+						<Type>Closed</Type>
+						<NumberOfFrames>1</NumberOfFrames>
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>475 475</FrameSize>
+					</Item>
+				</Animation>
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Trap</ClassName>
@@ -91,6 +107,78 @@
 				</Animation>
 			</Item>
 			<Item>
+				<ClassName>TombOfAnubis.Trap</ClassName>
+				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
+				<Offset>-105 0</Offset>
+				<Scale>0.42 0.42</Scale>
+				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
+				<Type>StaticSpikes</Type>
+				<Animation>
+					<Item>
+						<Type>ObjectActive</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<!-- Duration of one frame in milliseconds-->
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>256 256</FrameSize>
+					</Item>
+					<Item>
+						<Type>ObjectInactive</Type>
+						<NumberOfFrames>1</NumberOfFrames>
+						<!-- Duration of one frame in milliseconds-->
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>256 256</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Trap</ClassName>
+				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
+				<Offset>0 0</Offset>
+				<Scale>0.42 0.42</Scale>
+				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
+				<Type>StaticSpikes</Type>
+				<Animation>
+					<Item>
+						<Type>ObjectActive</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<!-- Duration of one frame in milliseconds-->
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>256 256</FrameSize>
+					</Item>
+					<Item>
+						<Type>ObjectInactive</Type>
+						<NumberOfFrames>1</NumberOfFrames>
+						<!-- Duration of one frame in milliseconds-->
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>256 256</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
+				<ClassName>TombOfAnubis.Trap</ClassName>
+				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
+				<Offset>105 0</Offset>
+				<Scale>0.42 0.42</Scale>
+				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
+				<Type>StaticSpikes</Type>
+				<Animation>
+					<Item>
+						<Type>ObjectActive</Type>
+						<NumberOfFrames>4</NumberOfFrames>
+						<!-- Duration of one frame in milliseconds-->
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>256 256</FrameSize>
+					</Item>
+					<Item>
+						<Type>ObjectInactive</Type>
+						<NumberOfFrames>1</NumberOfFrames>
+						<!-- Duration of one frame in milliseconds-->
+						<FrameDuration>200</FrameDuration>
+						<FrameSize>256 256</FrameSize>
+					</Item>
+				</Animation>
+			</Item>
+			<Item>
 				<ClassName>TombOfAnubis.Button</ClassName>
 				<SpawnTileCoordinate> 1 0</SpawnTileCoordinate>
 				<Scale>0.25 0.25</Scale>
@@ -109,41 +197,16 @@
 						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
 						<Offset>105 0</Offset>
 					</Item>
-				</ConnectedTrapPositions>
-				<Animation>
 					<Item>
-						<Type>NotPressed</Type>
-						<NumberOfFrames>1</NumberOfFrames>
-						<!-- Duration of one frame in milliseconds-->
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>256 256</FrameSize>
-					</Item>
-					<Item>
-						<Type>Pressed</Type>
-						<NumberOfFrames>1</NumberOfFrames>
-						<!-- Duration of one frame in milliseconds-->
-						<FrameDuration>200</FrameDuration>
-						<FrameSize>256 256</FrameSize>
-					</Item>
-				</Animation>
-			</Item>
-			<Item>
-				<ClassName>TombOfAnubis.Button</ClassName>
-				<SpawnTileCoordinate> 3 0</SpawnTileCoordinate>
-				<Scale>0.25 0.25</Scale>
-				<SpriteTextureName>selfmade_simplistic_button_spritesheet</SpriteTextureName>
-				<Type>InstantRelease</Type>
-				<ConnectedTrapPositions>
-					<Item>
-						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
+						<SpawnTileCoordinate>0 2</SpawnTileCoordinate>
 						<Offset>-105 0</Offset>
 					</Item>
 					<Item>
-						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
+						<SpawnTileCoordinate>0 2</SpawnTileCoordinate>
 						<Offset>0 0</Offset>
 					</Item>
 					<Item>
-						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
+						<SpawnTileCoordinate>0 2</SpawnTileCoordinate>
 						<Offset>105 0</Offset>
 					</Item>
 				</ConnectedTrapPositions>

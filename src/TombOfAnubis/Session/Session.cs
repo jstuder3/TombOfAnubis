@@ -514,8 +514,11 @@ namespace TombOfAnubis
                     MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\MapBlocks\" + mapBlockName);
                     block.Name = mapBlockName;
                     block.Parent = mapBlockDesc;
-                    mapBlockDesc.Blocks.Add(block);
-                    singleton.Map.MapBlocks.Add(block);
+                    if(singleton.NumberOfPlayers >= block.MinPlayers)
+                    {
+                        mapBlockDesc.Blocks.Add(block);
+                        singleton.Map.MapBlocks.Add(block);
+                    }
                 }
             }
             MapGenerator gen = new MapGenerator(singleton.Map);
