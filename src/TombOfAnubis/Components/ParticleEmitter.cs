@@ -106,6 +106,7 @@ namespace TombOfAnubis
         public bool PointForceUsesQuadraticFalloff { get; set; }
         //by how much the particles should lose velocity per second. 0 means they don't lose velocity, 0.5 means they lose half their velocity per second, 1 means they lose all of their velocity in one second
         public float Drag { get; set; }
+        public Visibility Visibility { get; set; }
 
     }
 

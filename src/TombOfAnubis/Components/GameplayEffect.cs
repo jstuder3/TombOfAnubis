@@ -15,6 +15,7 @@ namespace TombOfAnubis {
         Stunned,
         Hidden,
         OnCooldown,
+        DelayedFollow
     }
 
     /**
@@ -27,6 +28,7 @@ namespace TombOfAnubis {
      * AutoMove: float speed, Vector2 direction
      * Stunned: no parameters
      * Hidden: no parameters
+     * DelayedFollow: float delayAmount (0-1, where 0 means no delay, 1 means no movement), Entity otherEntity (entity that should be followed)
      **/
 
     public class GameplayEffect : Component
@@ -45,6 +47,7 @@ namespace TombOfAnubis {
         private ParticleEmitter stunnedEmitter;
 
         public EffectType Type { get; set; }
+        public Entity OtherEntity { get; set; }
 
         //Different constructors for varying types of parameters. Check the comment above to find out which parameters are necessary for the respective EffectType
         public GameplayEffect(EffectType type, float duration, Visibility visibility) : this(type, duration, new List<float>(), new List<Vector2>(), visibility) { }
@@ -52,6 +55,11 @@ namespace TombOfAnubis {
         public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01, Visibility visibility) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2>(), visibility) { }
 
         public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01, Vector2 effectVectorParameter_01, Visibility visibility) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2> { effectVectorParameter_01 }, visibility) { }
+
+        public GameplayEffect(EffectType type, float duration, float effectFloatParameter_01, Entity otherEntity, Visibility visibility) : this(type, duration, new List<float> { effectFloatParameter_01 }, new List<Vector2>(), visibility) 
+        {
+            OtherEntity = otherEntity;
+        }
 
         // main constructor that is called by all the other constructors
         public GameplayEffect(EffectType type, float duration, List<float> effectFloatParameters, List<Vector2> effectVectorParameters, Visibility visibility)
@@ -165,6 +173,18 @@ namespace TombOfAnubis {
                     {
                         ((ICooldown)Entity).PutOnCooldown();
                     }
+                    break;
+                case EffectType.DelayedFollow:
+                    if (!applied)
+                    {
+                        CheckHasFloatParameters(1);
+                    }
+                    Transform entityTransform = Entity.GetComponent<Transform>();
+                    Transform otherEntityTransform = OtherEntity.GetComponent<Transform>();
+
+                    Vector2 direction = otherEntityTransform.Position - entityTransform.Position;
+                    entityTransform.Position += direction * (1 - effectFloatParameters[0]) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                     break;
             }
 

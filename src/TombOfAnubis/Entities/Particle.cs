@@ -55,13 +55,13 @@ namespace TombOfAnubis
             }
             LocalOffset = ParticleConfiguration.LocalPosition + GenerateUniformlyRandomPointOnDisk();
 
-            Sprite sprite = new Sprite(ParticleConfiguration.Texture, RandomLinearlyInterpolatedTint(), ParticleConfiguration.SpriteLayer, Visibility.Game);
+            Sprite sprite = new Sprite(ParticleConfiguration.Texture, RandomLinearlyInterpolatedTint(), ParticleConfiguration.SpriteLayer, ParticleConfiguration.Visibility);
             if (ParticleConfiguration.InitialAlpha != 0) { sprite.Alpha = ParticleConfiguration.InitialAlpha; }
             AddComponent(sprite);
 
             Vector2 randomizedScale = ParticleConfiguration.Scale * (Vector2.One + ((float)random.NextDouble() - 0.5f) * ParticleConfiguration.RelativeScaleVariation);
 
-            Transform transform = new Transform(GetGlobalPosition(), randomizedScale, Visibility.Game);
+            Transform transform = new Transform(GetGlobalPosition(), randomizedScale, Visibility.Both);
             AddComponent(transform);
 
             float SpawnConeRadians = ParticleConfiguration.SpawnConeDegrees / 360f * 2 * MathF.PI;

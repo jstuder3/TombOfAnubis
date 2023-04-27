@@ -46,6 +46,7 @@ namespace TombOfAnubis
             pec.SpawnDirection = new Vector2(0f, -1f);
             pec.SpawnConeDegrees = 360f;
             pec.Drag = 0.5f;
+            pec.Visibility = Visibility.Game;
 
             switch (playerID)
             {
@@ -115,6 +116,7 @@ namespace TombOfAnubis
             pec.SpawnDirection = new Vector2(0f, -1f);
             pec.SpawnConeDegrees = 360f;
             pec.Drag = 0.5f;
+            pec.Visibility = Visibility.Game;
 
             switch (playerID)
             {

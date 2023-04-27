@@ -137,6 +137,7 @@ namespace TombOfAnubis
             pec.SpawnDirection = new Vector2(0f, -1f);
             pec.SpawnConeDegrees = 360f;
             pec.Drag = 0.5f;
+            pec.Visibility = Visibility.Game;
 
             particleEmitter = new ParticleEmitter(pec);
 
@@ -147,7 +148,7 @@ namespace TombOfAnubis
             if (dispenserType == DispenserType.ItemDispenser)
             {
 
-                switch (random.Next(0, 3))
+                switch (random.Next(0, 5))
                 {
                     case 0: //Speedup
                         ItemType = ItemType.Speedup;
@@ -161,9 +162,13 @@ namespace TombOfAnubis
                         ItemType = ItemType.Resurrection;
                         itemTexture = ItemTextureLibrary.Resurrection;
                         break;
-                    case 3: //Hiding Cloak (not yet implemented)
+                    case 3: //Hiding Cloak
                         ItemType = ItemType.HidingCloak;
-                        //ItemSprite = new Sprite(ItemTextureLibrary.HidingCloak, 3, Visibility.Game);
+                        itemTexture = ItemTextureLibrary.HidingCloak;
+                        break;
+                    case 4: //Anubis location reveal
+                        ItemType = ItemType.AnubisLocationReveal;
+                        itemTexture = ItemTextureLibrary.AnubisLocationReveal;
                         break;
                     default:
                         return;
@@ -187,6 +192,7 @@ namespace TombOfAnubis
             item_pec.ParticleDuration = 0.06f;
             item_pec.EmissionFrequency = 20f;
             item_pec.EmissionRate = 1f;
+            item_pec.Visibility = Visibility.Game;
 
             itemEmitter = new ParticleEmitter(item_pec);
             AddComponent(itemEmitter);

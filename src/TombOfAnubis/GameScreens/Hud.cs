@@ -79,8 +79,9 @@ namespace TombOfAnubis
                     case ItemType.Speedup: textureName = "SpeedUp"; break;
                     case ItemType.IncreaseViewDistance: skip = true; break;
                     case ItemType.Resurrection: textureName = "Resurrection"; break;
-                    case ItemType.HidingCloak: skip = true; break;
+                    case ItemType.HidingCloak: textureName="HidingCloak"; break;
                     case ItemType.Fist: textureName = "Fist"; break;
+                    case ItemType.AnubisLocationReveal: textureName = "AnubisLocationReveal"; break;
                     default: skip = true; break;
                 }
 

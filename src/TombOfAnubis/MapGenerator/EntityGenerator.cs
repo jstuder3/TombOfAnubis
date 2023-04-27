@@ -120,6 +120,7 @@ namespace TombOfAnubis
             pec.PointForceUsesQuadraticFalloff = false;
             pec.Gravity = new Vector2(0f, 0f);
             pec.Drag = 0.5f;
+            pec.Visibility = Visibility.Game;
 
             entityDescription.Load(content, @"Textures\Characters");
             Anubis anubis = new Anubis(

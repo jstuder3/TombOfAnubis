@@ -14,6 +14,9 @@ namespace TombOfAnubis
         public static Texture2D Speedup { get; set; }
         public static Texture2D Resurrection { get; set; }
         public static Texture2D Fist { get; set; }
+        public static Texture2D HidingCloak { get; set; }
+        public static Texture2D AnubisLocationReveal { get; set; }
+
         //public static Texture2D Artefact { get; set; }
 
         public static Texture2D GetTexture(ItemType itemType)
@@ -23,6 +26,8 @@ namespace TombOfAnubis
                 case ItemType.Speedup: return Speedup;
                 case ItemType.Resurrection: return Resurrection;
                 case ItemType.Fist: return Fist;
+                case ItemType.HidingCloak: return HidingCloak;
+                case ItemType.AnubisLocationReveal: return AnubisLocationReveal;
                 //case ItemType.Artefact: return Artefact;
             }
             return null;
@@ -37,6 +42,8 @@ namespace TombOfAnubis
             ItemTextureLibrary.Speedup = content.Load<Texture2D>(item_base_path + "SpeedUp");
             ItemTextureLibrary.Resurrection = content.Load<Texture2D>(item_base_path + "Resurrection");
             ItemTextureLibrary.Fist = content.Load<Texture2D>(item_base_path + "Fist");
+            ItemTextureLibrary.HidingCloak = content.Load<Texture2D>(item_base_path + "HidingCloak");
+            ItemTextureLibrary.AnubisLocationReveal = content.Load<Texture2D>(item_base_path + "AnubisLocationReveal");
             //ItemTextureLibrary.Artefact = ???
         }
     }
@@ -49,6 +56,7 @@ namespace TombOfAnubis
         Resurrection,
         Fist,
         HidingCloak,
+        AnubisLocationReveal,
         Artefact
     }
 
@@ -114,15 +122,16 @@ namespace TombOfAnubis
                     ItemType = ItemType.None;
                     Console.WriteLine("Fist spawned!");
                     return true;
-                case ItemType.HidingCloak:
-                    Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f, Visibility.Game));
-                    Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f, Visibility.Game));
-                    ItemType = ItemType.None;
-                    Console.WriteLine("Used HidingCloak!");
-                    break;
                 case ItemType.Resurrection:
                     if(Entity.GetComponent<Movement>().State == MovementState.Trapped)
                     {
+
+                        /*if (((Character)Entity).Ghost != null)
+                        {
+                            ((Character)Entity).Ghost.Delete();
+                            ((Character)Entity).Ghost = null;
+                        }*/
+
                         ItemType = ItemType.None;
 
                         Entity.GetComponent<Movement>().State = MovementState.Idle;
@@ -150,6 +159,38 @@ namespace TombOfAnubis
                         Entity.AddComponent(new ParticleEmitter(pec2));
 
                     }
+
+                    break;
+                case ItemType.HidingCloak:
+                    Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f, Visibility.Game));
+                    Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f, Visibility.Game));
+
+                    Texture2D cloakTexture = ItemTextureLibrary.HidingCloak;
+                    float cloakScale = 1.5f;
+                    Vector2 position = new Vector2(Entity.GetComponent<Sprite>().SourceRectangle.Width / 2, Entity.GetComponent<Sprite>().SourceRectangle.Height / 2) - new Vector2(cloakTexture.Width / 2, cloakTexture.Height / 2) * cloakScale;
+                    HidingCloak hidingCloak = new HidingCloak(position, Vector2.One*cloakScale, cloakTexture);
+                    Entity.AddChild(hidingCloak);
+                    hidingCloak.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
+
+
+                    ItemType = ItemType.None;
+                    Console.WriteLine("Used HidingCloak!");
+                    break;
+                case ItemType.AnubisLocationReveal:
+                    //Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f, Visibility.Game));
+                    //Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f, Visibility.Game));
+
+                    
+                    foreach(Anubis anubis in Session.GetInstance().World.GetChildrenOfType<Anubis>())
+                    {
+                        AnubisLocator anubisLocator = new AnubisLocator(anubis.GetComponent<Transform>().Position, Vector2.One * 5f);
+                        anubisLocator.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
+                        anubisLocator.AddComponent(new GameplayEffect(EffectType.DelayedFollow, 5f, 0.1f, anubis, Visibility.Both));
+                    }
+                    
+
+                    ItemType = ItemType.None;
+                    Console.WriteLine("Used HidingCloak!");
                     break;
             }
             return false;
