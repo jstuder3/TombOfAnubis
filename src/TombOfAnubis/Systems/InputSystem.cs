@@ -26,9 +26,10 @@ namespace TombOfAnubis
                 Transform transform = entity.GetComponent<Transform>();
                 Movement movement = entity.GetComponent<Movement>();
                 RectangleCollider collider = entity.GetComponent<RectangleCollider>();
+                Inventory inventory = entity.GetComponent<Inventory>();
                 float deltaTimeSeconds = (float)deltaTime.ElapsedGameTime.TotalSeconds;
 
-                if (movement.CanMove())
+                if (movement != null && movement.CanMove())
                 {
                     movement.State = MovementState.Idle;
                     int playerID = entity.GetComponent<Player>().PlayerID;
@@ -61,13 +62,13 @@ namespace TombOfAnubis
                     }
 
                     //use item, if there is one
-                    if (currentActions.Contains(PlayerAction.UseObject) && entity.GetComponent<Inventory>() != null)
+                    if (currentActions.Contains(PlayerAction.UseObject) && inventory != null)
                     {
-                        entity.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
+                        inventory.GetFullItemSlot()?.TryUseItem();
                     }
                     //drop item, if there is one
-                    if (currentActions.Contains(PlayerAction.DropObject) && entity.GetComponent<Inventory>() != null) {
-                        InventorySlot inventorySlot = entity.GetComponent<Inventory>().GetFullItemSlot();
+                    if (currentActions.Contains(PlayerAction.DropObject) && inventory != null) {
+                        InventorySlot inventorySlot = inventory.GetFullItemSlot();
                         if (inventorySlot != null)
                         {
                             inventorySlot.DropItem(deltaTime);
@@ -78,11 +79,10 @@ namespace TombOfAnubis
                 }
                 //if the player has self-revive item, he can also use it when he's dead
                 //use item, if there is one
-                else if (InputController.PlayerActions[entity.GetComponent<Player>().PlayerID].Contains(PlayerAction.UseObject) && entity.GetComponent<Inventory>().GetFullItemSlot()?.Item.ItemType == ItemType.Resurrection)
+                else if (inventory != null && InputController.PlayerActions[entity.GetComponent<Player>().PlayerID].Contains(PlayerAction.UseObject) && inventory.GetFullItemSlot()?.Item.ItemType == ItemType.Resurrection)
                 {
                     entity.GetComponent<Inventory>().GetFullItemSlot()?.TryUseItem();
                 }
-
             }
         }
 

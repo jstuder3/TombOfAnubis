@@ -128,11 +128,11 @@ namespace TombOfAnubis
                     if(Entity.GetComponent<Movement>().State == MovementState.Trapped)
                     {
 
-                        /*if (((Character)Entity).Ghost != null)
+                        if (((Character)Entity).Ghost != null)
                         {
                             ((Character)Entity).Ghost.Delete();
                             ((Character)Entity).Ghost = null;
-                        }*/
+                        }
 
                         ItemType = ItemType.None;
 
