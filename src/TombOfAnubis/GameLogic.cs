@@ -288,7 +288,7 @@ namespace TombOfAnubis
             bool gameover = true;
             foreach (Character ch in Session.GetInstance().World.GetChildrenOfType<Character>())
             {
-                if (!ch.GetComponent<Movement>().IsTrapped())
+                if (!ch.GetComponent<Movement>().IsTrapped() || ch.GetComponent<Inventory>().GetFullItemSlot()?.Item.ItemType == ItemType.Resurrection)
                 {
                     gameover = false;
                 }
