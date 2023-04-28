@@ -27,6 +27,7 @@ namespace TombOfAnubis
             foreach (GameplayEffect effect in GetComponents()) { 
                 if (!effect.IsActive(gameTime))
                 {
+                    effect.EndGameplayEffect();
                     effectsToRemove.Add(effect);
                 }
             }
@@ -35,7 +36,9 @@ namespace TombOfAnubis
             foreach (GameplayEffect effectToRemove in effectsToRemove)
             {
                 // delete handles effect disabling ("reverts" effects of applying, if necessary)
-                effectToRemove.Delete();
+                Entity ent = effectToRemove.Entity;
+                //effectToRemove.Delete();
+                ent.RemoveComponent(effectToRemove);
             }
 
             // actually apply effect (either "on startup", or continuously, depending on the effect)

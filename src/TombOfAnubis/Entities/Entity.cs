@@ -19,13 +19,19 @@ namespace TombOfAnubis
 
         public void RemoveComponentWithoutDeleting(Component component)
         {
-            components.Remove(component);
+            if (components != null)
+            {
+                components.Remove(component);
+            }
         }
 
         public void RemoveComponent(Component component)
         {
-            components.Remove(component);
-            component.Delete();
+            if (components != null)
+            {
+                components.Remove(component);
+                component.Delete();
+            }
         }
 
         /// <summary>
@@ -34,11 +40,11 @@ namespace TombOfAnubis
         public void Delete()
         {
 
-            foreach(GameplayEffect gameplayEffect in GetComponentsOfType<GameplayEffect>())
+            /*foreach(GameplayEffect gameplayEffect in GetComponentsOfType<GameplayEffect>())
             {
-                gameplayEffect.DeleteWithoutRevertingEffect();
+                gameplayEffect.Delete();
                 components.Remove(gameplayEffect);
-            }
+            }*/
 
             //components.Remove(GetComponentsOfType<GameplayEffect>());
 

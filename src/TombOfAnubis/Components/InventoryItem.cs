@@ -164,6 +164,13 @@ namespace TombOfAnubis
 
                     break;
                 case ItemType.HidingCloak:
+                    foreach(GameplayEffect ge in Entity.GetComponentsOfType<GameplayEffect>()) //cannot use another hiding cloak if already hidden. this prevents some nasty bugs
+                    {
+                        if(ge.Type == EffectType.Hidden && !ge.HasEnded())
+                        {
+                            return false;
+                        }
+                    }
                     Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f, Visibility.Game));
                     Entity.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f, Visibility.Game));
 

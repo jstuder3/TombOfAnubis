@@ -88,6 +88,11 @@ namespace TombOfAnubis {
             return (float)gameTime.TotalGameTime.TotalSeconds < endTime;
         }
 
+        public bool HasEnded()
+        {
+            return startTime == endTime;
+        }
+
         public bool HasBeenApplied()
         {
             return applied;
@@ -219,8 +224,12 @@ namespace TombOfAnubis {
                 case EffectType.Lifetime:
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
                     if (startTime < endTime) { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
+                        //do nothing
+                    }
+                    else
+                    {
                         Entity.RemoveComponentWithoutDeleting(this);
-                        Entity.Delete(); 
+                        Entity.Delete();
                     }
                     break;
                 case EffectType.Stunned:
@@ -240,10 +249,10 @@ namespace TombOfAnubis {
             GameplayEffectSystem.Deregister(this);
         }
 
-        public void DeleteWithoutRevertingEffect()
+        /*public void DeleteWithoutRevertingEffect()
         {
             GameplayEffectSystem.Deregister(this);
-        }
+        }*/
 
         private bool CheckHasFloatParameters(int numRequiredParameters)
         {
