@@ -126,6 +126,12 @@ namespace TombOfAnubis
                 return GamePad.GetState(ControllerID).IsButtonDown(UseButton);
             }
         }
+
+        public void SetInactive()
+        {
+            IsActive = false;
+            PlayerID = default(int);
+        }
     }
     public static class InputController
     {
@@ -178,8 +184,7 @@ namespace TombOfAnubis
         {
             foreach(PlayerInput playerInput in PlayerInputs)
             {
-                playerInput.IsActive = false;
-                playerInput.PlayerID = default(int);
+                playerInput.SetInactive();
             }
         }
 

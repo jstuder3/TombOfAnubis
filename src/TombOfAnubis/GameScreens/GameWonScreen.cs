@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.ExceptionServices;
 
 namespace TombOfAnubis
 {
@@ -23,10 +24,12 @@ namespace TombOfAnubis
         private bool skipCooldown = false;
         private bool startTimeSet = false;
 
+        private List<PlayerInput> activeInputs;
+
         public GameWonScreen()
             : base()
         {
-            
+            activeInputs = InputController.GetActiveInputs();
         }
         public override void LoadContent()
         {
@@ -53,20 +56,31 @@ namespace TombOfAnubis
         }
         public override void HandleInput()
         {
-            foreach (PlayerInput playerInput in InputController.PlayerInputs)
+            foreach (PlayerInput playerInput in activeInputs)
             {
                 if (playerInput.UseTriggered() && skipCooldown)
                 {
 
                     InputController.AddCooldown(playerInput.UseKey, playerInput.UseButton, 250);
-                    playerInput.IsActive = true;
-                    playerInput.PlayerID = 0;
                     VideoController.StopVideo();
+                    RemoveSecondaryInputs();
                     ExitScreen();
                     GameScreenManager.AddScreen(new MainMenuScreen());
                 }
             }
         }
+
+        private void RemoveSecondaryInputs()
+        {
+            foreach (PlayerInput playerInput in activeInputs)
+            {
+                if (playerInput.PlayerID != 0)
+                {
+                    playerInput.SetInactive();
+                }
+            }
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
