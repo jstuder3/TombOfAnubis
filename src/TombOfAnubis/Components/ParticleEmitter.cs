@@ -141,14 +141,16 @@ namespace TombOfAnubis
             base.Delete();
 
             //finally delete all particles and deregister emitter
-            foreach (Particle particle in ParticleList)
+            if (ParticleList != null)
             {
-                particle.Delete();
+                foreach (Particle particle in ParticleList)
+                {
+                    particle.Delete();
+                }
+                ParticleList.Clear();
+                ParticleList = null;
             }
 
-            ParticleList.Clear();
-            ParticleList = null;
-            
             ParticleEmitterSystem.Deregister(this);
 
         }

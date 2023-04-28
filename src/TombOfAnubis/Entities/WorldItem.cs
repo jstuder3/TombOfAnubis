@@ -48,5 +48,11 @@ namespace TombOfAnubis
             AddComponent(new ParticleEmitter(pec));
 
         }
+    new public void Delete()
+    {
+        base.Delete();
     }
+    }
+
+
 }

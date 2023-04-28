@@ -218,8 +218,10 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.Lifetime:
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
-                    Entity.RemoveComponentWithoutDeleting(this);
-                    Entity.Delete();
+                    if (startTime < endTime) { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
+                        Entity.RemoveComponentWithoutDeleting(this);
+                        Entity.Delete(); 
+                    }
                     break;
                 case EffectType.Stunned:
                     Entity.GetComponent<Movement>().State = MovementState.Idle;
