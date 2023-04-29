@@ -61,7 +61,7 @@ namespace TombOfAnubis
             this.dispenserType = dispenserType;
 
             // set up cooldown
-            this.CooldownDuration = 5f;
+            this.CooldownDuration = 10f;
 
             this.random = new Random();
 
