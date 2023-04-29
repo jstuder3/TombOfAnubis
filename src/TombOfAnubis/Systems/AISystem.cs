@@ -248,7 +248,7 @@ namespace TombOfAnubis
                 if (!ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
                 {
                     Console.WriteLine("Error: Anbuis cound not find a Path to cur tailed player");
-
+                    this.tailingPlayer = false;
                     //use random movement
                     direction = getRandomDirection();
                 } else
@@ -474,6 +474,7 @@ namespace TombOfAnubis
                 }
                 int nodeIdPlayer = movementGraph.ToNodeID(player.CenterPosition());
                 int dist = movementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer);
+                //Console.WriteLine("dist to current player: id: " + nodeIdPlayer + ", dist: " + dist);
                 if (dist >= 0 && dist < minDist)
                 {
                     minDist = dist;
