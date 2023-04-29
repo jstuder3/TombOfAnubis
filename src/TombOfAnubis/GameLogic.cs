@@ -237,12 +237,14 @@ namespace TombOfAnubis
 
         public static void OnCollision(Character character, Dispenser dispenser)
         {
-            bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
-            if (newItem)
+            if (character.GetComponent<Movement>().CanMove())
             {
-                AudioController.PlaySoundEffect("itemPickup2");
+                bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
+                if (newItem)
+                {
+                    AudioController.PlaySoundEffect("itemPickup2");
+                }
             }
-
             StaticCollision(character, dispenser);
         }
 
