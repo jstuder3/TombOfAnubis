@@ -304,18 +304,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Characters/anubis.png
 
-#begin Textures/Characters/blue_plagiarized_explorer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/blue_plagiarized_explorer.png
-
 #begin Textures/Characters/explorer_ghost_blue.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -363,66 +351,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Characters/explorer_ghost_red.png
-
-#begin Textures/Characters/green_plagiarized_explorer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/green_plagiarized_explorer.png
-
-#begin Textures/Characters/plagiarized_explorer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/plagiarized_explorer.png
-
-#begin Textures/Characters/purple_plagiarized_explorer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/purple_plagiarized_explorer.png
-
-#begin Textures/Characters/red_plagiarized_explorer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/red_plagiarized_explorer.png
-
-#begin Textures/Characters/yellow_plagiarized_explorer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Characters/yellow_plagiarized_explorer.png
 
 #begin Textures/Debug/DebugBox.png
 /importer:TextureImporter
@@ -784,18 +712,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Artefacts/blue_artefact.png
 
-#begin Textures/Objects/Artefacts/blue_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/blue_gear_icon.png
-
 #begin Textures/Objects/Artefacts/green_artefact.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -807,18 +723,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Artefacts/green_artefact.png
-
-#begin Textures/Objects/Artefacts/green_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/green_gear_icon.png
 
 #begin Textures/Objects/Artefacts/purple_artefact.png
 /importer:TextureImporter
@@ -832,18 +736,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Artefacts/purple_artefact.png
 
-#begin Textures/Objects/Artefacts/purple_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/purple_gear_icon.png
-
 #begin Textures/Objects/Artefacts/red_artefact.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -855,42 +747,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Artefacts/red_artefact.png
-
-#begin Textures/Objects/Artefacts/red_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/red_gear_icon.png
-
-#begin Textures/Objects/Artefacts/white_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/white_gear_icon.png
-
-#begin Textures/Objects/Artefacts/yellow_gear_icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Artefacts/yellow_gear_icon.png
 
 #begin Textures/Objects/Buttons/selfmade_simplistic_button_spritesheet.png
 /importer:TextureImporter
@@ -904,54 +760,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Buttons/selfmade_simplistic_button_spritesheet.png
 
-#begin Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Dispensers/blue_plagiarized_minecraft_dispenser.png
-
-#begin Textures/Objects/Dispensers/green_plagiarized_minecraft_dispenser.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Dispensers/green_plagiarized_minecraft_dispenser.png
-
-#begin Textures/Objects/Dispensers/plagiarized_minecraft_dispenser.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Dispensers/plagiarized_minecraft_dispenser.png
-
-#begin Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Dispensers/red_plagiarized_minecraft_dispenser.png
-
 #begin Textures/Objects/Dispensers/treasure_chest.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -963,54 +771,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Dispensers/treasure_chest.png
-
-#begin Textures/Objects/Items/attributed_impact_smoke.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Items/attributed_impact_smoke.png
-
-#begin Textures/Objects/Items/plagiarized_fire.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Items/plagiarized_fire.png
-
-#begin Textures/Objects/Items/plagiarized_fist_and_attributed_smoke_spritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Items/plagiarized_fist_and_attributed_smoke_spritesheet.png
-
-#begin Textures/Objects/Items/plagiarized_fist.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Items/plagiarized_fist.png
 
 #begin Textures/Objects/Items/PowerUp/AnubisLocationReveal.png
 /importer:TextureImporter
@@ -1071,6 +831,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/SpeedUp.png
+
+#begin Textures/Objects/Items/selfmade_fist_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/selfmade_fist_spritesheet.png
 
 #begin Textures/Objects/Particles/basic_particle.png
 /importer:TextureImporter
