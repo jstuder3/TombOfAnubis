@@ -35,14 +35,17 @@ namespace TombOfAnubis
             Left
         }
 
-        //variables for random movement
+        private Random rnd = new Random();
+
+
+        //variables for random movement        
         public int NumStepsToGo { get; set; } = -1;
         public Vector2 RandomDirection { get; set; } = default;
 
         
         //variables to tail players
-        private int MaxTailDistance { get; set; } = 5;
-        private int DetailDistance { get; set; } = 8;
+        private int MaxTailDistance { get; set; } = 4;
+        private int DetailDistance { get; set; } = 7;
         public bool tailingPlayer { get; set; } = false;
         public int tailedPlayerId { get; set; } = default;
         Character tailedPlayer { get; set; } = default;
@@ -50,6 +53,7 @@ namespace TombOfAnubis
         //Rage Level System
         //public int rageLevel = 0;
         private bool rageMode = false;
+        private int nArtefactsCollected = 0;
 
 
         //True AI logic:
@@ -87,12 +91,43 @@ namespace TombOfAnubis
 
         }
 
-        bool rageModeActivated()
+        public bool rageModeActivated()
         {
             return this.rageMode;
         }
 
-        
+        public void activateRageMode()
+        {
+            AI ai = GetComponents().First();
+            Entity entity = ai.Entity;
+            Movement movement = entity.GetComponent<Movement>();
+
+
+            //increase maxspeed:
+            movement.MaxSpeed += 100;
+            this.MaxTailDistance += 4;
+            this.DetailDistance += 2;
+
+            this.rageMode = true;
+            Console.WriteLine("AI: RRRRRRagemode activated");
+        }
+
+        public void triggerRageModeProbability(bool collectedNewArtefact)
+        {
+            int nPlayers = World.GetChildrenOfType<Character>().Count();
+            if (collectedNewArtefact)
+            {
+                this.nArtefactsCollected += Math.Min(nPlayers, this.nArtefactsCollected+1);
+            }
+            double threshold = (double)this.nArtefactsCollected / nPlayers;
+            double rand = this.rnd.NextDouble();
+            if (rand <= threshold)
+            {
+                this.activateRageMode();
+            }
+        }
+
+
 
         bool wallDetected()
         {
@@ -228,25 +263,6 @@ namespace TombOfAnubis
             }
             //normalization after raw direction claculation
             direction.Normalize();
-            /*
-            //somehow sometimes anubis position is already at target position??? try hotfix
-            if (direction.LengthSquared() < 1000)
-            {
-                //Console.WriteLine("AI: movement HotFix needed, tile distance too small");
-                if (ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer) > 1)
-                {
-
-                    target = ai.MovementGraph.getNthTargetToWalkTo(nodeIdAnubis, nodeIdPlayer, 2);
-                    direction = target - anubisPosition;
-                }
-                else
-                {
-                    direction = playerPosition - anubisPosition;
-                }
-
-            }
-            direction.Normalize()
-            */
 
 
             //print stuff
@@ -833,28 +849,6 @@ namespace TombOfAnubis
                 return;
 
                 
-            }
-        }
-
-        public void Update2(GameTime deltaTime)
-        {
-            //Console.WriteLine("start update AnubisAISystem");
-            Random rnd = new Random();
-
-            foreach (AI ai in GetComponents())
-            {
-                //Console.WriteLine("reached anubis section");
-                Entity entity = ai.Entity;
-                Transform transform = entity.GetComponent<Transform>();
-                Movement movement = entity.GetComponent<Movement>();
-
-                MovementGraph movementGraph = ai.MovementGraph;
-                List<Character> characters = World.GetChildrenOfType<Character>();
-                List<Artefact> artefacts = World.GetChildrenOfType<Artefact>();
-
-                RectangleCollider collider = entity.GetComponent<RectangleCollider>();
-
-
             }
         }
 
