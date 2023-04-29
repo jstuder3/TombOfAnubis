@@ -30,8 +30,6 @@ namespace TombOfAnubis
                 Animation animation = new Animation(EntityDescription.Animation, Visibility.Game);
                 AddComponent(animation);
 
-                animation.SetActiveClip(AnimationClipType.Idle);
-
                 sprite = new Sprite(EntityDescription.Texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
             }
             else
@@ -42,7 +40,6 @@ namespace TombOfAnubis
             {
                 Animation animation = new Animation(EntityDescription.Animation, Visibility.Minimap);
                 AddComponent(animation);
-                animation.SetActiveClip(AnimationClipType.Idle);
             }
             AddComponent(sprite);
 

@@ -124,7 +124,6 @@ namespace TombOfAnubis
                     character2.Ghost = null;
                 }
                 character2.GetComponent<Movement>().State = MovementState.Idle;
-                character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
                 ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
                 pec.LocalPosition = new Vector2(30f, 30f);
@@ -158,7 +157,6 @@ namespace TombOfAnubis
                     character1.Ghost = null;
                 }
                 character1.GetComponent<Movement>().State = MovementState.Idle;
-                character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
                 ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
                 pec.LocalPosition = new Vector2(30f, 30f);

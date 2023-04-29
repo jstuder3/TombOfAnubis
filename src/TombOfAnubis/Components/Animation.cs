@@ -16,7 +16,6 @@ namespace TombOfAnubis
         {
             AnimationClips = animationClips;
             Visibility = visibility;
-            SetActiveClip(AnimationClipType.Idle);
             DefaultSourceRectangle = animationClips[0].SourceRectangle;
             ComputeAnimationClipRectangles();
             AnimationSystem.Register(this);

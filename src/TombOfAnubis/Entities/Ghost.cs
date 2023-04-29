@@ -40,7 +40,7 @@ namespace TombOfAnubis
             {
                 Animation animation = new Animation(character.EntityDescription.GhostAnimation, Visibility.Minimap);
                 AddComponent(animation);
-                animation.SetActiveClip(AnimationClipType.Idle);
+                animation.SetActiveClip(AnimationClipType.Dead);
             }
             Player player = new Player((int)character.GetComponent<Player>().PlayerID);
             AddComponent(player);

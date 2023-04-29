@@ -137,7 +137,6 @@ namespace TombOfAnubis
                         ItemType = ItemType.None;
 
                         Entity.GetComponent<Movement>().State = MovementState.Idle;
-                        Entity.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
 
                         ParticleEmitterConfiguration pec2 = new ParticleEmitterConfiguration();
                         pec2.LocalPosition = new Vector2(30f, 30f);
