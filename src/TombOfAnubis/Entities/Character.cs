@@ -43,18 +43,11 @@ namespace TombOfAnubis
 
                 }
 
-                sprite = new Sprite(EntityDescription.Texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
+                sprite = new Sprite(EntityDescription.Texture, animation.DefaultSourceRectangle, 2, Visibility.Game);
+                AddComponent(sprite);
             }
-            else
-            {
-                sprite = new Sprite(EntityDescription.Texture, 2, Visibility.Both);
-            }
-            if (EntityDescription.Animation != null)
-            {
-                Animation animation = new Animation(EntityDescription.Animation, Visibility.Minimap);
-                AddComponent(animation);
-            }
-            AddComponent(sprite);
+            Sprite minimapSprite = new Sprite(Session.GetInstance().MinimapTexture, Session.GetInstance().MinimapCharacterSourceRectangles[(int)type], 2, Visibility.Minimap);
+            AddComponent(minimapSprite);
 
             Player player = new Player((int)type);
             AddComponent(player);

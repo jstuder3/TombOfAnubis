@@ -84,8 +84,11 @@ namespace TombOfAnubis
             Player player = new Player(playerID);
             AddComponent(player);
 
-            Sprite sprite = new Sprite(texture, 2, Visibility.Both);
+            Sprite sprite = new Sprite(texture, 2, Visibility.Game);
             AddComponent(sprite);
+
+            Sprite minimapSprite = new Sprite(Session.GetInstance().MinimapTexture, Session.GetInstance().MinimapArtefactSourceRectangles[playerID], 2, Visibility.Minimap);
+            AddComponent(minimapSprite);
 
             Discovery discovery = new Discovery();
             AddComponent(discovery);
