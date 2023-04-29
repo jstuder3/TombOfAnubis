@@ -1,4 +1,2 @@
 List any sprites that weren't created by ourselves and might not be replaced until release here.
 
-Impact smoke spritesheet: 
-Image by <a href="https://www.freepik.com/free-vector/cartoon-smoke-element-animation-frames_13763535.htm#query=dust%20animation&position=4&from_view=keyword&track=ais">Freepik</a>
