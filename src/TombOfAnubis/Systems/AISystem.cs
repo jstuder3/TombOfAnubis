@@ -110,6 +110,15 @@ namespace TombOfAnubis
 
             this.rageMode = true;
             Console.WriteLine("AI: RRRRRRagemode activated");
+
+            //change anubis particles to red
+            ParticleEmitter emitter = entity.GetComponent<ParticleEmitter>();
+            ParticleEmitterConfiguration pec = emitter.EmitterConfiguration;
+            pec.RandomizedTintMin = Color.DarkRed;
+            pec.RandomizedTintMax = Color.DarkGray;
+            emitter.EndEmitter();
+            entity.AddComponent(new ParticleEmitter(pec));
+
         }
 
         public void triggerRageModeProbability(bool collectedNewArtefact)
