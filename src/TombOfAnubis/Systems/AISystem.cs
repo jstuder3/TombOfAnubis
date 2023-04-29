@@ -473,7 +473,7 @@ namespace TombOfAnubis
             return minDist;
         }
 
-        public Character GetClosestPlayer(AI ai, Vector2 anubisPosition)
+        public Tuple<bool,Character> GetClosestPlayer(AI ai, Vector2 anubisPosition)
         {
             MovementGraph movementGraph = ai.MovementGraph;
             List<Character> characters = World.GetChildrenOfType<Character>();
@@ -501,14 +501,7 @@ namespace TombOfAnubis
                     }
                 }
             }
-            if (!foundAPlayer)
-            {
-                Console.WriteLine("GetClosestPlayer failed");
-                //return default, unknown behaviour
-                return closestPlayer;
-            }
-            return closestPlayer;
-
+            return Tuple.Create(foundAPlayer, closestPlayer);
         }
 
         public bool updateClosestPlayer(AI ai, Vector2 anubisPosition)
@@ -772,8 +765,13 @@ namespace TombOfAnubis
                             int distToClosestPlayer = GetDistToclosestPlayer(ai, positionAnubis);
                             if(distToClosestPlayer < tailingPlayerDist)
                             {
-                                this.tailedPlayer = GetClosestPlayer(ai, positionAnubis);
-                                Console.WriteLine("AI: switched tailing to closer Player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                                Tuple<bool,Character> tryClosestPlayer = GetClosestPlayer(ai, positionAnubis);
+                                if (tryClosestPlayer.Item1)
+                                {
+                                    this.tailedPlayer = tryClosestPlayer.Item2;
+                                    Console.WriteLine("AI: switched tailing to closer Player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                                }
+                                
                             }
                         }
                     }
@@ -783,9 +781,14 @@ namespace TombOfAnubis
                         int distToClosestPlayer = GetDistToclosestPlayer(ai, positionAnubis);
                         if (distToClosestPlayer <= this.MaxTailDistance)
                         {
-                            this.tailedPlayer = GetClosestPlayer(ai, positionAnubis);
-                            this.tailingPlayer = true;
-                            Console.WriteLine("AI: found player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                            Tuple<bool, Character> tryGetClosestPlayer = GetClosestPlayer(ai, positionAnubis);
+                            this.tailingPlayer = tryGetClosestPlayer.Item1;
+                            if (tryGetClosestPlayer.Item1)
+                            {
+                                this.tailedPlayer = tryGetClosestPlayer.Item2;
+                                Console.WriteLine("AI: found player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                            }
+                            
                         }
 
 
