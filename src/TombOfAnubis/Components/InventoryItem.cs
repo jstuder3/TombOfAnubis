@@ -209,7 +209,7 @@ namespace TombOfAnubis
                     Vector2 forwardDirection = Entity.GetComponent<Movement>().GetForwardVector();
                     forwardDirection.Normalize();
                     Vector2 tileLength = Session.GetInstance().Map.TileSize;
-                    Vector2 teleTranslation = new Vector2(10 * tileLength.X * forwardDirection.X, 10 * tileLength.Y * forwardDirection.Y);
+                    Vector2 teleTranslation = new Vector2(2 * tileLength.X * forwardDirection.X, 2 * tileLength.Y * forwardDirection.Y);
 
                     //check if targetposition is valid for all 4 corners of the player
                     Vector2 HalfDiagPlayerTranslation = Entity.CenterPosition() - Entity.TopLeftCornerPosition();
