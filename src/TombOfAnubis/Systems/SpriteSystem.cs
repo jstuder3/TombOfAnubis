@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using System; using System.Diagnostics;
 using System.Runtime.Serialization;
 
 namespace TombOfAnubis

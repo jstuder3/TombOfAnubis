@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using static System.Collections.Specialized.BitVector32;

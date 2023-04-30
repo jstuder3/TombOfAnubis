@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System;
+using System; using System.Diagnostics;
 using System.ComponentModel.Design.Serialization;
 
 namespace TombOfAnubis {
@@ -112,7 +112,7 @@ namespace TombOfAnubis {
                         movement = Entity.GetComponent<Movement>();
                         movement.AdditiveSpeedModifier += effectFloatParameters[0]; //first float parameter contains speedup value
                         movement.UpdateMovementSpeed();
-                        Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                        Debug.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
                 case EffectType.MultiplicativeSpeedModification:
@@ -123,7 +123,7 @@ namespace TombOfAnubis {
                         movement = Entity.GetComponent<Movement>();
                         movement.MultiplicativeSpeedModifier *= effectFloatParameters[0]; //first float parameter contains speedup multiplier
                         movement.UpdateMovementSpeed();
-                        Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                        Debug.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     }
                     break;
                 case EffectType.LinearAutoMove: // applied on every update, so we don't check for applied
@@ -132,7 +132,7 @@ namespace TombOfAnubis {
                     CheckHasVectorParameters(1);
                     effectVectorParameters[0].Normalize();
                     Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    //Console.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
+                    //Debug.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
                     break;
                 case EffectType.Lifetime:
                     //destroy the entity once this effect runs out, so this has no effect during Update()
@@ -208,7 +208,7 @@ namespace TombOfAnubis {
                     movement = Entity.GetComponent<Movement>();
                     movement.AdditiveSpeedModifier -= effectFloatParameters[0]; //first float parameter contains speedup
                     movement.UpdateMovementSpeed();
-                    Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                    Debug.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
                 case EffectType.MultiplicativeSpeedModification:
                     // decrease movement speed again
@@ -216,7 +216,7 @@ namespace TombOfAnubis {
                     movement = Entity.GetComponent<Movement>();
                     movement.MultiplicativeSpeedModifier /= effectFloatParameters[0]; //first float parameter contains speedup
                     movement.UpdateMovementSpeed();
-                    Console.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
+                    Debug.WriteLine("Put MaxSpeed to " + Entity.GetComponent<Movement>().MaxSpeed);
                     break;
                 case EffectType.LinearAutoMove:
                     // stop auto move, so no effect
@@ -268,7 +268,7 @@ namespace TombOfAnubis {
             if (effectVectorParameters.Count >= numRequiredParameters) return true;
             else
             {
-                Console.WriteLine();
+                //Debug.WriteLine();
                 throw new System.ArgumentOutOfRangeException("effectFloatParameters", "GameplayEffect doesn't have enough Vector parameters! Please make sure you passed all parameters as defined in GameplayEffects.cs when creating the GameplayEffect!");
             }
         }

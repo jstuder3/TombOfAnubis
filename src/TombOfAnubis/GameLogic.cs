@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -196,7 +196,7 @@ namespace TombOfAnubis
                 artefact.Delete();
                 AudioController.PlaySoundEffect("artefactPickup");
                 Session.GetInstance().AnubisAISystem.triggerRageModeProbability(true);
-                Console.WriteLine("Player " + playerID + " collected an artefact!");
+                Debug.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }
 
@@ -345,7 +345,7 @@ namespace TombOfAnubis
 
         public static void OnCollision(Character character, WorldItem worldItem)
         {
-            //Console.WriteLine("Character and worlditem colliding!");
+            //Debug.WriteLine("Character and worlditem colliding!");
             InventorySlot inventorySlot = character.GetComponent<Inventory>().GetEmptyItemSlot();
             if (inventorySlot == null || !inventorySlot.IsEmpty()) return;
 
@@ -414,22 +414,22 @@ namespace TombOfAnubis
 
                 Artefact artefact = new Artefact(playerID, artefactPositions[playerID], Vector2.One * artefactScale, artefactTexture, false);
                 altar.AddChild(artefact);
-                Console.WriteLine("Artefact of player " + playerID + " was placed!");
+                Debug.WriteLine("Artefact of player " + playerID + " was placed!");
                 AudioController.PlaySoundEffect("artefactPlaced");
             }
             else if (!altarInventory.ArtefactSlotsFull())
             {
-                Console.WriteLine("Either player " + playerID + " doesn't have an artefact or their artefact is already placed!");
+                Debug.WriteLine("Either player " + playerID + " doesn't have an artefact or their artefact is already placed!");
             }
 
             if (altarInventory.ArtefactSlotsFull())
             {
-                Console.WriteLine("All artefacts placed! Anubis was defeated!");
+                Debug.WriteLine("All artefacts placed! Anubis was defeated!");
                 Session.GetInstance().SessionState = SessionState.GameWon;
             }
             else
             {
-                Console.WriteLine("You need " + (Session.GetInstance().NumberOfPlayers - altarInventory.ArtefactCount()) + " more artefacts!");
+                Debug.WriteLine("You need " + (Session.GetInstance().NumberOfPlayers - altarInventory.ArtefactCount()) + " more artefacts!");
             }
 
 

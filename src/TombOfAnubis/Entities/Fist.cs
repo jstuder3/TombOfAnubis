@@ -2,7 +2,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Sdcb.FFmpeg.Utils;
-using System;
+using System; using System.Diagnostics;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO.Compression;
 
@@ -26,34 +27,35 @@ namespace TombOfAnubis
 
             if (Texture == null)
             {
-                Console.WriteLine("Error: Trying to instantiate fist without having first loaded its texture.");
+                Debug.WriteLine("Error: Trying to instantiate fist without having first loaded its texture.");
                 return;
             }
 
             Animation animation = new Animation(AnimationClipList, Visibility.Game);
             AddComponent(animation);
 
-            Console.WriteLine(forwardVector.ToString());
+            Debug.WriteLine(forwardVector.ToString());
 
             // select sprite based on forward vector
             if(forwardVector.X == 1 && forwardVector.Y == 0)
             {
-                //Console.WriteLine();
+                //Debug.WriteLine();
                 animation.SetActiveClip(AnimationClipType.WalkingRight);
             }
             else if(forwardVector.X == -1 && forwardVector.Y == 0)
             {
-                //Console.WriteLine();
+                //Debug.WriteLine();
                 animation.SetActiveClip(AnimationClipType.WalkingLeft);
             }
             else if (forwardVector.X == 0 && forwardVector.Y == 1)
             {
-                //Console.WriteLine();
+                //Debug.WriteLine();
+
                 animation.SetActiveClip(AnimationClipType.WalkingDown);
             }
             else if (forwardVector.X == 0 && forwardVector.Y == -1)
             {
-                //Console.WriteLine();
+                //Debug.WriteLine();
                 animation.SetActiveClip(AnimationClipType.WalkingUp);
             }
 

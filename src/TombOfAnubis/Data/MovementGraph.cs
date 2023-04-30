@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+using System; using System.Diagnostics;
 using System.Diagnostics;
 using System.Collections.Generic;
 
@@ -35,7 +35,7 @@ namespace TombOfAnubis
                 throw new ArgumentNullException("MapArgument");
             }
             this.map = map;
-            //Console.WriteLine("start initiating graph");
+            //Debug.WriteLine("start initiating graph");
 
             //try to get map info
 
@@ -44,8 +44,8 @@ namespace TombOfAnubis
             CreateNodeTileCoordinateMapping();
             CreateGraph();
 
-            //Console.WriteLine("graph has " + nGraphNodes + " nodes and " + nGraphEdges + " edges.");
-            //Console.WriteLine("finished creating graph, dajuuum");
+            //Debug.WriteLine("graph has " + nGraphNodes + " nodes and " + nGraphEdges + " edges.");
+            //Debug.WriteLine("finished creating graph, dajuuum");
         }
 
 
@@ -56,7 +56,7 @@ namespace TombOfAnubis
             nodeIds = new Dictionary<Point, int>();
             tileCoordinates = new Dictionary<int, Point>();
             int node_counter = 0;
-            //Console.WriteLine("draw Map: ");
+            //Debug.WriteLine("draw Map: ");
             
             
             for (int j = 0; j < map.MapDimensions.Y; j++)
@@ -66,7 +66,7 @@ namespace TombOfAnubis
                     Point tileCoordinate = new Point(i, j);
                     if (map.GetCollisionLayerValue(tileCoordinate) == 0)
                     {
-                        //Console.Write(0 + ",");
+                        //Debug.Write(0 + ",");
                         /*
                         for (int k = 0; k < nNodesPerTile; k++)
                         {
@@ -81,14 +81,14 @@ namespace TombOfAnubis
                         node_counter++;
                     } else
                     {
-                        //Console.Write(1 + ",");
+                        //Debug.Write(1 + ",");
                     }
 
 
                 }
-                //Console.WriteLine();
+                //Debug.WriteLine();
             }
-            //Console.WriteLine("---------------------");
+            //Debug.WriteLine("---------------------");
             nGraphNodes = node_counter + 1;
             
         }
@@ -148,10 +148,10 @@ namespace TombOfAnubis
                 {
                     if (fw_graph.TryGetPath(source, target, out IEnumerable<Edge<int>> path))
                     {
-                        Console.WriteLine("from node " + source + " to " + target + " path: ");
+                        Debug.WriteLine("from node " + source + " to " + target + " path: ");
                         foreach (Edge<int> edge in path)
                         {
-                            Console.WriteLine(edge);
+                            Debug.WriteLine(edge);
                         }
                     }
                 }
@@ -251,7 +251,7 @@ namespace TombOfAnubis
                 counter++;
             }
 
-            Console.WriteLine("Error: MovementGraph 34");
+            Debug.WriteLine("Error: MovementGraph 34");
             return new Vector2(0, 0);
         }
 
@@ -342,7 +342,7 @@ namespace TombOfAnubis
             //round binsize up to next multiple of characterSieLength
             int sideLength = (int)characterSideLength + (nBinsPerCharacterSideLength - (int)characterSideLength % nBinsPerCharacterSideLength);
             this.binSize = sideLength / nBinsPerCharacterSideLength;
-            Console.WriteLine("binSize: " + this.binSize);
+            Debug.WriteLine("binSize: " + this.binSize);
 
             //needs to be variable
             int WorldSizeHeight = 10000;
@@ -351,11 +351,11 @@ namespace TombOfAnubis
             //round up to be multiple of binSize
             this.WorldSizeHeight += this.binSize - (WorldSizeHeight % this.binSize);
             this.WorldSizeWidth += this.binSize - (WorldSizeWidth % this.binSize);
-            Console.WriteLine("WorldSize: " + this.WorldSizeWidth + ", " + this.WorldSizeHeight);
+            Debug.WriteLine("WorldSize: " + this.WorldSizeWidth + ", " + this.WorldSizeHeight);
 
             this.nBinsPerColumn = WorldSizeHeight / this.binSize;
             this.nBinsPerRow = WorldSizeWidth / this.binSize;
-            Console.WriteLine("nBins: " + this.nBinsPerRow + ", " + this.nBinsPerColumn);
+            Debug.WriteLine("nBins: " + this.nBinsPerRow + ", " + this.nBinsPerColumn);
 
 
             //createGraph();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using System; using System.Diagnostics;
 
 namespace TombOfAnubis
 {
@@ -64,7 +64,7 @@ namespace TombOfAnubis
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
             Hud = new Hud(GameScreenManager.GraphicsDevice, GameScreenManager);
 
-            Console.WriteLine("done");
+            Debug.WriteLine("done");
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
