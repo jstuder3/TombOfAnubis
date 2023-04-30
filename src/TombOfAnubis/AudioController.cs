@@ -63,6 +63,11 @@ namespace TombOfAnubis
             MediaPlayer.Resume();
         }
 
+        public static bool isPlayingSong()
+        {
+            return (MediaPlayer.State == MediaState.Playing);
+        }
+
         public static void PlaySoundEffect(string effect)
         {
             if (SoundEffects.ContainsKey(effect))

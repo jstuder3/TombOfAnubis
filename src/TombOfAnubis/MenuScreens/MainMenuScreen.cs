@@ -119,8 +119,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void LoadContent()
         {
-
-            AudioController.PlaySong("menuScreen");
+            if(!AudioController.isPlayingSong())
+                AudioController.PlaySong("menuScreen");
 
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;

@@ -103,8 +103,6 @@ namespace TombOfAnubis.MenuScreens
         public override void LoadContent()
         {
 
-            AudioController.PlaySong("menuScreen");
-
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/main_menu_bg");
