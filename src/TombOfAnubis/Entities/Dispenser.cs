@@ -148,7 +148,7 @@ namespace TombOfAnubis
             if (dispenserType == DispenserType.ItemDispenser)
             {
 
-                switch (5)//random.Next(0, 6))
+                switch (random.Next(0, 6))
                 {
                     case 0: //Speedup
                         ItemType = ItemType.Speedup;

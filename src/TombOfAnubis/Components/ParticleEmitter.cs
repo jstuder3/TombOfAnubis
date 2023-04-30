@@ -118,7 +118,6 @@ namespace TombOfAnubis
 
         public ParticleEmitterConfiguration EmitterConfiguration;
 
-        public float StartTime = 0;
         public float AliveUntil = -1;
         public bool HasEnded = false;
 
@@ -126,6 +125,7 @@ namespace TombOfAnubis
         public int FirstDeadParticleIndex;
 
         public float LastBurstTime;
+        public float TimeAlive = 0;
 
         public Vector2 EntityPosition { get; set; }
 
@@ -158,7 +158,7 @@ namespace TombOfAnubis
         public void EndEmitter()
         {
             //the particles that remain shouldn't just be destroyed. We keep updating until they have all ran out, and only then the ParticleEmitter and all the particles get destroyed
-            AliveUntil = StartTime;
+            AliveUntil = 0;
             HasEnded = true;
         }
 
@@ -177,20 +177,23 @@ namespace TombOfAnubis
             //check that the overall particle effect hasn't timed out. if it has, deregister, but leave the particles that exist alive until they all run out as to not make them all disappear all at once in an ugly fashion
             if (AliveUntil == -1)
             {
-                StartTime = (float)gameTime.TotalGameTime.TotalSeconds;
                 if (EmitterConfiguration.EmitterDuration > 0)
                 {
-                    AliveUntil = StartTime + EmitterConfiguration.EmitterDuration;
+                    AliveUntil = EmitterConfiguration.EmitterDuration;
                 }
                 else
                 {
                     AliveUntil = float.MaxValue;
                 }
-                LastBurstTime = StartTime;
+                TimeAlive = 0;
+                LastBurstTime = 0;
 
             }
 
-            if((float)gameTime.TotalGameTime.TotalSeconds > AliveUntil)
+            //update local time
+            TimeAlive += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if(TimeAlive > AliveUntil)
             {
                 HasEnded = true;
             }
@@ -210,14 +213,15 @@ namespace TombOfAnubis
                     currentParticle = lastAliveParticle;
                     FirstDeadParticleIndex--;
                 }
-                //then update (note: not yet implemented, and to-be-moved here since entities shouldn't update themselves)
+                //then update (note: entities shouldn't update themselves, so the logic should be moved here later)
                 currentParticle.Update(gameTime);
             }
+
 
             if (!HasEnded)
             {
                 // spawn as many particles as the spawn frequency requires
-                float deltaTime = (float)gameTime.TotalGameTime.TotalSeconds - LastBurstTime;
+                float deltaTime = TimeAlive - LastBurstTime;
                 float burstTime = 1f / EmitterConfiguration.EmissionFrequency;
 
                 int numBurstsToExecute = (int)MathF.Floor(deltaTime / burstTime);
