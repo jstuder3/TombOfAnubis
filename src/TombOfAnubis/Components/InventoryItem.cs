@@ -236,7 +236,7 @@ namespace TombOfAnubis
                         
                         teleport_streak.RandomizedSpawnPositionRadius = 50f;
                         teleport_streak.Texture = ParticleTextureLibrary.BasicParticle;
-                        teleport_streak.SpriteLayer = 2;
+                        teleport_streak.SpriteLayer = 1;
                         teleport_streak.RandomizedTintMin = Color.Yellow;
                         teleport_streak.RandomizedTintMax = Color.White;
                         teleport_streak.Scale = Vector2.One * 0.2f;
