@@ -38,19 +38,23 @@ namespace TombOfAnubis
             // select sprite based on forward vector
             if(forwardVector.X == 1 && forwardVector.Y == 0)
             {
-                Console.WriteLine(animation.SetActiveClip(AnimationClipType.WalkingRight));
+                //Console.WriteLine();
+                animation.SetActiveClip(AnimationClipType.WalkingRight);
             }
             else if(forwardVector.X == -1 && forwardVector.Y == 0)
             {
-                Console.WriteLine(animation.SetActiveClip(AnimationClipType.WalkingLeft));
+                //Console.WriteLine();
+                animation.SetActiveClip(AnimationClipType.WalkingLeft);
             }
             else if (forwardVector.X == 0 && forwardVector.Y == 1)
             {
-                Console.WriteLine(animation.SetActiveClip(AnimationClipType.WalkingDown));
+                //Console.WriteLine();
+                animation.SetActiveClip(AnimationClipType.WalkingDown);
             }
             else if (forwardVector.X == 0 && forwardVector.Y == -1)
             {
-                Console.WriteLine(animation.SetActiveClip(AnimationClipType.WalkingUp));
+                //Console.WriteLine();
+                animation.SetActiveClip(AnimationClipType.WalkingUp);
             }
 
             Sprite sprite = new Sprite(Texture, animation.DefaultSourceRectangle, 2, Visibility.Game);
