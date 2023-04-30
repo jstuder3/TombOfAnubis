@@ -1,12 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace TombOfAnubis
 {
     public class TombOfAnubis : Game
     {
-        private GraphicsDeviceManager graphics;
+        private static GraphicsDeviceManager graphics;
         GameScreenManager screenManager;
+
+        public static GraphicsDeviceManager Graphics
+        {
+            get { return graphics; }
+        }
 
 
         public TombOfAnubis()

@@ -20,6 +20,7 @@ namespace TombOfAnubis.MenuScreens
         private Rectangle backgroundPosition;
 
         private SpriteFont settingFont;
+        private SpriteFont titleFont;
 
         private Texture2D settingsScroll;
         private int settingsScrollWidth = 800, settingsScrollHeight = 400;
@@ -111,6 +112,7 @@ namespace TombOfAnubis.MenuScreens
             arrowTexture = content.Load<Texture2D>("Textures/Menu/Indicator");
 
             settingFont = Fonts.DisneyHeroicFont;
+            titleFont = Fonts.SettingsTitleFont;
             foreach (SettingsEntry entry in SettingsEntries)
             {
                 entry.EntryFont = settingFont;
@@ -147,7 +149,7 @@ namespace TombOfAnubis.MenuScreens
             float offsetY = (1.0f - textureHeight) / 2;
             settingsScrollPosition = GetRelativePosition(viewport, 0.5f, 0.5f);
 
-            Vector2 titleSize = settingFont.MeasureString(title);
+            Vector2 titleSize = titleFont.MeasureString(title);
             titleSize = Vector2.Divide(titleSize, new Vector2(screenWidth, screenHeight));
             float titleOffsetX = offsetX + (textureWidth - titleSize.X) / 2;
             float titleOffsetY = offsetY + absMarginY;
@@ -334,6 +336,8 @@ namespace TombOfAnubis.MenuScreens
                         case SettingsType.TickBox: 
                             {
                                 entry.TickBoxStatus = !entry.TickBoxStatus;
+                                TombOfAnubis.Graphics.IsFullScreen = entry.TickBoxStatus;
+                                TombOfAnubis.Graphics.ApplyChanges();
                                 break;
                             }
                         case SettingsType.SaveButton: 
@@ -380,15 +384,6 @@ namespace TombOfAnubis.MenuScreens
 
         public override void Draw(GameTime gameTime)
         {
-            //Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            //spacingX = 0.5f;
-            //marginX = 0.22f;
-            //selectBoxWidth = 0.28f;
-            //settingsScrollScale = new Vector2(1.2f, 3f);
-            //sliderButtonWidth = 0.01f; sliderButtonHeight = 0.025f;
-            //sliderLength = 0.3f; sliderThickness = 0.005f;
-            //SetElementPosition(viewport);
-
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
             spriteBatch.Begin();
@@ -398,7 +393,7 @@ namespace TombOfAnubis.MenuScreens
             spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             settingsScrollPosition = new Vector2(960, 540);
             spriteBatch.Draw(settingsScroll, settingsScrollPosition, sourceRectangle, Color.White, MathHelper.ToRadians(90), rotateOrigin, settingsScrollScale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(settingFont, title, titlePosition, Color.White);
+            spriteBatch.DrawString(titleFont, title, titlePosition, Color.White);
 
 
             // Draw each settings entry in turn.

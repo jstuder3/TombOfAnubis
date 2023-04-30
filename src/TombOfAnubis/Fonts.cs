@@ -29,6 +29,7 @@ namespace TombOfAnubis
         private static SpriteFont archeologicapsFont;
         private static SpriteFont disneyHeroicFont;
         private static SpriteFont cascadiaFont;
+        private static SpriteFont settingsTitleFont;
 
         public static SpriteFont PegyptaFont
         {
@@ -48,6 +49,11 @@ namespace TombOfAnubis
         public static SpriteFont CascadiaFont
         {
             get { return cascadiaFont; }
+        }
+
+        public static SpriteFont SettingsTitleFont
+        {
+            get { return settingsTitleFont; }
         }
 
         /*
@@ -161,6 +167,7 @@ namespace TombOfAnubis
             archeologicapsFont = contentManager.Load<SpriteFont>("Fonts/Archeologicaps");
             disneyHeroicFont = contentManager.Load<SpriteFont>("Fonts/DisneyHeroic");
             cascadiaFont = contentManager.Load<SpriteFont>("Fonts/CascadiaMonoSL");
+            settingsTitleFont = contentManager.Load<SpriteFont>("Fonts/SettingsTitle");
 
             /*
             buttonNamesFont = contentManager.Load<SpriteFont>("Fonts/ButtonNamesFont");

@@ -144,6 +144,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Pegypta-ALE6.spritefont
 
+#begin Fonts/SettingsTitle.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/SettingsTitle.spritefont
+
 #begin Maps/Map001.xml
 /importer:XmlImporter
 /processor:MapProcessor
