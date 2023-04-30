@@ -28,7 +28,7 @@ namespace TombOfAnubis
             // TODO: Add your initialization logic here
             base.Initialize();
 
-            screenManager.AddScreen(new IntroScreen());
+            screenManager.AddScreen(new IntroScreen(0));
 
         }
 

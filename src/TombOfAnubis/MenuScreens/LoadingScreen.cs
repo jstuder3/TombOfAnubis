@@ -51,10 +51,7 @@ namespace TombOfAnubis
 
 
         private Texture2D loadingTexture;
-        private Vector2 loadingPosition;
-
-        private Texture2D loadingBlackTexture;
-        private Rectangle loadingBlackTextureDestination;
+        private Rectangle loadingPosition;
 
 
         #endregion
@@ -99,17 +96,9 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             ContentManager content = GameScreenManager.Game.Content;
-            loadingTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
-            loadingBlackTexture =
-                content.Load<Texture2D>("Textures/Menu/MenuTile");
+            loadingTexture = content.Load<Texture2D>("Textures/Menu/LoadingScreen");
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            loadingBlackTextureDestination = new Rectangle(viewport.X, viewport.Y,
-                viewport.Width, viewport.Height);
-            loadingPosition = new Vector2(
-                viewport.X + (float)Math.Floor((viewport.Width -
-                    loadingTexture.Width) / 2f),
-                viewport.Y + (float)Math.Floor((viewport.Height -
-                    loadingTexture.Height) / 2f));
+            loadingPosition = new Rectangle(viewport.X,viewport.Y,viewport.Width, viewport.Height);
 
             base.LoadContent();
         }
@@ -182,8 +171,6 @@ namespace TombOfAnubis
                 Color color = new Color(255, 255, 255, (int)TransitionAlpha);
 
                 spriteBatch.Begin();
-                spriteBatch.Draw(loadingBlackTexture, loadingBlackTextureDestination,
-                    Color.White);
                 spriteBatch.Draw(loadingTexture, loadingPosition, Color.White);
                 spriteBatch.End();
             }

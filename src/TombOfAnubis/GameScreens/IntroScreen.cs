@@ -11,11 +11,13 @@ namespace TombOfAnubis
         private SpriteFont statusFont = Fonts.DisneyHeroicFont;
         private Color statusColor = Color.Gold;
         private float fontScale = 1f;
+        private int skipCooldown;
 
-        public IntroScreen()
+        public IntroScreen(int skipCooldown)
             : base()
         {
             InputController.ResetPlayerInputs();
+            this.skipCooldown = skipCooldown;
         }
         public override void LoadContent()
         {
@@ -25,11 +27,17 @@ namespace TombOfAnubis
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
+            if (skipCooldown > 0)
+            {
+                skipCooldown -= (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
         }
         public override void HandleInput()
         {
+            if (skipCooldown > 0) { return; }
+
             foreach (PlayerInput playerInput in InputController.PlayerInputs)
             {
                 if (playerInput.UseTriggered())
