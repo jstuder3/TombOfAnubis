@@ -234,24 +234,26 @@ namespace TombOfAnubis
                         //paticles that are spawned at the old location and move to the new location to indicate the teleport
                         ParticleEmitterConfiguration teleport_streak = new ParticleEmitterConfiguration();
                         
-                        teleport_streak.RandomizedSpawnPositionRadius = 25f;
+                        teleport_streak.RandomizedSpawnPositionRadius = 50f;
                         teleport_streak.Texture = ParticleTextureLibrary.BasicParticle;
                         teleport_streak.SpriteLayer = 2;
                         teleport_streak.RandomizedTintMin = Color.Yellow;
                         teleport_streak.RandomizedTintMax = Color.White;
                         teleport_streak.Scale = Vector2.One * 0.2f;
-                        teleport_streak.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                        teleport_streak.ScalingMode = ScalingMode.Constant;
+                        teleport_streak.InitialAlpha = 1f;
+                        teleport_streak.AlphaMode = AlphaMode.LinearDecreaseToZero;
                         teleport_streak.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
-                        teleport_streak.EmitterDuration = 1f;
-                        teleport_streak.ParticleDuration = 0.5f;
+                        teleport_streak.EmitterDuration = 0.1f;
+                        teleport_streak.ParticleDuration = 1f;
                         teleport_streak.EmissionFrequency = 30f;
-                        teleport_streak.EmissionRate = 1f;
-                        teleport_streak.InitialSpeed = 10f;
+                        teleport_streak.EmissionRate = 5f;
+                        teleport_streak.InitialSpeed = 150f;
                         teleport_streak.SpawnDirection = forwardDirection;//new Vector2(0f, -1f);
-                        teleport_streak.SpawnConeDegrees = 120f;
-                        teleport_streak.Drag = 0.2f;
-                        teleport_streak.LocalPointForcePosition = playerCenterPosition + teleTranslation;
-                        teleport_streak.PointForceStrength = 500f;
+                        teleport_streak.SpawnConeDegrees = 160f;
+                        teleport_streak.Drag = 0.5f;
+                        //teleport_streak.LocalPointForcePosition = playerCenterPosition + teleTranslation;
+                        //teleport_streak.PointForceStrength = 500f;
 
                         for(int i = 0;  i< num_streak_spawners; i++)
                         {
