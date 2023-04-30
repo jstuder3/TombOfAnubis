@@ -29,7 +29,7 @@ namespace TombOfAnubis
                 case ItemType.Fist: return Fist;
                 case ItemType.HidingCloak: return HidingCloak;
                 case ItemType.AnubisLocationReveal: return AnubisLocationReveal;
-                case ItemType.Teleport: return Resurrection;
+                case ItemType.Teleport: return Teleport;
                 //case ItemType.Artefact: return Artefact;
             }
             return null;
@@ -46,6 +46,7 @@ namespace TombOfAnubis
             ItemTextureLibrary.Fist = content.Load<Texture2D>(item_base_path + "Fist");
             ItemTextureLibrary.HidingCloak = content.Load<Texture2D>(item_base_path + "HidingCloak");
             ItemTextureLibrary.AnubisLocationReveal = content.Load<Texture2D>(item_base_path + "AnubisLocationReveal");
+            ItemTextureLibrary.Teleport = content.Load<Texture2D>(item_base_path + "Teleport");
             //ItemTextureLibrary.Artefact = ???
         }
     }
@@ -205,7 +206,9 @@ namespace TombOfAnubis
                     Console.WriteLine("Used HidingCloak!");
                     break;
                 case ItemType.Teleport:
-                    Vector2 playerPosition = Entity.CenterPosition();
+                    //Entity.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 5f, 100f, new Vector2(1f, -1f), Visibility.Both));
+                    //return true;
+                    Vector2 playerCenterPosition = Entity.CenterPosition();
                     Vector2 forwardDirection = Entity.GetComponent<Movement>().GetForwardVector();
                     forwardDirection.Normalize();
                     Vector2 tileLength = Session.GetInstance().Map.TileSize;
@@ -225,8 +228,65 @@ namespace TombOfAnubis
 
                     if (topLeft && topRight && bottomRight && bottomLeft)
                     {
+
+                        int num_streak_spawners = 10;
+
+                        //paticles that are spawned at the old location and move to the new location to indicate the teleport
+                        ParticleEmitterConfiguration teleport_streak = new ParticleEmitterConfiguration();
+                        
+                        teleport_streak.RandomizedSpawnPositionRadius = 25f;
+                        teleport_streak.Texture = ParticleTextureLibrary.BasicParticle;
+                        teleport_streak.SpriteLayer = 2;
+                        teleport_streak.RandomizedTintMin = Color.Yellow;
+                        teleport_streak.RandomizedTintMax = Color.White;
+                        teleport_streak.Scale = Vector2.One * 0.2f;
+                        teleport_streak.ScalingMode = ScalingMode.LinearDecreaseToZero;
+                        teleport_streak.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                        teleport_streak.EmitterDuration = 1f;
+                        teleport_streak.ParticleDuration = 0.5f;
+                        teleport_streak.EmissionFrequency = 30f;
+                        teleport_streak.EmissionRate = 1f;
+                        teleport_streak.InitialSpeed = 10f;
+                        teleport_streak.SpawnDirection = forwardDirection;//new Vector2(0f, -1f);
+                        teleport_streak.SpawnConeDegrees = 120f;
+                        teleport_streak.Drag = 0.2f;
+                        teleport_streak.LocalPointForcePosition = playerCenterPosition + teleTranslation;
+                        teleport_streak.PointForceStrength = 500f;
+
+                        for(int i = 0;  i< num_streak_spawners; i++)
+                        {
+                            teleport_streak.LocalPosition = playerCenterPosition + (float)i / (float)num_streak_spawners * teleTranslation;
+                            Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_streak));
+                        }
+
+                        
+
                         //use teleport
                         Entity.GetComponent<Transform>().Position = Entity.TopLeftCornerPosition() + teleTranslation;
+
+                        //particles that are spawned at the new location to show an "impact"
+                        ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
+                        teleport_impact.LocalPosition = Entity.GetComponent<Transform>().Position;
+                        teleport_impact.RandomizedSpawnPositionRadius = 50f;
+                        teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
+                        teleport_impact.SpriteLayer = 1;
+                        teleport_impact.RandomizedTintMin = Color.DarkGray;
+                        teleport_impact.RandomizedTintMax = Color.Gray;
+                        teleport_impact.Scale = Vector2.One * 0.6f;
+                        teleport_impact.ScalingMode = ScalingMode.Constant;
+                        teleport_impact.InitialAlpha = 1f;
+                        teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                        teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                        teleport_impact.EmitterDuration = 0.10f;
+                        teleport_impact.ParticleDuration = 2f;
+                        teleport_impact.EmissionFrequency = 20f;
+                        teleport_impact.EmissionRate = 50f;
+                        teleport_impact.InitialSpeed = 150f;
+                        teleport_impact.SpawnDirection = new Vector2(0f, -1f);
+                        teleport_impact.SpawnConeDegrees = 360f;
+                        teleport_impact.Drag = 0.5f;
+
+                        Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_impact));
 
                         Console.WriteLine("Used Teleport, new location: " + Entity.TopLeftCornerPosition());
                         ItemType = ItemType.None;
@@ -234,7 +294,7 @@ namespace TombOfAnubis
                     }
                     //can't use teleport
                     Console.WriteLine("Teleport: There's a time and place for everything, but not now.");
-                    return true;
+                    return false;
             }
             return false;
         }

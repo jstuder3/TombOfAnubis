@@ -844,6 +844,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/SpeedUp.png
 
+#begin Textures/Objects/Items/PowerUp/Teleport.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/Teleport.png
+
 #begin Textures/Objects/Items/selfmade_fist_spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

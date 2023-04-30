@@ -148,31 +148,30 @@ namespace TombOfAnubis
             if (dispenserType == DispenserType.ItemDispenser)
             {
 
-                switch (random.Next(0, 5))
+                switch (5)//random.Next(0, 6))
                 {
                     case 0: //Speedup
                         ItemType = ItemType.Speedup;
-                        itemTexture = ItemTextureLibrary.Speedup;
                         break;
                     case 1: //Fist
                         ItemType = ItemType.Fist;
-                        itemTexture = ItemTextureLibrary.Fist;
                         break;
                     case 2: //Resurrection (is now a self-revive item)
                         ItemType = ItemType.Resurrection;
-                        itemTexture = ItemTextureLibrary.Resurrection;
                         break;
                     case 3: //Hiding Cloak
                         ItemType = ItemType.HidingCloak;
-                        itemTexture = ItemTextureLibrary.HidingCloak;
                         break;
                     case 4: //Anubis location reveal
                         ItemType = ItemType.AnubisLocationReveal;
-                        itemTexture = ItemTextureLibrary.AnubisLocationReveal;
+                        break;
+                    case 5: //Teleporter
+                        ItemType = ItemType.Teleport;
                         break;
                     default:
                         return;
                 }
+                itemTexture = ItemTextureLibrary.GetTexture(ItemType);
             }
             else
             {
