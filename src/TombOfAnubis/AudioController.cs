@@ -21,6 +21,7 @@ namespace TombOfAnubis
                 { "menuScreen", content.Load<Song>(@"Audio\Soundtrack/Slow1_100bpm") },
                 { "gameSlowTrack", content.Load<Song>(@"Audio\Soundtrack/Slow2_100bpm") },
                 { "gameFastTrack", content.Load<Song>(@"Audio\Soundtrack/Fast2.2_100bpm") },
+                { "gameWonTrack", content.Load<Song>(@"Audio\Soundtrack/Slow3_95bpm") },
             };
             SoundEffects = new Dictionary<string, SoundEffect>()
             {

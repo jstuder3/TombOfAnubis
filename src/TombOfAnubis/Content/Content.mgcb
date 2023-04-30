@@ -1276,15 +1276,25 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
 
-#begin Videos/GameOver.mp4
+#begin Videos/GameWon1.mp4
 /importer:H264Importer
 /processor:VideoProcessor
-/build:Videos/GameOver.mp4
+/build:Videos/GameWon1.mp4
 
-#begin Videos/GameWon.mp4
+#begin Videos/GameWon2.mp4
 /importer:H264Importer
 /processor:VideoProcessor
-/build:Videos/GameWon.mp4
+/build:Videos/GameWon2.mp4
+
+#begin Videos/GameWon3.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/GameWon3.mp4
+
+#begin Videos/GameWon4.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/GameWon4.mp4
 
 #begin Videos/IntroVideo_v2.mp4
 /importer:H264Importer

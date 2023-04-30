@@ -34,17 +34,18 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             AudioController.StopSong();
+            AudioController.PlaySong("gameWonTrack");
             spriteBatch = GameScreenManager.SpriteBatch;
 
             switch (activeInputs.Count)
             {
-                case 1: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+                case 1: VideoController.PlayVideo(@"Content/Videos/GameWon1.mp4", false, true); break;
 
-                case 2: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+                case 2: VideoController.PlayVideo(@"Content/Videos/GameWon2.mp4", false, true); break;
 
-                case 3: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+                case 3: VideoController.PlayVideo(@"Content/Videos/GameWon3.mp4", false, true); break;
 
-                case 4: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+                case 4: VideoController.PlayVideo(@"Content/Videos/GameWon4.mp4", false, true); break;
 
             }
             

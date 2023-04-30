@@ -64,6 +64,8 @@ namespace TombOfAnubis
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
             Hud = new Hud(GameScreenManager.GraphicsDevice, GameScreenManager);
 
+            VideoController.LoadGameWonVideo(this.gameStartDescription.NumberOfPlayers);
+
             Console.WriteLine("done");
 
 

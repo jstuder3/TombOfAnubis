@@ -27,12 +27,23 @@ namespace TombOfAnubis
                 {
                     { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")},
                     { @"Content/Videos/IntroVideo_v2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo_v2.mp4")},
-                    { @"Content/Videos/GameWon.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameWon.mp4")},
-                    { @"Content/Videos/GameOver.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameOver.mp4")},
 
                 };
             videoPlayer = new VideoPlayer(graphics);
 
+        }
+
+        public static void LoadGameWonVideo(int numPlayers)
+        {
+            switch (numPlayers)
+            {
+                default: break;
+
+                case 1: if (!videos.ContainsKey(@"Content/Videos/GameWon1.mp4")) videos.Add(@"Content/Videos/GameWon1.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameWon1.mp4")); break;
+                case 2: if (!videos.ContainsKey(@"Content/Videos/GameWon2.mp4")) videos.Add(@"Content/Videos/GameWon2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameWon2.mp4")); break;
+                case 3: if (!videos.ContainsKey(@"Content/Videos/GameWon3.mp4")) videos.Add(@"Content/Videos/GameWon3.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameWon3.mp4")); break;
+                case 4: if (!videos.ContainsKey(@"Content/Videos/GameWon4.mp4")) videos.Add(@"Content/Videos/GameWon4.mp4", VideoHelper.LoadFromFile(@"Content/Videos/GameWon4.mp4")); break;
+            }
         }
 
         public static void PlayVideo(string title, bool looped, bool muted)
