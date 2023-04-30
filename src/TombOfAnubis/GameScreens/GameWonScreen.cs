@@ -35,7 +35,19 @@ namespace TombOfAnubis
         {
             AudioController.StopSong();
             spriteBatch = GameScreenManager.SpriteBatch;
-            VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true);
+
+            switch (activeInputs.Count)
+            {
+                case 1: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+
+                case 2: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+
+                case 3: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+
+                case 4: VideoController.PlayVideo(@"Content/Videos/GameWon.mp4", false, true); break;
+
+            }
+            
         }
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)

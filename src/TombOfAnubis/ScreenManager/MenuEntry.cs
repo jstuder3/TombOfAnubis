@@ -129,27 +129,7 @@ namespace TombOfAnubis
             get { return textureAnimation; }
             set { textureAnimation = value; }
         }
-        
-        public Rectangle TextureSourceRectangle
-        {
-            get { return textureSourceRectangle; }
-            set { textureSourceRectangle = value; }
-        }
 
-        /// <summary>
-        /// Stores whether this entry was the most recently selected MenuEntry
-        /// </summary>
-        public bool PrevSelected
-        {
-            get { return prevSelected; }
-            set { prevSelected = value; }
-        }
-
-        public double PrevSelectedTime
-        {
-            get { return prevSelectedTime; }
-            set { prevSelectedTime = value; }
-        }
 
         #endregion
 
@@ -265,7 +245,7 @@ namespace TombOfAnubis
         /// <summary>
         /// Draws the menu entry. This can be overridden to customize the appearance.
         /// </summary>
-        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
+        public virtual void Draw(MenuScreen screen, bool isSelected)
         {
             // Draw the selected entry in yellow, otherwise white.
             Color color = isSelected ? Fonts.MenuSelectedColor : Fonts.TitleColor;

@@ -237,7 +237,7 @@ namespace TombOfAnubis
             {
                 MenuEntry menuEntry = MenuEntries[i];
                 bool isSelected = IsActive && (i == selectedEntry);
-                menuEntry.Draw(this, isSelected, gameTime);
+                menuEntry.Draw(this, isSelected);
             }
 
             spriteBatch.End();

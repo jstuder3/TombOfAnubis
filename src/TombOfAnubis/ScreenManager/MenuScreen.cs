@@ -47,7 +47,6 @@ namespace TombOfAnubis
             get { return menuEntries; }
         }
 
-
         protected MenuEntry SelectedMenuEntry
         {
             get
@@ -96,10 +95,8 @@ namespace TombOfAnubis
         /// </summary>
         public override void HandleInput()
         {
-            int oldSelectedEntry = selectedEntry;
-            // TODO: Add counter of connected players
-
-            if (!buttonCooldown) {
+            if (!buttonCooldown)
+            {
                 // Move to the previous menu entry
                 if (InputController.IsUpTriggered())
                 {
@@ -119,25 +116,14 @@ namespace TombOfAnubis
                 }
 
                 // Button pressed
-                if(InputController.IsUseTriggered()) 
+                if (InputController.IsUseTriggered())
                 {
                     AudioController.PlaySoundEffect("menuAccept");
                     OnSelectEntry(selectedEntry);
                     buttonPressed = true;
                 }
             }
-            /*
-            else if (currentActions.Contains(PlayerActions.Back) ||
-                InputManager.IsActionTriggered(InputManager.Action.ExitGame))
-            {
-                OnCancel();
-            }
 
-            else if (selectedEntry != oldSelectedEntry)
-            {
-                AudioManager.PlayCue("MenuMove");
-            }
-            */
         }
 
 
@@ -224,7 +210,7 @@ namespace TombOfAnubis
 
                 bool isSelected = IsActive && (i == selectedEntry);
 
-                menuEntry.Draw(this, isSelected, gameTime);
+                menuEntry.Draw(this, isSelected);
             }
 
             spriteBatch.End();

@@ -9,15 +9,18 @@
 
 #region Using Statements
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Sdcb.FFmpeg.Raw;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using TombOfAnubis.GameScreens;
+using TombOfAnubis.MenuScreens;
 #endregion
 
 namespace TombOfAnubis
@@ -76,7 +79,7 @@ namespace TombOfAnubis
 
         MenuEntry newGameMenuEntry, settingsMenuEntry, quitMenuEntry;
 
-
+       
         #endregion
 
         #region Initialization
@@ -88,6 +91,8 @@ namespace TombOfAnubis
         public MainMenuScreen()
             : base()
         {
+            buttonPressed = true;
+
             gameStartDescription = new GameStartDescription();
             gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
@@ -97,12 +102,12 @@ namespace TombOfAnubis
             newGameMenuEntry.Selected += NewGameMenuEntrySelected;
             MenuEntries.Add(newGameMenuEntry);
 
-            // Create the Controls menu entry
+            // Create the  Settings entry
             settingsMenuEntry = new MenuEntry("Settings");
             settingsMenuEntry.Selected += SettingsMenuEntrySelected;
             MenuEntries.Add(settingsMenuEntry);
 
-            // Create the Credits menu entry
+            // Create the Quit game entry
             quitMenuEntry = new MenuEntry("Quit");
             quitMenuEntry.Selected += QuitMenuEntrySelected;
             MenuEntries.Add(quitMenuEntry);
@@ -234,7 +239,7 @@ namespace TombOfAnubis
         /// </summary>
         void SettingsMenuEntrySelected(object sender, EventArgs e)
         {
-            settingsMenuEntry.Text = "Settings";
+            GameScreenManager.AddScreen(new SettingsScreen());
         }
 
         /// <summary>
@@ -243,7 +248,6 @@ namespace TombOfAnubis
         void QuitMenuEntrySelected(object sender, EventArgs e)
         {
             dialogVisible = true;
-            //GameScreenManager.Game.Exit();
         }
 
         #endregion
@@ -309,7 +313,7 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-
+       
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
             spriteBatch.Begin();
@@ -323,7 +327,7 @@ namespace TombOfAnubis
             {
                 MenuEntry menuEntry = MenuEntries[i];
                 bool isSelected = IsActive && (i == selectedEntry);
-                menuEntry.Draw(this, isSelected, gameTime);
+                menuEntry.Draw(this, isSelected);
             }
 
             if (dialogVisible) DrawDialog();
