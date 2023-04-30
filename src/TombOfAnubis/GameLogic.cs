@@ -124,7 +124,7 @@ namespace TombOfAnubis
                     character2.Ghost = null;
                 }
                 character2.GetComponent<Movement>().State = MovementState.Idle;
-                character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
+                character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.WalkingDown);
 
                 ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
                 pec.LocalPosition = new Vector2(30f, 30f);
@@ -158,7 +158,7 @@ namespace TombOfAnubis
                     character1.Ghost = null;
                 }
                 character1.GetComponent<Movement>().State = MovementState.Idle;
-                character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.Idle);
+                character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.WalkingDown);
 
                 ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
                 pec.LocalPosition = new Vector2(30f, 30f);
@@ -195,6 +195,7 @@ namespace TombOfAnubis
                 character.GetComponent<Inventory>().AddArtefact();
                 artefact.Delete();
                 AudioController.PlaySoundEffect("artefactPickup");
+                Session.GetInstance().AnubisAISystem.triggerRageModeProbability(true);
                 Console.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }
@@ -237,12 +238,14 @@ namespace TombOfAnubis
 
         public static void OnCollision(Character character, Dispenser dispenser)
         {
-            bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
-            if (newItem)
+            if (character.GetComponent<Movement>().CanMove())
             {
-                AudioController.PlaySoundEffect("itemPickup2");
+                bool newItem = dispenser.TryGiveItem(character.GetComponent<Inventory>(), GameTime.TotalGameTime.TotalSeconds);
+                if (newItem)
+                {
+                    AudioController.PlaySoundEffect("itemPickup2");
+                }
             }
-
             StaticCollision(character, dispenser);
         }
 

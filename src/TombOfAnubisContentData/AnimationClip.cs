@@ -17,7 +17,6 @@ namespace TombOfAnubis
         WalkingRight,
         WalkingUp,
         WalkingDown,
-        Idle,
         ObjectActive,
         ObjectInactive,
         // Trap button
@@ -32,6 +31,8 @@ namespace TombOfAnubis
         //Treasure chest / item dispenser
         Open,
         Closed,
+        // Anubis
+        Flexing
     }
 
     public class AnimationClip

@@ -16,6 +16,7 @@ namespace TombOfAnubis
         public Character(EntityDescription entityDescription)
         {
             EntityDescription = entityDescription;
+            Enum.TryParse(EntityDescription.Type, out CharacterType type);
             Vector2 position = Session.GetInstance().Map.CreateEntityTileCenteredPosition(EntityDescription);
 
             Transform transform = new Transform(position, EntityDescription.Scale, Visibility.Game);
@@ -29,8 +30,18 @@ namespace TombOfAnubis
             {
                 Animation animation = new Animation(EntityDescription.Animation, Visibility.Game);
                 AddComponent(animation);
+                switch (type)
+                {
+                    case CharacterType.PlayerOne:
+                        animation.SetActiveClip(AnimationClipType.WalkingLeft); break;
+                    case CharacterType.PlayerTwo:
+                        animation.SetActiveClip(AnimationClipType.WalkingUp); break;
+                    case CharacterType.PlayerThree:
+                        animation.SetActiveClip(AnimationClipType.WalkingDown); break;
+                    case CharacterType.PlayerFour:
+                        animation.SetActiveClip(AnimationClipType.WalkingRight); break;
 
-                animation.SetActiveClip(AnimationClipType.Idle);
+                }
 
                 sprite = new Sprite(EntityDescription.Texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
             }
@@ -42,11 +53,9 @@ namespace TombOfAnubis
             {
                 Animation animation = new Animation(EntityDescription.Animation, Visibility.Minimap);
                 AddComponent(animation);
-                animation.SetActiveClip(AnimationClipType.Idle);
             }
             AddComponent(sprite);
 
-            Enum.TryParse(EntityDescription.Type, out CharacterType type);
             Player player = new Player((int)type);
             AddComponent(player);
 

@@ -209,7 +209,7 @@
 				<SpriteTextureName>anubis</SpriteTextureName>
 				<Animation>
 					<Item>
-						<Type>Idle</Type>
+						<Type>Flexing</Type>
 						<NumberOfFrames>2</NumberOfFrames>
 						<FrameDuration>400</FrameDuration>
 						<FrameSize>130 200</FrameSize>

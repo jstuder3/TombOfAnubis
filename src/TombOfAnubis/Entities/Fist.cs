@@ -14,7 +14,7 @@ namespace TombOfAnubis
         private float velocity;
         private float range;
 
-        public static Vector2 Scale = new Vector2(0.2f, 0.2f);
+        public static Vector2 Scale = new Vector2(0.6f, 0.6f);
         public static Texture2D Texture;
         public static List<AnimationClip> AnimationClipList;
         //private static 
@@ -65,14 +65,14 @@ namespace TombOfAnubis
         public static void LoadContent(GameScreenManager gameScreenManager)
         {
             ContentManager content = gameScreenManager.Game.Content;
-            string textureFullPath = "Textures/Objects/Items/plagiarized_fist_and_attributed_smoke_spritesheet";
+            string textureFullPath = "Textures/Objects/Items/selfmade_fist_spritesheet";
             Texture = content.Load<Texture2D>(textureFullPath);
 
             AnimationClipList = new List<AnimationClip> {
-                            new AnimationClip(AnimationClipType.WalkingLeft, 1, 200, new Point(400, 400)),
-                            new AnimationClip(AnimationClipType.WalkingRight, 1, 200, new Point(400, 400)),
-                            new AnimationClip(AnimationClipType.WalkingUp, 1, 200, new Point(400, 400)),
-                            new AnimationClip(AnimationClipType.WalkingDown, 1, 200, new Point(400, 400))
+                            new AnimationClip(AnimationClipType.WalkingLeft, 1, 200, new Point(128, 128)),
+                            new AnimationClip(AnimationClipType.WalkingRight, 1, 200, new Point(128, 128)),
+                            new AnimationClip(AnimationClipType.WalkingUp, 1, 200, new Point(128, 128)),
+                            new AnimationClip(AnimationClipType.WalkingDown, 1, 200, new Point(128, 128))
                         };
 
         }

@@ -61,7 +61,7 @@ namespace TombOfAnubis
             this.dispenserType = dispenserType;
 
             // set up cooldown
-            this.CooldownDuration = 5f;
+            this.CooldownDuration = 10f;
 
             this.random = new Random();
 
@@ -82,7 +82,7 @@ namespace TombOfAnubis
             emptyItemSlot = inventory.GetEmptyItemSlot();
             if (emptyItemSlot == null)
             {
-                Console.WriteLine("No more space in inventory!");
+                //Console.WriteLine("No more space in inventory!");
                 return false;
             }
 
