@@ -16,6 +16,7 @@ namespace TombOfAnubis
         public static Texture2D Fist { get; set; }
         public static Texture2D HidingCloak { get; set; }
         public static Texture2D AnubisLocationReveal { get; set; }
+        public static Texture2D Teleport { get; set; }
 
         //public static Texture2D Artefact { get; set; }
 
@@ -28,6 +29,7 @@ namespace TombOfAnubis
                 case ItemType.Fist: return Fist;
                 case ItemType.HidingCloak: return HidingCloak;
                 case ItemType.AnubisLocationReveal: return AnubisLocationReveal;
+                case ItemType.Teleport: return Teleport;
                 //case ItemType.Artefact: return Artefact;
             }
             return null;
@@ -44,6 +46,7 @@ namespace TombOfAnubis
             ItemTextureLibrary.Fist = content.Load<Texture2D>(item_base_path + "Fist");
             ItemTextureLibrary.HidingCloak = content.Load<Texture2D>(item_base_path + "HidingCloak");
             ItemTextureLibrary.AnubisLocationReveal = content.Load<Texture2D>(item_base_path + "AnubisLocationReveal");
+            ItemTextureLibrary.Teleport = content.Load<Texture2D>(item_base_path + "Teleport");
             //ItemTextureLibrary.Artefact = ???
         }
     }
@@ -57,7 +60,8 @@ namespace TombOfAnubis
         Fist,
         HidingCloak,
         AnubisLocationReveal,
-        Artefact
+        Artefact,
+        Teleport
     }
 
     public class InventoryItem : Component
@@ -69,7 +73,7 @@ namespace TombOfAnubis
         public bool isInWorld = false;
         public bool isInInventory = false;
 
-        private float lastTimeDropped = 0f;
+        private float dropCooldownEnd = 0f;
 
         public InventoryItem(ItemType itemType, Entity entity)
         {
@@ -201,6 +205,98 @@ namespace TombOfAnubis
                     ItemType = ItemType.None;
                     Console.WriteLine("Used HidingCloak!");
                     break;
+                case ItemType.Teleport:
+                    //Entity.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 5f, 100f, new Vector2(1f, -1f), Visibility.Both));
+                    //return true;
+                    Vector2 playerCenterPosition = Entity.CenterPosition();
+                    Vector2 forwardDirection = Entity.GetComponent<Movement>().GetForwardVector();
+                    forwardDirection.Normalize();
+                    Vector2 tileLength = Session.GetInstance().Map.TileSize;
+                    Vector2 teleTranslation = new Vector2(2 * tileLength.X * forwardDirection.X, 2 * tileLength.Y * forwardDirection.Y);
+
+                    //check if targetposition is valid for all 4 corners of the player
+                    Vector2 HalfDiagPlayerTranslation = Entity.CenterPosition() - Entity.TopLeftCornerPosition();
+                    Vector2 CenterToTopRightTranslation = new Vector2(HalfDiagPlayerTranslation.X, -HalfDiagPlayerTranslation.Y);
+
+                    bool topLeft = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.TopLeftCornerPosition() + teleTranslation)) == 0;
+                    bool bottomRight = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.TopLeftCornerPosition() + 2 * HalfDiagPlayerTranslation + teleTranslation)) == 0;
+                    bool topRight = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.CenterPosition() + CenterToTopRightTranslation + teleTranslation)) == 0;
+                    bool bottomLeft = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.CenterPosition() - CenterToTopRightTranslation + teleTranslation)) == 0;
+
+                    Console.WriteLine("curTopLeftPosition: " + Entity.TopLeftCornerPosition());
+                    Console.WriteLine("targetTopLeftPosition: " + (Entity.TopLeftCornerPosition() + teleTranslation));
+
+                    if (topLeft && topRight && bottomRight && bottomLeft)
+                    {
+
+                        int num_streak_spawners = 10;
+
+                        //paticles that are spawned at the old location and move to the new location to indicate the teleport
+                        ParticleEmitterConfiguration teleport_streak = new ParticleEmitterConfiguration();
+                        
+                        teleport_streak.RandomizedSpawnPositionRadius = 50f;
+                        teleport_streak.Texture = ParticleTextureLibrary.BasicParticle;
+                        teleport_streak.SpriteLayer = 1;
+                        teleport_streak.RandomizedTintMin = Color.Yellow;
+                        teleport_streak.RandomizedTintMax = Color.White;
+                        teleport_streak.Scale = Vector2.One * 0.2f;
+                        teleport_streak.ScalingMode = ScalingMode.Constant;
+                        teleport_streak.InitialAlpha = 1f;
+                        teleport_streak.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                        teleport_streak.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                        teleport_streak.EmitterDuration = 0.1f;
+                        teleport_streak.ParticleDuration = 1f;
+                        teleport_streak.EmissionFrequency = 30f;
+                        teleport_streak.EmissionRate = 5f;
+                        teleport_streak.InitialSpeed = 150f;
+                        teleport_streak.SpawnDirection = forwardDirection;//new Vector2(0f, -1f);
+                        teleport_streak.SpawnConeDegrees = 160f;
+                        teleport_streak.Drag = 0.5f;
+                        //teleport_streak.LocalPointForcePosition = playerCenterPosition + teleTranslation;
+                        //teleport_streak.PointForceStrength = 500f;
+
+                        for(int i = 0;  i< num_streak_spawners; i++)
+                        {
+                            teleport_streak.LocalPosition = playerCenterPosition + (float)i / (float)num_streak_spawners * teleTranslation;
+                            Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_streak));
+                        }
+
+                        
+
+                        //use teleport
+                        Entity.GetComponent<Transform>().Position = Entity.TopLeftCornerPosition() + teleTranslation;
+
+                        //particles that are spawned at the new location to show an "impact"
+                        ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
+                        teleport_impact.LocalPosition = Entity.GetComponent<Transform>().Position;
+                        teleport_impact.RandomizedSpawnPositionRadius = 50f;
+                        teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
+                        teleport_impact.SpriteLayer = 1;
+                        teleport_impact.RandomizedTintMin = Color.DarkGray;
+                        teleport_impact.RandomizedTintMax = Color.Gray;
+                        teleport_impact.Scale = Vector2.One * 0.6f;
+                        teleport_impact.ScalingMode = ScalingMode.Constant;
+                        teleport_impact.InitialAlpha = 1f;
+                        teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                        teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                        teleport_impact.EmitterDuration = 0.10f;
+                        teleport_impact.ParticleDuration = 2f;
+                        teleport_impact.EmissionFrequency = 20f;
+                        teleport_impact.EmissionRate = 50f;
+                        teleport_impact.InitialSpeed = 150f;
+                        teleport_impact.SpawnDirection = new Vector2(0f, -1f);
+                        teleport_impact.SpawnConeDegrees = 360f;
+                        teleport_impact.Drag = 0.5f;
+
+                        Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_impact));
+
+                        Console.WriteLine("Used Teleport, new location: " + Entity.TopLeftCornerPosition());
+                        ItemType = ItemType.None;
+                        return true;
+                    }
+                    //can't use teleport
+                    Console.WriteLine("Teleport: There's a time and place for everything, but not now.");
+                    return false;
             }
             return false;
         }
@@ -208,10 +304,10 @@ namespace TombOfAnubis
         public void DropItem(GameTime gameTime)
         {
             if(ItemType == ItemType.None) return;
+            if ((float)gameTime.TotalGameTime.TotalSeconds < dropCooldownEnd) return;
 
             //if ((float)gameTime.TotalGameTime.TotalSeconds - lastTimeDropped > 0.5f)
             {
-                lastTimeDropped = (float)gameTime.TotalGameTime.TotalSeconds;
 
                 Transform transform = Entity.GetComponent<Transform>();
                 Movement movement = Entity.GetComponent<Movement>();
@@ -220,6 +316,10 @@ namespace TombOfAnubis
                 WorldItem wi = new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType);
                 Session.GetInstance().World.AddChild(wi);
                 wi.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
+
+                //put dropping on cooldown
+                dropCooldownEnd = (float)gameTime.TotalGameTime.TotalSeconds + 1f;
+
                 ItemType = ItemType.None;
                 Console.WriteLine("Dropped item!");
             }

@@ -112,6 +112,9 @@ namespace TombOfAnubis
         public List<Texture2D> CharacterTextures { get; set; }
         public List<Texture2D> GhostCharacterTextures { get; set; }
 
+        public Texture2D MinimapTexture { get; set; }
+        public List<Rectangle> MinimapCharacterSourceRectangles { get; set; }
+        public List<Rectangle> MinimapArtefactSourceRectangles { get; set; }
 
         public int NumberOfPlayers { get; set; }
 
@@ -223,6 +226,22 @@ namespace TombOfAnubis
                 content.Load<Texture2D>(@"Textures\Objects\Artefacts\green_artefact"),
                 content.Load<Texture2D>(@"Textures\Objects\Artefacts\blue_artefact"),
                 content.Load<Texture2D>(@"Textures\Objects\Artefacts\purple_artefact")
+            };
+
+            singleton.MinimapTexture = content.Load<Texture2D>(@"Textures\Minimap\minimap_sprites");
+            singleton.MinimapCharacterSourceRectangles = new List<Rectangle>()
+            {
+                new Rectangle(0, 0, 200, 200),
+                new Rectangle(200, 0, 200, 200),
+                new Rectangle(400, 0, 200, 200),
+                new Rectangle(600, 0, 200, 200),
+            };
+            singleton.MinimapArtefactSourceRectangles = new List<Rectangle>()
+            {
+                new Rectangle(0, 200, 200, 200),
+                new Rectangle(200, 200, 200, 200),
+                new Rectangle(400, 200, 200, 200),
+                new Rectangle(600, 200, 200, 200),
             };
 
             singleton.Visibility = Visibility.Game;
@@ -531,7 +550,7 @@ namespace TombOfAnubis
                     MapBlock block = singleton.gameScreenManager.Game.Content.Load<MapBlock>(@"Maps\MapBlocks\" + mapBlockName);
                     block.Name = mapBlockName;
                     block.Parent = mapBlockDesc;
-                    if(singleton.NumberOfPlayers >= block.MinPlayers)
+                    if(singleton.NumberOfPlayers >= block.MinPlayers && singleton.NumberOfPlayers <= block.MaxPlayers)
                     {
                         mapBlockDesc.Blocks.Add(block);
                         singleton.Map.MapBlocks.Add(block);

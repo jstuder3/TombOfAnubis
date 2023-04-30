@@ -61,6 +61,8 @@ namespace TombOfAnubis
 
                     }
 
+                    transform.Position = newPosition;
+
                     //use item, if there is one
                     if (currentActions.Contains(PlayerAction.UseObject) && inventory != null)
                     {
@@ -74,7 +76,6 @@ namespace TombOfAnubis
                             inventorySlot.DropItem(deltaTime);
                         }
                     }
-                    transform.Position = newPosition;
 
                 }
                 //if the player has self-revive item, he can also use it when he's dead

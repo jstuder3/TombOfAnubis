@@ -71,27 +71,8 @@ namespace TombOfAnubis
 
             foreach (int i in Enum.GetValues(typeof(ItemType)))
             {
-                bool skip = false;
-                string textureName = "";
-                switch ((ItemType) i) {
-                    
-                    case ItemType.None: skip = true;  break;
-                    case ItemType.Speedup: textureName = "SpeedUp"; break;
-                    case ItemType.IncreaseViewDistance: skip = true; break;
-                    case ItemType.Resurrection: textureName = "Resurrection"; break;
-                    case ItemType.HidingCloak: textureName="HidingCloak"; break;
-                    case ItemType.Fist: textureName = "Fist"; break;
-                    case ItemType.AnubisLocationReveal: textureName = "AnubisLocationReveal"; break;
-                    default: skip = true; break;
-                }
-
-                if (!skip)
-                {
-                    string textureFullPath = "Textures/Objects/Items/PowerUp/" + textureName;
-                    Texture2D itemTexture = content.Load<Texture2D>(textureFullPath);
-                    itemTextures.Add((ItemType)i, itemTexture);
-                }
-                
+                //can load textures directly from the ItemTextureLibrary
+                itemTextures.Add((ItemType)i, ItemTextureLibrary.GetTexture((ItemType)i));             
             }
 
         }

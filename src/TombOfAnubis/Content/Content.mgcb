@@ -712,6 +712,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/treasuremap_border.png
 
+#begin Textures/Minimap/minimap_sprites.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Minimap/minimap_sprites.png
+
 #begin Textures/Objects/Altar/altar.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -856,6 +868,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/SpeedUp.png
 
+#begin Textures/Objects/Items/PowerUp/Teleport.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/Teleport.png
+
 #begin Textures/Objects/Items/selfmade_fist_spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -999,18 +1023,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Traps/selfmade_simplistic_trap_spritesheet.png
-
-#begin Textures/Objects/Traps/selfmade_simplistic_trap.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Objects/Traps/selfmade_simplistic_trap.png
 
 #begin Textures/Objects/UI/Item_slot_1.png
 /importer:TextureImporter
