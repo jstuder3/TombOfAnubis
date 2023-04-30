@@ -73,7 +73,7 @@ namespace TombOfAnubis
         public bool isInWorld = false;
         public bool isInInventory = false;
 
-        private float lastTimeDropped = 0f;
+        private float dropCooldownEnd = 0f;
 
         public InventoryItem(ItemType itemType, Entity entity)
         {
@@ -304,10 +304,10 @@ namespace TombOfAnubis
         public void DropItem(GameTime gameTime)
         {
             if(ItemType == ItemType.None) return;
+            if ((float)gameTime.TotalGameTime.TotalSeconds < dropCooldownEnd) return;
 
             //if ((float)gameTime.TotalGameTime.TotalSeconds - lastTimeDropped > 0.5f)
             {
-                lastTimeDropped = (float)gameTime.TotalGameTime.TotalSeconds;
 
                 Transform transform = Entity.GetComponent<Transform>();
                 Movement movement = Entity.GetComponent<Movement>();
@@ -316,6 +316,10 @@ namespace TombOfAnubis
                 WorldItem wi = new WorldItem(transform.Position + forwardVector * 150f, transform.Scale, ItemType);
                 Session.GetInstance().World.AddChild(wi);
                 wi.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
+
+                //put dropping on cooldown
+                dropCooldownEnd = (float)gameTime.TotalGameTime.TotalSeconds + 1f;
+
                 ItemType = ItemType.None;
                 Console.WriteLine("Dropped item!");
             }
