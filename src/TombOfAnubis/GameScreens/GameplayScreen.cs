@@ -43,7 +43,6 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             // TODO: Will be removed and called directly from Menu
-            AudioController.PlaySong("gameSlowTrack");
 
             //load item sprites and vfx sprites (this must happen before creating a session if this content should be able to be used on startup)
             Fist.LoadContent(GameScreenManager);
@@ -67,6 +66,8 @@ namespace TombOfAnubis
             VideoController.LoadGameWonVideo(this.gameStartDescription.NumberOfPlayers);
 
             Console.WriteLine("done");
+
+            AudioController.PlaySong("gameSlowTrack");
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
