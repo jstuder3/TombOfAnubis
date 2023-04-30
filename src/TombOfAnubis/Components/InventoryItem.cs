@@ -16,6 +16,7 @@ namespace TombOfAnubis
         public static Texture2D Fist { get; set; }
         public static Texture2D HidingCloak { get; set; }
         public static Texture2D AnubisLocationReveal { get; set; }
+        public static Texture2D Teleport { get; set; }
 
         //public static Texture2D Artefact { get; set; }
 
@@ -28,6 +29,7 @@ namespace TombOfAnubis
                 case ItemType.Fist: return Fist;
                 case ItemType.HidingCloak: return HidingCloak;
                 case ItemType.AnubisLocationReveal: return AnubisLocationReveal;
+                case ItemType.Teleport: return Resurrection;
                 //case ItemType.Artefact: return Artefact;
             }
             return null;
@@ -57,7 +59,8 @@ namespace TombOfAnubis
         Fist,
         HidingCloak,
         AnubisLocationReveal,
-        Artefact
+        Artefact,
+        Teleport
     }
 
     public class InventoryItem : Component
@@ -201,6 +204,37 @@ namespace TombOfAnubis
                     ItemType = ItemType.None;
                     Console.WriteLine("Used HidingCloak!");
                     break;
+                case ItemType.Teleport:
+                    Vector2 playerPosition = Entity.CenterPosition();
+                    Vector2 forwardDirection = Entity.GetComponent<Movement>().GetForwardVector();
+                    forwardDirection.Normalize();
+                    Vector2 tileLength = Session.GetInstance().Map.TileSize;
+                    Vector2 teleTranslation = new Vector2(10 * tileLength.X * forwardDirection.X, 10 * tileLength.Y * forwardDirection.Y);
+
+                    //check if targetposition is valid for all 4 corners of the player
+                    Vector2 HalfDiagPlayerTranslation = Entity.CenterPosition() - Entity.TopLeftCornerPosition();
+                    Vector2 CenterToTopRightTranslation = new Vector2(HalfDiagPlayerTranslation.X, -HalfDiagPlayerTranslation.Y);
+
+                    bool topLeft = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.TopLeftCornerPosition() + teleTranslation)) == 0;
+                    bool bottomRight = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.TopLeftCornerPosition() + 2 * HalfDiagPlayerTranslation + teleTranslation)) == 0;
+                    bool topRight = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.CenterPosition() + CenterToTopRightTranslation + teleTranslation)) == 0;
+                    bool bottomLeft = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.CenterPosition() - CenterToTopRightTranslation + teleTranslation)) == 0;
+
+                    Console.WriteLine("curTopLeftPosition: " + Entity.TopLeftCornerPosition());
+                    Console.WriteLine("targetTopLeftPosition: " + (Entity.TopLeftCornerPosition() + teleTranslation));
+
+                    if (topLeft && topRight && bottomRight && bottomLeft)
+                    {
+                        //use teleport
+                        Entity.GetComponent<Transform>().Position = Entity.TopLeftCornerPosition() + teleTranslation;
+
+                        Console.WriteLine("Used Teleport, new location: " + Entity.TopLeftCornerPosition());
+                        ItemType = ItemType.None;
+                        return true;
+                    }
+                    //can't use teleport
+                    Console.WriteLine("Teleport: There's a time and place for everything, but not now.");
+                    return true;
             }
             return false;
         }
