@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; using System.Diagnostics; using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -114,7 +114,7 @@ namespace TombOfAnubis
 
                     Entity.AddComponent(new ParticleEmitter(pec));
 
-                    Console.WriteLine("Speedup applied!");
+                    Debug.WriteLine("Speedup applied!");
                     return true;
                 case ItemType.Fist:
                     Session singleton = Session.GetInstance();
@@ -126,7 +126,7 @@ namespace TombOfAnubis
                     fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 1000f, forwardVector, Visibility.Game));
                     fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f, Visibility.Game));
                     ItemType = ItemType.None;
-                    Console.WriteLine("Fist spawned!");
+                    Debug.WriteLine("Fist spawned!");
                     return true;
                 case ItemType.Resurrection:
                     if(Entity.GetComponent<Movement>().State == MovementState.Trapped)
@@ -187,7 +187,7 @@ namespace TombOfAnubis
 
 
                     ItemType = ItemType.None;
-                    Console.WriteLine("Used HidingCloak!");
+                    Debug.WriteLine("Used HidingCloak!");
                     break;
                 case ItemType.AnubisLocationReveal:
                     //Entity.AddComponent(new GameplayEffect(EffectType.Hidden, 5f, Visibility.Game));
@@ -203,7 +203,7 @@ namespace TombOfAnubis
                     
 
                     ItemType = ItemType.None;
-                    Console.WriteLine("Used HidingCloak!");
+                    Debug.WriteLine("Used HidingCloak!");
                     break;
                 case ItemType.Teleport:
                     //Entity.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 5f, 100f, new Vector2(1f, -1f), Visibility.Both));
@@ -223,8 +223,8 @@ namespace TombOfAnubis
                     bool topRight = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.CenterPosition() + CenterToTopRightTranslation + teleTranslation)) == 0;
                     bool bottomLeft = Session.GetInstance().Map.GetCollisionLayerValue(Session.GetInstance().Map.PositionToTileCoordinate(Entity.CenterPosition() - CenterToTopRightTranslation + teleTranslation)) == 0;
 
-                    Console.WriteLine("curTopLeftPosition: " + Entity.TopLeftCornerPosition());
-                    Console.WriteLine("targetTopLeftPosition: " + (Entity.TopLeftCornerPosition() + teleTranslation));
+                    Debug.WriteLine("curTopLeftPosition: " + Entity.TopLeftCornerPosition());
+                    Debug.WriteLine("targetTopLeftPosition: " + (Entity.TopLeftCornerPosition() + teleTranslation));
 
                     if (topLeft && topRight && bottomRight && bottomLeft)
                     {
@@ -290,12 +290,12 @@ namespace TombOfAnubis
 
                         Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_impact));
 
-                        Console.WriteLine("Used Teleport, new location: " + Entity.TopLeftCornerPosition());
+                        Debug.WriteLine("Used Teleport, new location: " + Entity.TopLeftCornerPosition());
                         ItemType = ItemType.None;
                         return true;
                     }
                     //can't use teleport
-                    Console.WriteLine("Teleport: There's a time and place for everything, but not now.");
+                    Debug.WriteLine("Teleport: There's a time and place for everything, but not now.");
                     return false;
             }
             return false;
@@ -321,7 +321,7 @@ namespace TombOfAnubis
                 dropCooldownEnd = (float)gameTime.TotalGameTime.TotalSeconds + 1f;
 
                 ItemType = ItemType.None;
-                Console.WriteLine("Dropped item!");
+                Debug.WriteLine("Dropped item!");
             }
             return;
         }

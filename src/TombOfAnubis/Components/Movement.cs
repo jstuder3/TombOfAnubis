@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+using System; using System.Diagnostics;
 
 namespace TombOfAnubis
 {
@@ -82,7 +82,7 @@ namespace TombOfAnubis
                 case Orientation.Up:
                     return new Vector2(0, -1);
             }
-            Console.WriteLine("Error: Orientation of character not found. GetForwardVector() returns faulty vector!");
+            Debug.WriteLine("Error: Orientation of character not found. GetForwardVector() returns faulty vector!");
             return new Vector2(0, 0);
         }
 

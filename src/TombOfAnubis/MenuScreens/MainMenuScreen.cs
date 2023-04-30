@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Sdcb.FFmpeg.Raw;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;

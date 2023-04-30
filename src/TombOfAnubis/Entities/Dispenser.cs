@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace TombOfAnubis
@@ -82,7 +82,7 @@ namespace TombOfAnubis
             emptyItemSlot = inventory.GetEmptyItemSlot();
             if (emptyItemSlot == null)
             {
-                //Console.WriteLine("No more space in inventory!");
+                //Debug.WriteLine("No more space in inventory!");
                 return false;
             }
 
@@ -175,7 +175,7 @@ namespace TombOfAnubis
             }
             else
             {
-                Console.WriteLine("Unknown dispenser type!");
+                Debug.WriteLine("Unknown dispenser type!");
                 return;
             }
 

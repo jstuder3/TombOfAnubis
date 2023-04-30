@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using System; using System.Diagnostics;
 
 namespace TombOfAnubis
 {
@@ -62,10 +62,8 @@ namespace TombOfAnubis
             SplitScreen.Initialize(GameScreenManager.GraphicsDevice, gameStartDescription.NumberOfPlayers);
             Session.StartNewSession(gameStartDescription, GameScreenManager, this);
             Hud = new Hud(GameScreenManager.GraphicsDevice, GameScreenManager);
-
             VideoController.LoadGameWonVideo(this.gameStartDescription.NumberOfPlayers);
-
-            Console.WriteLine("done");
+            Debug.WriteLine("done");
 
             AudioController.PlaySong("gameSlowTrack");
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

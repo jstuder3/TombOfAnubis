@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace TombOfAnubis

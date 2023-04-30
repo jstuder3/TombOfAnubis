@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
@@ -177,7 +177,7 @@ namespace TombOfAnubis
 
             Velocity = Velocity * MathF.Pow((1 - ParticleConfiguration.Drag), deltaTime);
 
-            //Console.WriteLine("Position: " + transform.ToWorld().Position + ", Scale: " + transform.ToWorld().Scale);
+            //Debug.WriteLine("Position: " + transform.ToWorld().Position + ", Scale: " + transform.ToWorld().Scale);
 
         }
 

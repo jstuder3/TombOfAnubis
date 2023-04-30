@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 using static TombOfAnubis.Character;
 

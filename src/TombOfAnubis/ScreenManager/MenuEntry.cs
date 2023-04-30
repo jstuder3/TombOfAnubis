@@ -11,7 +11,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Sdcb.FFmpeg.Raw;
-using System;
+using System; using System.Diagnostics;
 #endregion
 
 namespace TombOfAnubis

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 using static TombOfAnubis.Character;
 
@@ -42,7 +42,7 @@ namespace TombOfAnubis
         }
         public List<EntityDescription> GenerateMap()
         {
-            Console.WriteLine("Level generation started ...");
+            Debug.WriteLine("Level generation started ...");
             int numAttempts = 0;
             int maxAttempts = 50;
             while(numAttempts < maxAttempts)
@@ -62,11 +62,11 @@ namespace TombOfAnubis
             }
             if(numAttempts < maxAttempts)
             {
-                Console.WriteLine("Generated level in " + (numAttempts) + " attempt(s).");
+                Debug.WriteLine("Generated level in " + (numAttempts) + " attempt(s).");
             }
             else
             {
-                Console.WriteLine("Level generation failed.");
+                Debug.WriteLine("Level generation failed.");
             }
             PrintLevel();
             PrintPlacedBlockInformation();
@@ -362,7 +362,7 @@ namespace TombOfAnubis
                 sum += block.Dimensions.X * block.Dimensions.Y;
                 if (selection < sum)
                 {
-                    //Console.WriteLine("Winner: " + block.Name);
+                    //Debug.WriteLine("Winner: " + block.Name);
                     return block;
                 }
             }
@@ -391,35 +391,35 @@ namespace TombOfAnubis
 
         public void PrintLevel()
         {
-            Console.WriteLine("----------------Level----------------");
+            Debug.WriteLine("----------------Level----------------");
             for (int i = 0; i < collisionLayer.GetLength(0); i++)
             {
                 for (int j = 0; j < collisionLayer.GetLength(1); j++)
                 {
-                    Console.Write(collisionLayer[i, j] + ",");
+                    Debug.Write(collisionLayer[i, j] + ",");
                 }
-                Console.WriteLine();
+                //Debug.WriteLine();
             }
-            Console.WriteLine("----------------Level----------------");
+            Debug.WriteLine("----------------Level----------------");
 
         }
         public void PrintPlacedBlockInformation()
         {
             foreach(var k in placedBlockNames.Keys)
             {
-                Console.WriteLine(placedBlockNames[k] + " " + k);
+                Debug.WriteLine(placedBlockNames[k] + " " + k);
             }
         }
 
         public void PrintBlockList(List<MapBlock> blocks)
         {
-            Console.Write("[ ");
+            Debug.Write("[ ");
             foreach (var block in blocks)
             {
-                Console.Write(block.ToString()+", ");
+                Debug.Write(block.ToString()+", ");
             }
-            Console.Write(" ]");
-            Console.WriteLine();
+            Debug.Write(" ]");
+            //Debug.WriteLine();
         }
 
         private static int[] Flatten(int[,] input)

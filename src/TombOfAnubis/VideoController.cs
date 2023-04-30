@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Framework.Media;
 using MonoGame.Extended.VideoPlayback;
-using System;
+using System; using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace TombOfAnubis
