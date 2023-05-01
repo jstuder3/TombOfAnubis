@@ -357,10 +357,10 @@ namespace TombOfAnubis
 
             inventorySlot.SetItem(worldItem.ItemType);
 
-            if(worldItem.ItemType == ItemType.Teleport)
+            /*if(worldItem.ItemType == ItemType.Teleport)
             {
                 character.AddComponent(new GameplayEffect(EffectType.TeleportPreview, 0f, 2f * Session.GetInstance().Map.TileSize.X, Visibility.Both));
-            }
+            }*/
 
             worldItem.Delete();
             //worldItem.AddComponent(new GameplayEffect(EffectType.Lifetime, 0f, Visibility.Game));

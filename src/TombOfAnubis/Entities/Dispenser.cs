@@ -86,10 +86,10 @@ namespace TombOfAnubis
                 return false;
             }
 
-            if(ItemType == ItemType.Teleport)
+            /*if(ItemType == ItemType.Teleport)
             {
                 inventory.Entity.AddComponent(new GameplayEffect(EffectType.TeleportPreview, 0f, 2f * Session.GetInstance().Map.TileSize.X, Visibility.Both));
-            }
+            }*/
 
             emptyItemSlot.Item = new InventoryItem(ItemType, emptyItemSlot.Entity);
 
