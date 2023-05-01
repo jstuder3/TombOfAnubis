@@ -22,6 +22,7 @@ namespace TombOfAnubis
         private List<Viewport> characterViewports;
         private SpriteFont statusFont;
         private Color statusColor;
+        private Color placedColor;
         private GameScreenManager screenManager;
         private List<Texture2D> itemBorderTextures = new List<Texture2D>();
         private int displayOffset = 30;
@@ -30,6 +31,8 @@ namespace TombOfAnubis
         private int numSlots = 1;
         private float fontScale = 0.35f;
         private string artefactSlotFiller = "Artefact";
+        private string artefactPlacedFiller = "Placed";
+        private bool[] collectedArtefact;
         private string itemSlotFiller = "Power Up";
         private Dictionary<ItemType, Texture2D> itemTextures = new Dictionary<ItemType, Texture2D>();
         private float itemDisplayScale = 0.3f;
@@ -51,7 +54,12 @@ namespace TombOfAnubis
             // In-game UI Fonts
             statusFont = Fonts.DisneyHeroicFont;
             statusColor = Fonts.ArtefactStatusColor;
+            placedColor = Color.LawnGreen;
+
             screenManager = gameScreenManager;
+
+            collectedArtefact = new bool [characters.Count];
+            Array.Fill(collectedArtefact, false);
 
             LoadContent();
         }
@@ -110,6 +118,8 @@ namespace TombOfAnubis
 
             int playerID = character.GetComponent<Player>().PlayerID;
             bool hasArtefact = character.GetComponent<Inventory>().HasArtefact();
+
+            if (hasArtefact) collectedArtefact[playerID] = true;
 
             bool hasPowerUp = false;
             ItemType powerUp = ItemType.None;
@@ -171,7 +181,15 @@ namespace TombOfAnubis
             else
             {
                 // Fill up artefact slot with a filler string
-                DrawFillerString(artefactSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 0);
+                if (collectedArtefact[playerID]) 
+                {
+                    DrawFillerString(artefactPlacedFiller, textureWidth, textureHeight, positionX[0], positionY[0], 0, placedColor);
+                }
+                else
+                {
+                    DrawFillerString(artefactSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 0, statusColor);
+                }
+                
             }
 
             if(hasPowerUp)
@@ -186,7 +204,7 @@ namespace TombOfAnubis
             else
             {
                 // Fill up item slot with a filler string
-                DrawFillerString(itemSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 1);
+                DrawFillerString(itemSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 1, statusColor);
             }
         }
 
@@ -229,7 +247,7 @@ namespace TombOfAnubis
         /// Draws a filler string when no artefact or item is collected.
         /// Slot 0 is for an artefact, the other for the item.
         /// </summary>
-        private void DrawFillerString(string statusText,int frameWidth, int frameHeight, int framePositionX, int framePositionY, int slot)
+        private void DrawFillerString(string statusText,int frameWidth, int frameHeight, int framePositionX, int framePositionY, int slot, Color color)
         {
             Vector2 textLength = statusFont.MeasureString(statusText) * fontScale;
             Vector2 positionOffSet;
@@ -243,7 +261,7 @@ namespace TombOfAnubis
             
             Vector2 displayPosition = new Vector2(framePositionX, framePositionY) + positionOffSet;
 
-            session.SpriteSystem.SpriteBatch.DrawString(statusFont, statusText, displayPosition, statusColor,
+            session.SpriteSystem.SpriteBatch.DrawString(statusFont, statusText, displayPosition, color,
             0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
         }
     }

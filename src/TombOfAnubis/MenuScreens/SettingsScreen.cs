@@ -41,7 +41,7 @@ namespace TombOfAnubis.MenuScreens
         Texture2D arrowTexture;
         float selectBoxWidth = 0.28f;
         float arrowScale = 0.1f;
-        List<string> supportedResolutions = new List<string> { "1280x720", "1920x1080", "2560x1440"};
+        List<string> supportedResolutions = new List<string> { "1280x720", "1920x1080", "2560x1440" };
 
         float sliderButtonWidth = 0.01f, sliderButtonHeight = 0.025f;
         float sliderLength = 0.28f, sliderThickness = 0.005f;
@@ -78,8 +78,8 @@ namespace TombOfAnubis.MenuScreens
         {
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
-            buttonCooldown = false;
-            buttonPressed = false;
+            buttonCooldown = true;
+            buttonPressed = true;
             lastPressed = TimeSpan.Zero;
 
 
@@ -87,13 +87,17 @@ namespace TombOfAnubis.MenuScreens
             /// Add entries to the Settings Screen
             /// </summary>
 
-            resolutionSetting = new SettingsEntry("Resolution", SettingsType.SelectBox, ControlType.Resolution);
+            //resolutionSetting = new SettingsEntry("Resolution", SettingsType.SelectBox, ControlType.Resolution);
             fullscreenSetting = new SettingsEntry("Fullscreen", SettingsType.TickBox, ControlType.Fullscreen);
             bgMusicVolumeSetting = new SettingsEntry("Music Volume", SettingsType.Slider, ControlType.Music);
             soundFXVolumeSetting = new SettingsEntry("SoundFX Volume", SettingsType.Slider, ControlType.SoundFX);
             saveButton = new SettingsEntry("Save", SettingsType.SaveButton, ControlType.Save);
 
-            SettingsEntries = new List<SettingsEntry> { resolutionSetting, fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton };
+            bgMusicVolumeSetting.SliderStatus = 1.0f;
+            soundFXVolumeSetting.SliderStatus = 1.0f;
+
+            SettingsEntries = new List<SettingsEntry> { fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton };
+            //SettingsEntries = new List<SettingsEntry> { resolutionSetting, fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton };
         }
 
 
@@ -336,8 +340,9 @@ namespace TombOfAnubis.MenuScreens
                         case SettingsType.TickBox: 
                             {
                                 entry.TickBoxStatus = !entry.TickBoxStatus;
-                                TombOfAnubis.Graphics.IsFullScreen = entry.TickBoxStatus;
-                                TombOfAnubis.Graphics.ApplyChanges();
+                                //TombOfAnubis.Graphics.IsFullScreen = entry.TickBoxStatus;
+                                //TombOfAnubis.Graphics.ApplyChanges();
+                                TombOfAnubis.Graphics.ToggleFullScreen();
                                 break;
                             }
                         case SettingsType.SaveButton: 
