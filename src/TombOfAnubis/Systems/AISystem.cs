@@ -98,6 +98,13 @@ namespace TombOfAnubis
 
         public void activateRageMode()
         {
+            
+            if(rageModeActivated())
+            {
+                //nothing to do. ragemode already activated
+                return;
+            }
+            
             AI ai = GetComponents().First();
             Entity entity = ai.Entity;
             Movement movement = entity.GetComponent<Movement>();
