@@ -123,6 +123,9 @@ namespace TombOfAnubis
                     character2.Ghost.Delete();
                     character2.Ghost = null;
                 }
+
+                AudioController.PlaySoundEffect("revival");
+
                 character2.GetComponent<Movement>().State = MovementState.Idle;
                 character2.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.WalkingDown);
 
@@ -146,7 +149,6 @@ namespace TombOfAnubis
                 pec.Drag = 0.5f;
 
                 character2.AddComponent(new ParticleEmitter(pec));
-                AudioController.PlaySoundEffect("revival");
 
 
             }
@@ -157,6 +159,9 @@ namespace TombOfAnubis
                     character1.Ghost.Delete();
                     character1.Ghost = null;
                 }
+
+                AudioController.PlaySoundEffect("revival");
+
                 character1.GetComponent<Movement>().State = MovementState.Idle;
                 character1.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.WalkingDown);
 
