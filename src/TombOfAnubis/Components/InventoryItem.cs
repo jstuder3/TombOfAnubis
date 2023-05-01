@@ -230,13 +230,13 @@ namespace TombOfAnubis
                     {
 
                         //remove the preview particles
-                        foreach(GameplayEffect ge in Entity.GetComponentsOfType<GameplayEffect>())
+                        /*foreach(GameplayEffect ge in Entity.GetComponentsOfType<GameplayEffect>())
                         {
                             if(ge.Type == EffectType.TeleportPreview)
                             {
                                 ge.EndGameplayEffect();
                             }
-                        }
+                        }*/
 
                         int num_streak_spawners = 10;
 

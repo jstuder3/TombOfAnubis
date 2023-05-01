@@ -204,6 +204,9 @@ namespace TombOfAnubis {
                     {
                         CheckHasFloatParameters(1);
                     }
+                    InventorySlot inventorySlot = Entity.GetComponent<Inventory>().GetFullItemSlot();
+                    if (IsActive(gameTime) && inventorySlot == null || inventorySlot.Item.ItemType != ItemType.Teleport) { EndGameplayEffect(); break; }
+
                     movement = Entity.GetComponent<Movement>();
                     if (previousForwardVector != movement.GetForwardVector())
                     {
