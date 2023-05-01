@@ -15,7 +15,8 @@ namespace TombOfAnubis {
         Stunned,
         Hidden,
         OnCooldown,
-        DelayedFollow
+        DelayedFollow,
+        TeleportPreview,
     }
 
     /**
@@ -29,6 +30,7 @@ namespace TombOfAnubis {
      * Stunned: no parameters
      * Hidden: no parameters
      * DelayedFollow: float delayAmount (0-1, where 0 means no delay, 1 means no movement), Entity otherEntity (entity that should be followed)
+     * TeleportPreview : float teleportdistance (forward vector is directly taken from Entity)
      **/
 
     public class GameplayEffect : Component
@@ -45,7 +47,8 @@ namespace TombOfAnubis {
         private List<Vector2> effectVectorParameters;
 
         private ParticleEmitter stunnedEmitter;
-
+        private Vector2 previousForwardVector;
+        private ParticleEmitter teleportPreviewEmitter;
         public EffectType Type { get; set; }
         public Entity OtherEntity { get; set; }
 
@@ -76,7 +79,12 @@ namespace TombOfAnubis {
         public void Start(GameTime gameTime)
         {
             startTime = (float)gameTime.TotalGameTime.TotalSeconds;
-            endTime = startTime + duration;
+            if (duration > 0)
+            { endTime = startTime + duration; }
+            else
+            {
+                endTime = float.MaxValue;
+            }
             started = true;
         }
         public bool IsStarted()
@@ -191,6 +199,54 @@ namespace TombOfAnubis {
                     entityTransform.Position += direction * (1 - effectFloatParameters[0]) * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     break;
+                case EffectType.TeleportPreview:
+                    if (!applied)
+                    {
+                        CheckHasFloatParameters(1);
+                    }
+                    movement = Entity.GetComponent<Movement>();
+                    if (previousForwardVector != movement.GetForwardVector())
+                    {
+                        if(teleportPreviewEmitter != null)
+                        {
+                            previousForwardVector = movement.GetForwardVector();
+                            teleportPreviewEmitter.EndEmitter();
+                            ParticleEmitterConfiguration prev_pec = teleportPreviewEmitter.EmitterConfiguration;
+                            prev_pec.LocalPosition = effectFloatParameters[0] * movement.GetForwardVector();
+                            teleportPreviewEmitter = new ParticleEmitter(prev_pec);
+                            Entity.AddComponent(teleportPreviewEmitter);
+                        }
+                        else
+                        {
+                            previousForwardVector = movement.GetForwardVector();
+
+                            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                            pec.LocalPosition = effectFloatParameters[0] * movement.GetForwardVector();
+                            pec.RandomizedSpawnPositionRadius = 10f;
+                            pec.Texture = ParticleTextureLibrary.BasicParticle;
+                            pec.SpriteLayer = 1;
+                            pec.RandomizedTintMin = Color.Purple;
+                            pec.RandomizedTintMax = Color.Blue;
+                            pec.Scale = Vector2.One * 0.4f;
+                            pec.ScalingMode = ScalingMode.Constant;
+                            pec.InitialAlpha = 1f;
+                            pec.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                            pec.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                            pec.EmitterDuration = 0f;
+                            pec.ParticleDuration = 1f;
+                            pec.EmissionFrequency = 20f;
+                            pec.EmissionRate = 1f;
+                            pec.InitialSpeed = 50f;
+                            pec.SpawnDirection = new Vector2(0f, -1f);
+                            pec.SpawnConeDegrees = 360f;
+                            pec.Drag = 0.5f;
+
+                            teleportPreviewEmitter = new ParticleEmitter(pec);
+                            Entity.AddComponent(teleportPreviewEmitter);
+                        }
+                    }
+
+                    break;
             }
 
             applied = true;
@@ -243,6 +299,12 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.OnCooldown:
                      ((ICooldown)Entity).EndCooldown();
+                    break;
+                case EffectType.TeleportPreview:
+                    if (teleportPreviewEmitter != null)
+                    {
+                        teleportPreviewEmitter.EndEmitter();
+                    }
                     break;
             }
 

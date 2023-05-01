@@ -229,6 +229,15 @@ namespace TombOfAnubis
                     if (topLeft && topRight && bottomRight && bottomLeft)
                     {
 
+                        //remove the preview particles
+                        foreach(GameplayEffect ge in Entity.GetComponentsOfType<GameplayEffect>())
+                        {
+                            if(ge.Type == EffectType.TeleportPreview)
+                            {
+                                ge.EndGameplayEffect();
+                            }
+                        }
+
                         int num_streak_spawners = 10;
 
                         //paticles that are spawned at the old location and move to the new location to indicate the teleport

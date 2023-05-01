@@ -326,7 +326,8 @@ namespace TombOfAnubis
                 gameplayEffect.EndGameplayEffect();
             }
 
-            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 2f, Visibility.Game));
+            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 5f, Visibility.Game));
+            anubis.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 10f, 0.5f, Visibility.Both));
 
         }
 
