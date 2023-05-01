@@ -140,6 +140,8 @@ namespace TombOfAnubis
 
                         ItemType = ItemType.None;
 
+                        AudioController.PlaySoundEffect("revival");
+
                         Entity.GetComponent<Movement>().State = MovementState.Idle;
                         Entity.GetComponent<Animation>()?.SetActiveClip(AnimationClipType.WalkingDown);
 
@@ -274,6 +276,7 @@ namespace TombOfAnubis
 
                         //use teleport
                         Entity.GetComponent<Transform>().Position = Entity.TopLeftCornerPosition() + teleTranslation;
+                        AudioController.PlaySoundEffect("teleport");
 
                         //particles that are spawned at the new location to show an "impact"
                         ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();

@@ -35,6 +35,7 @@ namespace TombOfAnubis
                 { "artefactPlaced", content.Load<SoundEffect>(@"Audio\SoundFX\ArtefactPlaced") },
                 { "anubisRoar", content.Load<SoundEffect>(@"Audio\SoundFX\AnubisRoar") },
                 { "revival", content.Load<SoundEffect>(@"Audio\SoundFX\Revival") },
+                { "teleport", content.Load<SoundEffect>(@"Audio\SoundFX\Teleport") },
             };
             MediaPlayer.IsRepeating = true;
 

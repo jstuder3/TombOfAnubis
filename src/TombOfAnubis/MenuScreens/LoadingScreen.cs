@@ -53,6 +53,18 @@ namespace TombOfAnubis
         private Texture2D loadingTexture;
         private Rectangle loadingPosition;
 
+        private string loadingText = "Loading...";
+        private string readyText = "Press <Use> to Start";
+        private int useButtonCooldown = 250;
+        private bool startGame = false;
+
+        private Rectangle textArea;
+        private SpriteFont font;
+        private float maxScale = 1.1f;
+        private float currScale = 1f;
+        private float scaleStep = 0.001f;
+        private bool isGrowing = true;
+
 
         #endregion
 
@@ -100,7 +112,29 @@ namespace TombOfAnubis
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
             loadingPosition = new Rectangle(viewport.X,viewport.Y,viewport.Width, viewport.Height);
 
+            font = Fonts.DisneyHeroicFont;
+
+            int posX = (int)(0.615f * viewport.Width);
+            int posY = (int)(0.91f * viewport.Height);
+            int width = (int)(0.365f * viewport.Width);
+            int height = (int)(0.0556f * viewport.Height);
+            textArea = new Rectangle(posX, posY, width, height);
+
             base.LoadContent();
+        }
+
+        #endregion
+
+        #region Handle Input
+
+        public override void HandleInput()
+        {
+            if(InputController.IsUseTriggered() && useButtonCooldown <= 0)
+            {
+                useButtonCooldown = 250;
+                AudioController.PlaySoundEffect("menuAccept");
+                startGame = true;
+            }
         }
 
         #endregion
@@ -116,9 +150,14 @@ namespace TombOfAnubis
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
+            if (useButtonCooldown > 0)
+            {
+                useButtonCooldown -= (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+
             // If all the previous screens have finished transitioning
             // off, it is time to actually perform the load.
-            if (otherScreensAreGone)
+            if (otherScreensAreGone && startGame)
             {
                 GameScreenManager.RemoveScreen(this);
 
@@ -166,12 +205,39 @@ namespace TombOfAnubis
 
                 // Center the text in the viewport.
                 Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-                Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
 
-                Color color = new Color(255, 255, 255, (int)TransitionAlpha);
+                string text;
+                float scale;
+                if (otherScreensAreGone)
+                {
+                    text = readyText;
+                    scale = isGrowing ? (currScale + scaleStep) : (currScale - scaleStep);
+                    if (isGrowing)
+                    {
+                        isGrowing = (scale < maxScale);
+                    }
+                    else
+                    {
+                        isGrowing = (scale < 1.0f);
+                    }
+                    currScale = scale;
+                }
+                else
+                {
+                    text = loadingText;
+                    scale = 1.0f;
+                }
+
+                Vector2 textDimension = font.MeasureString(text);
+
+                int posX = (int)(textArea.X + (textArea.Width) / 2);
+                int posY = (int)(textArea.Y + (textArea.Height) / 2);
+                Vector2 position = new Vector2(posX, posY);
+                Vector2 origin = textDimension / 2;
 
                 spriteBatch.Begin();
                 spriteBatch.Draw(loadingTexture, loadingPosition, Color.White);
+                spriteBatch.DrawString(font, text, position, Color.LawnGreen, 0f, origin, scale, SpriteEffects.None, 0f);
                 spriteBatch.End();
             }
         }

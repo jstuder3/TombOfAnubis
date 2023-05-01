@@ -140,6 +140,7 @@ namespace TombOfAnubis
             if (rand <= threshold)
             {
                 this.activateRageMode();
+                AudioController.PlaySong("gameFastTrack");
             }
         }
 
