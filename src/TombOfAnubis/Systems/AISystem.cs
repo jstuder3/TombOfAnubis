@@ -111,7 +111,7 @@ namespace TombOfAnubis
 
 
             //increase maxspeed:
-            movement.MaxSpeed += 100;
+            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 50f, Visibility.Both));
             this.MaxTailDistance += 4;
             this.DetailDistance += 2;
 
