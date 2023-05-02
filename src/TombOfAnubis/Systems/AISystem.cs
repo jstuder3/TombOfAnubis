@@ -234,6 +234,7 @@ namespace TombOfAnubis
 
         private Vector2 getDirection2(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
         {
+            //asumes this.TailingPlayer is true
 
             int nodeIdAnubis = ai.MovementGraph.ToNodeID(anubisPosition);
             int nodeIdPlayer = ai.MovementGraph.ToNodeID(playerPosition);
@@ -255,7 +256,7 @@ namespace TombOfAnubis
                 //Debug.WriteLine("Anubis walks towards Nodes");
                 if (!ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
                 {
-                    Debug.WriteLine("Error: Anbuis cound not find a Path to cur tailed player");
+                    Debug.WriteLine("AI: Error: Anbuis cound not find a Path to cur tailed player. Using RandomDirection");
                     this.tailingPlayer = false;
                     //use random movement
                     direction = getRandomDirection();
