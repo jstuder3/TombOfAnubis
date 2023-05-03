@@ -58,7 +58,7 @@ namespace TombOfAnubis
             MenuEntries.Add(restartMenuEntry);
 
             // Create the Exit menu entry
-            endGameMenuEntry = new MenuEntry("End Game");
+            endGameMenuEntry = new MenuEntry("Main Menu");
             endGameMenuEntry.Font = Fonts.DisneyHeroicFont;
             endGameMenuEntry.Selected += EndGameMenuEntrySelected;
             MenuEntries.Add(endGameMenuEntry);
@@ -209,7 +209,7 @@ namespace TombOfAnubis
                 ExitScreen();
             }
             //LoadingScreen.Load(GameScreenManager, true, new IntroScreen());
-            GameScreenManager.AddScreen(new IntroScreen(250));
+            GameScreenManager.AddScreen(new MainMenuScreen());
         }
 
         /// <summary>
