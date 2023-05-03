@@ -36,7 +36,7 @@ namespace TombOfAnubis
         private bool[] collectedArtefact;
         private string itemSlotFiller = "Power Up";
         private Dictionary<ItemType, Texture2D> itemTextures = new Dictionary<ItemType, Texture2D>();
-        private float itemDisplayScale = 0.5f;
+        private float itemDisplayScale = 0.58f;
         private float artefactDisplayScale = 0.5f;
 
         // Original texture width = 270
