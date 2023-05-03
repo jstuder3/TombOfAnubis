@@ -76,21 +76,10 @@ namespace TombOfAnubis
 
                     InputController.AddCooldown(playerInput.UseKey, playerInput.UseButton, 250);
                     VideoController.StopVideo();
-                    RemoveSecondaryInputs();
                     AudioController.StopSong();
+                    RemoveSecondaryInputs();
                     ExitScreen();
                     GameScreenManager.AddScreen(new MainMenuScreen());
-                }
-            }
-        }
-
-        private void RemoveSecondaryInputs()
-        {
-            foreach (PlayerInput playerInput in activeInputs)
-            {
-                if (playerInput.PlayerID != 0)
-                {
-                    playerInput.SetInactive();
                 }
             }
         }

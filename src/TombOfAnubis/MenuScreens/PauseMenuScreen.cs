@@ -198,6 +198,7 @@ namespace TombOfAnubis
                 ExitScreen();
             }
             //LoadingScreen.Load(GameScreenManager, true, new IntroScreen());
+            RemoveSecondaryInputs();
             GameScreenManager.AddScreen(new MainMenuScreen());
         }
 

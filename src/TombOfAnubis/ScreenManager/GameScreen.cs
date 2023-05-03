@@ -305,6 +305,17 @@ namespace TombOfAnubis
             }
         }
 
+        public void RemoveSecondaryInputs()
+        {
+            foreach (PlayerInput playerInput in InputController.GetActiveInputs())
+            {
+                if (playerInput.PlayerID != 0)
+                {
+                    playerInput.SetInactive();
+                }
+            }
+        }
+
 
         #endregion
     }
