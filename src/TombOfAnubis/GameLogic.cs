@@ -200,7 +200,6 @@ namespace TombOfAnubis
                 character.GetComponent<Inventory>().AddArtefact();
                 artefact.Delete();
                 AudioController.PlaySoundEffect("artefactPickup");
-                Session.GetInstance().AnubisAISystem.triggerRageModeProbability(true);
                 Debug.WriteLine("Player " + playerID + " collected an artefact!");
                 return;
             }
