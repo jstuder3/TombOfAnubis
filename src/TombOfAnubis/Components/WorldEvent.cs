@@ -29,6 +29,7 @@ namespace TombOfAnubis
 
         public virtual void Start() 
         {
+            Entity.AddChild(new WorldEventActivated());
             IsStarted = true;
         }
         public virtual void Stop()
