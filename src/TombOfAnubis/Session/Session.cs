@@ -106,6 +106,9 @@ namespace TombOfAnubis
         public ButtonControllerSystem ButtonControllerSystem { get; set; }
 
         public ParticleEmitterSystem ParticleEmitterSystem { get; set; }
+
+        public WorldEventSystem WorldEventSystem { get; set; }
+
         public World World { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
@@ -167,6 +170,8 @@ namespace TombOfAnubis
             singleton.AnubisAISystem.Update(gameTime);
             singleton.ButtonControllerSystem.Update(gameTime);
             singleton.ParticleEmitterSystem.Update(gameTime);
+
+            singleton.WorldEventSystem.Update(gameTime);
         }
 
         /// <summary>
@@ -256,6 +261,7 @@ namespace TombOfAnubis
             singleton.MovementSystem = new MovementSystem();
             singleton.ButtonControllerSystem = new ButtonControllerSystem();
             singleton.ParticleEmitterSystem = new ParticleEmitterSystem();
+            singleton.WorldEventSystem = new WorldEventSystem();
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);
