@@ -401,6 +401,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Maps/DungeonTiles.png
 
+#begin Textures/Maps/event_activated_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Maps/event_activated_sprite.png
+
 #begin Textures/Maps/ForestTiles.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -797,6 +809,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/AnubisLocationReveal.png
 
+#begin Textures/Objects/Items/PowerUp/AnubisLocationRevealWithText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/AnubisLocationRevealWithText.png
+
 #begin Textures/Objects/Items/PowerUp/Fist.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -808,6 +832,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/Fist.png
+
+#begin Textures/Objects/Items/PowerUp/FistWithText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/FistWithText.png
 
 #begin Textures/Objects/Items/PowerUp/HidingCloak.png
 /importer:TextureImporter
@@ -821,6 +857,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/HidingCloak.png
 
+#begin Textures/Objects/Items/PowerUp/HidingCloakWithText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/HidingCloakWithText.png
+
 #begin Textures/Objects/Items/PowerUp/Resurrection.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -832,6 +880,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/Resurrection.png
+
+#begin Textures/Objects/Items/PowerUp/ResurrectionWithText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/ResurrectionWithText.png
 
 #begin Textures/Objects/Items/PowerUp/SpeedUp.png
 /importer:TextureImporter
@@ -845,6 +905,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/SpeedUp.png
 
+#begin Textures/Objects/Items/PowerUp/SpeedUpWithText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/SpeedUpWithText.png
+
 #begin Textures/Objects/Items/PowerUp/Teleport.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -856,6 +928,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/Items/PowerUp/Teleport.png
+
+#begin Textures/Objects/Items/PowerUp/TeleportWithText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Objects/Items/PowerUp/TeleportWithText.png
 
 #begin Textures/Objects/Items/selfmade_fist_spritesheet.png
 /importer:TextureImporter

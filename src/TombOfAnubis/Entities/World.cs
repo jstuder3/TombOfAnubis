@@ -14,6 +14,9 @@ namespace TombOfAnubis
         {
             Origin = origin;
             Scale = scale;
+
+            AnubisRageEvent anubisRageEvent = new AnubisRageEvent();
+            AddComponent( anubisRageEvent );
         }
     }
 }

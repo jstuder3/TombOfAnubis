@@ -11,6 +11,14 @@ namespace TombOfAnubis
 {
     public struct ItemTextureLibrary
     {
+        //with text
+        public static Texture2D SpeedupWithText { get; set; }
+        public static Texture2D ResurrectionWithText { get; set; }
+        public static Texture2D FistWithText { get; set; }
+        public static Texture2D HidingCloakWithText { get; set; }
+        public static Texture2D AnubisLocationRevealWithText { get; set; }
+        public static Texture2D TeleportWithText { get; set; }
+
         public static Texture2D Speedup { get; set; }
         public static Texture2D Resurrection { get; set; }
         public static Texture2D Fist { get; set; }
@@ -18,19 +26,36 @@ namespace TombOfAnubis
         public static Texture2D AnubisLocationReveal { get; set; }
         public static Texture2D Teleport { get; set; }
 
+
         //public static Texture2D Artefact { get; set; }
 
-        public static Texture2D GetTexture(ItemType itemType)
+        public static Texture2D GetTexture(ItemType itemType, bool withText = false)
         {
-            switch(itemType)
+            if (withText)
             {
-                case ItemType.Speedup: return Speedup;
-                case ItemType.Resurrection: return Resurrection;
-                case ItemType.Fist: return Fist;
-                case ItemType.HidingCloak: return HidingCloak;
-                case ItemType.AnubisLocationReveal: return AnubisLocationReveal;
-                case ItemType.Teleport: return Teleport;
-                //case ItemType.Artefact: return Artefact;
+                switch (itemType)
+                {
+                    case ItemType.Speedup: return SpeedupWithText;
+                    case ItemType.Resurrection: return ResurrectionWithText;
+                    case ItemType.Fist: return FistWithText;
+                    case ItemType.HidingCloak: return HidingCloakWithText;
+                    case ItemType.AnubisLocationReveal: return AnubisLocationRevealWithText;
+                    case ItemType.Teleport: return TeleportWithText;
+                        //case ItemType.Artefact: return Artefact;
+                }
+            }
+            else
+            {
+                switch (itemType)
+                {
+                    case ItemType.Speedup: return Speedup;
+                    case ItemType.Resurrection: return Resurrection;
+                    case ItemType.Fist: return Fist;
+                    case ItemType.HidingCloak: return HidingCloak;
+                    case ItemType.AnubisLocationReveal: return AnubisLocationReveal;
+                    case ItemType.Teleport: return Teleport;
+                        //case ItemType.Artefact: return Artefact;
+                }
             }
             return null;
         }
@@ -48,6 +73,14 @@ namespace TombOfAnubis
             ItemTextureLibrary.AnubisLocationReveal = content.Load<Texture2D>(item_base_path + "AnubisLocationReveal");
             ItemTextureLibrary.Teleport = content.Load<Texture2D>(item_base_path + "Teleport");
             //ItemTextureLibrary.Artefact = ???
+
+            ItemTextureLibrary.SpeedupWithText = content.Load<Texture2D>(item_base_path + "SpeedUpWithText");
+            ItemTextureLibrary.ResurrectionWithText = content.Load<Texture2D>(item_base_path + "ResurrectionWithText");
+            ItemTextureLibrary.FistWithText = content.Load<Texture2D>(item_base_path + "FistWithText");
+            ItemTextureLibrary.HidingCloakWithText = content.Load<Texture2D>(item_base_path + "HidingCloakWithText");
+            ItemTextureLibrary.AnubisLocationRevealWithText = content.Load<Texture2D>(item_base_path + "AnubisLocationRevealWithText");
+            ItemTextureLibrary.TeleportWithText = content.Load<Texture2D>(item_base_path + "TeleportWithText");
+
         }
     }
 
@@ -123,8 +156,33 @@ namespace TombOfAnubis
                     //fist.Position() == Entity.Position();
                     Session.GetInstance().World.AddChild(fist);
                     //make the fist move automatically and make it despawn automatically
-                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.3f, 1000f, forwardVector, Visibility.Game));
-                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.3f, Visibility.Game));
+                    fist.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 0.6f, 1000f, forwardVector, Visibility.Game));
+                    fist.AddComponent(new GameplayEffect(EffectType.Lifetime, 0.6f, Visibility.Game));
+
+                    ParticleEmitterConfiguration pec5 = new ParticleEmitterConfiguration();
+                    pec5.LocalPosition = new Vector2(25f, 25f);
+                    pec5.RandomizedSpawnPositionRadius = 20f;
+                    pec5.Texture = ParticleTextureLibrary.BasicParticle;
+                    pec5.SpriteLayer = 1;
+                    pec5.RandomizedTintMin = Color.Red;
+                    pec5.RandomizedTintMax = Color.Orange;
+                    pec5.Scale = Vector2.One * 0.4f;
+                    pec5.InitialAlpha = 0.6f;
+                    pec5.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                    pec5.ScalingMode = ScalingMode.Constant;
+                    pec5.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
+                    pec5.EmitterDuration = 0.6f;
+                    pec5.ParticleDuration = 0.2f;
+                    pec5.EmissionFrequency = 60f;
+                    pec5.EmissionRate = 1f;
+                    pec5.InitialSpeed = 300f;
+                    pec5.SpawnDirection = -forwardVector;
+                    pec5.SpawnConeDegrees = 45f;
+                    pec5.SpriteLayer = 1;
+                    pec5.Drag = 0.5f;
+
+                    fist.AddComponent(new ParticleEmitter(pec5));
+
                     ItemType = ItemType.None;
                     Debug.WriteLine("Fist spawned!");
                     return true;
@@ -198,7 +256,7 @@ namespace TombOfAnubis
                     
                     foreach(Anubis anubis in Session.GetInstance().World.GetChildrenOfType<Anubis>())
                     {
-                        AnubisLocator anubisLocator = new AnubisLocator(anubis.GetComponent<Transform>().Position, Vector2.One * 5f);
+                        AnubisLocator anubisLocator = new AnubisLocator(anubis.GetComponent<Transform>().Position, Vector2.One * 4f);
                         anubisLocator.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
                         anubisLocator.AddComponent(new GameplayEffect(EffectType.DelayedFollow, 5f, 0.1f, anubis, Visibility.Both));
                     }

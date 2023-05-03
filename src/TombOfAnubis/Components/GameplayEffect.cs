@@ -168,6 +168,7 @@ namespace TombOfAnubis {
                         pec.SpawnDirection = new Vector2(0f, -1f);
                         pec.SpawnConeDegrees = 360f;
                         pec.Drag = 0.5f;
+                        pec.Visibility = Visibility.Game;
                         stunnedEmitter = new ParticleEmitter(pec);
                         Entity.AddComponent(stunnedEmitter);
                     }
@@ -179,6 +180,10 @@ namespace TombOfAnubis {
                         movement = Entity.GetComponent<Movement>();
                         movement.State = MovementState.Hiding;
                         movement.HiddenFromAnubis = true;
+
+                        //make the player slightly transparent
+                        Entity.GetComponent<Sprite>().Alpha = 0.4f;
+
                     }
                     break;
                 case EffectType.OnCooldown:
@@ -299,6 +304,7 @@ namespace TombOfAnubis {
                     movement = Entity.GetComponent<Movement>();
                     movement.State = MovementState.Idle;
                     movement.HiddenFromAnubis = false;
+                    Entity.GetComponent<Sprite>().Alpha = 1f;
                     break;
                 case EffectType.OnCooldown:
                      ((ICooldown)Entity).EndCooldown();

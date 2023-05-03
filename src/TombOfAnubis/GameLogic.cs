@@ -250,7 +250,18 @@ namespace TombOfAnubis
                     AudioController.PlaySoundEffect("itemPickup2");
                 }
             }
-            StaticCollision(character, dispenser);
+            //StaticCollision(character, dispenser);
+
+            Transform t1 = character.GetComponent<Transform>();
+
+            Vector2 center1 = character.CenterPosition();
+            Vector2 center2 = dispenser.CenterPosition();
+
+            Vector2 overlap_direction = center2 - center1;
+            overlap_direction.Normalize();
+
+            t1.Position -= overlap_direction * DeltaTime * 300;
+
         }
 
         public static void OnCollision(Character character, Anubis anubis)
@@ -330,8 +341,8 @@ namespace TombOfAnubis
                 gameplayEffect.EndGameplayEffect();
             }
 
-            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 5f, Visibility.Game));
-            anubis.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 10f, 0.5f, Visibility.Both));
+            anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 4f, Visibility.Game));
+            anubis.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 6f, 0.5f, Visibility.Both));
 
         }
 

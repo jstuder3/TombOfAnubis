@@ -16,12 +16,13 @@ namespace TombOfAnubis
             Transform transform = new Transform(position, scale, Visibility.Both);
             AddComponent(transform);
 
-            Sprite sprite = new Sprite(texture, 3, Visibility.Game);
-            AddComponent(sprite);
+            //Sprite sprite = new Sprite(texture, 3, Visibility.Game);
+            //sprite.Alpha = 0.5f;
+            //AddComponent(sprite);
 
             ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
-            pec.LocalPosition = new Vector2(40f, 40f);
-            pec.RandomizedSpawnPositionRadius = 100f;
+            pec.LocalPosition = new Vector2(20f, 20f);
+            pec.RandomizedSpawnPositionRadius = 50f;
             //doesn't work yet
             pec.ParticlesMoveWithEntity = false;
             pec.Texture = ParticleTextureLibrary.BasicParticle;
@@ -33,7 +34,7 @@ namespace TombOfAnubis
             pec.Scale = Vector2.One * 0.5f;
             pec.ScalingMode = ScalingMode.Constant;
             pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
-            pec.EmitterDuration = 4f;
+            pec.EmitterDuration = 4.5f;
             pec.ParticleDuration = 1f;
             pec.EmissionFrequency = 60f;
             pec.EmissionRate = 1f;

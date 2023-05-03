@@ -106,11 +106,16 @@ namespace TombOfAnubis
         public ButtonControllerSystem ButtonControllerSystem { get; set; }
 
         public ParticleEmitterSystem ParticleEmitterSystem { get; set; }
+
+        public WorldEventSystem WorldEventSystem { get; set; }
+
         public World World { get; set; }
 
         public List<Texture2D> ArtefactTextures { get; set; }
         public List<Texture2D> CharacterTextures { get; set; }
         public List<Texture2D> GhostCharacterTextures { get; set; }
+
+        public Texture2D WorldEffectTexture { get; set; }
 
         public Texture2D MinimapTexture { get; set; }
         public List<Rectangle> MinimapCharacterSourceRectangles { get; set; }
@@ -167,6 +172,8 @@ namespace TombOfAnubis
             singleton.AnubisAISystem.Update(gameTime);
             singleton.ButtonControllerSystem.Update(gameTime);
             singleton.ParticleEmitterSystem.Update(gameTime);
+
+            singleton.WorldEventSystem.Update(gameTime);
         }
 
         /// <summary>
@@ -228,6 +235,8 @@ namespace TombOfAnubis
                 content.Load<Texture2D>(@"Textures\Objects\Artefacts\purple_artefact")
             };
 
+            singleton.WorldEffectTexture = content.Load<Texture2D>(@"Textures\Maps\event_activated_sprite");
+
             singleton.MinimapTexture = content.Load<Texture2D>(@"Textures\Minimap\minimap_sprites");
             singleton.MinimapCharacterSourceRectangles = new List<Rectangle>()
             {
@@ -256,6 +265,7 @@ namespace TombOfAnubis
             singleton.MovementSystem = new MovementSystem();
             singleton.ButtonControllerSystem = new ButtonControllerSystem();
             singleton.ParticleEmitterSystem = new ParticleEmitterSystem();
+            singleton.WorldEventSystem = new WorldEventSystem();
 
             //// set up the initial map
             ChangeMap(gameStartDescription.MapContentName);

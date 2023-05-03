@@ -36,7 +36,7 @@ namespace TombOfAnubis
         private bool[] collectedArtefact;
         private string itemSlotFiller = "Power Up";
         private Dictionary<ItemType, Texture2D> itemTextures = new Dictionary<ItemType, Texture2D>();
-        private float itemDisplayScale = 0.5f;
+        private float itemDisplayScale = 0.58f;
         private float artefactDisplayScale = 0.5f;
 
         // Original texture width = 270
@@ -85,7 +85,7 @@ namespace TombOfAnubis
             foreach (int i in Enum.GetValues(typeof(ItemType)))
             {
                 //can load textures directly from the ItemTextureLibrary
-                itemTextures.Add((ItemType)i, ItemTextureLibrary.GetTexture((ItemType)i));             
+                itemTextures.Add((ItemType)i, ItemTextureLibrary.GetTexture((ItemType)i, true));             
             }
 
         }
