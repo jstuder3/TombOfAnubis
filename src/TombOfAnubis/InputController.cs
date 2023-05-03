@@ -100,6 +100,14 @@ namespace TombOfAnubis
             {
                 GamePadState gamePadState = GamePad.GetState(ControllerID);
                 InputController.PlayerMovementDirections[PlayerID] = gamePadState.ThumbSticks.Left * new Vector2(1f, -1f);
+
+                InputController.PlayerMovementDirections[PlayerID] += (float)(gamePadState.DPad.Left) * new Vector2(-1, 0);
+                InputController.PlayerMovementDirections[PlayerID] += (float)(gamePadState.DPad.Right) * new Vector2(1, 0);
+                InputController.PlayerMovementDirections[PlayerID] += (float)(gamePadState.DPad.Up) * new Vector2(0, -1);
+                InputController.PlayerMovementDirections[PlayerID] += (float)(gamePadState.DPad.Down) * new Vector2(0, 1);
+
+                InputController.PlayerMovementDirections[PlayerID].Normalize();
+
                 if (gamePadState.IsButtonDown(UseButton) && !InputController.ButtonCooldowns.ContainsKey(UseButton))
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.UseObject);
