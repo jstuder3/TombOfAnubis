@@ -24,19 +24,24 @@ namespace TombOfAnubis
         private Color statusColor;
         private Color placedColor;
         private GameScreenManager screenManager;
+
+        // Inventory params
         private List<Texture2D> itemBorderTextures = new List<Texture2D>();
-        private int displayOffset = 30;
         private int placementOffset = 3;
-        private float scalingFactor = 0.75f;
+        private float scalingFactor = 1.0f;
         private int numSlots = 1;
-        private float fontScale = 0.35f;
+        private float fontScale = 0.45f;
         private string artefactSlotFiller = "Artefact";
         private string artefactPlacedFiller = "Placed";
         private bool[] collectedArtefact;
         private string itemSlotFiller = "Power Up";
         private Dictionary<ItemType, Texture2D> itemTextures = new Dictionary<ItemType, Texture2D>();
-        private float itemDisplayScale = 0.3f;
-        private float artefactDisplayScale = 0.4f;
+        private float itemDisplayScale = 0.5f;
+        private float artefactDisplayScale = 0.5f;
+
+        // Original texture width = 270
+        private float artefactSlotLeftMargin = 23.0f / 270.0f, artefactSlotRightMargin = 132.0f / 270.0f;
+        private float itemSlotLeftMargin = 137.0f / 270.0f, itemSlotRightMargin = 245.0f / 270.0f;
 
 
         public Hud(GraphicsDevice graphicsDevice, GameScreenManager gameScreenManager)
@@ -154,12 +159,12 @@ namespace TombOfAnubis
                 else if (playerID == 2)
                 {
                     X = characterViewport.X + textureWidth * i + placementOffset;
-                    Y = characterViewport.Y + characterViewport.Height - textureHeight - placementOffset - displayOffset;
+                    Y = characterViewport.Y + characterViewport.Height - textureHeight - placementOffset;
                 }
                 else
                 {
                     X = characterViewport.X + characterViewport.Width - textureWidth * (i+1) - placementOffset;
-                    Y = characterViewport.Y + characterViewport.Height - textureHeight - placementOffset - displayOffset;
+                    Y = characterViewport.Y + characterViewport.Height - textureHeight - placementOffset;
                 }
 
                 positionX.Add(X);
@@ -197,7 +202,7 @@ namespace TombOfAnubis
                 if (itemTextures.ContainsKey(powerUp))
                 {
                     texture = itemTextures[powerUp];
-                    DrawItemSprite(playerID, texture, textureWidth, textureHeight, positionX[0], positionY[0]);
+                    DrawItemSprite(texture, textureWidth, textureHeight, positionX[0], positionY[0]);
                 }
             }
 
@@ -213,13 +218,16 @@ namespace TombOfAnubis
         /// </summary>
         private void DrawArtefactSprite(int playerID, int frameWidth, int frameHeight, int framePositionX, int framePositionY)
         {
+            int slotWidth = (int) ((artefactSlotRightMargin - artefactSlotLeftMargin) * frameWidth);
+            int displacement = (int)(artefactSlotLeftMargin * frameWidth);
+
             Texture2D artefactTexture = session.Map.Artefacts[playerID].Texture;
             Vector2 artefactScale = session.Map.Artefacts[playerID].Scale;
 
             int artefactWidth = (int)(artefactTexture.Width * artefactScale.X * artefactDisplayScale);
             int artefactHeight = (int)(artefactTexture.Height * artefactScale.Y * artefactDisplayScale);
 
-            Vector2 artefactPositionOffSet = new Vector2((frameWidth - artefactWidth) / 4, (frameHeight - artefactHeight) / 2);
+            Vector2 artefactPositionOffSet = new Vector2((slotWidth - artefactWidth) / 2 + displacement, (frameHeight - artefactHeight) / 2);
             Vector2 artefactDisplayPosition = new Vector2(framePositionX, framePositionY) + artefactPositionOffSet;
 
             Rectangle DestinationRectangle = new Rectangle((int)artefactDisplayPosition.X, (int)artefactDisplayPosition.Y, artefactWidth, artefactHeight);
@@ -230,12 +238,15 @@ namespace TombOfAnubis
         /// <summary>
         /// Draws the artefact sprite in the designated slot
         /// </summary>
-        private void DrawItemSprite(int playerID, Texture2D itemTexture, int frameWidth, int frameHeight, int framePositionX, int framePositionY)
+        private void DrawItemSprite(Texture2D itemTexture, int frameWidth, int frameHeight, int framePositionX, int framePositionY)
         {
+            int slotWidth = (int)((itemSlotRightMargin - itemSlotLeftMargin) * frameWidth);
+            int displacement = (int)(itemSlotLeftMargin * frameWidth);
+
             int itemWidth = (int)(itemTexture.Width * itemDisplayScale);
             int itemHeight = (int)(itemTexture.Height * itemDisplayScale);
 
-            Vector2 itemPositionOffSet = new Vector2((frameWidth - itemWidth) * 3 / 4, (frameHeight - itemHeight) / 2);
+            Vector2 itemPositionOffSet = new Vector2((slotWidth - itemWidth) /2 + displacement, (frameHeight - itemHeight) / 2);
             Vector2 itemDisplayPosition = new Vector2(framePositionX, framePositionY) + itemPositionOffSet;
 
             Rectangle DestinationRectangle = new Rectangle((int)itemDisplayPosition.X, (int)itemDisplayPosition.Y, itemWidth, itemHeight);
@@ -253,10 +264,15 @@ namespace TombOfAnubis
             Vector2 positionOffSet;
             if (slot == 0)
             {
-                positionOffSet = new Vector2((frameWidth - textLength.X) / 4, (frameHeight - textLength.Y) / 2);
+                int slotWidth = (int)((artefactSlotRightMargin - artefactSlotLeftMargin) * frameWidth);
+                int displacement = (int)(artefactSlotLeftMargin * frameWidth);
+                positionOffSet = new Vector2((slotWidth - textLength.X) / 2 + displacement, (frameHeight - textLength.Y) / 2);
             }
-            else {
-                positionOffSet = new Vector2((frameWidth - textLength.X) * 3 / 4, (frameHeight - textLength.Y) / 2);
+            else
+            {
+                int slotWidth = (int)((itemSlotRightMargin - itemSlotLeftMargin) * frameWidth);
+                int displacement = (int)(itemSlotLeftMargin * frameWidth);
+                positionOffSet = new Vector2((slotWidth - textLength.X) / 2 + displacement, (frameHeight - textLength.Y) / 2);
             }
             
             Vector2 displayPosition = new Vector2(framePositionX, framePositionY) + positionOffSet;

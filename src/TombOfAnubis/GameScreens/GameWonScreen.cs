@@ -19,7 +19,7 @@ namespace TombOfAnubis
         private float fontScale = 1f;
 
         // In milliseconds
-        private int cooldownPeriod = 2000;
+        private int cooldownPeriod = 6750;
         private double videoStartTime;
         private bool skipCooldown = false;
         private bool startTimeSet = false;

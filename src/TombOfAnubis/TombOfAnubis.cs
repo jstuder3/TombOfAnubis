@@ -9,9 +9,21 @@ namespace TombOfAnubis
         private static GraphicsDeviceManager graphics;
         GameScreenManager screenManager;
 
-        public static GraphicsDeviceManager Graphics
+        public static int numSupportedResolutions = 2;
+        public static ushort[] supportedWidths = new ushort[] { 2560, 1920 };
+        public static ushort[] supportedHeights = new ushort[] { 1440, 1080 };
+
+        public static void ToggleFullScreen()
         {
-            get { return graphics; }
+            graphics.ToggleFullScreen();
+        }
+
+        public static void ChangeResolution(int width, int height)
+        {
+            graphics.PreferredBackBufferWidth = width;
+            graphics.PreferredBackBufferHeight = height;
+            // Apply the changes
+            graphics.ApplyChanges();
         }
 
 

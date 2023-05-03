@@ -19,7 +19,7 @@ namespace TombOfAnubis
 
 
         private Texture2D backgroundTexture;
-        private Vector2 backgroundPosition;
+        private Rectangle backgroundPosition;
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
@@ -85,7 +85,7 @@ namespace TombOfAnubis
 
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("Textures/Menu/plagiarized_bg");
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/main_menu_bg");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
             titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 
@@ -122,9 +122,7 @@ namespace TombOfAnubis
             int screenHeight = viewport.Height;
 
             // Center background image around viewport
-            backgroundPosition = new Vector2(
-                (screenWidth - backgroundTexture.Width) / 2,
-                (screenHeight - backgroundTexture.Height) / 2);
+            backgroundPosition = new Rectangle(viewport.X,viewport.Y, screenWidth, screenHeight);
 
             float titleWidth = titleScale * titleTexture.Width / screenWidth;
             float titleHeight = titleScale * titleTexture.Height / screenHeight;
