@@ -85,7 +85,7 @@ namespace TombOfAnubis
             foreach (int i in Enum.GetValues(typeof(ItemType)))
             {
                 //can load textures directly from the ItemTextureLibrary
-                itemTextures.Add((ItemType)i, ItemTextureLibrary.GetTexture((ItemType)i));             
+                itemTextures.Add((ItemType)i, ItemTextureLibrary.GetTexture((ItemType)i, true));             
             }
 
         }

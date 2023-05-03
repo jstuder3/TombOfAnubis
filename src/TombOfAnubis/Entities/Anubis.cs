@@ -35,7 +35,7 @@ namespace TombOfAnubis
 
             RectangleCollider collider = new RectangleCollider(TopLeftCornerPosition(), Size(), false);
             AddComponent(collider);
-
+            
             //floating particles
             ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
             pec.LocalPosition = new Vector2(25f, 100f);

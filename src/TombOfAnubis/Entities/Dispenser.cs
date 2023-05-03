@@ -44,11 +44,11 @@ namespace TombOfAnubis
 
                 animation.SetActiveClip(AnimationClipType.Open);
 
-                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 2, Visibility.Both);
+                sprite = new Sprite(texture, animation.DefaultSourceRectangle, 1, Visibility.Both);
             }
             else
             {
-                sprite = new Sprite(texture, 2, Visibility.Both);
+                sprite = new Sprite(texture, 1, Visibility.Both);
             }
             AddComponent(sprite);
 
