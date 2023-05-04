@@ -89,10 +89,10 @@ namespace TombOfAnubis.MenuScreens
             /// </summary>
 
             supportedResolutions = new List<string>();
-            int numSupportedResolutions = TombOfAnubis.numSupportedResolutions;
+            int numSupportedResolutions = ScreenResizer.numSupportedResolutions;
             for (int i = 0; i < numSupportedResolutions; i++)
             {
-                string resolutionEntry = TombOfAnubis.supportedWidths[i].ToString() + " x " + TombOfAnubis.supportedHeights[i];
+                string resolutionEntry = ScreenResizer.supportedWidths[i].ToString() + " x " + ScreenResizer.supportedHeights[i];
                 supportedResolutions.Add(resolutionEntry);
             }
 
@@ -349,7 +349,7 @@ namespace TombOfAnubis.MenuScreens
                         case SettingsType.TickBox: 
                             {
                                 entry.TickBoxStatus = !entry.TickBoxStatus;
-                                TombOfAnubis.ToggleFullScreen();
+                                TombOfAnubis.resizer.ToggleFullscreen();
                                 break;
                             }
                         case SettingsType.SaveButton: 
