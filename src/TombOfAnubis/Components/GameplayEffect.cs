@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System; using System.Diagnostics;
 using System.ComponentModel.Design.Serialization;
+using Microsoft.Xna.Framework.Input;
 
 namespace TombOfAnubis {
     public enum EffectType
@@ -17,6 +18,7 @@ namespace TombOfAnubis {
         OnCooldown,
         DelayedFollow,
         TeleportPreview,
+        Vibrate
     }
 
     /**
@@ -255,6 +257,11 @@ namespace TombOfAnubis {
                     }
 
                     break;
+
+                case EffectType.Vibrate:
+                    GamePad.SetVibration(Entity.GetComponent<Player>().PlayerID, 1.0f, 1.0f);
+                    break;
+                    
             }
 
             applied = true;
@@ -314,6 +321,9 @@ namespace TombOfAnubis {
                     {
                         teleportPreviewEmitter.EndEmitter();
                     }
+                    break;
+                case EffectType.Vibrate:
+                    GamePad.SetVibration(Entity.GetComponent<Player>().PlayerID, 0.0f, 0.0f);
                     break;
             }
 

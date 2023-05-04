@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,14 @@ namespace TombOfAnubis
             Transform transform = new Transform(Vector2.Zero, Vector2.One * 5, Visibility.Both);
             AddComponent(transform);
 
-            Sprite sprite = new Sprite(Session.GetInstance().WorldEffectTexture, 5, Visibility.Minimap);
+
+            Animation animation = new Animation(new List<AnimationClip>() { Session.GetInstance().WorldEffectAnimation}, Visibility.Minimap);
+            animation.SetActiveClip(AnimationClipType.Flexing);
+            AddComponent(animation);
+
+            Sprite sprite = new Sprite(Session.GetInstance().WorldEffectTexture, animation.DefaultSourceRectangle, 5, Visibility.Minimap);
             AddComponent(sprite);
+
 
             Vector2 MapCenter = Session.GetInstance().Map.MapSize / 2;
             Vector2 CurrentCenter = MinimapSize() / 2;
@@ -24,6 +31,12 @@ namespace TombOfAnubis
 
             GameplayEffect selfDestroy = new GameplayEffect(EffectType.Lifetime, 3, Visibility.Both);
             AddComponent(selfDestroy);
+
+            foreach(Character character in Session.GetInstance().World.GetChildrenOfType<Character>())
+            {
+                character.AddComponent(new GameplayEffect(EffectType.Vibrate, 1.5f, Visibility.Both));
+            }
+
         }
     }
 }

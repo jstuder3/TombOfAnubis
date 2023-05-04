@@ -18,7 +18,7 @@ namespace TombOfAnubis
                 Sprite sprite = animation.Entity.GetComponent<Sprite>();
                 AnimationClip activeClip = animation.ActiveClip;
 
-                if(activeClip != null)
+                if(activeClip != null && sprite != null)
                 {
                     if(sprite.SourceRectangle.Y == activeClip.SourceRectangle.Y && !animation.IsStopped)
                     {
@@ -36,7 +36,7 @@ namespace TombOfAnubis
                     }
 
                 }
-                else
+                else if( sprite  != null )
                 {
                     sprite.SourceRectangle = animation.AnimationClips[0].SourceRectangle;
                 }

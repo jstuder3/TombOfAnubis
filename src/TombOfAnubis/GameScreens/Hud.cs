@@ -104,7 +104,7 @@ namespace TombOfAnubis
         private void DrawMinimap(GameTime gameTime)
         {
             Vector2 minimapSize = new Vector2(minimapScale * viewport.Height, minimapScale * viewport.Height); 
-            Session.StartMinimapMode(minimapSize);
+            Session.StartMinimapMode(minimapSize, gameTime);
 
             Vector2 minimapPosition = session.World.Origin;
 

@@ -117,6 +117,8 @@ namespace TombOfAnubis
 
         public Texture2D WorldEffectTexture { get; set; }
 
+        public AnimationClip WorldEffectAnimation { get; set; }
+
         public Texture2D MinimapTexture { get; set; }
         public List<Rectangle> MinimapCharacterSourceRectangles { get; set; }
         public List<Rectangle> MinimapArtefactSourceRectangles { get; set; }
@@ -235,7 +237,10 @@ namespace TombOfAnubis
                 content.Load<Texture2D>(@"Textures\Objects\Artefacts\purple_artefact")
             };
 
-            singleton.WorldEffectTexture = content.Load<Texture2D>(@"Textures\Maps\event_activated_sprite");
+            singleton.WorldEffectTexture = content.Load<Texture2D>(@"Textures\Maps\animated_event_activated_sprite");
+
+            singleton.WorldEffectAnimation = new AnimationClip(AnimationClipType.Flexing, 2, 400, new Point(1200, 1200));
+            singleton.WorldEffectAnimation.SourceRectangle = new Rectangle(0, 0, 1200, 1200);
 
             singleton.MinimapTexture = content.Load<Texture2D>(@"Textures\Minimap\minimap_sprites");
             singleton.MinimapCharacterSourceRectangles = new List<Rectangle>()
@@ -339,7 +344,7 @@ namespace TombOfAnubis
 
         }
 
-        public static void StartMinimapMode(Vector2 minimapSize)
+        public static void StartMinimapMode(Vector2 minimapSize, GameTime gameTime)
         {
             Vector2 scale = minimapSize / singleton.Map.MapSize;
             singleton.Visibility = Visibility.Minimap;
@@ -361,6 +366,7 @@ namespace TombOfAnubis
             {
                 MoveMapCenterTo(topRightMapCenter);
             }
+            singleton.AnimationSystem.Update(gameTime);
         }
         public static void EndMinimapMode()
         {
