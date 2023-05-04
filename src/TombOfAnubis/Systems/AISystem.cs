@@ -910,11 +910,12 @@ namespace TombOfAnubis
                 {
                     Debug.WriteLine("AI: Error: Anbuis cound not find a Path to cur tailed player. Using RandomDirection");
                     this.tailingPlayer = false;
+                    this.randomTileNrSet = false;
                     //use random movement
                     direction = getRandomDirection();
                 } else
                 {
-                    int smoothness = 2;
+                    int smoothness = 3;
                     if (wallDetected()) { smoothness = 2; } //needed to correctly augment direction
                     
                     
@@ -1364,10 +1365,20 @@ namespace TombOfAnubis
                             this.randomTileNrSet = true;
                         }
 
+                        //check if path to that tileNr exists
+                        int saftycounter = 0; //should be unneseccary now, but safty first
+                        while(!(movementGraph.GetDistance(movementGraph.ToNodeID(positionAnubis), this.randomTileNr) > 0) && saftycounter < 30)
+                        {
+                            this.randomTileNr = movementGraph.GetRandomTileNr(movementGraph.ToNodeID(positionAnubis));
+                            //Debug.WriteLine("adf, after: " + this.randomTileNr + ", dist to it: " + movementGraph.GetDistance(movementGraph.ToNodeID(positionAnubis), this.randomTileNr));
+                            saftycounter++;
+                        }
+
                         //update wall system befor e direction fkt called
                         float offset = (float)1.1 * (entity.CenterPosition() - entity.TopLeftCornerPosition()).Length();
                         updateWallSystem(positionAnubis, entity.TopLeftCornerPosition() - entity.CenterPosition(), offset, 0);
                         //now valid tile nr as a goal is set, walk towards it
+                        
                         Vector2 direction = this.getDirection2(ai, positionAnubis, movementGraph.ToCenterTilePosition(this.randomTileNr));
 
                         newPosition += direction * movement.MaxSpeed * deltaTimeSeconds;
