@@ -5,6 +5,7 @@ using QuikGraph;
 using System; using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Input;
 //using System.Numerics;
 
 namespace TombOfAnubis
@@ -62,10 +63,18 @@ namespace TombOfAnubis
 
 
         //avoidWallSystem:
+        public Vector2 wallBottomLeftPos = default;
+        public Vector2 wallBottomRightPos = default;
+        public Vector2 wallTopLeftPos = default;
+        public Vector2 wallTopRightPos = default;
+
         public bool wallBottomLeft = false;
         public bool wallBottomRight = false;
         public bool wallTopLeft = false;
         public bool wallTopRight = false;
+
+
+        public int quadrant = 0; //top, left, right, bottom
 
         public void printState(AI ai)
         {
@@ -98,7 +107,9 @@ namespace TombOfAnubis
 
         public void activateRageMode()
         {
-            
+
+            //Debug.WriteLine("Ragemode currently perma deactivated");
+            //return;
             if(rageModeActivated())
             {
                 //nothing to do. ragemode already activated
@@ -111,7 +122,7 @@ namespace TombOfAnubis
 
 
             //increase maxspeed:
-            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 50f, Visibility.Both));
+            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 150f, Visibility.Both));
             this.MaxTailDistance += 4;
             this.DetailDistance += 2;
 
@@ -144,6 +155,107 @@ namespace TombOfAnubis
             }
         }
 
+        private bool aboveLine(Vector2 linep1, Vector2 linep2, Vector2 pos)
+        {
+            Vector2 direction = linep2 - linep1;
+            direction.Normalize();
+            float a = direction.Y / direction.X;
+            float b = -a * linep1.X + linep1.Y;
+            float bb = -a * linep2.X + linep2.Y;
+            Console.WriteLine("line test, b: " + b + ", " + bb);
+            return pos.Y > a*pos.X + b;
+        }
+
+        bool horizontalTileNeigh(AI ai, Vector2 pos1, Vector2 pos2)
+        {
+            int nodeIdPos1 = ai.MovementGraph.ToNodeID(pos1);
+            int nodeIdPos2 = ai.MovementGraph.ToNodeID(pos2);
+
+            Vector2 nodeIdPos1Position = ai.MovementGraph.ToPosition(nodeIdPos1);
+            Vector2 nodeIdPos2Position = ai.MovementGraph.ToPosition(nodeIdPos2);
+
+            if (nodeIdPos1Position.Y == nodeIdPos2Position.Y)
+            {
+                //same tiles or horizontal neighbouring tiles
+                return true;
+            } 
+            return false;
+        }
+
+        bool someCheck(AI ai, Vector2 pos)
+        {
+            Map map = Session.GetInstance().Map;
+            Point tileIndex = map.PositionToTileCoordinate(pos);
+            //map.Tile
+
+            return false;
+        }
+
+        int insideTileLocation(Vector2 pos)
+        {
+            // 1: top quad, 2: right quad, 3: bottom quad, 4: left quad
+            Map map = Session.GetInstance().Map;
+            Point tileIndex = map.PositionToTileCoordinate(pos);
+
+            Vector2 tileCentrePos = map.TileCoordinateToTileCenterPosition(tileIndex);
+            Vector2 tileTopLeftPos = map.TileCoordinateToPosition(tileIndex);
+
+            Vector2 diag = tileCentrePos - tileTopLeftPos;
+
+            Vector2 tileTopMidPos = tileTopLeftPos + new Vector2(diag.X, 0);
+            Vector2 tileLeftMidPos = tileTopLeftPos + new Vector2(0, diag.Y);
+            Vector2 tileBottomMidPos = tileLeftMidPos + diag;
+            Vector2 tileRightMidPos = tileTopMidPos + diag;
+
+            //Vector2 tileTopMidPos = tileCentrePos + new Vector2(0, (float)-0.5 * map.TileSize.Y) * map.TileScale;
+            //Vector2 tileLeftMidPos = tileCentrePos + new Vector2((float)-0.5 * map.TileSize.X, 0) * map.TileScale;
+            //Vector2 tileBottomMidPos = tileCentrePos + new Vector2(0, (float)0.5 * map.TileSize.Y) * map.TileScale;
+            //Vector2 tileRightMidPos = tileCentrePos + new Vector2((float)-0.5 * map.TileSize.X, 0) * map.TileScale;
+            //Debug.WriteLine("iTQ: tile Positions: " + tileTopLeftPos + ", " + tileTopMidPos + ", " + tileLeftMidPos);
+
+            double distToTop = (pos - tileTopMidPos).LengthSquared();
+            double distToLeft = (pos - tileLeftMidPos).LengthSquared();
+            double distToBottom = (pos - tileBottomMidPos).LengthSquared();
+            double distToRight = (pos - tileRightMidPos).LengthSquared();
+
+            //Debug.WriteLine("iTQ: dists: " + distToTop + ", " + distToLeft + ", " + distToBottom + ", " + distToRight);
+
+            double minDist = Math.Min(Math.Min(distToTop, distToLeft), Math.Min(distToRight, distToBottom));
+            int casee = 0;
+            if (minDist == distToTop)
+            {
+                casee = 1;
+            } else if (minDist == distToRight)
+            {
+                casee = 2;
+            } else if (minDist == distToBottom)
+            {
+                casee = 3;
+            } else if (minDist == distToLeft)
+            {
+                casee = 4;
+            }
+            //Debug.WriteLine("insideTileLoc ret: " + casee);
+            return casee;
+        }
+
+
+        bool verticalTileNeigh(AI ai, Vector2 pos1, Vector2 pos2)
+        {
+            int nodeIdPos1 = ai.MovementGraph.ToNodeID(pos1);
+            int nodeIdPos2 = ai.MovementGraph.ToNodeID(pos2);
+
+            Vector2 nodeIdPos1Position = ai.MovementGraph.ToPosition(nodeIdPos1);
+            Vector2 nodeIdPos2Position = ai.MovementGraph.ToPosition(nodeIdPos2);
+
+            if (nodeIdPos1Position.X == nodeIdPos2Position.X)
+            {
+                //same tiles or horizontal neighbouring tiles
+                return true;
+            }
+            return false;
+        }
+
 
 
         bool wallDetected()
@@ -151,14 +263,475 @@ namespace TombOfAnubis
             return this.wallTopRight || this.wallTopLeft || this.wallBottomRight || this.wallBottomLeft;
         }
 
-        Vector2 wallDirectionAugmentation(Vector2 direction)
+        Vector2 wallDirectionAugmentation3(AI ai, Vector2 direction)
         {
-            
+            direction.Normalize();
+            Vector2 direction_before = direction;
+            //Debug.WriteLine("direction initially: " + direction);
+            Entity anubis = ai.Entity;
+            Map map = Session.GetInstance().Map;
+
+
             //adapt direction if walls are close
             bool wallRight = this.wallTopRight && this.wallBottomRight;
             bool wallLeft = this.wallTopLeft && this.wallBottomLeft;
             bool wallBottom = this.wallBottomLeft && this.wallBottomRight;
             bool wallTop = this.wallTopLeft && this.wallTopRight;
+
+            Vector2 pos = anubis.CenterPosition();
+            Vector2 topLeft = anubis.TopLeftCornerPosition();
+            Vector2 topRight = anubis.TopLeftCornerPosition() + new Vector2(anubis.Size().X, 0);
+            Vector2 bottomLeft = anubis.TopLeftCornerPosition() + new Vector2(0, anubis.Size().Y);
+            Vector2 bottomRight = anubis.TopLeftCornerPosition() + anubis.Size();
+
+            //Debug.WriteLine("positions: " + pos + ", " + topLeft + ", " + topRight + ", " + bottomLeft + ", " + bottomRight);
+
+
+
+
+            //get positions of current tile
+            int nodeId = ai.MovementGraph.ToNodeID(pos);
+            Vector2 tileLength = Session.GetInstance().Map.TileSize * Session.GetInstance().Map.TileScale;
+
+            //Debug.WriteLine("Positions: " + pos + ", retPos: " + ai.MovementGraph.ToPosition(nodeId));
+            //Debug.WriteLine("node id: " + nodeId);
+
+
+
+            if (wallTop)
+            {
+                //Debug.WriteLine("great wall top");
+                direction.Y = Math.Max(0, direction.Y);
+            }
+            else if (wallBottom)
+            {
+                //Debug.WriteLine("great wall Bottom");
+                direction.Y = Math.Min(0, direction.Y);
+            }
+            else if (wallLeft)
+            {
+                //Debug.WriteLine("great wall Left");
+                direction.X = Math.Max(0, direction.X);
+            }
+            else if (wallRight)
+            {
+                //Debug.WriteLine("great wall Right");
+                direction.X = Math.Min(0, direction.X);
+            }
+            else if (this.wallTopLeft)
+            {
+
+                //Corner top left of anubis
+                //Debug.Write("corner Top Left: ");
+                //check in which quadrant the wallSystemPoint lies in the wall tile
+                int quadrant = insideTileLocation(this.wallTopLeftPos);
+
+                if (quadrant == 3)
+                {
+                    //below wall
+                    if (direction.X < direction.Y)
+                    {
+                        //more to the left than top, thus away from the corner
+                        direction.Y = Math.Max(0, direction.Y);
+
+                    }
+                    else
+                    {
+                        //direction more to the top than left, thus towards the corner
+                        direction = new Vector2(1, 0);
+                    }
+                    //Debug.WriteLine(" wall above");
+                }
+                else if (quadrant == 2)
+                {
+                    //right side of wall
+                    //right side of wall
+                    if (direction.X < direction.Y)
+                    {
+                        //more to the left than top, thus towards the corner
+                        direction = new Vector2(0, 1);
+                    }
+                    else
+                    {
+                        //more to the top than right, thus away from the corner
+                        direction.X = Math.Max(0, direction.X);
+                    }
+                    //Debug.WriteLine(" wall left");
+                }
+                else
+                {
+                    Debug.WriteLine("AI: quadrant failed, pls screenshot: topLeft, quad: " + quadrant);
+                }
+            }
+            else if (this.wallTopRight)
+            {
+                //Debug.Write("corner Top Right: ");
+
+                int quadrant = insideTileLocation(this.wallTopRightPos);
+
+                if (quadrant == 3)
+                {
+                    //topright point is below the wall
+                    if (direction.X > -1 * direction.Y)
+                    {
+                        //walk more to the right than top, thus away from corner
+                        direction.Y = Math.Max(0, direction.Y);
+
+                    }
+                    else
+                    {
+                        //walk more to the top than right, thus towards the corner
+                        direction = new Vector2(-1, 0);
+                    }
+                    //Debug.WriteLine(" Wall above");
+                }
+                else if (quadrant == 4)
+                {
+                    //topright position is left side of wall
+                    if (direction.X > -1 * direction.Y)
+                    {
+                        //walk more to the right than top, thus towards the corner
+                        direction = new Vector2(0, 1);
+
+                    }
+                    else
+                    {
+                        //walk more to the top than right, thus away from the corner
+                        direction.X = Math.Min(0, direction.X);
+                    }
+                    //Debug.WriteLine(" Wall right");
+                } else
+                {
+                    Debug.WriteLine("AI: quadrant failed, pls screenshot:, topRight quad: " + quadrant);
+                }
+            }
+            else if (this.wallBottomLeft)
+            {
+                //Debug.Write("corner Bottom Left: ");
+
+                int quadrant = insideTileLocation(this.wallBottomLeftPos);
+
+                if(quadrant == 1)
+                {
+                    //bottom left position is above wall
+
+                    if (-1 * direction.X > direction.Y)
+                    {
+                        //walk more to the left than bottom, thus away from corner
+                        //just prevent from walking down into wall
+                        direction.Y = Math.Min(0, direction.Y);
+                    }
+                    else
+                    {
+                        //walk more to the bottom than left, thus into corner
+                        direction = new Vector2(1, 0);
+
+                    }
+                    //Debug.WriteLine(" Wall below");
+                }
+                else if (quadrant == 2)
+                {
+                    //bottom left position is right side of wall
+
+                    if (-1 * direction.X > direction.Y)
+                    {
+                        //walk more to the left than bottom, thus towards the corner
+                        direction = new Vector2(0, -1);
+                    }
+                    else
+                    {
+                        //walk more to the bottom than left, thus away from corner
+                        direction.X = Math.Max(0, direction.X);
+                    }
+
+                    //Debug.WriteLine(" Wall left");
+                } else
+                {
+                    Debug.WriteLine("AI: quadrant failed, pls screenshot: BottomLeft, Quad: " + quadrant);
+                }
+            }
+            else if (this.wallBottomRight)
+            {
+                //Debug.Write("corner Bottom Right: ");
+                int quadrant = insideTileLocation(this.wallBottomRightPos);
+                if(quadrant == 1)
+                {
+                    //bottom right position is above wall
+                    if (direction.X > direction.Y)
+                    {
+                        //walk more towards the right than bottom, thus away from corner
+                        direction.Y = Math.Min(0, direction.Y);
+                    }
+                    else
+                    {
+                        //walk more towards the bottom than right, thus towards the corner
+                        direction = new Vector2(-1, 0);
+                    }
+
+                    //Debug.WriteLine(" Wall below");
+                } else if (quadrant == 4)
+                {
+                    //bottom right position is left side of wall
+                    if (direction.X > direction.Y)
+                    {
+                        //walk more towards the right than bottom, thus towards the corner
+                        direction = new Vector2(0, -1);
+                    }
+                    else
+                    {
+                        //walk more towards the bottom than right, thus away from corner
+                        direction.X = Math.Min(0, direction.X);
+                    }
+
+                    //Debug.WriteLine(" Wall right");
+                }
+                else
+                {
+                    Debug.WriteLine("AI: quadrant failed, pls screenshot: TopRight, quad: " + quadrant);
+                }                
+            }
+            direction.Normalize();
+            if (direction != direction_before)
+            {
+                //Debug.WriteLine("direc augmented (o,n): " + direction_before + ", " + direction);
+            }
+            return direction;
+        }
+
+        Vector2 wallDirectionAugmentation2(AI ai, Vector2 direction)
+        {
+            direction.Normalize();
+            Debug.WriteLine("direction initially: " + direction);
+            Entity anubis = ai.Entity;
+            Map map = Session.GetInstance().Map;
+
+
+            //adapt direction if walls are close
+            bool wallRight = this.wallTopRight && this.wallBottomRight;
+            bool wallLeft = this.wallTopLeft && this.wallBottomLeft;
+            bool wallBottom = this.wallBottomLeft && this.wallBottomRight;
+            bool wallTop = this.wallTopLeft && this.wallTopRight;
+
+            Vector2 pos = anubis.CenterPosition();
+            Vector2 topLeft = anubis.TopLeftCornerPosition();
+            Vector2 topRight = anubis.TopLeftCornerPosition() + new Vector2(anubis.Size().X, 0);
+            Vector2 bottomLeft = anubis.TopLeftCornerPosition() + new Vector2(0, anubis.Size().Y);
+            Vector2 bottomRight = anubis.TopLeftCornerPosition() + anubis.Size();
+
+            //Debug.WriteLine("positions: " + pos + ", " + topLeft + ", " + topRight + ", " + bottomLeft + ", " + bottomRight);
+
+
+
+
+            //get positions of current tile
+            int nodeId = ai.MovementGraph.ToNodeID(pos);
+            Vector2 tileLength = Session.GetInstance().Map.TileSize * Session.GetInstance().Map.TileScale;
+
+            //Debug.WriteLine("Positions: " + pos + ", retPos: " + ai.MovementGraph.ToPosition(nodeId));
+            //Debug.WriteLine("node id: " + nodeId);
+
+
+
+            if (wallTop)
+            {
+                Debug.WriteLine("great wall top");
+                direction.Y = Math.Max(0, direction.Y);
+            }
+            else if (wallBottom)
+            {
+                Debug.WriteLine("great wall Bottom"); 
+                direction.Y = Math.Min(0, direction.Y);
+            }
+            else if (wallLeft)
+            {
+                Debug.WriteLine("great wall Left"); 
+                direction.X = Math.Max(0, direction.X);
+            }
+            else if (wallRight)
+            {
+                Debug.WriteLine("great wall Right"); 
+                direction.X = Math.Min(0, direction.X);
+            }
+            else if (this.wallTopLeft)
+            {
+
+                //Corner top left of anubis
+                Debug.Write("corner Top Left: ");
+                //check if topleft position is below wall (or to the right)
+                if (horizontalTileNeigh(ai, topLeft, pos))
+                {
+                    //top left position is below wall
+                    if (direction.X < direction.Y)
+                    {
+                        //more to the left than top, thus away from the corner
+                        direction.Y = Math.Max(0, direction.Y);
+                        
+                    } else
+                    {
+                        //direction more to the top than left, thus towards the corner
+                        direction = new Vector2(1, 0);
+                    }
+
+                    Debug.WriteLine(" wall above");
+                }
+                else
+                {
+                    //right side of wall
+                    if (direction.X < direction.Y)
+                    {
+                        //more to the left than top, thus towards the corner
+                        direction = new Vector2(0, 1);
+                    } else
+                    {
+                        //more to the top than right, thus away from the corner
+                        direction.X = Math.Max(0, direction.X);
+                    }
+                    Debug.WriteLine(" wall left");
+                }
+            }
+            else if (this.wallTopRight)
+            {
+                Debug.Write("corner Top Right: ");
+                if (horizontalTileNeigh(ai, topRight, pos))
+                {
+                    //topright point is below the wall
+                    if (direction.X > -1 * direction.Y)
+                    {
+                        //walk more to the right than top, thus away from corner
+                        direction.Y = Math.Max(0, direction.Y);
+
+                    } else
+                    {
+                        //walk more to the top than right, thus towards the corner
+                        direction = new Vector2(-1, 0);
+                    }
+                    Debug.WriteLine(" Wall above");
+                }
+                else
+                {
+                    //topright position is left side of wall
+                    if (direction.X > -1 * direction.Y)
+                    {
+                        //walk more to the right than top, thus towards the corner
+                        direction = new Vector2(0, 1);
+
+                    } else
+                    {
+                        //walk more to the top than right, thus away from the corner
+                        direction.X = Math.Min(0, direction.X);
+
+                    }
+                    Debug.WriteLine(" Wall right");
+                }
+            }
+            else if (this.wallBottomLeft)
+            {
+                Debug.Write("corner Bottom Left: ");
+                if (horizontalTileNeigh(ai, bottomLeft, pos))
+                {
+                    //bottom left position is above wall
+
+                    if (-1 * direction.X > direction.Y)
+                    {
+                        //walk more to the left than bottom, thus away from corner
+                        //just prevent from walking down into wall
+                        direction.Y = Math.Min(0, direction.Y);
+                    } else
+                    {
+                        //walk more to the bottom than left, thus into corner
+                        direction = new Vector2(1, 0);
+
+                    }
+                    Debug.WriteLine(" Wall below");
+                }
+                else
+                {
+                    //bottom left position is right side of wall
+
+                    if (-1 * direction.X > direction.Y)
+                    {
+                        //walk more to the left than bottom, thus towards the corner
+                        direction = new Vector2(0, -1);
+                    }
+                    else
+                    {
+                        //walk more to the bottom than left, thus away from corner
+                        direction.X = Math.Max(0, direction.X);
+                    }
+
+                    Debug.WriteLine(" Wall left");
+                }
+            }
+            else if (this.wallBottomRight)
+            {
+                Debug.Write("corner Bottom Right: ");
+                if (horizontalTileNeigh(ai, bottomRight, pos))
+                {
+                    //bottom right position is above wall
+                    if (direction.X > direction.Y)
+                    {
+                        //walk more towards the right than bottom, thus away from corner
+                        direction.Y = Math.Min(0, direction.Y);
+                    } else
+                    {
+                        //walk more towards the bottom than right, thus towards the corner
+                        direction = new Vector2(-1, 0);
+                    }
+
+                    Debug.WriteLine(" Wall below");
+                }
+                else
+                {
+                    //bottom right position is left side of wall
+                    if (direction.X > direction.Y)
+                    {
+                        //walk more towards the right than bottom, thus towards the corner
+                        direction = new Vector2(0, -1);
+                    } else
+                    {
+                        //walk more towards the bottom than right, thus away from corner
+                        direction.X = Math.Min(0, direction.X);
+                    }
+
+                    Debug.WriteLine(" Wall right");
+                }
+            }
+            direction.Normalize();
+            Debug.WriteLine("direction augmented: " + direction);
+            return direction;
+        }
+
+        Vector2 wallDirectionAugmentation(AI ai, Vector2 direction)
+        {
+            Entity anubis = ai.Entity;
+            Map map = Session.GetInstance().Map;
+
+
+            //adapt direction if walls are close
+            bool wallRight = this.wallTopRight && this.wallBottomRight;
+            bool wallLeft = this.wallTopLeft && this.wallBottomLeft;
+            bool wallBottom = this.wallBottomLeft && this.wallBottomRight;
+            bool wallTop = this.wallTopLeft && this.wallTopRight;
+
+            Vector2 pos = anubis.CenterPosition();
+            Vector2 topLeft = anubis.TopLeftCornerPosition();
+            Vector2 topRight = anubis.TopLeftCornerPosition() + new Vector2(anubis.Size().X, 0);
+            Vector2 bottomLeft = anubis.TopLeftCornerPosition() + new Vector2(0, anubis.Size().Y);
+            Vector2 bottomRight = anubis.TopLeftCornerPosition() + anubis.Size();
+
+            //Debug.WriteLine("positions: " + pos + ", " + topLeft + ", " + topRight + ", " + bottomLeft + ", " + bottomRight);
+
+
+
+
+            //get positions of current tile
+            int nodeId = ai.MovementGraph.ToNodeID(pos);
+            Vector2 tileLength = Session.GetInstance().Map.TileSize * Session.GetInstance().Map.TileScale;
+
+            //Debug.WriteLine("Positions: " + pos + ", retPos: " + ai.MovementGraph.ToPosition(nodeId));
+            //Debug.WriteLine("node id: " + nodeId);
+
+
 
             if (wallTop)
             {
@@ -178,6 +751,7 @@ namespace TombOfAnubis
             }
             else if (this.wallTopLeft)
             {
+
                 //cannot move to the left&top
                 if (direction.X < direction.Y)
                 {
@@ -189,6 +763,7 @@ namespace TombOfAnubis
                     //more to the top than left, thus wall to the top, walk right until no wall
                     direction = new Vector2(1, 0);
                 }
+
             }
             else if (this.wallTopRight)
             {
@@ -202,6 +777,7 @@ namespace TombOfAnubis
                     //more to the top than right, thus wall to the top, walk left until no wall
                     direction = new Vector2(-1, 0);
                 }
+                
             }
             else if (this.wallBottomLeft)
             {
@@ -215,6 +791,7 @@ namespace TombOfAnubis
                     //more to the bottom than left, thus wall to the bottom, walk right until no wall
                     direction = new Vector2(1, 0);
                 }
+
             }
             else if (this.wallBottomRight)
             {
@@ -228,6 +805,7 @@ namespace TombOfAnubis
                     //more to the bottom than right, thus wall to the bottom, walk left until no wall
                     direction = new Vector2(-1, 0);
                 }
+
             }
             return direction;
         }
@@ -262,7 +840,7 @@ namespace TombOfAnubis
                     direction = getRandomDirection();
                 } else
                 {
-                    int smoothness = 3;
+                    int smoothness = 2;
                     if (wallDetected()) { smoothness = 2; } //needed to correctly augment direction
                     
                     
@@ -295,8 +873,7 @@ namespace TombOfAnubis
             }
 
 
-            
-            direction = wallDirectionAugmentation(direction) ;
+            direction = wallDirectionAugmentation3(ai, direction) ;
 
             direction.Normalize();
             if (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft)
@@ -307,163 +884,6 @@ namespace TombOfAnubis
             else
             {
                 //Debug.WriteLine("no wall direction augmentation, direction: " + direction);
-            }
-            return direction;
-        }
-
-        private Vector2 getDirection(AI ai, Vector2 anubisPosition, Vector2 playerPosition)
-        {
-
-            int nodeIdAnubis = ai.MovementGraph.ToNodeID(anubisPosition);
-            int nodeIdPlayer = ai.MovementGraph.ToNodeID(playerPosition);
-
-            Point tileCoordinateAnubis = ai.MovementGraph.ToTileCoordinate(nodeIdAnubis);
-            Point tileCoordinatePlayer = ai.MovementGraph.ToTileCoordinate(nodeIdPlayer);
-
-            //if player&anubis close use real direction
-            if (nodeIdAnubis == nodeIdPlayer || ai.MovementGraph.isTileNeighbor(tileCoordinateAnubis, tileCoordinatePlayer))
-            {
-                Vector2 difference = playerPosition - anubisPosition;
-                Vector2 temp2 = difference; //only for debug
-                difference.Normalize();
-                //Debug.WriteLine("State: direcToPlayer, anubis, player, target, direction, direction norml.: " + anubisPosition + ", " + playerPosition + ", " + playerPosition + ", " + temp2 + ", " + difference);
-                return difference;
-            }
-
-
-            //else use direction to next tile\node of the path to the tailed player
-
-            if (!ai.MovementGraph.PathExists(nodeIdAnubis, nodeIdPlayer))
-            {
-                Debug.WriteLine("Error: Anbuis cound not find a Path to cur tailed player");
-
-                //hotfix:
-                this.tailingPlayer = false;
-                return new Vector2(0, 0);
-            }
-
-
-            Vector2 target = ai.MovementGraph.GetTargetToWalkTo(nodeIdAnubis, nodeIdPlayer);
-            Vector2 target2 = ai.MovementGraph.getNthTargetToWalkTo(nodeIdAnubis, nodeIdPlayer, 2);
-            if(target2.LengthSquared() != 0)
-            {
-                target = (float)0.5 * (target + target2);
-            }
-
-            Vector2 direction = target - anubisPosition;
-            
-            //somehow sometimes anubis position is already at target position??? try hotfix
-            if(direction.LengthSquared() < 1000)
-            {
-                //Debug.WriteLine("AI: movement HotFix needed, tile distance too small");
-                if(ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer) > 1)
-                {
-                    
-                    target = ai.MovementGraph.getNthTargetToWalkTo(nodeIdAnubis, nodeIdPlayer, 2);
-                    direction = target - anubisPosition;
-                } else
-                {
-                    direction = playerPosition - anubisPosition;
-                }
-                
-            }
-            Vector2 temp = direction;
-            direction.Normalize();
-            //Debug.WriteLine("State: direcToTile, anubis, player, target, direction, direciton norml.: " + anubisPosition + ", " + playerPosition + ", " + target + ", " + temp + ", " + direction);
-            //Debug.WriteLine("direction length: " + temp.LengthSquared());
-            bool print_stuff = false;
-            if (print_stuff && (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft))
-            {
-                Debug.WriteLine("direction augmentation, direction before: " + direction);
-                if (this.wallTopLeft) { Debug.WriteLine("Wall TopLeft"); };
-                if (this.wallTopRight) { Debug.WriteLine("Wall TopRight"); };
-                if (this.wallBottomRight) { Debug.WriteLine("Wall BottomRight"); };
-                if (this.wallBottomLeft) { Debug.WriteLine("Wall BottomLeft"); };
-            }
-            //adapt direction if walls are close
-            bool wallRight = this.wallTopRight && this.wallBottomRight;
-            bool wallLeft = this.wallTopLeft && this.wallBottomLeft;
-            bool wallBottom = this.wallBottomLeft && this.wallBottomRight;
-            bool wallTop = this.wallTopLeft && this.wallTopRight;
-            
-            if (wallTop)
-            {
-                direction.Y = Math.Max(0, direction.Y);
-            } 
-            else if (wallBottom)
-            {
-                direction.Y = Math.Min(0, direction.Y);
-            } 
-            else if (wallLeft)
-            {
-                direction.X = Math.Max(0, direction.X);
-            }
-            else if (wallRight)
-            {
-                direction.X = Math.Min(0, direction.X);
-            }
-            else if (this.wallTopLeft)
-            {
-                //cannot move to the left&top
-                if (direction.X < direction.Y)
-                {
-                    //more to the left than top, thus wall to the left, walk down until no wall
-                    direction = new Vector2(0,1);
-                }
-                else
-                {
-                    //more to the top than left, thus wall to the top, walk right until no wall
-                    direction = new Vector2(1,0);
-                }
-            }
-            else if (this.wallTopRight)
-            {
-                if (direction.X > -1 * direction.Y)
-                {
-                    //more to the right than top, thus wall to the right, walk down until no wall
-                    direction = new Vector2(0,1);
-                }
-                else
-                {
-                    //more to the top than right, thus wall to the top, walk left until no wall
-                    direction = new Vector2(-1,0);
-                }
-            }
-            else if (this.wallBottomLeft)
-            {
-                if (-1*direction.X > direction.Y)
-                {
-                    //more to the left than bottom, thus wall to the left, walk up until no wall
-                    direction = new Vector2(0,-1);
-                } else
-                {
-                    //more to the bottom than left, thus wall to the bottom, walk right until no wall
-                    direction = new Vector2(1,0);
-                }
-            } else if (this.wallBottomRight)
-            {
-                if(direction.X > direction.Y)
-                {
-                    //more to the right than bottom, thus wall to the right, walk up until no wall
-                    direction = new Vector2(0,-1);
-                } else
-                {
-                    //more to the bottom than right, thus wall to the bottom, walk left until no wall
-                    direction = new Vector2(-1,0);
-                }
-            }
-
-
-
-
-
-            direction.Normalize();
-            if (this.wallTopLeft || this.wallTopRight || this.wallBottomRight || this.wallBottomLeft)
-            {
-                Debug.WriteLine("diretion after: " + direction);
-            } else
-            {
-                //Debug.WriteLine("no wall direction augmentation");
             }
             return direction;
         }
@@ -615,18 +1035,37 @@ namespace TombOfAnubis
             float decreaser = (float)1;
             Vector2 topIncreaser = new Vector2(0, -10);
 
+            //Vector2 top = pos + increaser * new Vector2(0, diagVec.Y);
+            //Vector2 bottom = pos + new Vector2(0, -1*diagVec.Y);
+            //Vector2 left = pos + new Vector2(diagVec.X, 0);
+            //Vector2 right = pos + new Vector2(-1*diagVec.X, 0);
+
             Vector2 topLeft = pos + increaser*diagVec + topIncreaser;
             Vector2 topRight = pos + increaser*new Vector2(-1 * diagVec.X, diagVec.Y) + topIncreaser;
             Vector2 bottomLeft = pos + increaser*new Vector2(diagVec.X, -1 * diagVec.Y);
             Vector2 bottomRight = pos - increaser*diagVec;
 
-            
+            Vector2 top = topLeft + (float)0.5 * (topRight - topLeft);
+            Vector2 bottom = bottomLeft + (float)0.3 * (bottomRight - bottomLeft);
+            Vector2 left = topLeft + (float)0.5 * (bottomLeft - topLeft);
+            Vector2 right = topRight + (float)0.5 * (bottomRight - topRight);
+
+
 
             //update all booleans
+            //this.wallTop = !this.validPosition(top);
+            //this.wallLeft = !this.validPosition(left); ;
+            //this.wallBottom = !this.validPosition(bottom);
+            //this.wallRight = !this.validPosition(right);
             this.wallBottomLeft = !this.validPosition(bottomLeft);
             this.wallBottomRight = !this.validPosition(bottomRight);
             this.wallTopLeft = !this.validPosition(topLeft);
             this.wallTopRight = !this.validPosition(topRight);
+
+            this.wallBottomLeftPos = bottomLeft;
+            this.wallTopLeftPos = topLeft;
+            this.wallTopRightPos = topRight;
+            this.wallBottomRightPos = bottomRight;
 
             if (verbose >= 1)
             {
@@ -636,6 +1075,9 @@ namespace TombOfAnubis
                 if (this.wallBottomLeft) { Debug.WriteLine("Wall BottomLeft"); };
 
             }
+
+
+            //update quadrant
 
         }
 
@@ -851,18 +1293,6 @@ namespace TombOfAnubis
                     Debug.WriteLine("AI: unknown AI mode");
 
                 }
-                //if (currentActions.Contains(PlayerActions.UseObject))
-                //{
-                //    //check which objects are currently colliding with the player. then check that they are in the orientation the player is looking in
-                //    // if the targeted object is iteractable (i.e. an artefact or an item dispenser, or anything else that can be interacted with), trigger the corresponding interaction
-
-                //    //if item dispenser: give player an item of the type corresponding to the dispenser, assuming the player can carry such an item
-
-                //    //if a button: trigger the interaction corresponding to that button
-
-                //    //if a player: check if trapped/unconscious, then check if the current player can free/resurrect that player
-
-                //}
 
                 //set new Anubis Position
                 Vector2 shift = entity.TopLeftCornerPosition() - entity.CenterPosition();
@@ -872,11 +1302,6 @@ namespace TombOfAnubis
 
                 
             }
-        }
-
-        private Point toPoint(Vector2 vec)
-        {
-            return new Point((int)vec.X, (int)vec.Y);
         }
     }
 }
