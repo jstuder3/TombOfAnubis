@@ -6,30 +6,15 @@ namespace TombOfAnubis
 {
     public class TombOfAnubis : Game
     {
-        private static GraphicsDeviceManager graphics;
+        private GraphicsDeviceManager graphics;
         GameScreenManager screenManager;
 
-        public static int numSupportedResolutions = 2;
-        public static ushort[] supportedWidths = new ushort[] { 2560, 1920 };
-        public static ushort[] supportedHeights = new ushort[] { 1440, 1080 };
-
-        public static void ToggleFullScreen()
-        {
-            graphics.ToggleFullScreen();
-        }
-
-        public static void ChangeResolution(int width, int height)
-        {
-            graphics.PreferredBackBufferWidth = width;
-            graphics.PreferredBackBufferHeight = height;
-            // Apply the changes
-            graphics.ApplyChanges();
-        }
-
+        public static ScreenResizer resizer;
 
         public TombOfAnubis()
         {
             graphics = new GraphicsDeviceManager(this);
+            resizer = new ScreenResizer(graphics, base.Window);
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
