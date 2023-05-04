@@ -17,6 +17,8 @@ namespace TombOfAnubis
 
             AnubisRageEvent anubisRageEvent = new AnubisRageEvent();
             AddComponent( anubisRageEvent );
+            AnubisCastEvent anubisCastEvent = new AnubisCastEvent();
+            AddComponent( anubisCastEvent );
         }
     }
 }

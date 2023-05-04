@@ -51,10 +51,19 @@ namespace TombOfAnubis
         public int tailedPlayerId { get; set; } = default;
         Character tailedPlayer { get; set; } = default;
 
-        //Rage Level System
+        //variables to increase ms when tailed same player over a longer time
+        private int increaseMsOverTimedistance { get; set; } = 3;
+        public GameplayEffect oldMsOverTime { get; set; } = default;
+        public bool msOverTimeActive = false;
+
+        //Event System
         //public int rageLevel = 0;
         private bool rageMode = false;
         public ParticleEmitter rageModeParticlesEmitter = default;
+
+        //variables for Castmode
+        private bool cmInitSucceeded = false;
+        private Vector2 cmChosenPos = default;
 
 
         //True AI logic:
@@ -107,9 +116,6 @@ namespace TombOfAnubis
 
         public void activateRageMode()
         {
-
-            //Debug.WriteLine("Ragemode currently perma deactivated");
-            //return;
             if(rageModeActivated())
             {
                 //nothing to do. ragemode already activated
@@ -118,11 +124,10 @@ namespace TombOfAnubis
             
             AI ai = GetComponents().First();
             Entity entity = ai.Entity;
-            Movement movement = entity.GetComponent<Movement>();
 
             //increase maxspeed:
             this.rageMode = true;
-            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 150f, Visibility.Both));
+            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 100f, Visibility.Both));
             this.MaxTailDistance += 4;
             this.DetailDistance += 2;
 
@@ -140,33 +145,81 @@ namespace TombOfAnubis
 
         public void deactivateRageMode()
         {
+            //Debug.WriteLine("Event: deactiveRagemode, ragemode stat: " + this.rageModeActivated());
             if(!rageModeActivated())
             {
                 return;
             }
             AI ai = GetComponents().First();
             Entity entity = ai.Entity;
-            Movement movement = entity.GetComponent<Movement>();
 
             //increase maxspeed:
-            this.rageMode = true;
-            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, -100f, Visibility.Both));
+            this.rageMode = false;
+            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, -80f, Visibility.Both));
             this.MaxTailDistance -= 4;
             this.DetailDistance -= 2;
             this.rageModeParticlesEmitter.EndEmitter();
             Debug.WriteLine("AI: Ragemode deactivated");
         }
 
-        private bool aboveLine(Vector2 linep1, Vector2 linep2, Vector2 pos)
+        public void initiateCastMode()
         {
-            Vector2 direction = linep2 - linep1;
-            direction.Normalize();
-            float a = direction.Y / direction.X;
-            float b = -a * linep1.X + linep1.Y;
-            float bb = -a * linep2.X + linep2.Y;
-            Console.WriteLine("line test, b: " + b + ", " + bb);
-            return pos.Y > a*pos.X + b;
+            Debug.WriteLine("Event: CastMode inititated!!!");
+            AI ai = GetComponents().First();
+            //MovementGraph movementGraph = ai.MovementGraph;
+            List<Character> characters = World.GetChildrenOfType<Character>();
+
+            int countNVisible = 0;
+            foreach (Character player in characters)
+            {
+                if (player.GetComponent<Movement>().IsVisibleToAnubis())
+                {
+                    countNVisible++;
+                }
+            }
+            if(countNVisible > 0)
+            {
+                this.cmInitSucceeded = true;
+                int chosenPlayerNr = this.rnd.Next(countNVisible);
+                bool succeededd = false;
+
+                int counter = 0;
+                foreach(Character player in characters)
+                {
+                    if (player.GetComponent<Movement>().IsVisibleToAnubis())
+                    {
+                        if (counter == chosenPlayerNr)
+                        {
+                            this.cmChosenPos = player.TopLeftCornerPosition();
+                            this.cmInitSucceeded = true;
+                            succeededd = true;
+                            return;
+
+                        } else
+                        {
+                            counter++;
+                        }
+                    }
+                }
+                if (!succeededd)
+                {
+                    Debug.WriteLine("Event: CastMode initialization failed");
+                }
+            } 
         }
+
+        public void executeCastMode()
+        {
+            if(this.cmInitSucceeded)
+            {
+                Debug.WriteLine("Event: CastMode Execution");
+                AI ai = GetComponents().First();
+                Entity anubis = ai.Entity;
+                Transform transform = anubis.GetComponent<Transform>();
+                transform.Position = this.cmChosenPos;
+            }
+        }
+
 
         bool horizontalTileNeigh(AI ai, Vector2 pos1, Vector2 pos2)
         {
@@ -181,15 +234,6 @@ namespace TombOfAnubis
                 //same tiles or horizontal neighbouring tiles
                 return true;
             } 
-            return false;
-        }
-
-        bool someCheck(AI ai, Vector2 pos)
-        {
-            Map map = Session.GetInstance().Map;
-            Point tileIndex = map.PositionToTileCoordinate(pos);
-            //map.Tile
-
             return false;
         }
 
@@ -209,18 +253,11 @@ namespace TombOfAnubis
             Vector2 tileBottomMidPos = tileLeftMidPos + diag;
             Vector2 tileRightMidPos = tileTopMidPos + diag;
 
-            //Vector2 tileTopMidPos = tileCentrePos + new Vector2(0, (float)-0.5 * map.TileSize.Y) * map.TileScale;
-            //Vector2 tileLeftMidPos = tileCentrePos + new Vector2((float)-0.5 * map.TileSize.X, 0) * map.TileScale;
-            //Vector2 tileBottomMidPos = tileCentrePos + new Vector2(0, (float)0.5 * map.TileSize.Y) * map.TileScale;
-            //Vector2 tileRightMidPos = tileCentrePos + new Vector2((float)-0.5 * map.TileSize.X, 0) * map.TileScale;
-            //Debug.WriteLine("iTQ: tile Positions: " + tileTopLeftPos + ", " + tileTopMidPos + ", " + tileLeftMidPos);
-
             double distToTop = (pos - tileTopMidPos).LengthSquared();
             double distToLeft = (pos - tileLeftMidPos).LengthSquared();
             double distToBottom = (pos - tileBottomMidPos).LengthSquared();
             double distToRight = (pos - tileRightMidPos).LengthSquared();
 
-            //Debug.WriteLine("iTQ: dists: " + distToTop + ", " + distToLeft + ", " + distToBottom + ", " + distToRight);
 
             double minDist = Math.Min(Math.Min(distToTop, distToLeft), Math.Min(distToRight, distToBottom));
             int casee = 0;
@@ -237,7 +274,6 @@ namespace TombOfAnubis
             {
                 casee = 4;
             }
-            //Debug.WriteLine("insideTileLoc ret: " + casee);
             return casee;
         }
 

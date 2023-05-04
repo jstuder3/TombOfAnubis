@@ -30,4 +30,29 @@ namespace TombOfAnubis
             base.Update(gameTime);
         }
     }
+
+    public class AnubisCastEvent : WorldEvent
+    {
+        public AnubisCastEvent() : base(3)
+        {
+
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            //this chooses a position of a currently visible player
+            Session.GetInstance().AnubisAISystem.initiateCastMode();
+        }
+        public override void Stop()
+        {
+            base.Stop();
+            //teleport to the chosen position 
+            Session.GetInstance().AnubisAISystem.executeCastMode();
+        }
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+    }
 }
