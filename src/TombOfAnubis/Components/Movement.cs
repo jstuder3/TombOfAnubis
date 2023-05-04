@@ -25,7 +25,7 @@ namespace TombOfAnubis
     }
     public class Movement : Component
     {
-        public int BaseMovementSpeed { get; }
+        public int BaseMovementSpeed { get; set; }
         public int MaxSpeed { get; set; }
         public Orientation Orientation { get; set; }
 

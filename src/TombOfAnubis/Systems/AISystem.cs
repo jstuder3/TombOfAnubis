@@ -52,9 +52,11 @@ namespace TombOfAnubis
         Character tailedPlayer { get; set; } = default;
 
         //variables to increase ms when tailed same player over a longer time
-        private int increaseMsOverTimedistance { get; set; } = 3;
-        public GameplayEffect oldMsOverTime { get; set; } = default;
+        private int increaseMsOverTimeDistance { get; set; } = 3;
         public bool msOverTimeActive = false;
+
+        public int increaseMsoverTimeAccumulation = 0;
+        public float timeAccumulatorMiliSec = 0;
 
         //Event System
         //public int rageLevel = 0;
@@ -82,8 +84,7 @@ namespace TombOfAnubis
         public bool wallTopLeft = false;
         public bool wallTopRight = false;
 
-
-        public int quadrant = 0; //top, left, right, bottom
+        public int quadrant = 0; //1: top, 2: left, 3: right, 4: bottom
 
         public void printState(AI ai)
         {
@@ -105,8 +106,39 @@ namespace TombOfAnubis
                 int nodeIdPlayer = ai.MovementGraph.ToNodeID(positionPlayer);
                 Debug.WriteLine("Player nr: " + player.GetComponent<Player>().PlayerID + ", position " + positionPlayer + ", nodeId " + nodeIdPlayer + ", distance: " + ai.MovementGraph.GetDistance(nodeIdAnubis, nodeIdPlayer));
             }
+        }
 
+        public void increaseMsCauseTailing(GameTime deltaTime)
+        {
+            //increase the timeAccMiliSec, if more than 10, add 1ms per 10miliSec.
+            float miliSec = (float)deltaTime.ElapsedGameTime.TotalMilliseconds;
+            //Debug.WriteLine("elapsed Time[ms]: " + miliSec);
+            this.timeAccumulatorMiliSec += miliSec;
 
+            if(this.timeAccumulatorMiliSec > 100)
+            {
+                AI ai = GetComponents().First();
+                Entity entity = ai.Entity;
+                int msIncreasage = (int)(this.timeAccumulatorMiliSec / 100.0);
+                entity.GetComponent<Movement>().BaseMovementSpeed += msIncreasage;
+                this.increaseMsoverTimeAccumulation += msIncreasage;
+                this.timeAccumulatorMiliSec = this.timeAccumulatorMiliSec % 100;
+            }
+        }
+
+        public void decreaseIncreasgeOfMscuasetailing()
+        {
+            if (this.increaseMsoverTimeAccumulation > 0)
+            {
+                AI ai = GetComponents().First();
+                Entity entity = ai.Entity;
+                entity.GetComponent<Movement>().BaseMovementSpeed -= this.increaseMsoverTimeAccumulation;
+                Debug.WriteLine("AI: remove TailingMS, decreasedMs by: " + this.increaseMsoverTimeAccumulation + ", new Ms: " + entity.GetComponent<Movement>().BaseMovementSpeed);
+
+                this.increaseMsoverTimeAccumulation = 0;
+                this.timeAccumulatorMiliSec = 0;
+
+            }
         }
 
         public bool rageModeActivated()
@@ -126,6 +158,8 @@ namespace TombOfAnubis
             Entity entity = ai.Entity;
 
             //increase maxspeed:
+            //entity.GetComponent<Movement>().BaseMovementSpeed += 50;
+
             this.rageMode = true;
             entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 100f, Visibility.Both));
             this.MaxTailDistance += 4;
@@ -139,6 +173,8 @@ namespace TombOfAnubis
             Emitter.EndEmitter(); 
             this.rageModeParticlesEmitter = new ParticleEmitter(pec);
             entity.AddComponent(rageModeParticlesEmitter);
+
+
 
             Debug.WriteLine("AI: RRRRRRagemode activated");
         }
@@ -1256,6 +1292,7 @@ namespace TombOfAnubis
                         if(!this.tailedPlayer.GetComponent<Movement>().IsVisibleToAnubis() || movementGraph.GetDistance(nodeIdAnubis, nodeIdTailedPlayer) >= this.DetailDistance)
                         {
                             this.tailingPlayer = false;
+                            this.decreaseIncreasgeOfMscuasetailing();
                             Debug.WriteLine("AI: tailed Player not visible or too far, detailed");
                         } else
                         {
@@ -1268,6 +1305,7 @@ namespace TombOfAnubis
                                 if (tryClosestPlayer.Item1)
                                 {
                                     this.tailedPlayer = tryClosestPlayer.Item2;
+                                    this.decreaseIncreasgeOfMscuasetailing();
                                     Debug.WriteLine("AI: switched tailing to closer Player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
                                 }
                                 
@@ -1286,12 +1324,22 @@ namespace TombOfAnubis
                             {
                                 this.tailedPlayer = tryGetClosestPlayer.Item2;
                                 Debug.WriteLine("AI: found player, tailing: " + this.tailedPlayer.GetComponent<Player>().PlayerID);
+                                //just for saftey:
+                                this.decreaseIncreasgeOfMscuasetailing();
                             }
-                            
+
                         }
-
-
                     }
+
+
+
+                    //after game logic but before direction cal:
+                    //check if tailed player is being taled for a longer time:
+                    if(this.tailingPlayer && movementGraph.GetDistance(movementGraph.ToNodeID(positionAnubis), movementGraph.ToNodeID(this.tailedPlayer.CenterPosition())) <= this.increaseMsOverTimeDistance) {
+                        increaseMsCauseTailing(deltaTime);
+                    }
+
+
 
                     if (this.tailingPlayer)
                     {
