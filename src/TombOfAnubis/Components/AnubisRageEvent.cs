@@ -23,6 +23,7 @@ namespace TombOfAnubis
         public override void Stop()
         {
             base.Stop();
+            Session.GetInstance().AnubisAISystem.deactivateRageMode();
         }
         public override void Update(GameTime gameTime)
         {

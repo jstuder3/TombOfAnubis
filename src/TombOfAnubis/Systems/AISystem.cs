@@ -54,7 +54,7 @@ namespace TombOfAnubis
         //Rage Level System
         //public int rageLevel = 0;
         private bool rageMode = false;
-        private int nArtefactsCollected = 0;
+        public ParticleEmitter rageModeParticlesEmitter = default;
 
 
         //True AI logic:
@@ -120,39 +120,41 @@ namespace TombOfAnubis
             Entity entity = ai.Entity;
             Movement movement = entity.GetComponent<Movement>();
 
-
             //increase maxspeed:
+            this.rageMode = true;
             entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 150f, Visibility.Both));
             this.MaxTailDistance += 4;
             this.DetailDistance += 2;
 
-            this.rageMode = true;
-            Debug.WriteLine("AI: RRRRRRagemode activated");
-
             //change anubis particles to red
-            ParticleEmitter emitter = entity.GetComponent<ParticleEmitter>();
-            ParticleEmitterConfiguration pec = emitter.EmitterConfiguration;
+            ParticleEmitter Emitter = entity.GetComponent<ParticleEmitter>();
+            ParticleEmitterConfiguration pec = Emitter.EmitterConfiguration;
             pec.RandomizedTintMin = Color.DarkRed;
             pec.RandomizedTintMax = Color.DarkGray;
-            emitter.EndEmitter();
-            entity.AddComponent(new ParticleEmitter(pec));
+            Emitter.EndEmitter(); 
+            this.rageModeParticlesEmitter = new ParticleEmitter(pec);
+            entity.AddComponent(rageModeParticlesEmitter);
 
+            Debug.WriteLine("AI: RRRRRRagemode activated");
         }
 
-        public void triggerRageModeProbability(bool collectedNewArtefact)
+        public void deactivateRageMode()
         {
-            int nPlayers = World.GetChildrenOfType<Character>().Count();
-            if (collectedNewArtefact)
+            if(!rageModeActivated())
             {
-                this.nArtefactsCollected += Math.Min(nPlayers, this.nArtefactsCollected+1);
+                return;
             }
-            double threshold = (double)this.nArtefactsCollected / nPlayers;
-            double rand = this.rnd.NextDouble();
-            if (rand <= threshold)
-            {
-                this.activateRageMode();
-                AudioController.PlaySong("gameFastTrack");
-            }
+            AI ai = GetComponents().First();
+            Entity entity = ai.Entity;
+            Movement movement = entity.GetComponent<Movement>();
+
+            //increase maxspeed:
+            this.rageMode = true;
+            entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, -100f, Visibility.Both));
+            this.MaxTailDistance -= 4;
+            this.DetailDistance -= 2;
+            this.rageModeParticlesEmitter.EndEmitter();
+            Debug.WriteLine("AI: Ragemode deactivated");
         }
 
         private bool aboveLine(Vector2 linep1, Vector2 linep2, Vector2 pos)
