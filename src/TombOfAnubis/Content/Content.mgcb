@@ -1205,6 +1205,11 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
 
+#begin Videos/CreditsScreen.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/CreditsScreen.mp4
+
 #begin Videos/GameWon1.mp4
 /importer:H264Importer
 /processor:VideoProcessor

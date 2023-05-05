@@ -30,7 +30,7 @@ namespace TombOfAnubis
         private int placementOffset = 3;
         private float scalingFactor = 1.0f;
         private int numSlots = 1;
-        private float fontScale = 0.45f;
+        private float fontScale = 0.53f;
         private string artefactSlotFiller = "Artefact";
         private string artefactPlacedFiller = "Placed";
         private bool[] collectedArtefact;

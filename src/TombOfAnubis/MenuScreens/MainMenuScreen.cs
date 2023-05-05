@@ -21,6 +21,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using TombOfAnubis.GameScreens;
 using TombOfAnubis.MenuScreens;
+using MonoGame.Extended.Framework.Media;
 #endregion
 
 namespace TombOfAnubis
@@ -34,6 +35,7 @@ namespace TombOfAnubis
 
         #region Graphics Data
 
+        private bool quit;
 
         private Texture2D backgroundTexture;
         private Rectangle backgroundPosition;
@@ -92,6 +94,7 @@ namespace TombOfAnubis
             : base()
         {
             buttonPressed = true;
+            quit = false;
 
             gameStartDescription = new GameStartDescription();
             gameStartDescription.MapContentName = "Map001";
@@ -251,25 +254,36 @@ namespace TombOfAnubis
             dialogVisible = true;
         }
 
+        public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
+        {
+            if(quit)
+            {
+                bool isVideoPlaying = VideoController.GetState() == MediaState.Playing;
+                if (!isVideoPlaying) { GameScreenManager.Game.Exit(); }
+            }
+            base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+        }
+
         #endregion
 
         #region HandleInput
 
         public override void HandleInput()
         {
-            if(dialogVisible)
+            if(dialogVisible && !quit)
             {
                 HandleQuitDialogInput();
             }
-            else
+            else if(!quit)
             {
                 base.HandleInput();
             }
+            else { }
         }
 
         private void HandleQuitDialogInput()
         {
-            if (!buttonCooldown)
+            if (!buttonCooldown && !quit)
             {
                 if (InputController.IsleftTriggered())
                 {
@@ -291,7 +305,9 @@ namespace TombOfAnubis
                     AudioController.PlaySoundEffect("menuAccept");
                     if (confirmationStatus)
                     {
-                        GameScreenManager.Game.Exit();
+                        AudioController.StopSong();
+                        VideoController.PlayVideo(@"Content/Videos/CreditsScreen.mp4", false, true);
+                        quit = true;
                     }
                     else
                     {
@@ -314,26 +330,35 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-       
+
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
-            spriteBatch.Begin();
-
-            // draw the background images
-            spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
-
-            // Draw each menu entry in turn.
-            for (int i = 0; i < MenuEntries.Count; i++)
+            if (quit)
             {
-                MenuEntry menuEntry = MenuEntries[i];
-                bool isSelected = IsActive && (i == selectedEntry);
-                menuEntry.Draw(this, isSelected);
+                Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+                VideoController.Draw(spriteBatch, new Rectangle(viewport.X, viewport.Y, viewport.Width, viewport.Height));
             }
 
-            if (dialogVisible) DrawDialog();
+            else
+            {
+                spriteBatch.Begin();
 
-            spriteBatch.End();
+                // draw the background images
+                spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
+                spriteBatch.Draw(titleTexture, titlePosition, null, Color.White, 0f, Vector2.Zero, titleScale, SpriteEffects.None, 0f);
+
+                // Draw each menu entry in turn.
+                for (int i = 0; i < MenuEntries.Count; i++)
+                {
+                    MenuEntry menuEntry = MenuEntries[i];
+                    bool isSelected = IsActive && (i == selectedEntry);
+                    menuEntry.Draw(this, isSelected);
+                }
+
+                if (dialogVisible) DrawDialog();
+
+                spriteBatch.End();
+            }
         }
 
         void DrawDialog()

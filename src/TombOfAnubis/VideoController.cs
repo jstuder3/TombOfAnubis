@@ -27,6 +27,7 @@ namespace TombOfAnubis
                 {
                     { @"Content/Videos/IntroVideo.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo.mp4")},
                     { @"Content/Videos/IntroVideo_v2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/IntroVideo_v2.mp4")},
+                    { @"Content/Videos/CreditsScreen.mp4", VideoHelper.LoadFromFile(@"Content/Videos/CreditsScreen.mp4")},
 
                 };
             videoPlayer = new VideoPlayer(graphics);
