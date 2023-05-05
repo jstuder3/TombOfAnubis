@@ -140,8 +140,15 @@ namespace TombOfAnubis {
                     // move entity in the given direction every update (note that direction is normalized)
                     CheckHasFloatParameters(1);
                     CheckHasVectorParameters(1);
-                    effectVectorParameters[0].Normalize();
-                    Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (effectVectorParameters[0] != Vector2.Zero)
+                    {
+                        effectVectorParameters[0].Normalize();
+                        Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("You fed a zero vector to LinearAutoMove. Feeding a zero vector to LinearAutoMove is completely useless and should be avoided!");
+                    }
                     //Debug.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
                     break;
                 case EffectType.Lifetime:
