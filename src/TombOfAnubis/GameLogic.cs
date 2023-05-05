@@ -264,6 +264,12 @@ namespace TombOfAnubis
             Vector2 center2 = dispenser.CenterPosition();
 
             Vector2 overlap_direction = center2 - center1;
+
+            if (overlap_direction == Vector2.Zero)
+            {
+                overlap_direction = Vector2.One;
+            }
+
             overlap_direction.Normalize();
 
             t1.Position -= overlap_direction * DeltaTime * 300;
