@@ -294,7 +294,8 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.Lifetime:
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
-                    if (startTime < endTime) { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
+                    if (startTime < endTime)
+                    { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
                         //do nothing
                     }
                     else
@@ -314,7 +315,11 @@ namespace TombOfAnubis {
                     Entity.GetComponent<Sprite>().Alpha = 1f;
                     break;
                 case EffectType.OnCooldown:
-                     ((ICooldown)Entity).EndCooldown();
+                    // if the effect is deleted ahead of time, we don't want to add or remove other components to the entity (Which endCooldown does). This can cause errors when deleting the entity.
+                    if (startTime >= endTime)
+                    {
+                        ((ICooldown)Entity).EndCooldown();
+                    }
                     break;
                 case EffectType.TeleportPreview:
                     if (teleportPreviewEmitter != null)

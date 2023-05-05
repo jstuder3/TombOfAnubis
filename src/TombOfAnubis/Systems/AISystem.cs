@@ -19,12 +19,10 @@ namespace TombOfAnubis
 
     public class AISystem : BaseSystem<AI>
     {
-        public World World { get; set; }
 
         public AnubisBehaviour AnubisBehaviour { get; set; }
-        public AISystem(World world, AnubisBehaviour anubisBehaviour)
+        public AISystem(AnubisBehaviour anubisBehaviour)
         {
-            World = world;
             AnubisBehaviour = anubisBehaviour;
         }
 
@@ -90,7 +88,7 @@ namespace TombOfAnubis
         {
             Entity entity = ai.Entity;
             //Transform transform = entity.GetComponent<Transform>();
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             //Anubis:
             Vector2 positionAnubis = entity.TopLeftCornerPosition();
@@ -203,7 +201,7 @@ namespace TombOfAnubis
             Debug.WriteLine("Event: CastMode inititated!!!");
             AI ai = GetComponents().First();
             //MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             int countNVisible = 0;
             foreach (Character player in characters)
@@ -966,7 +964,7 @@ namespace TombOfAnubis
         public int GetDistToclosestPlayer(AI ai, Vector2 positionAnubis)
         {
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
             int nodeIdAnubis = movementGraph.ToNodeID(positionAnubis);
             int minDist = 999999;
 
@@ -990,7 +988,7 @@ namespace TombOfAnubis
         public Tuple<bool,Character> GetClosestPlayer(AI ai, Vector2 anubisPosition)
         {
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
             int closestPlayerDist = 999999;
@@ -1022,7 +1020,7 @@ namespace TombOfAnubis
         {
             //Debug.WriteLine("cur no tailed player, try to change now");
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
 
             int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
@@ -1186,8 +1184,8 @@ namespace TombOfAnubis
                 if (!movement.CanMove()) continue;
 
                 MovementGraph movementGraph = ai.MovementGraph;
-                List<Character> characters = World.GetChildrenOfType<Character>();
-                List<Artefact> artefacts = World.GetChildrenOfType<Artefact>();
+                List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
+                List<Artefact> artefacts = Session.GetInstance().World.GetChildrenOfType<Artefact>();
 
                 RectangleCollider collider = entity.GetComponent<RectangleCollider>();
 

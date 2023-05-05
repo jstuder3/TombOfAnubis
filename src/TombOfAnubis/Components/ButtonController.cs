@@ -151,6 +151,12 @@ namespace TombOfAnubis
                 return false;
             }
         }
+        public override void Delete()
+        {
+            base.Delete();
+            ButtonControllerSystem.Deregister(this);
+
+        }
 
     }
 }

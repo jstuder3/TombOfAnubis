@@ -9,16 +9,9 @@ namespace TombOfAnubis
 {
     public class DiscoverySystem : BaseSystem<Discovery>
     {
-        public World Scene { get; set; }
-        private Map map;
-        public DiscoverySystem(World scene) 
-        { 
-            Scene = scene;
-        }
-
         public override void Update(GameTime deltaTime)
         {
-            List<Character> characters = Scene.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             foreach (Discovery discovery in GetComponents())
             {

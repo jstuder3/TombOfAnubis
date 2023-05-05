@@ -12,6 +12,8 @@ namespace TombOfAnubis
         public bool IsStarted { get; set; } = false;
         public float Duration { get; set; }
 
+        public float Progress { get; set; }
+
         public float CooldownAfterEvent {get; set;}
 
         public WorldEvent(float duration, float coolDownAfterEvent = 10) 

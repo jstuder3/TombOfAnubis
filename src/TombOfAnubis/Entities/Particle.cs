@@ -133,6 +133,7 @@ namespace TombOfAnubis
             LocalOffset +=  Velocity * deltaTime;
 
             Transform transform = GetComponent<Transform>();
+            if(transform == null) { return; }
             transform.Position = GetGlobalPosition();
             if (ParticleConfiguration.ScalingMode == ScalingMode.LinearDecreaseToZero) {
                 if(Duration == 0)

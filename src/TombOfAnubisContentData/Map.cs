@@ -4,10 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
-using System.Reflection;
-using static System.Formats.Asn1.AsnWriter;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
+
 
 namespace TombOfAnubis
 {
@@ -237,6 +234,15 @@ namespace TombOfAnubis
             }
             return result;
         }
+
+        public Vector2 CreateEntityTileCenteredPosition(Rectangle entitySourceRectangle, Vector2 scale, Point tileCoordinates)
+        {
+            var tilePos = TileCoordinateToPosition(tileCoordinates);
+            var spriteCenter = tilePos + new Vector2(entitySourceRectangle.Width * scale.X / 2, entitySourceRectangle.Height * scale.Y / 2);
+            var tileCenter = tilePos + new Vector2(TileSize.X / 2, TileSize.Y / 2);
+            return tilePos + tileCenter - spriteCenter;
+        }
+
         public Vector2 CreateEntityTileCenteredPosition(EntityDescription entityDescription)
         {
             Point tileCoordinates = entityDescription.SpawnTileCoordinate;
@@ -295,6 +301,25 @@ namespace TombOfAnubis
         public bool ValidTileCoordinates(Point coords)
         {
             return coords.X >= 0 && coords.Y >= 0 && coords.X < MapDimensions.X && coords.Y < MapDimensions.Y;
+        }
+        public Point FindClosestFloor(Vector2 position, List<Point> blockedTileCoordinates)
+        {
+            Point currentTileCoord = PositionToTileCoordinate(position);
+            for(int i = 0; i <  MapDimensions.X; i++) 
+            {
+                for(int x = -i; x <= i; x++)
+                {
+                    for (int y = -i; y <= i; y++)
+                    {
+                        Point candidate = currentTileCoord + new Point(x, y);
+                        if(ValidTileCoordinates(candidate) && GetCollisionLayerValue(candidate) == 0 && !blockedTileCoordinates.Contains(candidate))
+                        {
+                            return candidate;
+                        }
+                    }
+                }
+            }
+            return currentTileCoord;
         }
 
         public void TranslateCollisionToBaseLayer()

@@ -18,7 +18,6 @@ namespace TombOfAnubis
         private Viewport viewport;
         private GraphicsDevice graphics;
         private Session session;
-        private List<Character> characters;
         private List<Viewport> characterViewports;
         private SpriteFont statusFont;
         private Color statusColor;
@@ -49,7 +48,6 @@ namespace TombOfAnubis
             graphics = graphicsDevice;
             viewport = graphics.Viewport;
             session = Session.GetInstance();
-            characters = session.World.GetChildrenOfType<Character>();
             characterViewports = SplitScreen.PlayerViewports;
             minimapBackground = new Texture2D(graphicsDevice, 1, 1);
             minimapBackground.SetData(new[] { Color.Black });
@@ -63,7 +61,7 @@ namespace TombOfAnubis
 
             screenManager = gameScreenManager;
 
-            collectedArtefact = new bool [characters.Count];
+            collectedArtefact = new bool [session.World.GetChildrenOfType<Character>().Count];
             Array.Fill(collectedArtefact, false);
 
             LoadContent();
@@ -74,7 +72,7 @@ namespace TombOfAnubis
             ContentManager content = screenManager.Game.Content;
             minimapBackground = content.Load<Texture2D>("Textures/Menu/treasuremap_background");
             minimapFrame = content.Load<Texture2D>("Textures/Menu/treasuremap_border");
-            for (int i = 0; i < characters.Count; i++)
+            for (int i = 0; i < session.World.GetChildrenOfType<Character>().Count; i++)
             {
                 string textureName = "Item_slot_" + (i + 1);
                 string textureFullPath = "Textures/Objects/UI/" + textureName;
@@ -95,9 +93,9 @@ namespace TombOfAnubis
 
             DrawMinimap(gameTime);
 
-            for (int i = 0; i < characters.Count; i++)
+            for (int i = 0; i < session.World.GetChildrenOfType<Character>().Count; i++)
             {
-                DrawArtefactInventory(gameTime, characters[i], characterViewports[i]);
+                DrawArtefactInventory(gameTime, session.World.GetChildrenOfType<Character>()[i], characterViewports[i]);
             }
         }
 

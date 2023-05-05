@@ -6,7 +6,7 @@ using System; using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using static System.Collections.Specialized.BitVector32;
-
+using System.Linq;
 
 namespace TombOfAnubis
 {
@@ -64,6 +64,8 @@ namespace TombOfAnubis
             set { map = value; }
         }
 
+        public bool IsEarthquake { get; set; } = false;
+        public bool PauseDrawing { get; set; } = false;
 
         /// <summary>
         /// The viewport that the tile engine is rendering within.
@@ -183,8 +185,23 @@ namespace TombOfAnubis
         /// </summary>
         public static void Draw(GameTime gameTime)
         {
+            if (singleton.IsEarthquake)
+            {
+                if (gameTime.TotalGameTime.Milliseconds % 2 == 0)
+                {
+                    singleton.World.Origin += 5 * Vector2.One;
+                }
+                else
+                {
+                    singleton.World.Origin -= 5 * Vector2.One;
+                }
+            }
             singleton.SpriteSystem.Viewport = singleton.Viewport;
-            singleton.SpriteSystem.Draw(gameTime);
+
+            if (!singleton.PauseDrawing)
+            {
+                singleton.SpriteSystem.Draw(gameTime);
+            }
         }
 
         /// <summary>
@@ -264,8 +281,8 @@ namespace TombOfAnubis
             singleton.SpriteSystem = new SpriteSystem(screenManager.SpriteBatch);
             singleton.PlayerInputSystem = new InputSystem(screenManager);
             singleton.GameplayEffectSystem = new GameplayEffectSystem();
-            singleton.AnubisAISystem = new AISystem(singleton.World, AnubisBehaviour.TrueAI);
-            singleton.DiscoverySystem = new DiscoverySystem(singleton.World);
+            singleton.AnubisAISystem = new AISystem(AnubisBehaviour.TrueAI);
+            singleton.DiscoverySystem = new DiscoverySystem();
             singleton.AnimationSystem = new AnimationSystem();
             singleton.MovementSystem = new MovementSystem();
             singleton.ButtonControllerSystem = new ButtonControllerSystem();
@@ -276,6 +293,99 @@ namespace TombOfAnubis
             ChangeMap(gameStartDescription.MapContentName);
             EntityGenerator.Initialize(singleton.gameScreenManager.Game.Content);
             List<Entity> entities = singleton.GenerateMap();
+            singleton.World.AddChildren(entities);
+
+            List<Entity> mapEntities = singleton.CreateMapTileEntities();
+            singleton.World.AddChildren(mapEntities);
+        }
+
+        public static void RegenerateMap()
+        {
+            //ClearSystems();
+            singleton.Map.Reset();
+            EntityGenerator.DoNotSpawnTypes = new List<Type>() { typeof(Character), typeof(Ghost) };
+            List<Entity> entities = singleton.GenerateMap();
+            EntityGenerator.DoNotSpawnTypes = new List<Type>();
+
+            List<Artefact> oldArtefacts = singleton.World.GetChildrenOfType<Artefact>();
+            List<Artefact> newArtefacts = entities.FindAll(x => x.GetType() == typeof(Artefact)).Cast<Artefact>().ToList(); ;
+
+            // Remove already collected artefacts from the new map
+            List<Artefact> toDelete = new List<Artefact>();
+            foreach (Artefact a in newArtefacts)
+            {
+                bool found = false;
+                foreach (Artefact b in oldArtefacts)
+                {
+                    if (a.GetComponent<Player>().PlayerID == b.GetComponent<Player>().PlayerID)
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    toDelete.Add(a);
+                }
+            }
+            foreach (Artefact a in toDelete)
+            {
+                a.Delete();
+                entities.Remove(a);
+            }
+
+            // Copy placed artefacts to the new altar
+            Altar oldAltar = singleton.World.GetChildrenOfType<Altar>()[0];
+            Altar newAltar = (Altar)entities.Find(x => x.GetType() == typeof(Altar));
+            int i = 0;
+            foreach (InventorySlot slot in oldAltar.GetComponent<Inventory>().ArtefactSlots)
+            {
+                if (!slot.IsEmpty() && slot.SlotType == SlotType.ArtefactSlot)
+                {
+                    newAltar.GetComponent<Inventory>().AddArtefact(i);
+                    float artefactScale = 0.1f;
+                    Texture2D artefactTexture = Session.GetInstance().ArtefactTextures[i];
+
+                    Vector2 altarSize = newAltar.SpriteSize();
+                    float artefactWidth = artefactTexture.Width * artefactScale;
+
+                    float w = altarSize.X;
+                    float h = altarSize.Y;
+                    Vector2[] artefactPositions = new Vector2[]
+                    {
+                    new Vector2(0.05f*w, -0.17f*h),
+                    new Vector2(0.93f*w - artefactWidth, -0.17f*h),
+                    new Vector2(0.02f*w, 0.14f*h),
+                    new Vector2(0.98f*w - artefactWidth, 0.14f*h)
+                    };
+
+                    Artefact artefact = new Artefact(i, artefactPositions[i], Vector2.One * artefactScale, artefactTexture, false);
+                    newAltar.AddChild(artefact);
+                }
+                i++;
+            }
+
+
+            singleton.World.DeleteChildrenExcept(new List<Type>() { typeof(Character), typeof(Ghost) });
+
+            List<Type> spawnBlockingTypes = new List<Type>()
+            {
+                typeof(Altar), typeof(Button), typeof(Trap), typeof(Dispenser), typeof(Anubis), typeof(Artefact)
+            };
+            List<Point> blockedTiles = new List<Point>();
+            foreach (Entity entity in entities.FindAll(x => spawnBlockingTypes.Contains(x.GetType())))
+            {
+                blockedTiles.Add(singleton.Map.PositionToTileCoordinate(entity.CenterPosition()));
+            }
+
+            foreach (Character character in singleton.World.GetChildrenOfType<Character>())
+            {
+                Point characterTileCoord = singleton.Map.PositionToTileCoordinate(character.CenterPosition());
+                Point closestFloorTile = singleton.Map.FindClosestFloor(character.CenterPosition(), blockedTiles);
+                int colValChar = singleton.Map.GetCollisionLayerValue(characterTileCoord);
+                int colValClose = singleton.Map.GetCollisionLayerValue(closestFloorTile);
+                Vector2 tileCenterdPosition = singleton.Map.CreateEntityTileCenteredPosition(character.GetComponent<Sprite>().SourceRectangle, character.GetComponent<Transform>().Scale, closestFloorTile);
+                character.GetComponent<Transform>().Position = tileCenterdPosition;
+            }
             singleton.World.AddChildren(entities);
 
             List<Entity> mapEntities = singleton.CreateMapTileEntities();
@@ -295,16 +405,7 @@ namespace TombOfAnubis
                 singleton.gameplayScreen = null;
 
                 // clear systems
-                SpriteSystem.Clear();
-                CollisionSystem.Clear();
-                GameplayEffectSystem.Clear();
-                InputSystem.Clear();
-                AISystem.Clear();
-                DiscoverySystem.Clear();
-                AnimationSystem.Clear();
-                MovementSystem.Clear();
-                ButtonControllerSystem.Clear();
-                ParticleEmitterSystem.Clear();
+                ClearSystems();
 
                 // Reset map
                 singleton.Map.Reset();
@@ -317,6 +418,21 @@ namespace TombOfAnubis
                     gameplayScreen.ExitScreen();
                 }
             }
+        }
+
+        public static void ClearSystems()
+        {
+            SpriteSystem.Clear();
+            CollisionSystem.Clear();
+            GameplayEffectSystem.Clear();
+            InputSystem.Clear();
+            AISystem.Clear();
+            DiscoverySystem.Clear();
+            AnimationSystem.Clear();
+            MovementSystem.Clear();
+            ButtonControllerSystem.Clear();
+            ParticleEmitterSystem.Clear();
+            WorldEventSystem.Clear();
         }
 
         /// <summary>
@@ -337,11 +453,6 @@ namespace TombOfAnubis
             ContentManager content = singleton.gameScreenManager.Game.Content;
             singleton.Map = content.Load<Map>(mapContentName);
             singleton.World.Scale = singleton.Map.WorldScale * SplitScreen.WorldScaleFactorsBasedOnNPlayers[singleton.NumberOfPlayers - 1];
-
-            // Create the undiscovered texture. This should be loaded from a png and prettier than just a black square.
-            singleton.Map.UndiscoveredTexture = new Texture2D(singleton.gameScreenManager.GraphicsDevice, 1, 1);
-            singleton.Map.UndiscoveredTexture.SetData(new[] { Color.SaddleBrown });
-
         }
 
         public static void StartMinimapMode(Vector2 minimapSize, GameTime gameTime)

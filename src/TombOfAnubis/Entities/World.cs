@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using TombOfAnubis.Components;
 
 namespace TombOfAnubis
 {
@@ -17,8 +18,12 @@ namespace TombOfAnubis
 
             AnubisRageEvent anubisRageEvent = new AnubisRageEvent();
             AddComponent( anubisRageEvent );
+
             AnubisCastEvent anubisCastEvent = new AnubisCastEvent();
             AddComponent( anubisCastEvent );
+
+            ChangeMapEvent changeMapEvent = new ChangeMapEvent();
+            AddComponent(changeMapEvent );
         }
     }
 }
