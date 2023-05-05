@@ -114,7 +114,29 @@ namespace TombOfAnubis
             }
             foreach (Type type in childrenTypes)
             {
-                DeleteChildrenOfType(type);
+                List<Entity> foundChildren = new List<Entity>();
+                foreach (Entity entity in children)
+                {
+                    if (entity.GetType().Equals(type))
+                    {
+                        if (entity.GetType().Equals(typeof(Particle)))
+                        {
+                            if (!exceptions.Contains(((Particle)entity).ParentEmitter.Entity.GetType()))
+                            {
+                                foundChildren.Add(entity);
+                            }
+                        }
+                        else
+                        {
+                            foundChildren.Add(entity);
+                        }
+                    }
+                }
+                foreach (Entity child in foundChildren)
+                {
+                    children.Remove(child);
+                    child.Delete();
+                }
             }
         }
         public List<T> GetChildrenOfType<T>() where T : Entity

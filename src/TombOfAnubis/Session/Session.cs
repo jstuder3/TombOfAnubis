@@ -301,9 +301,9 @@ namespace TombOfAnubis
 
         public static void RegenerateMap()
         {
-            //ClearSystems();
             singleton.Map.Reset();
-            EntityGenerator.DoNotSpawnTypes = new List<Type>() { typeof(Character), typeof(Ghost) };
+            List<Type> notRegeneratedEntities = new List<Type>() { typeof(Character), typeof(Ghost), typeof(Anubis) };
+            EntityGenerator.DoNotSpawnTypes = notRegeneratedEntities;
             List<Entity> entities = singleton.GenerateMap();
             EntityGenerator.DoNotSpawnTypes = new List<Type>();
 
@@ -365,11 +365,11 @@ namespace TombOfAnubis
             }
 
 
-            singleton.World.DeleteChildrenExcept(new List<Type>() { typeof(Character), typeof(Ghost) });
+            singleton.World.DeleteChildrenExcept(notRegeneratedEntities);
 
             List<Type> spawnBlockingTypes = new List<Type>()
             {
-                typeof(Altar), typeof(Button), typeof(Trap), typeof(Dispenser), typeof(Anubis), typeof(Artefact)
+                typeof(Altar), typeof(Button), typeof(Trap), typeof(Dispenser), typeof(Anubis), typeof(Artefact), typeof(Character)
             };
             List<Point> blockedTiles = new List<Point>();
             foreach (Entity entity in entities.FindAll(x => spawnBlockingTypes.Contains(x.GetType())))
@@ -380,12 +380,17 @@ namespace TombOfAnubis
             foreach (Character character in singleton.World.GetChildrenOfType<Character>())
             {
                 Point characterTileCoord = singleton.Map.PositionToTileCoordinate(character.CenterPosition());
-                Point closestFloorTile = singleton.Map.FindClosestFloor(character.CenterPosition(), blockedTiles);
-                int colValChar = singleton.Map.GetCollisionLayerValue(characterTileCoord);
-                int colValClose = singleton.Map.GetCollisionLayerValue(closestFloorTile);
-                Vector2 tileCenterdPosition = singleton.Map.CreateEntityTileCenteredPosition(character.GetComponent<Sprite>().SourceRectangle, character.GetComponent<Transform>().Scale, closestFloorTile);
-                character.GetComponent<Transform>().Position = tileCenterdPosition;
+                Point closestFloorTileToCharacter = singleton.Map.FindClosestFloor(character.CenterPosition(), blockedTiles);
+                character.GetComponent<Transform>().Position = singleton.Map.CreateEntityTileCenteredPosition(character.GetComponent<Sprite>().SourceRectangle, character.GetComponent<Transform>().Scale, closestFloorTileToCharacter); ;
             }
+
+
+            Anubis anubis = singleton.World.GetChildrenOfType<Anubis>()[0];
+            Point anubisTileCoord = singleton.Map.PositionToTileCoordinate(anubis.CenterPosition());
+            Point closestFloorTileToAnubis = singleton.Map.FindClosestFloor(anubis.CenterPosition(), blockedTiles);
+            anubis.GetComponent<Transform>().Position = singleton.Map.CreateEntityTileCenteredPosition(anubis.GetComponent<Sprite>().SourceRectangle, anubis.GetComponent<Transform>().Scale, closestFloorTileToAnubis); ;
+
+            anubis.GetComponent<AI>().MovementGraph = new MovementGraph(singleton.Map);
             singleton.World.AddChildren(entities);
 
             List<Entity> mapEntities = singleton.CreateMapTileEntities();
