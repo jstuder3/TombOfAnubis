@@ -93,6 +93,8 @@ namespace TombOfAnubis
             graphics.PreferredBackBufferWidth = _width;
             graphics.PreferredBackBufferHeight = _height;
             graphics.IsFullScreen = false;
+            window.BeginScreenDeviceChange(false);
+            window.EndScreenDeviceChange(window.ScreenDeviceName, 1920, 1080);
             graphics.ApplyChanges();
         }
 
