@@ -12,6 +12,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System; using System.Diagnostics;
+using System.Diagnostics.SymbolStore;
+using static System.Formats.Asn1.AsnWriter;
+using static System.Net.Mime.MediaTypeNames;
 #endregion
 
 namespace TombOfAnubis
@@ -53,17 +56,29 @@ namespace TombOfAnubis
         private Texture2D loadingTexture;
         private Rectangle loadingPosition;
 
-        private string loadingText = "Loading...";
         private string readyText = "Press <Use> to Start";
         private int useButtonCooldown = 250;
         private bool startGame = false;
 
-        private Rectangle textArea;
         private SpriteFont font;
-        private float maxScale = 1.1f;
-        private float currScale = 1f;
-        private float scaleStep = 0.001f;
-        private bool isGrowing = true;
+
+        private int numPlayers;
+        private bool hasVideo;
+        private float fontScale = 0.6f;
+        // Relative to Viewport height
+        private float margin = 0.08f;
+
+        /// <summary>
+        /// Constants to display skip option after some time
+        /// </summary>
+
+        // In milliseconds
+        private int cooldownPeriod = 3000;
+        private int afterSkipCooldown = 50;
+
+        private bool startTimeSet = false;
+        private bool skipCooldown = false;
+        private double videoStartTime;
 
 
         #endregion
@@ -77,17 +92,19 @@ namespace TombOfAnubis
         /// be activated via the static Load method instead.
         /// </summary>
         private LoadingScreen(GameScreenManager screenManager, bool loadingIsSlow,
-                              GameScreen[] screensToLoad)
+                              GameScreen[] screensToLoad, bool hasVideo)
         {
             this.loadingIsSlow = loadingIsSlow;
             this.screensToLoad = screensToLoad;
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
+
+            this.hasVideo = hasVideo;
         }
 
 
         /// <summary>
-        /// Activates the loading screen.
+        /// Activates the loading screen. (Background story video)
         /// </summary>
         public static void Load(GameScreenManager screenManager, bool loadingIsSlow,
                                 params GameScreen[] screensToLoad)
@@ -99,7 +116,27 @@ namespace TombOfAnubis
             // Create and activate the loading screen.
             LoadingScreen loadingScreen = new LoadingScreen(screenManager,
                                                             loadingIsSlow,
-                                                            screensToLoad);
+                                                            screensToLoad,
+                                                            true);
+
+            screenManager.AddScreen(loadingScreen);
+        }
+
+        /// <summary>
+        /// Activates the loading screen. (Only show image)
+        /// </summary>
+        public static void LoadAtRestart(GameScreenManager screenManager, bool loadingIsSlow,
+                                params GameScreen[] screensToLoad)
+        {
+            // Tell all the current screens to transition off.
+            foreach (GameScreen screen in screenManager.GetScreens())
+                screen.ExitScreen();
+
+            // Create and activate the loading screen.
+            LoadingScreen loadingScreen = new LoadingScreen(screenManager,
+                                                            loadingIsSlow,
+                                                            screensToLoad,
+                                                            false);
 
             screenManager.AddScreen(loadingScreen);
         }
@@ -108,17 +145,41 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             ContentManager content = GameScreenManager.Game.Content;
-            loadingTexture = content.Load<Texture2D>("Textures/Menu/LoadingScreen");
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            loadingPosition = new Rectangle(viewport.X,viewport.Y,viewport.Width, viewport.Height);
+            numPlayers = InputController.GetActiveInputs().Count;
+            font = Fonts.SettingsTitleFont;
 
-            font = Fonts.DisneyHeroicFont;
+            if (hasVideo)
+            {
+                VideoController.LoadBackstoryVideo(numPlayers);
+                loadingPosition = new Rectangle(viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
-            int posX = (int)(0.615f * viewport.Width);
-            int posY = (int)(0.91f * viewport.Height);
-            int width = (int)(0.365f * viewport.Width);
-            int height = (int)(0.0556f * viewport.Height);
-            textArea = new Rectangle(posX, posY, width, height);
+                AudioController.PlaySong("gameWonTrack");
+
+                switch (numPlayers)
+                {
+                    case 1: VideoController.PlayVideo(@"Content/Videos/Backstory1.mp4", false, true); break;
+
+                    case 2: VideoController.PlayVideo(@"Content/Videos/Backstory2.mp4", false, true); break;
+
+                    case 3: VideoController.PlayVideo(@"Content/Videos/Backstory3.mp4", false, true); break;
+
+                    case 4: VideoController.PlayVideo(@"Content/Videos/Backstory4.mp4", false, true); break;
+                }
+            }
+
+            loadingPosition = new Rectangle(viewport.X, viewport.Y, viewport.Width, viewport.Height);
+
+            switch (numPlayers)
+            {
+                case 1: loadingTexture = content.Load<Texture2D>("Textures/Menu/LoadingScreen/BackstoryEnd1"); break;
+
+                case 2: loadingTexture = content.Load<Texture2D>("Textures/Menu/LoadingScreen/BackstoryEnd2"); break;
+
+                case 3: loadingTexture = content.Load<Texture2D>("Textures/Menu/LoadingScreen/BackstoryEnd3"); break;
+
+                case 4: loadingTexture = content.Load<Texture2D>("Textures/Menu/LoadingScreen/BackstoryEnd4"); break;
+            }
 
             base.LoadContent();
         }
@@ -132,8 +193,17 @@ namespace TombOfAnubis
             if(InputController.IsUseTriggered() && useButtonCooldown <= 0)
             {
                 useButtonCooldown = 250;
-                AudioController.PlaySoundEffect("menuAccept");
-                startGame = true;
+                if (skipCooldown || !hasVideo)
+                {
+                    AudioController.StopSong();
+                    AudioController.PlaySoundEffect("menuAccept");
+                    VideoController.StopVideo();
+
+                    // To draw explaination picture after skipping video
+                    hasVideo = false;
+                    startGame = true;
+
+                }
             }
         }
 
@@ -148,6 +218,21 @@ namespace TombOfAnubis
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
+            if (hasVideo)
+            {
+                if (!startTimeSet)
+                {
+                    startTimeSet = true;
+                    videoStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+                }
+                double diff = gameTime.TotalGameTime.TotalMilliseconds - videoStartTime;
+                if (diff > cooldownPeriod)
+                {
+                    skipCooldown = true;
+                }
+            }
+
+
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
             if (useButtonCooldown > 0)
@@ -159,20 +244,26 @@ namespace TombOfAnubis
             // off, it is time to actually perform the load.
             if (otherScreensAreGone && startGame)
             {
-                GameScreenManager.RemoveScreen(this);
+                afterSkipCooldown -= (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                Draw(gameTime);
 
-                foreach (GameScreen screen in screensToLoad)
+                if (afterSkipCooldown <= 0)
                 {
-                    if (screen != null)
-                    {
-                        GameScreenManager.AddScreen(screen);
-                    }
-                }
+                    GameScreenManager.RemoveScreen(this);
 
-                // Once the load has finished, we use ResetElapsedTime to tell
-                // the  game timing mechanism that we have just finished a very
-                // long frame, and that it should not try to catch up.
-                GameScreenManager.Game.ResetElapsedTime();
+                    foreach (GameScreen screen in screensToLoad)
+                    {
+                        if (screen != null)
+                        {
+                            GameScreenManager.AddScreen(screen);
+                        }
+                    }
+
+                    //// Once the load has finished, we use ResetElapsedTime to tell
+                    //// the  game timing mechanism that we have just finished a very
+                    //// long frame, and that it should not try to catch up.
+                    GameScreenManager.Game.ResetElapsedTime();
+                }
             }
         }
 
@@ -206,39 +297,32 @@ namespace TombOfAnubis
                 // Center the text in the viewport.
                 Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
 
-                string text;
-                float scale;
-                if (otherScreensAreGone)
+                if(hasVideo)
                 {
-                    text = readyText;
-                    scale = isGrowing ? (currScale + scaleStep) : (currScale - scaleStep);
-                    if (isGrowing)
+                    VideoController.Draw(spriteBatch, loadingPosition);
+
+                    if (otherScreensAreGone && skipCooldown)
                     {
-                        isGrowing = (scale < maxScale);
+                        Vector2 textDimension = font.MeasureString(readyText) * fontScale;
+                        Vector2 textPosition = new Vector2(viewport.Width - margin * viewport.Height - textDimension.X, (1 - margin) * viewport.Height - textDimension.Y);
+
+                        spriteBatch.Begin();
+                        spriteBatch.DrawString(font, readyText, textPosition, Color.Red, 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
+                        spriteBatch.End();
                     }
-                    else
-                    {
-                        isGrowing = (scale < 1.0f);
-                    }
-                    currScale = scale;
                 }
+
                 else
                 {
-                    text = loadingText;
-                    scale = 1.0f;
+                    Vector2 textDimension = font.MeasureString(readyText) * fontScale;
+                    Vector2 textPosition = new Vector2(viewport.Width - margin * viewport.Height - textDimension.X, (1 - margin) * viewport.Height - textDimension.Y);
+
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(loadingTexture, loadingPosition, Color.White);
+                    spriteBatch.DrawString(font, readyText, textPosition, Color.Red, 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
+                    spriteBatch.End();
                 }
 
-                Vector2 textDimension = font.MeasureString(text);
-
-                int posX = (int)(textArea.X + (textArea.Width) / 2);
-                int posY = (int)(textArea.Y + (textArea.Height) / 2);
-                Vector2 position = new Vector2(posX, posY);
-                Vector2 origin = textDimension / 2;
-
-                spriteBatch.Begin();
-                spriteBatch.Draw(loadingTexture, loadingPosition, Color.White);
-                spriteBatch.DrawString(font, text, position, Color.LawnGreen, 0f, origin, scale, SpriteEffects.None, 0f);
-                spriteBatch.End();
             }
         }
 

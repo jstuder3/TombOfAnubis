@@ -34,6 +34,19 @@ namespace TombOfAnubis
 
         }
 
+        public static void LoadBackstoryVideo(int numPlayers)
+        {
+            switch (numPlayers)
+            {
+                default: break;
+
+                case 1: if (!videos.ContainsKey(@"Content/Videos/Backstory1.mp4")) videos.Add(@"Content/Videos/Backstory1.mp4", VideoHelper.LoadFromFile(@"Content/Videos/Backstory1.mp4")); break;
+                case 2: if (!videos.ContainsKey(@"Content/Videos/Backstory2.mp4")) videos.Add(@"Content/Videos/Backstory2.mp4", VideoHelper.LoadFromFile(@"Content/Videos/Backstory2.mp4")); break;
+                case 3: if (!videos.ContainsKey(@"Content/Videos/Backstory3.mp4")) videos.Add(@"Content/Videos/Backstory3.mp4", VideoHelper.LoadFromFile(@"Content/Videos/Backstory3.mp4")); break;
+                case 4: if (!videos.ContainsKey(@"Content/Videos/Backstory4.mp4")) videos.Add(@"Content/Videos/Backstory4.mp4", VideoHelper.LoadFromFile(@"Content/Videos/Backstory4.mp4")); break;
+            }
+        }
+
         public static void LoadGameWonVideo(int numPlayers)
         {
             switch (numPlayers)

@@ -509,6 +509,54 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/LoadingScreen.png
 
+#begin Textures/Menu/LoadingScreen/BackstoryEnd1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/LoadingScreen/BackstoryEnd1.png
+
+#begin Textures/Menu/LoadingScreen/BackstoryEnd2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/LoadingScreen/BackstoryEnd2.png
+
+#begin Textures/Menu/LoadingScreen/BackstoryEnd3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/LoadingScreen/BackstoryEnd3.png
+
+#begin Textures/Menu/LoadingScreen/BackstoryEnd4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/LoadingScreen/BackstoryEnd4.png
+
 #begin Textures/Menu/LoginScreen/Controller.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1204,6 +1252,26 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Objects/UI/Item_slot_4.png
+
+#begin Videos/Backstory1.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/Backstory1.mp4
+
+#begin Videos/Backstory2.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/Backstory2.mp4
+
+#begin Videos/Backstory3.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/Backstory3.mp4
+
+#begin Videos/Backstory4.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Videos/Backstory4.mp4
 
 #begin Videos/CreditsScreen.mp4
 /importer:H264Importer
