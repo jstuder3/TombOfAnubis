@@ -10,7 +10,7 @@ namespace TombOfAnubis
 {
     public class AnubisRageEvent : WorldEvent
     {
-        public AnubisRageEvent() : base(12)
+        public AnubisRageEvent() : base(10)
         {
 
         }
@@ -33,7 +33,7 @@ namespace TombOfAnubis
 
     public class AnubisCastEvent : WorldEvent
     {
-        public AnubisCastEvent() : base(3)
+        public AnubisCastEvent() : base(2)
         {
 
         }
