@@ -28,11 +28,13 @@ namespace TombOfAnubis.GameScreens
         private List<PlayerInput> joinedPlayers;
 
         private string startDescription;
-        private Texture2D startButtonTexture;
+        private Texture2D startBackground;
 
         private Texture2D lineTexture;
         private Rectangle verticalLinePos, horizontalLinePos;
         private int playerFrameWidth, playerFrameHeight;
+
+        private Texture2D startButton;
 
         // Constants
         private Color lineColor = Color.White;
@@ -42,14 +44,17 @@ namespace TombOfAnubis.GameScreens
 
         private int lineThickness = 2;
 
-        // Sprite Scales
-        private float spriteScale = 0.7f;
-        private float keyboardScale = 0.4f, controllerScale = 0.3f;
-        private float instructionScale = 0.4f;
+        // Sprite & Font Scales
+        private float spriteScale = 1.0f;
+        private float keyboardScale = 0.5f, controllerScale = 0.5f;
+        private float instructionScale = 0.6f;
+        private float playerNumberScale = 1.4f;
+        private float startButtonScale = 0.3f;
 
         // Relative to playerFrame size
-        private float marginX = 0.03f, marginY = 0.03f;
-        private float startButtonHeightScale = 0.1f;
+        private float marginStartButton = 0.03f;
+        private float marginY = 0.03f;
+        private float startBarHeightScale = 0.1f;
 
 
         public LoginPlayersScreen() : base()
@@ -82,6 +87,20 @@ namespace TombOfAnubis.GameScreens
             controllerInput = content.Load<Texture2D>("Textures/Menu/LoginScreen/Controller");
             joinInstruction = content.Load<Texture2D>("Textures/Menu/LoginScreen/JoinInstruction");
 
+            PlayerInput firstPlayer = InputController.GetActiveInputs()[0];
+
+            switch (firstPlayer.UseKey)
+            {
+                default: startButton = content.Load<Texture2D>("Textures/Menu/LoginScreen/UseController"); break;
+
+                case Keys.E: startButton = content.Load<Texture2D>("Textures/Menu/LoginScreen/Use1"); break;
+                case Keys.Z: startButton = content.Load<Texture2D>("Textures/Menu/LoginScreen/Use2"); break;
+                case Keys.O: startButton = content.Load<Texture2D>("Textures/Menu/LoginScreen/Use3"); break;
+                case Keys.OemMinus: startButton = content.Load<Texture2D>("Textures/Menu/LoginScreen/Use4"); break;
+            }
+
+            //startButton = content.Load<Texture2D>()
+
             Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
             int screenWidth = viewport.Width;
             int screenHeight = viewport.Height;
@@ -97,8 +116,8 @@ namespace TombOfAnubis.GameScreens
             verticalLinePos = new Rectangle(playerFrameWidth, 0, lineThickness, screenHeight);
             horizontalLinePos = new Rectangle(0, playerFrameHeight, screenWidth, lineThickness);
 
-            startButtonTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1,1);
-            startButtonTexture.SetData(new[] { buttonColor });
+            startBackground = new Texture2D(GameScreenManager.GraphicsDevice, 1,1);
+            startBackground.SetData(new[] { buttonColor });
             startDescription = "Start With 1 Player";
         }
 
@@ -225,20 +244,20 @@ namespace TombOfAnubis.GameScreens
         {
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
-            Vector2 textLength = descriptionFont.MeasureString(playerNumber);
+            Vector2 textLength = descriptionFont.MeasureString(playerNumber) * playerNumberScale;
             int topMargin = (int) (marginY * playerFrameHeight);
             Vector2 textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, playerFrame.Y + topMargin);
-            spriteBatch.DrawString(descriptionFont, playerNumber, textPosition, Color.White);
+            spriteBatch.DrawString(descriptionFont, playerNumber, textPosition, Color.White, 0f, Vector2.Zero, playerNumberScale, SpriteEffects.None, 0f);
 
             int spriteWidth = (int)(playerSprite.Width * spriteScale);
             int spriteHeight = (int)(playerSprite.Height * spriteScale);
             int playerControlWidth = (int)(playerControl.Width * playerControlScale);
             int playerControlHeight = (int)(playerControl.Height * playerControlScale);
-            int offSetX = (int)(playerFrame.Width - (spriteWidth + playerControlWidth)) / 3;
-            int offsetY = (int)(playerFrame.Height - (textLength.Y + 2 * topMargin + spriteHeight)) / 2;
+            int offSetX = (int)((playerFrame.Width - (spriteWidth + playerControlWidth)) / 3);
+            int offsetY = (int)((playerFrame.Height - (textLength.Y + 2 * topMargin + spriteHeight)) / 2 + textLength.Y + topMargin);
             Vector2 spritePosition = new Vector2(playerFrame.X + offSetX, playerFrame.Y + offsetY);
 
-            offsetY = (int)(playerFrame.Height - (textLength.Y + 2 * topMargin + playerControlHeight)) / 2;
+            offsetY = (int)((playerFrame.Height - (textLength.Y + 2 * topMargin + playerControlHeight)) / 2 + textLength.Y + topMargin);
             Vector2 playerControlPosition =  new Vector2(spritePosition.X + offSetX + spriteWidth, playerFrame.Y + offsetY);
 
             spriteBatch.Draw(playerSprite, spritePosition, null, Color.White, 0f, Vector2.Zero, spriteScale, SpriteEffects.None, 0f);
@@ -247,14 +266,20 @@ namespace TombOfAnubis.GameScreens
             // Draw the start button only for player 1
             if(playerNumber.Equals("Player 1"))
             {
-                offsetY = (int)(playerFrame.Y + (1.0f - startButtonHeightScale) * playerFrame.Height);
-                int startButtonHeight = (int)(startButtonHeightScale * playerFrame.Height);
-                Rectangle startButtonPosition = new Rectangle(playerFrame.X, offsetY, playerFrame.Width, startButtonHeight);
-                spriteBatch.Draw(startButtonTexture, startButtonPosition, Color.White);
+                offsetY = (int)(playerFrame.Y + (1.0f - startBarHeightScale) * playerFrame.Height);
+                int startBarHeight = (int)(startBarHeightScale * playerFrame.Height);
+                Rectangle startBGPosition = new Rectangle(playerFrame.X, offsetY, playerFrame.Width, startBarHeight);
+                spriteBatch.Draw(startBackground, startBGPosition, Color.White);
 
                 textLength = descriptionFont.MeasureString(startDescription);
-                textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, offsetY + (startButtonHeight - textLength.Y)/2);
+                textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, offsetY + (startBarHeight - textLength.Y)/2);
                 spriteBatch.DrawString(descriptionFont, startDescription, textPosition, Color.White);
+
+                int rightMargin = (int)(playerFrame.Width * marginStartButton);
+                int offsetX = (int)(playerFrame.Width - (rightMargin + startButton.Width * startButtonScale));
+                offsetY += (int)((startBarHeight - startButton.Height * startButtonScale) / 2);
+                Vector2 startButtonPosition = new Vector2(offsetX, offsetY);
+                spriteBatch.Draw(startButton, startButtonPosition, null, Color.White, 0f, Vector2.Zero, startButtonScale, SpriteEffects.None, 0f);
             }
         }
     }
