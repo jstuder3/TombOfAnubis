@@ -38,6 +38,7 @@ namespace TombOfAnubis
 
         public bool TryUseItem()
         {
+            if(Session.GetInstance().AnubisAISystem.powerupsBlockedEvent) { return false; } //if Event powerupsBlocked, items can't be used
             return Item.TryUse();
         }
 

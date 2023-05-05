@@ -65,6 +65,9 @@ namespace TombOfAnubis
         private bool cmInitSucceeded = false;
         private Vector2 cmChosenPos = default;
 
+        //variables for blockPowerUpsEvent
+        public bool powerupsBlockedEvent = false;
+
 
         //True AI logic:
         private int randomTileNr = default;
@@ -139,6 +142,19 @@ namespace TombOfAnubis
             }
         }
 
+        public void activateBlockPowerups()
+        {
+            Debug.WriteLine("Event: powerups are deactivated");
+            this.powerupsBlockedEvent = true;
+        }
+
+        public void deactivateBlockPowerups()
+        {
+            
+            Debug.WriteLine("Event: powerups are activated again");
+            this.powerupsBlockedEvent = false;
+        }
+
         public bool rageModeActivated()
         {
             return this.rageMode;
@@ -198,8 +214,9 @@ namespace TombOfAnubis
 
         public void initiateCastMode()
         {
-            Debug.WriteLine("Event: CastMode inititated!!!");
+            
             AI ai = GetComponents().First();
+            
             //MovementGraph movementGraph = ai.MovementGraph;
             List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
@@ -227,7 +244,34 @@ namespace TombOfAnubis
                             this.cmChosenPos = player.TopLeftCornerPosition();
                             this.cmInitSucceeded = true;
                             succeededd = true;
+                            Debug.WriteLine("Event: CastMode inititated!!! cur anubis pos: " + ai.Entity.GetComponent<Transform>().Position + ", stored tele pos: " + this.cmChosenPos);
+
+                            /*
+                            //particles that are spawned at the new location to show an "impact"
+                            ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
+                            teleport_impact.LocalPosition = this.cmChosenPos;
+                            teleport_impact.RandomizedSpawnPositionRadius = 50f;
+                            teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
+                            teleport_impact.SpriteLayer = 1;
+                            teleport_impact.RandomizedTintMin = Color.DarkGray;
+                            teleport_impact.RandomizedTintMax = Color.Gray;
+                            teleport_impact.Scale = Vector2.One * 0.6f;
+                            teleport_impact.ScalingMode = ScalingMode.Constant;
+                            teleport_impact.InitialAlpha = 1f;
+                            teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                            teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                            teleport_impact.EmitterDuration = 0.10f;
+                            teleport_impact.ParticleDuration = 2f;
+                            teleport_impact.EmissionFrequency = 20f;
+                            teleport_impact.EmissionRate = 50f;
+                            teleport_impact.InitialSpeed = 150f;
+                            teleport_impact.SpawnDirection = new Vector2(0f, -1f);
+                            teleport_impact.SpawnConeDegrees = 360f;
+                            teleport_impact.Drag = 0.5f;
+                            */
                             return;
+                            
+
 
                         } else
                         {
@@ -246,11 +290,42 @@ namespace TombOfAnubis
         {
             if(this.cmInitSucceeded)
             {
-                Debug.WriteLine("Event: CastMode Execution");
+                
                 AI ai = GetComponents().First();
                 Entity anubis = ai.Entity;
                 Transform transform = anubis.GetComponent<Transform>();
+
+                
+
+                //set anubis position to the new location
                 transform.Position = this.cmChosenPos;
+
+                Debug.WriteLine("Event: CastMode Execution. new anuibs Pos: " + transform.Position);
+
+                //spawn particles at the new location
+                //particles that are spawned at the new location to show an "impact"
+                ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
+                teleport_impact.LocalPosition = cmChosenPos;
+                teleport_impact.RandomizedSpawnPositionRadius = 50f;
+                teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
+                teleport_impact.SpriteLayer = 1;
+                teleport_impact.RandomizedTintMin = Color.DarkGray;
+                teleport_impact.RandomizedTintMax = Color.Gray;
+                teleport_impact.Scale = Vector2.One * 0.6f;
+                teleport_impact.ScalingMode = ScalingMode.Constant;
+                teleport_impact.InitialAlpha = 1f;
+                teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                teleport_impact.EmitterDuration = 0.10f;
+                teleport_impact.ParticleDuration = 2f;
+                teleport_impact.EmissionFrequency = 20f;
+                teleport_impact.EmissionRate = 50f;
+                teleport_impact.InitialSpeed = 150f;
+                teleport_impact.SpawnDirection = new Vector2(0f, -1f);
+                teleport_impact.SpawnConeDegrees = 360f;
+                teleport_impact.Drag = 0.5f;
+
+                Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_impact));
             }
         }
 

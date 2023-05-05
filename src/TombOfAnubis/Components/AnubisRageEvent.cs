@@ -55,4 +55,27 @@ namespace TombOfAnubis
             base.Update(gameTime);
         }
     }
+
+    public class AnubisBlockPowerups : WorldEvent
+    {
+        public AnubisBlockPowerups() : base(7)
+        {
+
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            Session.GetInstance().AnubisAISystem.activateBlockPowerups();
+        }
+        public override void Stop()
+        {
+            base.Stop();
+            Session.GetInstance().AnubisAISystem.deactivateBlockPowerups();
+        }
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+    }
 }
