@@ -1,6 +1,7 @@
 ﻿using System; using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static System.Collections.Specialized.BitVector32;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TombOfAnubis
@@ -207,6 +208,7 @@ namespace TombOfAnubis
                 artefact.Delete();
                 AudioController.PlaySoundEffect("artefactPickup");
                 Debug.WriteLine("Player " + playerID + " collected an artefact!");
+                PlayFastSoundtrack();
                 return;
             }
 
@@ -518,6 +520,30 @@ namespace TombOfAnubis
             //execute overlap correction
             actorTransform.Position += overlap;
             actorCollider.Position += overlap;
+        }
+
+        private static int GetNumCollectedArtefacts()
+        {
+            int collected = 0;
+            foreach (Character character in Session.GetInstance().World.GetChildrenOfType<Character>())
+            {
+                if (character.GetComponent<Inventory>().HasArtefact())
+                {
+                    collected++;
+                }
+            }
+            return collected;
+        }
+
+        private static void PlayFastSoundtrack()
+        {
+            int collectedArtefacts = GetNumCollectedArtefacts();
+            int numPlayers = Session.GetInstance().World.GetChildrenOfType<Character>().Count;
+
+            if (collectedArtefacts == (int)Math.Ceiling((float)numPlayers / 2))
+            {
+                AudioController.PlaySong("gameFastTrack");
+            }
         }
     }
 }
