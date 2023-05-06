@@ -354,8 +354,7 @@ namespace TombOfAnubis.MenuScreens
                             }
                         case SettingsType.SaveButton: 
                             {
-                                ExitScreen();
-                                GameScreenManager.AddScreen(new MainMenuScreen());
+                                GameScreenManager.RemoveScreen(this);
                                 break;
                             }
                         default: { break; }

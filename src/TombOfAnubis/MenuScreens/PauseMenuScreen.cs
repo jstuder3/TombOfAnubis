@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Framework.Media;
 using MonoGame.Extended.VideoPlayback;
+using TombOfAnubis.MenuScreens;
 
 namespace TombOfAnubis
 {
@@ -23,14 +24,14 @@ namespace TombOfAnubis
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
-        private float titleScale = 0.6f;
+        private float titleScale = 0.5f;
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.4f;
         private static List<AnimationClip> activeScrollAnimation;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
-        private float marginY = 0.04f;
+        private float marginX = 0.25f, marginY = 0.04f;
 
         #endregion
 
@@ -38,7 +39,7 @@ namespace TombOfAnubis
         #region Menu Entries
 
 
-        MenuEntry resumeMenuEntry, restartMenuEntry, endGameMenuEntry;
+        MenuEntry resumeMenuEntry, restartMenuEntry, instructionsMenuEntry, endGameMenuEntry;
 
 
         #endregion
@@ -66,6 +67,12 @@ namespace TombOfAnubis
             restartMenuEntry.Font = Fonts.DisneyHeroicFont;
             restartMenuEntry.Selected += RestartMenuEntrySelected;
             MenuEntries.Add(restartMenuEntry);
+
+            // Create the  Instructions entry
+            instructionsMenuEntry = new MenuEntry("Instructions");
+            instructionsMenuEntry.Font = Fonts.DisneyHeroicFont;
+            instructionsMenuEntry.Selected += InstructionsMenuEntrySelected;
+            MenuEntries.Add(instructionsMenuEntry);
 
             // Create the Exit menu entry
             endGameMenuEntry = new MenuEntry("Main Menu");
@@ -131,21 +138,22 @@ namespace TombOfAnubis
             float textureHeight = ((float)scrollTextureHeight / screenHeight) * scrollTextureScale;
 
             // Center the title according to the screen width
-            float titleOffsetX = (1.0f - titleWidth) / 2;
+            //float titleOffsetX = (1.0f - titleWidth) / 2;
+            float titleOffsetX = marginX + (textureWidth - titleWidth) / 2;
             titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
 
             // Center the UI element according to the screen width
             float textureOffsetX = (1.0f - textureWidth) / 2;
             // The first MenuEntry element is drawn at this relative vertical coordinate
-            float entryStart = titleHeight + marginY + textureHeight / 2;
+            float entryStart = titleHeight + 2.5f * marginY;
 
             for (int i = 0; i < MenuEntries.Count; i++)
             {
-                float entrySpacing = (i == 0) ? 0.0f : i * textureHeight;
+                float entrySpacing = i * textureHeight;
 
                 float offsetY = entryStart + entrySpacing;
 
-                MenuEntries[i].Position = GetRelativePosition(viewport, textureOffsetX, offsetY);
+                MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
             }
         }
 
@@ -186,6 +194,14 @@ namespace TombOfAnubis
             }
             Session.EndSession();
             LoadingScreen.LoadAtRestart(GameScreenManager, true, new GameplayScreen(gameStartDescription));
+        }
+
+        /// <summary>
+        /// Event handler for when the Controls menu entry is selected.
+        /// </summary>
+        void InstructionsMenuEntrySelected(object sender, EventArgs e)
+        {
+            GameScreenManager.AddScreen(new InstructionScreen(false));
         }
 
         /// <summary>

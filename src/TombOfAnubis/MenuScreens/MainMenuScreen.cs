@@ -42,7 +42,7 @@ namespace TombOfAnubis
 
         private Vector2 titlePosition;
         private Texture2D titleTexture;
-        private float titleScale = 0.6f;
+        private float titleScale = 0.5f;
 
         private SpriteFont menuFont;
 
@@ -79,7 +79,7 @@ namespace TombOfAnubis
         #region Menu Entries
 
 
-        MenuEntry newGameMenuEntry, settingsMenuEntry, quitMenuEntry;
+        MenuEntry newGameMenuEntry, settingsMenuEntry, instructionsMenuEntry, quitMenuEntry;
 
        
         #endregion
@@ -109,6 +109,11 @@ namespace TombOfAnubis
             settingsMenuEntry = new MenuEntry("Settings");
             settingsMenuEntry.Selected += SettingsMenuEntrySelected;
             MenuEntries.Add(settingsMenuEntry);
+
+            // Create the  Instructions entry
+            instructionsMenuEntry = new MenuEntry("Instructions");
+            instructionsMenuEntry.Selected += InstructionsMenuEntrySelected;
+            MenuEntries.Add(instructionsMenuEntry);
 
             // Create the Quit game entry
             quitMenuEntry = new MenuEntry("Quit");
@@ -188,7 +193,7 @@ namespace TombOfAnubis
             titlePosition = GetRelativePosition(viewport, titleOffsetX, marginY);
 
             // The first MenuEntry element is drawn at this relative vertical coordinate
-            float entryStart = titleHeight + 3 * marginY;
+            float entryStart = titleHeight + 2.5f * marginY;
 
             for (int i = 0; i < MenuEntries.Count; i++)
             {
@@ -244,6 +249,14 @@ namespace TombOfAnubis
         void SettingsMenuEntrySelected(object sender, EventArgs e)
         {
             GameScreenManager.AddScreen(new SettingsScreen());
+        }
+
+        /// <summary>
+        /// Event handler for when the Controls menu entry is selected.
+        /// </summary>
+        void InstructionsMenuEntrySelected(object sender, EventArgs e)
+        {
+            GameScreenManager.AddScreen(new InstructionScreen(true));
         }
 
         /// <summary>

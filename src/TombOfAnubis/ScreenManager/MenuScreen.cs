@@ -167,6 +167,11 @@ namespace TombOfAnubis
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+
+            if(ScreenState == ScreenState.Hidden)
+            {
+                buttonPressed = true;
+            }
             
             // Update button cooldown.
             if (buttonPressed)
@@ -178,7 +183,7 @@ namespace TombOfAnubis
             if (buttonCooldown) // enough time elapsed since last pressed
             {
                 TimeSpan diff = gameTime.TotalGameTime - lastPressed;
-                if (diff.TotalMilliseconds > 250)
+                if (diff.TotalMilliseconds > 300)
                 {
                     buttonCooldown = false;
                 }
