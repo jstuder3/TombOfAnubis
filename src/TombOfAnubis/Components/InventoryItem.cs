@@ -263,7 +263,7 @@ namespace TombOfAnubis
                     
 
                     ItemType = ItemType.None;
-                    Debug.WriteLine("Used HidingCloak!");
+                    Debug.WriteLine("Used LocationReveal!");
                     break;
                 case ItemType.Teleport:
                     //Entity.AddComponent(new GameplayEffect(EffectType.LinearAutoMove, 5f, 100f, new Vector2(1f, -1f), Visibility.Both));

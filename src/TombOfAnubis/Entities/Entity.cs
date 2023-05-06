@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 
 namespace TombOfAnubis
@@ -39,24 +41,22 @@ namespace TombOfAnubis
         /// </summary>
         public void Delete()
         {
-
-            /*foreach(GameplayEffect gameplayEffect in GetComponentsOfType<GameplayEffect>())
+            if (components != null)
             {
-                gameplayEffect.Delete();
-                components.Remove(gameplayEffect);
-            }*/
+                foreach (Component component in components)
+                {
+                    component.Delete();
+                }
 
-            //components.Remove(GetComponentsOfType<GameplayEffect>());
-
-            foreach (Component component in components)
-            {
-                component.Delete();
+                components.Clear();
+                components = null;
             }
-
-            components.Clear();
-            components = null;
-
+            List<Entity> childrenToRemove = new List<Entity>();
             foreach (Entity child in children)
+            {
+                childrenToRemove.Add(child);
+            }
+            foreach (Entity child in childrenToRemove)
             {
                 child.Delete();
             }
@@ -85,6 +85,60 @@ namespace TombOfAnubis
             return false;
         }
 
+        public void DeleteChildrenOfType(Type type)
+        {
+            List<Entity> foundChildren = new List<Entity>();
+            foreach (Entity entity in children)
+            {
+                if (entity.GetType().Equals(type))
+                {
+                    foundChildren.Add(entity);
+                }
+            }
+            foreach(Entity child in foundChildren)
+            {
+                children.Remove(child);
+                child.Delete();
+            }
+        }
+
+        public void DeleteChildrenExcept( List<Type> exceptions)
+        {
+            HashSet<Type> childrenTypes = new HashSet<Type>();
+            foreach (Entity child in children)
+            {
+                if (!exceptions.Contains(child.GetType()))
+                {
+                    childrenTypes.Add(child.GetType());
+                }
+            }
+            foreach (Type type in childrenTypes)
+            {
+                List<Entity> foundChildren = new List<Entity>();
+                foreach (Entity entity in children)
+                {
+                    if (entity.GetType().Equals(type))
+                    {
+                        if (entity.GetType().Equals(typeof(Particle)))
+                        {
+                            if (!exceptions.Contains(((Particle)entity).ParentEmitter.Entity.GetType()))
+                            {
+                                foundChildren.Add(entity);
+                            }
+                        }
+                        else
+                        {
+                            foundChildren.Add(entity);
+                        }
+                    }
+                }
+                foreach (Entity child in foundChildren)
+                {
+                    children.Remove(child);
+                    child.Delete();
+                }
+            }
+        }
         public List<T> GetChildrenOfType<T>() where T : Entity
         {
             List<T> foundChildren = new List<T>();

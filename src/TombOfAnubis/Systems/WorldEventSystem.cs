@@ -53,6 +53,7 @@ namespace TombOfAnubis
                 }
                 else
                 {
+                    currentEvent.Progress = Math.Min(1.0f, currentEventElapsedSeconds / currentEvent.Duration);
                     currentEvent.Update(gameTime);
                 }
             }

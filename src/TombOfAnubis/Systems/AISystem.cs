@@ -19,12 +19,10 @@ namespace TombOfAnubis
 
     public class AISystem : BaseSystem<AI>
     {
-        public World World { get; set; }
 
         public AnubisBehaviour AnubisBehaviour { get; set; }
-        public AISystem(World world, AnubisBehaviour anubisBehaviour)
+        public AISystem(AnubisBehaviour anubisBehaviour)
         {
-            World = world;
             AnubisBehaviour = anubisBehaviour;
         }
 
@@ -67,6 +65,9 @@ namespace TombOfAnubis
         private bool cmInitSucceeded = false;
         private Vector2 cmChosenPos = default;
 
+        //variables for blockPowerUpsEvent
+        public bool powerupsBlockedEvent = false;
+
 
         //True AI logic:
         private int randomTileNr = default;
@@ -90,7 +91,7 @@ namespace TombOfAnubis
         {
             Entity entity = ai.Entity;
             //Transform transform = entity.GetComponent<Transform>();
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             //Anubis:
             Vector2 positionAnubis = entity.TopLeftCornerPosition();
@@ -139,6 +140,19 @@ namespace TombOfAnubis
                 this.timeAccumulatorMiliSec = 0;
 
             }
+        }
+
+        public void activateBlockPowerups()
+        {
+            Debug.WriteLine("Event: powerups are deactivated");
+            this.powerupsBlockedEvent = true;
+        }
+
+        public void deactivateBlockPowerups()
+        {
+            
+            Debug.WriteLine("Event: powerups are activated again");
+            this.powerupsBlockedEvent = false;
         }
 
         public bool rageModeActivated()
@@ -200,10 +214,11 @@ namespace TombOfAnubis
 
         public void initiateCastMode()
         {
-            Debug.WriteLine("Event: CastMode inititated!!!");
+            
             AI ai = GetComponents().First();
+            
             //MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             int countNVisible = 0;
             foreach (Character player in characters)
@@ -229,7 +244,34 @@ namespace TombOfAnubis
                             this.cmChosenPos = player.TopLeftCornerPosition();
                             this.cmInitSucceeded = true;
                             succeededd = true;
+                            Debug.WriteLine("Event: CastMode inititated!!! cur anubis pos: " + ai.Entity.GetComponent<Transform>().Position + ", stored tele pos: " + this.cmChosenPos);
+
+                            /*
+                            //particles that are spawned at the new location to show an "impact"
+                            ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
+                            teleport_impact.LocalPosition = this.cmChosenPos;
+                            teleport_impact.RandomizedSpawnPositionRadius = 50f;
+                            teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
+                            teleport_impact.SpriteLayer = 1;
+                            teleport_impact.RandomizedTintMin = Color.DarkGray;
+                            teleport_impact.RandomizedTintMax = Color.Gray;
+                            teleport_impact.Scale = Vector2.One * 0.6f;
+                            teleport_impact.ScalingMode = ScalingMode.Constant;
+                            teleport_impact.InitialAlpha = 1f;
+                            teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                            teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                            teleport_impact.EmitterDuration = 0.10f;
+                            teleport_impact.ParticleDuration = 2f;
+                            teleport_impact.EmissionFrequency = 20f;
+                            teleport_impact.EmissionRate = 50f;
+                            teleport_impact.InitialSpeed = 150f;
+                            teleport_impact.SpawnDirection = new Vector2(0f, -1f);
+                            teleport_impact.SpawnConeDegrees = 360f;
+                            teleport_impact.Drag = 0.5f;
+                            */
                             return;
+                            
+
 
                         } else
                         {
@@ -248,11 +290,42 @@ namespace TombOfAnubis
         {
             if(this.cmInitSucceeded)
             {
-                Debug.WriteLine("Event: CastMode Execution");
+                
                 AI ai = GetComponents().First();
                 Entity anubis = ai.Entity;
                 Transform transform = anubis.GetComponent<Transform>();
+
+                
+
+                //set anubis position to the new location
                 transform.Position = this.cmChosenPos;
+
+                Debug.WriteLine("Event: CastMode Execution. new anuibs Pos: " + transform.Position);
+
+                //spawn particles at the new location
+                //particles that are spawned at the new location to show an "impact"
+                ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
+                teleport_impact.LocalPosition = cmChosenPos;
+                teleport_impact.RandomizedSpawnPositionRadius = 50f;
+                teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
+                teleport_impact.SpriteLayer = 1;
+                teleport_impact.RandomizedTintMin = Color.DarkGray;
+                teleport_impact.RandomizedTintMax = Color.Gray;
+                teleport_impact.Scale = Vector2.One * 0.6f;
+                teleport_impact.ScalingMode = ScalingMode.Constant;
+                teleport_impact.InitialAlpha = 1f;
+                teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
+                teleport_impact.EmitterDuration = 0.10f;
+                teleport_impact.ParticleDuration = 2f;
+                teleport_impact.EmissionFrequency = 20f;
+                teleport_impact.EmissionRate = 50f;
+                teleport_impact.InitialSpeed = 150f;
+                teleport_impact.SpawnDirection = new Vector2(0f, -1f);
+                teleport_impact.SpawnConeDegrees = 360f;
+                teleport_impact.Drag = 0.5f;
+
+                Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_impact));
             }
         }
 
@@ -966,7 +1039,7 @@ namespace TombOfAnubis
         public int GetDistToclosestPlayer(AI ai, Vector2 positionAnubis)
         {
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
             int nodeIdAnubis = movementGraph.ToNodeID(positionAnubis);
             int minDist = 999999;
 
@@ -990,7 +1063,7 @@ namespace TombOfAnubis
         public Tuple<bool,Character> GetClosestPlayer(AI ai, Vector2 anubisPosition)
         {
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
             int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
             int closestPlayerDist = 999999;
@@ -1022,7 +1095,7 @@ namespace TombOfAnubis
         {
             //Debug.WriteLine("cur no tailed player, try to change now");
             MovementGraph movementGraph = ai.MovementGraph;
-            List<Character> characters = World.GetChildrenOfType<Character>();
+            List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
 
 
             int nodeIdAnubis = movementGraph.ToNodeID(anubisPosition);
@@ -1186,8 +1259,8 @@ namespace TombOfAnubis
                 if (!movement.CanMove()) continue;
 
                 MovementGraph movementGraph = ai.MovementGraph;
-                List<Character> characters = World.GetChildrenOfType<Character>();
-                List<Artefact> artefacts = World.GetChildrenOfType<Artefact>();
+                List<Character> characters = Session.GetInstance().World.GetChildrenOfType<Character>();
+                List<Artefact> artefacts = Session.GetInstance().World.GetChildrenOfType<Artefact>();
 
                 RectangleCollider collider = entity.GetComponent<RectangleCollider>();
 

@@ -10,6 +10,7 @@ namespace TombOfAnubis
     {
         private static ContentManager content;
         private static List<Entity> entities;
+        public static List<Type> DoNotSpawnTypes { get; set; } = new List<Type>();
         public static void Initialize(ContentManager _content)
         {
             content = _content;
@@ -23,7 +24,7 @@ namespace TombOfAnubis
             foreach (EntityDescription entityDescription in EntityDescriptions)
             {
                 Type t = Type.GetType(entityDescription.ClassName);
-                if(t == typeof(Character))
+                if(t == typeof(Character) && !DoNotSpawnTypes.Contains(t))
                 {
                     Enum.TryParse(entityDescription.Type, out CharacterType type);
                     if ((int)type < Session.GetInstance().NumberOfPlayers)
@@ -31,22 +32,22 @@ namespace TombOfAnubis
                         entities.Add(SpawnCharacter(entityDescription));
                     }
                 }
-                else if(t == typeof(Artefact)) {
+                else if(t == typeof(Artefact) && !DoNotSpawnTypes.Contains(t)) {
                     entities.Add(SpawnArtefact(entityDescription));
                 }
-                else if (t == typeof(Dispenser)) {
+                else if (t == typeof(Dispenser) && !DoNotSpawnTypes.Contains(t)) {
                     entities.Add(SpawnDispenser(entityDescription));
                 }
-                else if (t == typeof(Anubis)) {
+                else if (t == typeof(Anubis) && !DoNotSpawnTypes.Contains(t)) {
                     entities.Add(SpawnAnubis(entityDescription));
                 }
-                else if (t == typeof(Altar)) {
+                else if (t == typeof(Altar) && !DoNotSpawnTypes.Contains(t)) {
                     entities.Add(SpawnAltar(entityDescription));
                 }
-                else if (t == typeof(Trap)) {
+                else if (t == typeof(Trap) && !DoNotSpawnTypes.Contains(t)) {
                     entities.Add(SpawnTrap(entityDescription));
                 }
-                else if (t == typeof(Button)) {
+                else if (t == typeof(Button) && !DoNotSpawnTypes.Contains(t)) {
                     entities.Add(SpawnButton(entityDescription));
                 }
             }

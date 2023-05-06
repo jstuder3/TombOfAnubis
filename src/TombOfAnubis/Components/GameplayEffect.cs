@@ -140,8 +140,15 @@ namespace TombOfAnubis {
                     // move entity in the given direction every update (note that direction is normalized)
                     CheckHasFloatParameters(1);
                     CheckHasVectorParameters(1);
-                    effectVectorParameters[0].Normalize();
-                    Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (effectVectorParameters[0] != Vector2.Zero)
+                    {
+                        effectVectorParameters[0].Normalize();
+                        Entity.GetComponent<Transform>().Position += effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("You fed a zero vector to LinearAutoMove. Feeding a zero vector to LinearAutoMove is completely useless and should be avoided!");
+                    }
                     //Debug.WriteLine("AutoMoved by " + effectVectorParameters[0] * effectFloatParameters[0] * (float)gameTime.ElapsedGameTime.TotalSeconds + " units. New position: " + Entity.GetComponent<Transform>().Position);
                     break;
                 case EffectType.Lifetime:
@@ -294,7 +301,8 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.Lifetime:
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
-                    if (startTime < endTime) { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
+                    if (startTime < endTime)
+                    { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
                         //do nothing
                     }
                     else
@@ -314,7 +322,11 @@ namespace TombOfAnubis {
                     Entity.GetComponent<Sprite>().Alpha = 1f;
                     break;
                 case EffectType.OnCooldown:
-                     ((ICooldown)Entity).EndCooldown();
+                    // if the effect is deleted ahead of time, we don't want to add or remove other components to the entity (Which endCooldown does). This can cause errors when deleting the entity.
+                    if (startTime >= endTime)
+                    {
+                        ((ICooldown)Entity).EndCooldown();
+                    }
                     break;
                 case EffectType.TeleportPreview:
                     if (teleportPreviewEmitter != null)

@@ -6,7 +6,7 @@ namespace TombOfAnubis
 {
     public class CollisionSystem : BaseSystem<Collider>
     {
-        public static HashSet<Tuple<Collider, Collider>> SkippedCollisions;
+        public static HashSet<Tuple<Collider, Collider>> SkippedCollisions = new HashSet<Tuple<Collider, Collider>>();
         public static List<Collider> StaticColliders = new List<Collider>();
         public static List<Collider> DynamicColliders = new List<Collider>();
 
