@@ -154,6 +154,7 @@ namespace TombOfAnubis
             for (int playerIdx = 0; playerIdx < SplitScreen.NumberOfPlayers; playerIdx++)
             {
                 Viewport viewport = SplitScreen.SetViewport(playerIdx);
+                Debug.WriteLine("Player Viewport:" + viewport);
 
                 Session.SetViewport(viewport);
                 Session.SetFocusOnPlayer(playerIdx);

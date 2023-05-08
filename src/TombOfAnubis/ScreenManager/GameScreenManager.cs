@@ -76,6 +76,7 @@ namespace TombOfAnubis
         /// </summary>
         public override void Update(GameTime gameTime)
         {
+            SetViewport();
             // Make a copy of the master screen list, to avoid confusion if
             // the process of updating one screen adds or removes others.
             _screensToUpdate.Clear();
@@ -203,6 +204,11 @@ namespace TombOfAnubis
         public void ExitGame()
         {
             _game.Exit();
+        }
+
+        public void SetViewport()
+        {
+            GraphicsDevice.Viewport = TombOfAnubis.resizer.Viewport;
         }
 
     }

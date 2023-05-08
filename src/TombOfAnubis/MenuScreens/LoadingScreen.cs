@@ -52,6 +52,7 @@ namespace TombOfAnubis
 
         #region Graphics Data
 
+        Viewport viewport;
 
         private Texture2D loadingTexture;
         private Rectangle loadingPosition;
@@ -100,6 +101,8 @@ namespace TombOfAnubis
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
 
             this.hasVideo = hasVideo;
+
+            Debug.WriteLine("Viewport LoginScreen:" + screenManager.GraphicsDevice.Viewport);
         }
 
 
@@ -145,7 +148,8 @@ namespace TombOfAnubis
         public override void LoadContent()
         {
             ContentManager content = GameScreenManager.Game.Content;
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+            viewport = GameScreenManager.GraphicsDevice.Viewport;
+            Debug.WriteLine("LoadingScreen Viewport:" + viewport);
             numPlayers = InputController.GetActiveInputs().Count;
             font = Fonts.SettingsTitleFont;
 
@@ -295,7 +299,6 @@ namespace TombOfAnubis
                 SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
                 // Center the text in the viewport.
-                Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
 
                 if(hasVideo)
                 {

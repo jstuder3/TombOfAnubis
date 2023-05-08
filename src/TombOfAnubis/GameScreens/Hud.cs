@@ -47,6 +47,7 @@ namespace TombOfAnubis
         {
             graphics = graphicsDevice;
             viewport = graphics.Viewport;
+            Debug.WriteLine("Hud Viewport:" + viewport);
             session = Session.GetInstance();
             characterViewports = SplitScreen.PlayerViewports;
             minimapBackground = new Texture2D(graphicsDevice, 1, 1);

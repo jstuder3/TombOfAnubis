@@ -350,6 +350,7 @@ namespace TombOfAnubis.MenuScreens
                             {
                                 entry.TickBoxStatus = !entry.TickBoxStatus;
                                 TombOfAnubis.resizer.ToggleFullscreen();
+                                GameScreenManager.SetViewport();
                                 break;
                             }
                         case SettingsType.SaveButton: 
