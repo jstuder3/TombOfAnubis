@@ -100,27 +100,37 @@ namespace TombOfAnubis
                 // Move to the previous menu entry
                 if (InputController.IsUpTriggered())
                 {
+                    buttonPressed = true;
                     AudioController.PlaySoundEffect("menuSelect");
                     selectedEntry--;
                     if (selectedEntry < 0)
                         selectedEntry = menuEntries.Count - 1;
-                    buttonPressed = true;
                 }
 
                 // Move to the next menu entry
                 if (InputController.IsDownTriggered())
                 {
+                    buttonPressed = true;
                     AudioController.PlaySoundEffect("menuSelect");
                     selectedEntry = (selectedEntry + 1) % menuEntries.Count;
-                    buttonPressed = true;
                 }
 
                 // Button pressed
                 if (InputController.IsUseTriggered())
                 {
-                    AudioController.PlaySoundEffect("menuAccept");
-                    OnSelectEntry(selectedEntry);
                     buttonPressed = true;
+                    AudioController.PlaySoundEffect("menuAccept");
+
+                    foreach (PlayerInput playerInput in InputController.GetActiveInputs())
+                    {
+                        if (playerInput.UseTriggered())
+                        {
+                            InputController.AddCooldown(playerInput.UseKey, playerInput.UseButton, 250);
+                        }
+                    }
+
+                    OnSelectEntry(selectedEntry);
+
                 }
             }
 
@@ -183,7 +193,7 @@ namespace TombOfAnubis
             if (buttonCooldown) // enough time elapsed since last pressed
             {
                 TimeSpan diff = gameTime.TotalGameTime - lastPressed;
-                if (diff.TotalMilliseconds > 300)
+                if (diff.TotalMilliseconds > 250)
                 {
                     buttonCooldown = false;
                 }
