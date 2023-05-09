@@ -15,7 +15,7 @@
 	  <TorchProbability>0.3</TorchProbability>
 	  <EntityProperties>
 		  <MaxCharacterMovementSpeed>400</MaxCharacterMovementSpeed>
-		  <MaxAnubisMovementSpeed>280</MaxAnubisMovementSpeed>
+		  <MaxAnubisMovementSpeed>320</MaxAnubisMovementSpeed>
 	  </EntityProperties>
 	  <MapBlockDescriptions>
 		  <Item>
