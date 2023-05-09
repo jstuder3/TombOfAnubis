@@ -120,10 +120,11 @@ namespace TombOfAnubis
             {
                 AI ai = GetComponents().First();
                 Entity entity = ai.Entity;
-                int msIncreasage = (int)(this.timeAccumulatorMiliSec / 100.0);
+                int msIncreasage = (int)(this.timeAccumulatorMiliSec / 50.0);
+                //msIncreasage *= 2;
                 entity.GetComponent<Movement>().BaseMovementSpeed += msIncreasage;
                 this.increaseMsoverTimeAccumulation += msIncreasage;
-                this.timeAccumulatorMiliSec = this.timeAccumulatorMiliSec % 100;
+                this.timeAccumulatorMiliSec = this.timeAccumulatorMiliSec % 50;
             }
         }
 
