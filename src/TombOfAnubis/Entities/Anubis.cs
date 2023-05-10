@@ -70,7 +70,7 @@ namespace TombOfAnubis
             AddComponent(new ParticleEmitter(pec));
 
             //slow anubis down at the start of the game
-            AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.5f, Visibility.Both));
+            AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.001f, Visibility.Both));
             AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 10f, 0.5f, Visibility.Both));
 
         }
