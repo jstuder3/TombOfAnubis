@@ -121,7 +121,14 @@ namespace TombOfAnubis
                 AI ai = GetComponents().First();
                 Entity entity = ai.Entity;
                 int msIncreasage = (int)(this.timeAccumulatorMiliSec / 50.0);
-                //msIncreasage *= 2;
+
+                //nerf tialingMSIncreasage if playing solo
+                int nPlayers = Session.GetInstance().World.GetChildrenOfType<Character>().Count();
+                if (nPlayers == 1)
+                {
+                    msIncreasage /= 2;
+                }
+
                 entity.GetComponent<Movement>().BaseMovementSpeed += msIncreasage;
                 this.increaseMsoverTimeAccumulation += msIncreasage;
                 this.timeAccumulatorMiliSec = this.timeAccumulatorMiliSec % 50;
