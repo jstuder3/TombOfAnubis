@@ -127,7 +127,7 @@ namespace TombOfAnubis
                 if (nPlayers == 1)
                 {
                     msIncreasage /= 2;
-                }
+                }               
 
                 entity.GetComponent<Movement>().BaseMovementSpeed += msIncreasage;
                 this.increaseMsoverTimeAccumulation += msIncreasage;
@@ -179,23 +179,23 @@ namespace TombOfAnubis
             AI ai = GetComponents().First();
             Entity entity = ai.Entity;
 
-            //increase maxspeed:
-            //entity.GetComponent<Movement>().BaseMovementSpeed += 50;
-
+            //increase asnubis stats (ms & tailing):
             this.rageMode = true;
             entity.AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, 100f, Visibility.Both));
             this.MaxTailDistance += 4;
             this.DetailDistance += 2;
 
             //change anubis particles to red
+            
             ParticleEmitter Emitter = entity.GetComponent<ParticleEmitter>();
             ParticleEmitterConfiguration pec = Emitter.EmitterConfiguration;
             pec.RandomizedTintMin = Color.DarkRed;
             pec.RandomizedTintMax = Color.DarkGray;
-            Emitter.EndEmitter(); 
+            //do not pause standart anubis particle effects but temporary spawn red ones with base effect
+            //Emitter.EndEmitter(); 
             this.rageModeParticlesEmitter = new ParticleEmitter(pec);
             entity.AddComponent(rageModeParticlesEmitter);
-
+            
 
 
             Debug.WriteLine("AI: RRRRRRagemode activated");
@@ -217,6 +217,7 @@ namespace TombOfAnubis
             this.MaxTailDistance -= 4;
             this.DetailDistance -= 2;
             this.rageModeParticlesEmitter.EndEmitter();
+
             Debug.WriteLine("AI: Ragemode deactivated");
         }
 
