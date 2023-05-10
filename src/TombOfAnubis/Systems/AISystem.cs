@@ -255,33 +255,40 @@ namespace TombOfAnubis
                             succeededd = true;
                             Debug.WriteLine("Event: CastMode inititated!!! cur anubis pos: " + ai.Entity.GetComponent<Transform>().Position + ", stored tele pos: " + this.cmChosenPos);
 
-                            /*
-                            //particles that are spawned at the new location to show an "impact"
-                            ParticleEmitterConfiguration teleport_impact = new ParticleEmitterConfiguration();
-                            teleport_impact.LocalPosition = this.cmChosenPos;
-                            teleport_impact.RandomizedSpawnPositionRadius = 50f;
-                            teleport_impact.Texture = ParticleTextureLibrary.BasicParticle;
-                            teleport_impact.SpriteLayer = 1;
-                            teleport_impact.RandomizedTintMin = Color.DarkGray;
-                            teleport_impact.RandomizedTintMax = Color.Gray;
-                            teleport_impact.Scale = Vector2.One * 0.6f;
-                            teleport_impact.ScalingMode = ScalingMode.Constant;
-                            teleport_impact.InitialAlpha = 1f;
-                            teleport_impact.AlphaMode = AlphaMode.LinearDecreaseToZero;
-                            teleport_impact.RelativeScaleVariation = new Vector2(0.9f, 0.9f);
-                            teleport_impact.EmitterDuration = 0.10f;
-                            teleport_impact.ParticleDuration = 2f;
-                            teleport_impact.EmissionFrequency = 20f;
-                            teleport_impact.EmissionRate = 50f;
-                            teleport_impact.InitialSpeed = 150f;
-                            teleport_impact.SpawnDirection = new Vector2(0f, -1f);
-                            teleport_impact.SpawnConeDegrees = 360f;
-                            teleport_impact.Drag = 0.5f;
-                            */
+                            //add particle effect at teleport target location  (code copied from ragemode)
+                            //floating particles
+                            ParticleEmitterConfiguration pec = new ParticleEmitterConfiguration();
+                            pec.LocalPosition = this.cmChosenPos + new Vector2(25f, 100f);
+                            pec.RandomizedSpawnPositionRadius = 50f;
+                            //doesn't work yet
+                            pec.ParticlesMoveWithEntity = false;
+                            pec.Texture = ParticleTextureLibrary.BasicParticle;
+                            pec.SpriteLayer = 1;
+                            pec.InitialAlpha = 0.5f;
+                            pec.AlphaMode = AlphaMode.LinearDecreaseToZero;
+                            pec.RandomizedTintMin = Color.DarkRed;
+                            pec.RandomizedTintMax = Color.DarkGray;
+                            pec.Scale = Vector2.One * 0.4f;
+                            pec.ScalingMode = ScalingMode.Constant;
+                            pec.RelativeScaleVariation = new Vector2(0.8f, 0.8f);
+                            pec.EmitterDuration = 2f;
+                            pec.ParticleDuration = 2f;
+                            pec.EmissionFrequency = 60f;
+                            pec.EmissionRate = 1f;
+                            pec.InitialSpeed = 50f;
+                            pec.SpawnDirection = new Vector2(0f, -1f);
+                            pec.SpawnConeDegrees = 90f;
+                            pec.Gravity = new Vector2(0f, 0f);
+                            //currently behaves a bit unintuitively
+                            pec.LocalPointForcePosition = Vector2.Zero;
+                            pec.PointForceStrength = 0f;
+                            pec.PointForceUsesQuadraticFalloff = false;
+                            pec.Gravity = new Vector2(0f, 0f);
+                            pec.Drag = 0.5f;
+                            pec.Visibility = Visibility.Game;
+
+                            Session.GetInstance().World.AddComponent(new ParticleEmitter(pec));
                             return;
-                            
-
-
                         } else
                         {
                             counter++;
@@ -303,8 +310,6 @@ namespace TombOfAnubis
                 AI ai = GetComponents().First();
                 Entity anubis = ai.Entity;
                 Transform transform = anubis.GetComponent<Transform>();
-
-                
 
                 //set anubis position to the new location
                 transform.Position = this.cmChosenPos;
@@ -335,6 +340,9 @@ namespace TombOfAnubis
                 teleport_impact.Drag = 0.5f;
 
                 Session.GetInstance().World.AddComponent(new ParticleEmitter(teleport_impact));
+
+                //reset flag for next iteration
+                this.cmInitSucceeded = false;
             }
         }
 
