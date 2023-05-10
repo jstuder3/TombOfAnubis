@@ -2,12 +2,13 @@
 using System; using System.Diagnostics;
 using System.Collections.Generic;
 using static TombOfAnubis.Character;
+using System.Net.Mail;
 
 namespace TombOfAnubis
 {
     public class MapGenerator
     {
-
+        public static readonly int MinTileDistanceArtefactAltar = 7;
         public Point MapDimensions { get; set; }
 
         private int[,] collisionLayer;
@@ -17,6 +18,8 @@ namespace TombOfAnubis
         private List<MapBlockDescription> mapBlocksDescriptions;
         private Random rand;
         private Dictionary<string, int> placedBlockNames;
+
+        private int numTrappedArtefacts = 0;
 
         public MapGenerator(Map map)
         {
@@ -44,7 +47,7 @@ namespace TombOfAnubis
         {
             Debug.WriteLine("Level generation started ...");
             int numAttempts = 0;
-            int maxAttempts = 50;
+            int maxAttempts = 500;
             while(numAttempts < maxAttempts)
             {
                 numAttempts++;
@@ -82,6 +85,7 @@ namespace TombOfAnubis
             Populate(collisionLayer, MapBlock.InvalidValue);
             entitiyDescriptions.Clear();
             placedBlockNames.Clear();
+            numTrappedArtefacts = 0;
             foreach (MapBlockDescription desc in mapBlocksDescriptions)
             {
                 desc.Reset();
@@ -255,6 +259,10 @@ namespace TombOfAnubis
             {
                 placedBlockNames[block.Name] = 1;
             }
+            if(MapBlockContainsEntity(block, typeof(Artefact)) && MapBlockContainsEntity(block, typeof(Trap)))
+            {
+                numTrappedArtefacts++;
+            }
             for (int i = 0; i < block.Dimensions.X; i++)
             {
                 for(int j = 0; j < block.Dimensions.Y; j++)
@@ -317,6 +325,53 @@ namespace TombOfAnubis
             return levelCoord.X >= 0 && levelCoord.X < MapDimensions.X && levelCoord.Y >= 0 && levelCoord.Y < MapDimensions.Y;
         }
         private bool ValidateMap()
+        {
+            //Debug.WriteLine("-------LevelCandidate-------");
+            //PrintPlacedBlockInformation();
+            bool validMapBlockDescs = ValidateMapBlockDescriptions();
+            //if(!validMapBlockDescs) { Debug.WriteLine("Map block validation failed."); }
+            bool trappedArtefactsAppear = numTrappedArtefacts > 0;
+            //if (!trappedArtefactsAppear) { Debug.WriteLine("Not enough trapped artefacts: "+numTrappedArtefacts); }
+
+            bool artefactMinDistance = ValidateArtefactMinDistanceToAltar();
+            //if (!artefactMinDistance) { Debug.WriteLine("Min Distance check failed"); }
+            //Debug.WriteLine("-------EndLevelCandidate-------");
+
+            return validMapBlockDescs && trappedArtefactsAppear && artefactMinDistance;
+        }
+
+        private bool ValidateArtefactMinDistanceToAltar()
+        {
+            EntityDescription altar = null;
+            List<EntityDescription> artefacts = new List<EntityDescription>();
+            foreach(EntityDescription ed in entitiyDescriptions)
+            {
+                if(Type.GetType(ed.ClassName) == typeof(Altar))
+                {
+                    altar = ed;
+                }
+                if(Type.GetType(ed.ClassName) == typeof(Artefact))
+                {
+                    artefacts.Add(ed);
+                }
+            }
+            if(altar == null || artefacts.Count == 0) { return false; }
+
+            Point altarCoord = altar.SpawnTileCoordinate;
+            foreach(EntityDescription artefact in artefacts)
+            {
+                Point artefactCoord = artefact.SpawnTileCoordinate;
+                Point diff = artefactCoord - altarCoord;
+                Vector2 diffv = new Vector2 (diff.X, diff.Y);
+                if (diffv.Length() < MinTileDistanceArtefactAltar)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool ValidateMapBlockDescriptions()
         {
             foreach (MapBlockDescription mapBlockDescription in mapBlocksDescriptions)
             {
@@ -388,17 +443,58 @@ namespace TombOfAnubis
             }
 
         }
+        public bool MapBlockContainsEntity(MapBlock block, Type entityType)
+        {
+            if (block.Entities == null)
+            {
+                return false;
+            }
+            foreach (var entity in block.Entities)
+            {
+                Type t = Type.GetType(entity.ClassName);
+                if (t == entityType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void PrintLevel()
         {
+            EntityDescription altar = null;
+            List<Point> artefacts = new List<Point>();
+            foreach (EntityDescription ed in entitiyDescriptions)
+            {
+                if (Type.GetType(ed.ClassName) == typeof(Altar))
+                {
+                    altar = ed;
+                }
+                if (Type.GetType(ed.ClassName) == typeof(Artefact))
+                {
+                    artefacts.Add(ed.SpawnTileCoordinate);
+                }
+            }
+            if (altar == null || artefacts.Count == 0) { return; }
+
             Debug.WriteLine("----------------Level----------------");
             for (int i = 0; i < collisionLayer.GetLength(0); i++)
             {
                 for (int j = 0; j < collisionLayer.GetLength(1); j++)
                 {
-                    Debug.Write(collisionLayer[i, j] + ",");
+                    if(new Point(j, i) == altar.SpawnTileCoordinate)
+                    {
+                        Debug.Write("A,");
+                    }else if(artefacts.Contains(new Point(j, i)))
+                    {
+                        Debug.Write("B,");
+                    }
+                    else
+                    {
+                        Debug.Write(collisionLayer[i, j] + ",");
+                    }
                 }
-                //Debug.WriteLine();
+                Debug.Write("\n");
             }
             Debug.WriteLine("----------------Level----------------");
 
