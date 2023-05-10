@@ -239,7 +239,7 @@ namespace TombOfAnubis
             {
                 ExitScreen();
             }
-            //LoadingScreen.Load(GameScreenManager, true, new LoginPlayersScreen());
+            ExitScreen();
             GameScreenManager.AddScreen(new LoginPlayersScreen());
         }
 

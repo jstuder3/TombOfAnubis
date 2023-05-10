@@ -11,6 +11,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System; using System.Diagnostics;
 using System.Diagnostics.SymbolStore;
 using static System.Formats.Asn1.AsnWriter;
@@ -57,7 +58,7 @@ namespace TombOfAnubis
         private Texture2D loadingTexture;
         private Rectangle loadingPosition;
 
-        private string readyText = "Press <Use> to Start";
+        //private string readyText = "Press <Use> to Start";
         private int useButtonCooldown = 250;
         private bool startGame = false;
 
@@ -80,6 +81,9 @@ namespace TombOfAnubis
         private bool startTimeSet = false;
         private bool skipCooldown = false;
         private double videoStartTime;
+
+        private PlayerInput firstPlayer;
+        private string playerUseButton;
 
 
         #endregion
@@ -147,6 +151,18 @@ namespace TombOfAnubis
 
         public override void LoadContent()
         {
+            firstPlayer = InputController.GetActiveInputs()[0];
+
+            switch (firstPlayer.UseKey)
+            {
+                default: playerUseButton = "(A)"; break;
+
+                case Keys.E: playerUseButton = "[E]"; break;
+                case Keys.Z: playerUseButton = "[Z]"; break;
+                case Keys.O: playerUseButton = "[O]"; break;
+                case Keys.OemMinus: playerUseButton = "[-]"; break;
+            }
+
             ContentManager content = GameScreenManager.Game.Content;
             viewport = GameScreenManager.GraphicsDevice.Viewport;
             Debug.WriteLine("LoadingScreen Viewport:" + viewport);
@@ -194,7 +210,7 @@ namespace TombOfAnubis
 
         public override void HandleInput()
         {
-            if(InputController.IsUseTriggered() && useButtonCooldown <= 0)
+            if(firstPlayer.UseTriggered() && useButtonCooldown <= 0)
             {
                 useButtonCooldown = 250;
                 if (skipCooldown || !hasVideo)
@@ -299,6 +315,8 @@ namespace TombOfAnubis
                 SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
 
                 // Center the text in the viewport.
+
+                string readyText = "Press " + playerUseButton + " to Start";
 
                 if(hasVideo)
                 {

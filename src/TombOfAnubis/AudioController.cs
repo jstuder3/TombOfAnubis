@@ -11,6 +11,8 @@ namespace TombOfAnubis
 {
     public static class AudioController
     {
+        public static float MusicVolume;
+        public static float SoundeffectVolume;
         public static Dictionary<string, Song> Songs {  get; set; }
         public static Dictionary<string, SoundEffect> SoundEffects { get; set; }
 
@@ -36,6 +38,9 @@ namespace TombOfAnubis
                 { "anubisRoar", content.Load<SoundEffect>(@"Audio\SoundFX\AnubisRoar") },
                 { "revival", content.Load<SoundEffect>(@"Audio\SoundFX\Revival") },
                 { "teleport", content.Load<SoundEffect>(@"Audio\SoundFX\Teleport") },
+                { "punch", content.Load<SoundEffect>(@"Audio\SoundFX\Punch") },
+                { "trapButtonActivated", content.Load<SoundEffect>(@"Audio\SoundFX\TrapButtonClick") },
+                { "trapDeactivated", content.Load<SoundEffect>(@"Audio\SoundFX\TrapdoorOpen") },
             };
             MediaPlayer.IsRepeating = true;
 
@@ -75,6 +80,18 @@ namespace TombOfAnubis
             {
                 SoundEffects[effect].Play();
             }
+        }
+
+        public static void SetMusicVolume(float volume)
+        {
+            MediaPlayer.Volume = volume;
+            MusicVolume = volume;
+        }
+
+        public static void SetSoundeffectVolume(float volume)
+        {
+            SoundEffect.MasterVolume = volume;
+            SoundeffectVolume = volume;
         }
     }
 }

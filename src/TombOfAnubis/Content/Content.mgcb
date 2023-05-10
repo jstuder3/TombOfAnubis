@@ -68,6 +68,12 @@
 /processorParam:Quality=Best
 /build:Audio/SoundFX/MenuSelect.mp3
 
+#begin Audio/SoundFX/Punch.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/Punch.mp3
+
 #begin Audio/SoundFX/Revival.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -79,6 +85,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/SoundFX/Teleport.mp3
+
+#begin Audio/SoundFX/TrapButtonClick.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/TrapButtonClick.mp3
+
+#begin Audio/SoundFX/TrapdoorOpen.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/TrapdoorOpen.mp3
 
 #begin Audio/Soundtrack/Fast1_115bpm.wav
 /importer:WavImporter

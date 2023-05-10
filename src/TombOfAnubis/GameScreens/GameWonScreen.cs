@@ -25,6 +25,7 @@ namespace TombOfAnubis
         private bool startTimeSet = false;
 
         private List<PlayerInput> activeInputs;
+        private string playerUseButton;
 
         public GameWonScreen()
             : base()
@@ -48,7 +49,18 @@ namespace TombOfAnubis
                 case 4: VideoController.PlayVideo(@"Content/Videos/GameWon4.mp4", false, true); break;
 
             }
-            
+
+            PlayerInput firstPlayer = activeInputs[0];
+            switch (firstPlayer.UseKey)
+            {
+                default: playerUseButton = "(A)"; break;
+
+                case Keys.E: playerUseButton = "[E]"; break;
+                case Keys.Z: playerUseButton = "[Z]"; break;
+                case Keys.O: playerUseButton = "[O]"; break;
+                case Keys.OemMinus: playerUseButton = "[-]"; break;
+            }
+
         }
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
@@ -69,18 +81,16 @@ namespace TombOfAnubis
         }
         public override void HandleInput()
         {
-            foreach (PlayerInput playerInput in activeInputs)
-            {
-                if (playerInput.UseTriggered() && skipCooldown)
-                {
+            PlayerInput firstPlayer = activeInputs[0];
 
-                    InputController.AddCooldown(playerInput.UseKey, playerInput.UseButton, 250);
-                    VideoController.StopVideo();
-                    AudioController.StopSong();
-                    RemoveSecondaryInputs();
-                    ExitScreen();
-                    GameScreenManager.AddScreen(new MainMenuScreen());
-                }
+            if (firstPlayer.UseTriggered() && skipCooldown)
+            {
+                InputController.AddCooldown(firstPlayer.UseKey, firstPlayer.UseButton, 250);
+                VideoController.StopVideo();
+                AudioController.StopSong();
+                RemoveSecondaryInputs();
+                ExitScreen();
+                GameScreenManager.AddScreen(new MainMenuScreen());
             }
         }
 
@@ -92,7 +102,7 @@ namespace TombOfAnubis
             
             if (skipCooldown)
             {
-                string statusText = "Press [E] / (A)";
+                string statusText = "Press " + playerUseButton;
                 Vector2 textLength = statusFont.MeasureString(statusText) * fontScale;
 
                 Vector2 displayPosition = new Vector2(viewport.X + viewport.Width * 4f / 5f, viewport.Y + viewport.Height * 4f / 5f);

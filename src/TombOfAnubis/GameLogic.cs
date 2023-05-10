@@ -355,6 +355,7 @@ namespace TombOfAnubis
                 gameplayEffect.EndGameplayEffect();
             }
 
+            AudioController.PlaySoundEffect("punch");
             anubis.AddComponent(new GameplayEffect(EffectType.Stunned, 4f, Visibility.Game));
             anubis.AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 6f, 0.5f, Visibility.Both));
 
