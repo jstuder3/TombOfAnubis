@@ -53,14 +53,13 @@ namespace TombOfAnubis
         /// </summary>
         /// <remarks>If present, the text will be centered on the texture.</remarks>
         private Texture2D texture;
+        private readonly Rectangle textureSourceRectangle = new Rectangle(0,0,800, 400);
         private float textureScale = 1.0f;
 
-
-        /// <summary>
-        /// Animation of texture when entry is selected
-        /// </summary>
-        private Animation textureAnimation;
-        private Rectangle textureSourceRectangle;
+        private Color barColor = Color.Crimson;
+        private float barThickness = 0.02f, maxBarLength = 0.6f;
+        private readonly int animationDuration = 200;
+        private double animationStart;
 
         /// <summary>
         /// Stores whether this entry was the most recently selected MenuEntry
@@ -120,17 +119,6 @@ namespace TombOfAnubis
             set { textureScale = value; }
         }
 
-
-        /// <summary>
-        /// Animation of texture when entry is selected
-        /// </summary>
-        public Animation TextureAnimation
-        {
-            get { return textureAnimation; }
-            set { textureAnimation = value; }
-        }
-
-
         #endregion
 
 
@@ -181,71 +169,22 @@ namespace TombOfAnubis
         {
 
             float totalTime = (float)gameTime.TotalGameTime.TotalMilliseconds;
-            if (isSelected && prevSelected)
+            if (isSelected && animationStart == 0)
             {
-                double timeElapsedPrevSelect = gameTime.TotalGameTime.TotalMilliseconds - prevSelectedTime;
-                double animationDuration = textureAnimation.AnimationClips[1].GetTotalClipDuration();
+                animationStart = totalTime;
+            }
+            
+            if(!isSelected)
+            {
+                animationStart = 0;
+            }
 
-                if (timeElapsedPrevSelect >= animationDuration)
-                {
-                    textureAnimation.SetActiveClip(AnimationClipType.ActiveEntry);
-                }
-                UpdateAnimationFrame(timeElapsedPrevSelect);
-            }
-            else if (!isSelected && prevSelected)
-            {
-                textureAnimation.SetActiveClip(AnimationClipType.InactiveEntry);
-                prevSelected = false;
-                UpdateAnimationFrame(totalTime);
-            }
-            else if (isSelected && !prevSelected)
-            {
-                textureAnimation.SetActiveClip(AnimationClipType.TransitionEntry);
-                prevSelectedTime = gameTime.TotalGameTime.TotalMilliseconds;
-                prevSelected = true;
-                UpdateAnimationFrame(totalTime);
-            }
-            else
-            {
-                textureAnimation.SetActiveClip(AnimationClipType.InactiveEntry);
-                UpdateAnimationFrame(totalTime);
-            }
         }
-
-        public void UpdateAnimationFrame(double timeElapsed)
-        {
-            AnimationClip activeClip = textureAnimation.ActiveClip;
-
-            if (activeClip != null)
-            {
-                if (textureSourceRectangle.Y == activeClip.SourceRectangle.Y)
-                {
-                    int frameIdx = (int)(timeElapsed / activeClip.FrameDuration) % activeClip.NumberOfFrames;
-                    textureSourceRectangle = new Rectangle(
-                        frameIdx * activeClip.FrameSize.X,
-                        activeClip.SourceRectangle.Y,
-                        activeClip.SourceRectangle.Width,
-                        activeClip.SourceRectangle.Height
-                       );
-                }
-                else
-                {
-                    textureSourceRectangle = activeClip.SourceRectangle;
-                }
-
-            }
-            else
-            {
-                textureAnimation.SetActiveClip(textureAnimation.AnimationClips[0].Type);
-                textureSourceRectangle = textureAnimation.AnimationClips[0].SourceRectangle;
-            }
-        }
-
 
         /// <summary>
         /// Draws the menu entry. This can be overridden to customize the appearance.
         /// </summary>
-        public virtual void Draw(MenuScreen screen, bool isSelected)
+        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
             // Draw the selected entry in yellow, otherwise white.
             Color color = isSelected ? Fonts.MenuSelectedColor : Fonts.TitleColor;
@@ -269,22 +208,48 @@ namespace TombOfAnubis
                         (float)Math.Floor((scaledHeight - textSize.Y) / 2));
                     spriteBatch.DrawString(spriteFont, text, textPosition, color);
                 }
+
+                if(isSelected)
+                {
+                    Texture2D barTexture = new Texture2D(screenManager.GraphicsDevice, 1, 1);
+                    barTexture.SetData(new[] { barColor });
+
+                    int barHeight = (int)(barThickness * scaledHeight);
+                    int topBarOffsetY = (int)(position.Y + 0.28f * scaledHeight);
+                    int bottomBarOffsetY = (int)(position.Y + 0.72f * scaledHeight);
+
+                    int elapsedTimeAfterSelect = (int)(gameTime.TotalGameTime.TotalMilliseconds - animationStart);
+
+                    if(elapsedTimeAfterSelect > animationDuration)
+                    {
+                        int barLength = (int)(maxBarLength * scaledWidth);
+                        int barOffsetX = (int)(position.X + (scaledWidth - barLength) / 2);
+                        Rectangle topBar = new Rectangle(barOffsetX, topBarOffsetY, barLength, barHeight);
+                        Rectangle bottomBar = new Rectangle(barOffsetX, bottomBarOffsetY, barLength, barHeight);
+                        spriteBatch.Draw(barTexture, topBar, Color.White);
+                        spriteBatch.Draw(barTexture, bottomBar, Color.White);
+                    }
+
+                    else
+                    {
+                        int barLength = (int)((maxBarLength * scaledWidth * elapsedTimeAfterSelect) / animationDuration);
+                        int barOffsetX = (int)(position.X + (scaledWidth - barLength) / 2);
+                        Rectangle topBar = new Rectangle(barOffsetX, topBarOffsetY, barLength, barHeight);
+                        Rectangle bottomBar = new Rectangle(barOffsetX, bottomBarOffsetY, barLength, barHeight);
+                        spriteBatch.Draw(barTexture, topBar, Color.White);
+                        spriteBatch.Draw(barTexture, bottomBar, Color.White);
+                    }
+
+                    Debug.WriteLine("Animation start: " + animationStart);
+                    Debug.WriteLine("Elapsed time: " + elapsedTimeAfterSelect);
+                }
             }
             else if ((spriteFont != null) && !String.IsNullOrEmpty(text))
             {
                 spriteBatch.DrawString(spriteFont, text, position, color);
             }
+
         }
-
-
-        /// <summary>
-        /// Queries how much space this menu entry requires.
-        /// </summary>
-        public virtual int GetHeight(MenuScreen screen)
-        {
-            return Font.LineSpacing;
-        }
-
 
         #endregion
     }

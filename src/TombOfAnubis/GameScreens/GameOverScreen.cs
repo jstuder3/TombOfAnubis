@@ -21,7 +21,6 @@ namespace TombOfAnubis
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.5f;
-        private static List<AnimationClip> activeScrollAnimation;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
         private float buttonSpacing = 0.1f, buttonOffsetY = 0.6f;
@@ -78,32 +77,18 @@ namespace TombOfAnubis
             backgroundTexture = content.Load<Texture2D>("Textures/Menu/GameOverBG");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
 
-            activeScrollAnimation = new List<AnimationClip> {
-                            new AnimationClip(AnimationClipType.InactiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
-                            new AnimationClip(AnimationClipType.TransitionEntry, 3, 30, new Point(scrollTextureWidth, scrollTextureHeight)),
-                            new AnimationClip(AnimationClipType.ActiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
-                        };
+            foreach (MenuEntry entry in MenuEntries)
+            {
+                entry.Texture = scrollTexture;
+                entry.TextureScale = scrollTextureScale;
+            }
 
             Viewport viewport = ResolutionController.TargetViewport;
-
-            // Set the textures on each menu element and its scale
-            Animation animation = new Animation(activeScrollAnimation, Visibility.Game);
-            SetAnimation(scrollTexture, scrollTextureScale, animation);
 
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
 
             base.LoadContent();
-        }
-
-        public void SetAnimation(Texture2D animationSpritesheet, float spriteScale, Animation animation)
-        {
-            foreach (MenuEntry entry in MenuEntries)
-            {
-                entry.Texture = animationSpritesheet;
-                entry.TextureScale = spriteScale;
-                entry.TextureAnimation = animation;
-            }
         }
 
         public void SetElementPosition(Viewport viewport)
@@ -247,7 +232,7 @@ namespace TombOfAnubis
             {
                 MenuEntry menuEntry = MenuEntries[i];
                 bool isSelected = IsActive && (i == selectedEntry);
-                menuEntry.Draw(this, isSelected);
+                menuEntry.Draw(this, isSelected, gameTime);
             }
 
             spriteBatch.End();

@@ -203,7 +203,7 @@ namespace TombOfAnubis
             for (int i = 0; i < menuEntries.Count; i++)
             {
                 bool isSelected = IsActive && (i == selectedEntry);
-
+                //Debug.WriteLine("isActive: " + IsActive);
                 menuEntries[i].Update(this, isSelected, gameTime);
             }
         }
@@ -225,7 +225,7 @@ namespace TombOfAnubis
 
                 bool isSelected = IsActive && (i == selectedEntry);
 
-                menuEntry.Draw(this, isSelected);
+                menuEntry.Draw(this, isSelected, gameTime);
             }
 
             spriteBatch.End();
