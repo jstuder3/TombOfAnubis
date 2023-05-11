@@ -260,6 +260,11 @@
 /processor:PassThroughProcessor
 /build:Maps/MapBlocks/TrappedArtefact001.xml
 
+#begin Maps/MapBlocks/TrappedArtefact002.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Maps/MapBlocks/TrappedArtefact002.xml
+
 #begin Maps/MapBlocks/TrappedArtefactSP001.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
