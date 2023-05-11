@@ -58,6 +58,39 @@ namespace TombOfAnubis
             return Tiles[coord.X * Dimensions.Y + coord.Y];
         }
 
+        public bool HasTopDoor()
+        {
+            for(int y = 0; y < Dimensions.Y; y++)
+            {
+                if(GetValue(new Point(0, y)) == FloorValue) return true;
+            }
+            return false;
+        }
+        public bool HasBottomDoor()
+        {
+            for (int y = 0; y < Dimensions.Y; y++)
+            {
+                if (GetValue(new Point(Dimensions.X - 1, y)) == FloorValue) return true;
+            }
+            return false;
+        }
+        public bool HasLeftDoor()
+        {
+            for (int x = 0; x < Dimensions.X; x++)
+            {
+                if (GetValue(new Point(x, 0)) == FloorValue) return true;
+            }
+            return false;
+        }
+        public bool HasRightDoor()
+        {
+            for (int x = 0; x < Dimensions.X; x++)
+            {
+                if (GetValue(new Point(x, Dimensions.Y - 1)) == FloorValue) return true;
+            }
+            return false;
+        }
+
         public class MapBlockReader : ContentTypeReader<MapBlock>
         {
             protected override MapBlock Read(ContentReader input, MapBlock existingInstance)
