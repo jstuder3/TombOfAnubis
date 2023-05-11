@@ -100,11 +100,10 @@ namespace TombOfAnubis
         private void Createmap()
         {
             PlaceArtefacts();
-            CreateBorder();
-            CreateEmptyPaddingNearBorder();
             int roundsWithoutPlacement = 0;
             int maxRoundsWithoutPlacement = 4 * MapDimensions.X * MapDimensions.Y;
             int placedBlocks = 0;
+            bool borderDrawn = false;
             while (positionsToFill.Count != 0)
             {
                 Point coord = SelectRandomPosition();
@@ -113,6 +112,11 @@ namespace TombOfAnubis
                 {
                     if (roundsWithoutPlacement >= maxRoundsWithoutPlacement && CanPlace(MapBlock.Empty, coord))
                     {
+                        if (!borderDrawn)
+                        {
+                            CreateBorder();
+                            borderDrawn = true;
+                        }
                         Place(MapBlock.Empty, coord);
                     }
                     else
@@ -228,56 +232,34 @@ namespace TombOfAnubis
             List<Point> locations = new List<Point>();
 
             // Left and right border
-            for (int x = w; x < MapDimensions.X - w; x++)
+            for (int x = 0; x < MapDimensions.X; x++)
             {
                 Point candidateTop = new Point(x, 0);
                 Point candidateBottom = new Point(x, MapDimensions.Y - h);
-                if (CanPlace(block, candidateTop) && !block.HasTopDoor())
+                if (CanPlace(block, candidateTop))
                 {
                     locations.Add(candidateTop);
                 }
-                if (CanPlace(block, candidateBottom) && !block.HasBottomDoor())
+                if (CanPlace(block, candidateBottom))
                 {
                     locations.Add(candidateBottom);
                 }
             }
             // Top and bottom border
-            for (int y = h; y < MapDimensions.Y - h; y++)
+            for (int y =0; y < MapDimensions.Y; y++)
             {
                 Point candidateleft = new Point(0, y);
                 Point candidateRight = new Point(MapDimensions.X - w, y);
-                if (CanPlace(block, candidateleft) && !block.HasLeftDoor())
+                if (CanPlace(block, candidateleft))
                 {
                     locations.Add(candidateleft);
                 }
-                if (CanPlace(block, candidateRight) && !block.HasRightDoor())
+                if (CanPlace(block, candidateRight))
                 {
                     locations.Add(candidateRight);
                 }
             }
 
-            // Cornder cases
-            Point topLeft = new Point(0, 0);
-            Point topRight = new Point(MapDimensions.X - w, 0);
-            Point bottomLeft = new Point(0, MapDimensions.Y - h);
-            Point bottomRight = new Point(MapDimensions.X - w, MapDimensions.Y - h);
-
-            if(CanPlace(block, topLeft) && !block.HasTopDoor() && !block.HasLeftDoor())
-            {
-                locations.Add(topLeft);
-            }
-            if (CanPlace(block, topRight) && !block.HasTopDoor() && !block.HasRightDoor())
-            {
-                locations.Add(topRight);
-            }
-            if (CanPlace(block, bottomLeft) && !block.HasBottomDoor() && !block.HasLeftDoor())
-            {
-                locations.Add(bottomLeft);
-            }
-            if (CanPlace(block, bottomRight) && !block.HasBottomDoor() && !block.HasRightDoor())
-            {
-                locations.Add(bottomRight);
-            }
             return locations;
 
         }
@@ -333,7 +315,6 @@ namespace TombOfAnubis
 
         private bool CanPlace(MapBlock block, Point coord)
         {
-            //if(coord.X == 0 && block.HasLeftDoor() || coord.X == MapDimensions.X - block.Dimensions.X)dd
             for (int y = 0; y < block.Dimensions.Y; y++)
             {
                 for (int x = 0; x < block.Dimensions.X; x++)
@@ -344,6 +325,19 @@ namespace TombOfAnubis
                         return false;
                     }
                 }
+            }
+
+            if(block.Equals(MapBlock.Empty)) { 
+                return true;
+            }
+            if (
+                // Make sure there is a border of walls arount the map and every door has a way out.
+                (coord.Y <= 1 && block.HasTopDoor())
+            || (coord.X <= 1 && block.HasLeftDoor())
+            || (coord.Y >= MapDimensions.Y - block.Dimensions.Y - 1 && block.HasBottomDoor())
+            || (coord.X >= MapDimensions.X - block.Dimensions.X - 1 && block.HasRightDoor()))
+            {
+                return false;
             }
             return true;
         }
