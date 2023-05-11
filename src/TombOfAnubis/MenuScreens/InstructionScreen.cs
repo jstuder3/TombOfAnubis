@@ -45,6 +45,11 @@ namespace TombOfAnubis.MenuScreens
 
         public override void HandleInput()
         {
+            if (InputController.IsBackTriggered())
+            {
+                GameScreenManager.AddScreen(new MainMenuScreen());
+                ExitScreen();
+            }
             if (!buttonCooldown)
             {
                 if (InputController.IsUseTriggered())

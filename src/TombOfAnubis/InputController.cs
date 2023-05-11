@@ -10,7 +10,8 @@ namespace TombOfAnubis
     {
         UseObject,
         PauseGame,
-        DropObject
+        DropObject,
+        Back
     }
 
     public class PlayerInput
@@ -26,12 +27,15 @@ namespace TombOfAnubis
         public Keys UseKey { get; set; }
         public Keys PauseKey { get; set; }
         public Keys DropKey { get; set; }
+        public Keys BackKey { get; set; }
 
         public Buttons UseButton { get; set; }
         public Buttons DropButton { get; set; }
         public Buttons PauseButton { get; set; }
+        public Buttons BackButton { get; set; }
 
-        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause, Keys dropKey)
+
+        public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause, Keys dropKey, Keys backKey)
         {
             IsKeyboard = true;
             UpKey = up;
@@ -41,6 +45,7 @@ namespace TombOfAnubis
             UseKey = use;
             PauseKey = pause;
             DropKey = dropKey;
+            BackKey = backKey;
         }
         public PlayerInput(Buttons use, int controllerID)
         {
@@ -49,6 +54,7 @@ namespace TombOfAnubis
             UseButton = use;
             PauseButton = Buttons.Start;
             DropButton = Buttons.B;
+            BackButton = Buttons.B;
         }
 
         public void Update()
@@ -94,6 +100,10 @@ namespace TombOfAnubis
                     {
                         InputController.PlayerActions[PlayerID].Add(PlayerAction.DropObject);
                     }
+                    if (key == BackKey)
+                    {
+                        InputController.PlayerActions[PlayerID].Add(PlayerAction.Back);
+                    }
                 }
             }
             else if(IsActive)
@@ -120,6 +130,10 @@ namespace TombOfAnubis
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.DropObject);
                 }
+                if (gamePadState.IsButtonDown(BackButton) && !InputController.ButtonCooldowns.ContainsKey(BackButton))
+                {
+                    InputController.PlayerActions[PlayerID].Add(PlayerAction.Back);
+                }
             }
         }
 
@@ -144,10 +158,10 @@ namespace TombOfAnubis
     public static class InputController
     {
         public static PlayerInput[] PlayerInputs = new PlayerInput[] { 
-            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E, Keys.Escape, Keys.Q),
-            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z, Keys.Escape, Keys.R),
-            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O, Keys.Escape, Keys.U),
-            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus, Keys.Escape, Keys.OemPeriod),
+            new PlayerInput(Keys.W, Keys.S, Keys.A, Keys.D, Keys.E, Keys.Escape, Keys.Q, Keys.Escape),
+            new PlayerInput(Keys.T, Keys.G, Keys.F, Keys.H, Keys.Z, Keys.Escape, Keys.R, Keys.Escape),
+            new PlayerInput(Keys.I, Keys.K, Keys.J, Keys.L, Keys.O, Keys.Escape, Keys.U, Keys.Escape),
+            new PlayerInput(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.OemMinus, Keys.Escape, Keys.OemPeriod, Keys.Escape),
             new PlayerInput(Buttons.A, 0),
             new PlayerInput(Buttons.A, 1),
             new PlayerInput(Buttons.A, 2),
@@ -264,6 +278,17 @@ namespace TombOfAnubis
             return false;
         }
 
+        public static bool IsBackTriggered()
+        {
+            foreach (HashSet<PlayerAction> playerAction in PlayerActions)
+            {
+                if (playerAction.Contains(PlayerAction.Back))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public static List<PlayerInput> GetActiveInputs()
         {
             List<PlayerInput> res = new List<PlayerInput>();

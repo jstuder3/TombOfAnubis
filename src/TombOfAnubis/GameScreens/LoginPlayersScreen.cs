@@ -124,6 +124,12 @@ namespace TombOfAnubis.GameScreens
         public override void HandleInput()
         {
             base.HandleInput();
+
+            if (InputController.IsBackTriggered()){
+                GameScreenManager.AddScreen(new MainMenuScreen());
+                RemoveSecondaryInputs();
+                ExitScreen();
+            }
             foreach (PlayerInput playerInput in InputController.PlayerInputs)
             {
                 if (playerInput.UseTriggered() && !playerInput.IsActive)

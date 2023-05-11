@@ -94,7 +94,7 @@ namespace TombOfAnubis.MenuScreens
             fullscreenSetting = new SettingsEntry("Fullscreen", SettingsType.TickBox, ControlType.Fullscreen);
             bgMusicVolumeSetting = new SettingsEntry("Music Volume", SettingsType.Slider, ControlType.Music);
             soundFXVolumeSetting = new SettingsEntry("SoundFX Volume", SettingsType.Slider, ControlType.SoundFX);
-            saveButton = new SettingsEntry("Apply", SettingsType.SaveButton, ControlType.Save);
+            saveButton = new SettingsEntry("Save", SettingsType.SaveButton, ControlType.Save);
 
             bgMusicVolumeSetting.SliderStatus = settings.VolumeSetting;
             soundFXVolumeSetting.SliderStatus = settings.SoundFXVolumeSetting;
@@ -243,6 +243,18 @@ namespace TombOfAnubis.MenuScreens
             if (!buttonCooldown)
             {
                 SettingsEntry entry = settingsEntries[settingsSelectedEntry];
+
+                if(InputController.IsBackTriggered())
+                {
+                    Settings old = Settings.Read();
+                    if (old.IsFullscreen != settings.IsFullscreen)
+                    {
+                        ResolutionController.ToggleFullscreen();
+                    }
+                    MediaPlayer.Volume = settings.VolumeSetting;
+                    SoundEffect.MasterVolume = settings.SoundFXVolumeSetting;
+                    GameScreenManager.RemoveScreen(this);
+                }
 
                 // Move to the previous settings entry
                 if (InputController.IsUpTriggered())
