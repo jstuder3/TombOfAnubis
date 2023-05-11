@@ -9,7 +9,7 @@ namespace TombOfAnubis
 {
     public class MapGenerator
     {
-        public static readonly int MinTileDistanceArtefactAltar = 7;
+        public float MinTileDistanceArtefactAltar;
         public Point MapDimensions { get; set; }
 
         private Map map;
@@ -23,8 +23,10 @@ namespace TombOfAnubis
 
         public MapGenerator(Map map)
         {
+
             this.map = map;
             MapDimensions = map.MapDimensions;
+            MinTileDistanceArtefactAltar = Math.Max(MapDimensions.X, MapDimensions.Y) * 0.4f;
             map.CollisionLayer = new int[MapDimensions.X * MapDimensions.Y];
             Array.Fill(map.CollisionLayer, MapBlock.InvalidValue);
             positionsToFill = new List<Point>();
@@ -100,9 +102,9 @@ namespace TombOfAnubis
         private void Createmap()
         {
             PlaceArtefacts();
+            PlaceAltar();
             int roundsWithoutPlacement = 0;
             int maxRoundsWithoutPlacement = 4 * MapDimensions.X * MapDimensions.Y;
-            int placedBlocks = 0;
             bool borderDrawn = false;
             while (positionsToFill.Count != 0)
             {
@@ -128,7 +130,6 @@ namespace TombOfAnubis
                 else
                 {
                     Place(candidate, coord);
-                    placedBlocks++;
                     CreateBorder(coord, candidate);
                     UpdateLevelPieces(candidate);
                 }
@@ -146,26 +147,6 @@ namespace TombOfAnubis
                         if (CanPlace(MapBlock.Wall, new Point(x, y)))
                         {
                             Place(MapBlock.Wall, new Point(x, y));
-                        }
-                    }
-
-                }
-            }
-        }
-        private void CreateEmptyPaddingNearBorder()
-        {
-            for (int y = 0; y < MapDimensions.Y; y += MapBlock.Empty.Dimensions.Y)
-            {
-                for (int x = 0; x < MapDimensions.X; x += MapBlock.Empty.Dimensions.X)
-                {
-                    if (x == MapBlock.Empty.Dimensions.X ||
-                        x == MapDimensions.X - MapBlock.Empty.Dimensions.X - MapBlock.Wall.Dimensions.X ||
-                        y == MapBlock.Empty.Dimensions.Y ||
-                        y == MapDimensions.Y - MapBlock.Empty.Dimensions.Y - MapBlock.Wall.Dimensions.Y)
-                    {
-                        if (CanPlace(MapBlock.Empty, new Point(x, y)))
-                        {
-                            Place(MapBlock.Empty, new Point(x, y));
                         }
                     }
 
@@ -225,6 +206,82 @@ namespace TombOfAnubis
             }
         }
 
+        public void PlaceAltar()
+        {
+            List<MapBlock> altarBlocks = new List<MapBlock>();
+            foreach (var mbd in mapBlocksDescriptions)
+            {
+                foreach (var block in mbd.Blocks)
+                {
+                    if (MapBlockContainsEntity(block, typeof(Altar)))
+                    {
+                        altarBlocks.Add(block);
+                    }
+                }
+            }
+            int nPlaced = 0;
+            int nRounds = 0;
+            int maxRounds = 500;
+            while (nPlaced < 1 && nRounds < maxRounds)
+            {
+                nRounds++;
+                MapBlock candidate = altarBlocks[rand.Next(altarBlocks.Count)];
+                List<Point> locations = FindAltarPositions(candidate);
+                if (locations.Count != 0)
+                {
+                    Point dst = locations[rand.Next(locations.Count)];
+                    Place(candidate, dst);
+                    CreateBorder(dst, candidate);
+                    UpdateLevelPieces(candidate);
+
+                    nPlaced++;
+                }
+            }
+            if(nRounds == maxRounds)
+            {
+                Console.WriteLine("Altar placement failed, trying random location." );
+            }
+        }
+
+
+        private List<Point> FindAltarPositions(MapBlock block)
+        {
+            List<Point> locations = new List<Point>();
+            Point altarRelativePos = GetEntityDescriptionsOfType(block, typeof(Altar))[0].SpawnTileCoordinate;
+            List<EntityDescription> artefacts = new List<EntityDescription>();
+            foreach (EntityDescription ed in entitiyDescriptions)
+            {
+                if (Type.GetType(ed.ClassName) == typeof(Artefact))
+                {
+                    artefacts.Add(ed);
+                }
+            }
+
+            foreach(Point position in positionsToFill)
+            {
+                Point altarPos = position + altarRelativePos;
+                if(CanPlace(block, position))
+                {
+                    bool minDistanceFulfilled = true;
+                    foreach (var artefact in artefacts)
+                    {
+                        Point d = altarPos - artefact.SpawnTileCoordinate;
+                        Vector2 dist = new Vector2(d.X, d.Y);
+                        if (dist.Length() < MinTileDistanceArtefactAltar)
+                        {
+                            minDistanceFulfilled = false;
+                        }
+                    }
+                    if (minDistanceFulfilled)
+                    {
+                        locations.Add(position);
+                    }
+                }
+            }
+
+            return locations;
+
+        }
         private List<Point> FindLocationsAtBorder(MapBlock block)
         {
             int w = block.Dimensions.X;
@@ -413,54 +470,12 @@ namespace TombOfAnubis
         }
         private bool ValidateMap()
         {
-            //Console.WriteLine("-------LevelCandidate-------");
-            //PrintPlacedBlockInformation();
+
             bool validMapBlockDescs = ValidateMapBlockDescriptions();
-            //if(!validMapBlockDescs) { Console.WriteLine("Map block validation failed."); }
             bool trappedArtefactsAppear = numTrappedArtefacts > 0;
-            //if (!trappedArtefactsAppear) { Console.WriteLine("Not enough trapped artefacts: "+numTrappedArtefacts); }
-
-            //bool artefactMinDistance = ValidateArtefactMinDistanceToAltar();
-
-            //bool altarNotInCorner = ValidateAltarNotInCorner();
-            //if (!artefactMinDistance) { Console.WriteLine("Min Distance check failed"); }
-            //Console.WriteLine("-------EndLevelCandidate-------");
 
             return validMapBlockDescs && trappedArtefactsAppear;
         }
-
-
-        private bool ValidateArtefactMinDistanceToAltar()
-        {
-            EntityDescription altar = null;
-            List<EntityDescription> artefacts = new List<EntityDescription>();
-            foreach(EntityDescription ed in entitiyDescriptions)
-            {
-                if(Type.GetType(ed.ClassName) == typeof(Altar))
-                {
-                    altar = ed;
-                }
-                if(Type.GetType(ed.ClassName) == typeof(Artefact))
-                {
-                    artefacts.Add(ed);
-                }
-            }
-            if(altar == null || artefacts.Count == 0) { return false; }
-
-            Point altarCoord = altar.SpawnTileCoordinate;
-            foreach(EntityDescription artefact in artefacts)
-            {
-                Point artefactCoord = artefact.SpawnTileCoordinate;
-                Point diff = artefactCoord - altarCoord;
-                Vector2 diffv = new Vector2 (diff.X, diff.Y);
-                if (diffv.Length() < MinTileDistanceArtefactAltar)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         private bool ValidateMapBlockDescriptions()
         {
             foreach (MapBlockDescription mapBlockDescription in mapBlocksDescriptions)
@@ -513,26 +528,6 @@ namespace TombOfAnubis
             }
             return null;
         }
-
-        /// <summary>
-        /// Invalid blocks have highest priority
-        /// </summary>
-        private int CompareCandidates(MapBlock b1, MapBlock b2)
-        {
-            if (!b1.Parent.Valid() && b2.Parent.Valid())
-            {
-                return -1;
-            }
-            else if (b1.Parent.Valid() && !b2.Parent.Valid())
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
-
-        }
         public bool MapBlockContainsEntity(MapBlock block, Type entityType)
         {
             if (block.Entities == null)
@@ -548,6 +543,23 @@ namespace TombOfAnubis
                 }
             }
             return false;
+        }
+        public List<EntityDescription> GetEntityDescriptionsOfType(MapBlock block, Type entityType)
+        {
+            List<EntityDescription > entities = new List<EntityDescription>();
+            if (block.Entities == null)
+            {
+                return entities;
+            }
+            foreach (var entity in block.Entities)
+            {
+                Type t = Type.GetType(entity.ClassName);
+                if (t == entityType)
+                {
+                    entities.Add(entity);
+                }
+            }
+            return entities;
         }
 
         public void PrintLevel()
@@ -602,33 +614,6 @@ namespace TombOfAnubis
             {
                 Console.WriteLine(placedBlockNames[k] + " " + k);
             }
-        }
-
-        public void PrintBlockList(List<MapBlock> blocks)
-        {
-            Console.Write("[ ");
-            foreach (var block in blocks)
-            {
-                Console.Write(block.ToString()+", ");
-            }
-            Console.Write(" ]");
-            //Console.WriteLine();
-        }
-
-        private static int[] Flatten(int[,] input)
-        {
-            int size = input.Length;
-            int[] result = new int[size];
-
-            int write = 0;
-            for (int i = 0; i <= input.GetUpperBound(0); i++)
-            {
-                for (int z = 0; z <= input.GetUpperBound(1); z++)
-                {
-                    result[write++] = input[i, z];
-                }
-            }
-            return result;
         }
     }
 }
