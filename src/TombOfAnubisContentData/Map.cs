@@ -181,6 +181,17 @@ namespace TombOfAnubis
 
             return CollisionLayer[mapPosition.Y * MapDimensions.X + mapPosition.X];
         }
+        public void SetCollisionLayerValue(Point mapPosition, int value)
+        {
+            // check the parameter
+            if ((mapPosition.X < 0) || (mapPosition.X >= MapDimensions.X) ||
+                (mapPosition.Y < 0) || (mapPosition.Y >= MapDimensions.Y))
+            {
+                throw new ArgumentOutOfRangeException("mapPosition");
+            }
+
+            CollisionLayer[mapPosition.Y * MapDimensions.X + mapPosition.X] = value;
+        }
         public Rectangle GetBaseLayerSourceRectangle(int baseLayerValue)
         {
             if (baseLayerValue < 0)

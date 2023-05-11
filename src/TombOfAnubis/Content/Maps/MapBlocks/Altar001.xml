@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <XnaContent>
 	<Asset Type="TombOfAnubis.MapBlock">
-		<!-- Dimensions of the Tiles array (x: num Rows, y: num Cols)-->
+		<!-- Dimensions of the Tiles array (x: right, y: down)-->
 		<Dimensions>5 5</Dimensions>
 		<!-- Array to describe the block layout: 1 is wall, 0 is floor-->
 		<Tiles>
@@ -14,7 +14,7 @@
 		<Entities>
 			<Item>
 				<ClassName>TombOfAnubis.Character</ClassName>
-				<SpawnTileCoordinate> 2 0</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<Type>PlayerOne</Type>
 				<Animation>
@@ -60,7 +60,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Character</ClassName>
-				<SpawnTileCoordinate> 0 2</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 0</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<Type>PlayerTwo</Type>
 				<Animation>
@@ -106,7 +106,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Character</ClassName>
-				<SpawnTileCoordinate> 4 2</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 4</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<Type>PlayerThree</Type>
 				<Animation>
@@ -152,7 +152,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Character</ClassName>
-				<SpawnTileCoordinate> 2 4</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 4 2</SpawnTileCoordinate>
 				<Scale>0.5 0.5</Scale>
 				<Type>PlayerFour</Type>
 				<Animation>
@@ -204,7 +204,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Anubis</ClassName>
-				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 3</SpawnTileCoordinate>
 				<Scale>1.05 1.05</Scale>
 				<SpriteTextureName>anubis</SpriteTextureName>
 				<Animation>

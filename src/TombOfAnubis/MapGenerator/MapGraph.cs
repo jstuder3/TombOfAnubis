@@ -15,9 +15,6 @@ namespace TombOfAnubis
         private static readonly int EdgeCostEmptyEmpty = 1;
 
 
-        private int[,] level;
-        private Point levelDim;
-
         private HashSet<Point> floors;
         private HashSet<Point> walls;
         private HashSet<Point> emptys;
@@ -27,11 +24,11 @@ namespace TombOfAnubis
         private UndirectedBidirectionalGraph<Point, Edge<Point>> Graph;
 
         private Dictionary<Edge<Point>, double> EdgeCost;
+        private Map map;
 
-        public MapGraph(int[,] level)
-        { 
-            this.level = level;
-            levelDim = new Point(level.GetLength(0), level.GetLength(1));
+        public MapGraph(Map map)
+        {
+            this.map = map;
             floors = new HashSet<Point>();
             walls = new HashSet<Point>();
             emptys = new HashSet<Point>();
@@ -49,21 +46,21 @@ namespace TombOfAnubis
 
         private void FillFloorWallEmptyLists()
         {
-            for (int i = 0; i < levelDim.X; i++)
+            for (int y = 0; y < map.MapDimensions.Y; y++)
             {
-                for (int j = 0; j < levelDim.Y; j++)
+                for (int x = 0; x < map.MapDimensions.X; x++)
                 {
-                    if (level[i, j] == MapBlock.FloorValue)
+                    if (map.GetCollisionLayerValue(new Point(x, y)) == MapBlock.FloorValue)
                     {
-                        floors.Add(new Point(i, j));
+                        floors.Add(new Point(x, y));
                     }
-                    else if (level[i, j] == MapBlock.WallValue)
+                    else if (map.GetCollisionLayerValue(new Point(x, y)) == MapBlock.WallValue)
                     {
-                        walls.Add(new Point(i, j));
+                        walls.Add(new Point(x, y));
                     }
-                    else if(level[i, j] == MapBlock.EmptyValue)
+                    else if(map.GetCollisionLayerValue(new Point(x, y)) == MapBlock.EmptyValue)
                     {
-                        emptys.Add(new Point(i, j));
+                        emptys.Add(new Point(x, y));
                     }
                 }
             }
@@ -92,14 +89,14 @@ namespace TombOfAnubis
                 };
                 foreach (Point neighbour in neighbours)
                 {
-                    if (!ValidCoord(neighbour)) { continue; }
-                    if (level[neighbour.X, neighbour.Y] == MapBlock.FloorValue)
+                    if (!map.ValidTileCoordinates(neighbour)) { continue; }
+                    if (map.GetCollisionLayerValue(neighbour) == MapBlock.FloorValue)
                     {
                         Edge<Point> edge = new Edge<Point>(floor, neighbour);
                         EdgeCost.Add(edge, EdgeCostFloorFloor);
                         directedGraph.AddEdge(edge);
                     }
-                    else if (level[neighbour.X, neighbour.Y] == MapBlock.EmptyValue)
+                    else if (map.GetCollisionLayerValue(neighbour) == MapBlock.EmptyValue)
                     {
                         Edge<Point> edge = new Edge<Point>(floor, neighbour);
                         EdgeCost.Add(edge, EdgeCostFloorEmpty);
@@ -118,8 +115,8 @@ namespace TombOfAnubis
                 };
                 foreach (Point neighbour in neighbours)
                 {
-                    if (!ValidCoord(neighbour)) { continue; }
-                    if (level[neighbour.X, neighbour.Y] == MapBlock.EmptyValue)
+                    if (!map.ValidTileCoordinates(neighbour)) { continue; }
+                    if (map.GetCollisionLayerValue(neighbour) == MapBlock.EmptyValue)
                     {
                         Edge<Point> edge = new Edge<Point>(empty, neighbour);
                         EdgeCost.Add(edge, EdgeCostEmptyEmpty);
@@ -146,9 +143,9 @@ namespace TombOfAnubis
                     foreach(Edge<Point> edge in path)
                     {
                         Point v = edge.Target;
-                        if (level[v.X, v.Y] == MapBlock.EmptyValue)
+                        if (map.GetCollisionLayerValue(v) == MapBlock.EmptyValue)
                         {
-                            level[v.X, v.Y] = MapBlock.FloorValue;
+                            map.SetCollisionLayerValue(v, MapBlock.FloorValue);
                             EdgeCost[edge] = EdgeCostRoad;
                             emptys.Remove(v);
                         }
@@ -162,7 +159,7 @@ namespace TombOfAnubis
         {
             foreach (Point empty in emptys)
             {
-                level[empty.X, empty.Y] = MapBlock.WallValue;
+                map.SetCollisionLayerValue(empty, MapBlock.WallValue);
             }
         }
 
@@ -176,11 +173,6 @@ namespace TombOfAnubis
             tryGetPath(to, out path);
             return path;
 
-        }
-
-        private bool ValidCoord(Point coord)
-        {
-            return coord.X >= 0 && coord.Y >= 0 &&  coord.X < levelDim.X && coord.Y < levelDim.Y;
         }
     }
 }

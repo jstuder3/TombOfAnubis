@@ -3,7 +3,7 @@
 	<Asset Type="TombOfAnubis.MapBlock">
 		<MinPlayers>1</MinPlayers>
 		<MaxPlayers>1</MaxPlayers>
-		<!-- Dimensions of the Tiles array (x: num Rows, y: num Cols)-->
+		<!-- Dimensions of the Tiles array (x: right, y: down)-->
 		<Dimensions>4 4</Dimensions>
 		<!-- Array to describe the block layout: 1 is wall, 0 is floor-->
 		<Tiles>
@@ -21,7 +21,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Trap</ClassName>
-				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 3</SpawnTileCoordinate>
 				<Offset>-105 0</Offset>
 				<Scale>0.42 0.42</Scale>
 				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
@@ -45,7 +45,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Trap</ClassName>
-				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 3</SpawnTileCoordinate>
 				<Offset>0 0</Offset>
 				<Scale>0.42 0.42</Scale>
 				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
@@ -69,7 +69,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Trap</ClassName>
-				<SpawnTileCoordinate> 3 2</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 3</SpawnTileCoordinate>
 				<Offset>105 0</Offset>
 				<Scale>0.42 0.42</Scale>
 				<SpriteTextureName>selfmade_simplistic_trap_spritesheet</SpriteTextureName>
@@ -93,21 +93,21 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Button</ClassName>
-				<SpawnTileCoordinate> 1 0</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 0 1</SpawnTileCoordinate>
 				<Scale>0.25 0.25</Scale>
 				<SpriteTextureName>selfmade_simplistic_button_spritesheet</SpriteTextureName>
 				<Type>InstantRelease</Type>
 				<ConnectedTrapPositions>
 					<Item>
-						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
+						<SpawnTileCoordinate>2 3</SpawnTileCoordinate>
 						<Offset>-105 0</Offset>
 					</Item>
 					<Item>
-						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
+						<SpawnTileCoordinate>2 3</SpawnTileCoordinate>
 						<Offset>0 0</Offset>
 					</Item>
 					<Item>
-						<SpawnTileCoordinate>3 2</SpawnTileCoordinate>
+						<SpawnTileCoordinate>2 3</SpawnTileCoordinate>
 						<Offset>105 0</Offset>
 					</Item>
 				</ConnectedTrapPositions>

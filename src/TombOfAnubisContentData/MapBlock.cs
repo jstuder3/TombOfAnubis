@@ -55,10 +55,10 @@ namespace TombOfAnubis
         }
         public int GetValue(Point coord)
         {
-            return Tiles[coord.X * Dimensions.Y + coord.Y];
+            return Tiles[coord.Y * Dimensions.X + coord.X];
         }
 
-        public bool HasTopDoor()
+        public bool HasLeftDoor()
         {
             for(int y = 0; y < Dimensions.Y; y++)
             {
@@ -66,7 +66,7 @@ namespace TombOfAnubis
             }
             return false;
         }
-        public bool HasBottomDoor()
+        public bool HasRightDoor()
         {
             for (int y = 0; y < Dimensions.Y; y++)
             {
@@ -74,7 +74,7 @@ namespace TombOfAnubis
             }
             return false;
         }
-        public bool HasLeftDoor()
+        public bool HasTopDoor()
         {
             for (int x = 0; x < Dimensions.X; x++)
             {
@@ -82,7 +82,7 @@ namespace TombOfAnubis
             }
             return false;
         }
-        public bool HasRightDoor()
+        public bool HasBottomDoor()
         {
             for (int x = 0; x < Dimensions.X; x++)
             {
