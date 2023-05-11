@@ -164,7 +164,6 @@ namespace TombOfAnubis.ScreenManager
         {
             this.untickedBox = untickedBox;
             this.tickedBox = tickedBox;
-            this.tickBoxStatus = false;
 
         }
 

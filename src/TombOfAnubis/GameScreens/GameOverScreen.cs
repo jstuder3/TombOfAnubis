@@ -84,7 +84,7 @@ namespace TombOfAnubis
                             new AnimationClip(AnimationClipType.ActiveEntry, 1, 50, new Point(scrollTextureWidth, scrollTextureHeight)),
                         };
 
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = ResolutionController.TargetViewport;
 
             // Set the textures on each menu element and its scale
             Animation animation = new Animation(activeScrollAnimation, Visibility.Game);

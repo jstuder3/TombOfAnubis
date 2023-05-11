@@ -86,7 +86,7 @@ namespace TombOfAnubis.MenuScreens
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = ResolutionController.TargetViewport;
 
             spriteBatch.Begin();
 

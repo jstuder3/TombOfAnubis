@@ -70,7 +70,7 @@ namespace TombOfAnubis
         }
         public override void Draw(GameTime gameTime)
         {
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = ResolutionController.TargetViewport;
             //var videoTexture = videoPlayer.GetTexture();
             VideoController.Draw(spriteBatch, new Rectangle(viewport.X, viewport.Y, viewport.Width, viewport.Height));
 

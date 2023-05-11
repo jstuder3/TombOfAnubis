@@ -76,7 +76,6 @@ namespace TombOfAnubis
         /// </summary>
         public override void Update(GameTime gameTime)
         {
-            SetViewport();
             // Make a copy of the master screen list, to avoid confusion if
             // the process of updating one screen adds or removes others.
             _screensToUpdate.Clear();
@@ -144,6 +143,7 @@ namespace TombOfAnubis
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
+            ResolutionController.SetRenderTarget();
             foreach (GameScreen screen in _screens)
             {
                 if (screen.ScreenState == ScreenState.Hidden)
@@ -151,6 +151,7 @@ namespace TombOfAnubis
 
                 screen.Draw(gameTime);
             }
+            ResolutionController.Draw(spriteBatch);
         }
 
 
@@ -206,10 +207,6 @@ namespace TombOfAnubis
             _game.Exit();
         }
 
-        public void SetViewport()
-        {
-            GraphicsDevice.Viewport = TombOfAnubis.resizer.Viewport;
-        }
 
     }
 }

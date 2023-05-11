@@ -45,12 +45,12 @@ namespace TombOfAnubis
         {
             graphics = graphicsDevice;
             numberOfPlayers = numPlayers;
-            gameScreenViewport = graphics.Viewport;
+            gameScreenViewport = ResolutionController.TargetViewport;
             PlayerViewports = new List<Viewport>();
             switch (numberOfPlayers)
             {
                 case 1:
-                    playerViewports.Add(graphics.Viewport); break;
+                    playerViewports.Add(gameScreenViewport); break;
                 case 2:
                     CreateTwoPlayerViewports(graphicsDevice); break;
                 case 3:

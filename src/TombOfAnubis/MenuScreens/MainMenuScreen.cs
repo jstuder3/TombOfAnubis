@@ -153,7 +153,7 @@ namespace TombOfAnubis
             SetAnimation(scrollTexture, scrollTextureScale, animation);
 
             // Now that they have textures, set the proper positions on the menu entries
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = ResolutionController.TargetViewport;
             SetElementPosition(viewport);
 
             // Dialog Content
@@ -348,7 +348,7 @@ namespace TombOfAnubis
 
             if (quit)
             {
-                Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+                Viewport viewport = ResolutionController.TargetViewport;
                 VideoController.Draw(spriteBatch, new Rectangle(viewport.X, viewport.Y, viewport.Width, viewport.Height));
             }
 

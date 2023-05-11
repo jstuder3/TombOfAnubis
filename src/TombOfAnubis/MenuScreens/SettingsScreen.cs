@@ -38,11 +38,11 @@ namespace TombOfAnubis.MenuScreens
 
         SettingsEntry resolutionSetting, fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton;
 
+        Settings settings;
+
         Texture2D arrowTexture;
         float selectBoxWidth = 0.28f;
         float arrowScale = 0.1f;
-        //List<string> supportedResolutions = new List<string> { "1280x720", "1920x1080", "2560x1440" };
-        List<string> supportedResolutions;
 
         float sliderButtonWidth = 0.01f, sliderButtonHeight = 0.025f;
         float sliderLength = 0.28f, sliderThickness = 0.005f;
@@ -77,6 +77,7 @@ namespace TombOfAnubis.MenuScreens
         /// </summary>
         public SettingsScreen()
         {
+            settings = Settings.Read();
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
             buttonCooldown = true;
@@ -88,13 +89,6 @@ namespace TombOfAnubis.MenuScreens
             /// Add entries to the Settings Screen
             /// </summary>
 
-            supportedResolutions = new List<string>();
-            int numSupportedResolutions = ScreenResizer.numSupportedResolutions;
-            for (int i = 0; i < numSupportedResolutions; i++)
-            {
-                string resolutionEntry = ScreenResizer.supportedWidths[i].ToString() + " x " + ScreenResizer.supportedHeights[i];
-                supportedResolutions.Add(resolutionEntry);
-            }
 
             resolutionSetting = new SettingsEntry("Resolution", SettingsType.SelectBox, ControlType.Resolution);
             fullscreenSetting = new SettingsEntry("Fullscreen", SettingsType.TickBox, ControlType.Fullscreen);
@@ -102,11 +96,12 @@ namespace TombOfAnubis.MenuScreens
             soundFXVolumeSetting = new SettingsEntry("SoundFX Volume", SettingsType.Slider, ControlType.SoundFX);
             saveButton = new SettingsEntry("Apply", SettingsType.SaveButton, ControlType.Save);
 
-            bgMusicVolumeSetting.SliderStatus = 1.0f;
-            soundFXVolumeSetting.SliderStatus = 1.0f;
+            bgMusicVolumeSetting.SliderStatus = settings.VolumeSetting;
+            soundFXVolumeSetting.SliderStatus = settings.SoundFXVolumeSetting;
+            fullscreenSetting.TickBoxStatus = settings.IsFullscreen;
 
             //SettingsEntries = new List<SettingsEntry> { fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton };
-            SettingsEntries = new List<SettingsEntry> { resolutionSetting, fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton };
+            SettingsEntries = new List<SettingsEntry> {fullscreenSetting, bgMusicVolumeSetting, soundFXVolumeSetting, saveButton };
         }
 
 
@@ -133,8 +128,7 @@ namespace TombOfAnubis.MenuScreens
             }
 
             // Now that they have textures, set the proper positions on the menu entries
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
-            SetElementPosition(viewport);
+            SetElementPosition(new Viewport(0, 0, ResolutionController.RenderTarget.Width, ResolutionController.RenderTarget.Height));
 
             base.LoadContent();
         }
@@ -183,16 +177,6 @@ namespace TombOfAnubis.MenuScreens
 
                 switch (entry.EntryType)
                 {
-                    case SettingsType.SelectBox:
-                        {
-                            float relativeWidth = selectBoxWidth * textureWidth;
-                            Vector2 selectBoxSize = GetRelativePosition(viewport, relativeWidth, stringHeight);
-                            Rectangle selectBox = new Rectangle((int)entry.ElementPosition.X, (int)entry.ElementPosition.Y, (int)selectBoxSize.X, (int)selectBoxSize.Y);
-
-                            entry.SetSelectBoxParams(selectBox, arrowTexture, arrowScale, supportedResolutions);
-                            break;
-                        }
-
                     case SettingsType.TickBox:
                         {
                             int tickBoxSize = (int)(stringHeight * screenHeight);
@@ -299,8 +283,15 @@ namespace TombOfAnubis.MenuScreens
 
                                 switch (entry.ControlType)
                                 {
-                                    case ControlType.Music: { MediaPlayer.Volume = entry.SliderStatus; break; }
-                                    case ControlType.SoundFX: { SoundEffect.MasterVolume = entry.SliderStatus; break; }
+                                    case ControlType.Music: { 
+                                            MediaPlayer.Volume = entry.SliderStatus;
+                                            settings.VolumeSetting = entry.SliderStatus;
+
+                                            break; }
+                                    case ControlType.SoundFX: { 
+                                            SoundEffect.MasterVolume = entry.SliderStatus;
+                                            settings.SoundFXVolumeSetting = entry.SliderStatus;
+                                            break; }
                                     default: { break; }
                                 }
                                 break;
@@ -328,8 +319,14 @@ namespace TombOfAnubis.MenuScreens
 
                                 switch (entry.ControlType)
                                 {
-                                    case ControlType.Music: { MediaPlayer.Volume = entry.SliderStatus; break; }
-                                    case ControlType.SoundFX: { SoundEffect.MasterVolume = entry.SliderStatus; break; }
+                                    case ControlType.Music: { 
+                                            MediaPlayer.Volume = entry.SliderStatus;
+                                            settings.VolumeSetting = entry.SliderStatus;
+                                            break; }
+                                    case ControlType.SoundFX: { 
+                                            SoundEffect.MasterVolume = entry.SliderStatus;
+                                            settings.SoundFXVolumeSetting = entry.SliderStatus;
+                                            break; }
                                     default : { break; }
                                 }
                                 break;
@@ -349,12 +346,14 @@ namespace TombOfAnubis.MenuScreens
                         case SettingsType.TickBox: 
                             {
                                 entry.TickBoxStatus = !entry.TickBoxStatus;
-                                TombOfAnubis.resizer.ToggleFullscreen();
-                                GameScreenManager.SetViewport();
+                                settings.IsFullscreen = entry.TickBoxStatus;
+                                ResolutionController.ToggleFullscreen();
+
                                 break;
                             }
                         case SettingsType.SaveButton: 
                             {
+                                settings.Write();
                                 GameScreenManager.RemoveScreen(this);
                                 break;
                             }
@@ -406,7 +405,6 @@ namespace TombOfAnubis.MenuScreens
             settingsScrollPosition = new Vector2(960, 540);
             spriteBatch.Draw(settingsScroll, settingsScrollPosition, sourceRectangle, Color.White, MathHelper.ToRadians(90), rotateOrigin, settingsScrollScale, SpriteEffects.None, 0f);
             spriteBatch.DrawString(titleFont, title, titlePosition, Color.White);
-
 
             // Draw each settings entry in turn.
             for (int i = 0; i < settingsEntries.Count; i++)

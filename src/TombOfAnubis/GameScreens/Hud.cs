@@ -46,7 +46,7 @@ namespace TombOfAnubis
         public Hud(GraphicsDevice graphicsDevice, GameScreenManager gameScreenManager)
         {
             graphics = graphicsDevice;
-            viewport = graphics.Viewport;
+            viewport = ResolutionController.TargetViewport;
             Debug.WriteLine("Hud Viewport:" + viewport);
             session = Session.GetInstance();
             characterViewports = SplitScreen.PlayerViewports;

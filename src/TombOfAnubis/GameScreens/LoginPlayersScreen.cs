@@ -101,7 +101,7 @@ namespace TombOfAnubis.GameScreens
 
             //startButton = content.Load<Texture2D>()
 
-            Viewport viewport = GameScreenManager.GraphicsDevice.Viewport;
+            Viewport viewport = ResolutionController.TargetViewport;
             int screenWidth = viewport.Width;
             int screenHeight = viewport.Height;
 

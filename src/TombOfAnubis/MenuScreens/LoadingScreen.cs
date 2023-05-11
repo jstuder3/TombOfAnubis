@@ -164,7 +164,7 @@ namespace TombOfAnubis
             }
 
             ContentManager content = GameScreenManager.Game.Content;
-            viewport = GameScreenManager.GraphicsDevice.Viewport;
+            viewport = ResolutionController.TargetViewport;
             Debug.WriteLine("LoadingScreen Viewport:" + viewport);
             numPlayers = InputController.GetActiveInputs().Count;
             font = Fonts.SettingsTitleFont;
