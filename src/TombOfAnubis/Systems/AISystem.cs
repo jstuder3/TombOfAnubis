@@ -87,6 +87,10 @@ namespace TombOfAnubis
 
         public int quadrant = 0; //1: top, 2: left, 3: right, 4: bottom
 
+        //public int initialBaseMS = 320;
+        public int maxTailMSIncreasage = 130;
+        
+
         public void printState(AI ai)
         {
             Entity entity = ai.Entity;
@@ -118,6 +122,13 @@ namespace TombOfAnubis
 
             if(this.timeAccumulatorMiliSec > 100)
             {
+                //first check if not already at max MS
+                if(this.increaseMsoverTimeAccumulation >= this.maxTailMSIncreasage)
+                {
+                    //Debug.WriteLine("AI: MaxTailingMS reached");
+                    return;
+                }
+
                 AI ai = GetComponents().First();
                 Entity entity = ai.Entity;
                 int msIncreasage = (int)(this.timeAccumulatorMiliSec / 50.0);
@@ -126,7 +137,12 @@ namespace TombOfAnubis
                 if (Session.GetInstance().NumberOfPlayers == 1)
                 {
                     msIncreasage = (int)(msIncreasage/1.5);
-                }               
+                }    
+                
+                if(this.increaseMsoverTimeAccumulation + msIncreasage >= this.maxTailMSIncreasage)
+                {
+                    msIncreasage = this.maxTailMSIncreasage - this.increaseMsoverTimeAccumulation;
+                }
 
                 entity.GetComponent<Movement>().BaseMovementSpeed += msIncreasage;
                 entity.GetComponent<Movement>().UpdateMovementSpeed();
