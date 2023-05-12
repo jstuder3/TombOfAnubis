@@ -149,6 +149,30 @@ namespace TombOfAnubis
             }
         }
 
+        public bool LeftTriggered()
+        {
+            if (IsKeyboard)
+            {
+                return Keyboard.GetState().GetPressedKeys().Contains(LeftKey);
+            }
+            else
+            {
+                return GamePad.GetState(ControllerID).ThumbSticks.Left.X == -1;
+            }
+        }
+
+        public bool RightTriggered()
+        {
+            if (IsKeyboard)
+            {
+                return Keyboard.GetState().GetPressedKeys().Contains(RightKey);
+            }
+            else
+            {
+                return GamePad.GetState(ControllerID).ThumbSticks.Left.X == 1;
+            }
+        }
+
         public void SetInactive()
         {
             IsActive = false;

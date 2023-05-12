@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using static System.Collections.Specialized.BitVector32;
 using System.Linq;
+using TombOfAnubis.GameScreens;
 
 namespace TombOfAnubis
 {
@@ -129,6 +130,8 @@ namespace TombOfAnubis
 
         public Entity[,] MapTiles { get; set; } 
 
+        public Mode GameMode { get; set; }
+
 
 
         // <summary>
@@ -230,6 +233,7 @@ namespace TombOfAnubis
             // create a new singleton
             singleton = new Session(screenManager, gameplayScreen);
             singleton.NumberOfPlayers = gameStartDescription.NumberOfPlayers;
+            singleton.GameMode = gameStartDescription.GameMode;
             var content = singleton.gameScreenManager.Game.Content;
 
             singleton.CharacterTextures = new List<Texture2D>()

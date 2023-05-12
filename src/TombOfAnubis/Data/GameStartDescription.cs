@@ -1,4 +1,6 @@
-﻿namespace TombOfAnubis
+﻿using TombOfAnubis.GameScreens;
+
+namespace TombOfAnubis
 {
     public class GameStartDescription
     {
@@ -21,5 +23,11 @@
             set { numberOfPlayers = value; }
         }
 
+        private Mode gameMode;
+        public Mode GameMode
+        {
+            get { return gameMode; }
+            set { gameMode = value; }
+        }
     }
 }
