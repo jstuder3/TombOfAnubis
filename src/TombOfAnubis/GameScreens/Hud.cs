@@ -16,7 +16,6 @@ namespace TombOfAnubis
         private Texture2D minimapFrame;
         private float minimapScale = 0.25f;
         private Viewport viewport;
-        private GraphicsDevice graphics;
         private Session session;
         private List<Viewport> characterViewports;
         private SpriteFont statusFont;
@@ -26,6 +25,8 @@ namespace TombOfAnubis
 
         // Inventory params
         private List<Texture2D> itemBorderTextures = new List<Texture2D>();
+        private Texture2D blockedTexture;
+        private float blockedPlankScale = 0.2f;
         private int placementOffset = 3;
         private float scalingFactor = 1.0f;
         private int numSlots = 1;
@@ -45,7 +46,6 @@ namespace TombOfAnubis
 
         public Hud(GraphicsDevice graphicsDevice, GameScreenManager gameScreenManager)
         {
-            graphics = graphicsDevice;
             viewport = ResolutionController.TargetViewport;
             Debug.WriteLine("Hud Viewport:" + viewport);
             session = Session.GetInstance();
@@ -73,6 +73,7 @@ namespace TombOfAnubis
             ContentManager content = screenManager.Game.Content;
             minimapBackground = content.Load<Texture2D>("Textures/Menu/treasuremap_background");
             minimapFrame = content.Load<Texture2D>("Textures/Menu/treasuremap_border");
+            blockedTexture = content.Load<Texture2D>("Textures/Objects/UI/item_blocked");
             for (int i = 0; i < session.World.GetChildrenOfType<Character>().Count; i++)
             {
                 string textureName = "Item_slot_" + (i + 1);
@@ -251,6 +252,19 @@ namespace TombOfAnubis
             Rectangle DestinationRectangle = new Rectangle((int)itemDisplayPosition.X, (int)itemDisplayPosition.Y, itemWidth, itemHeight);
 
             session.SpriteSystem.SpriteBatch.Draw(itemTexture, DestinationRectangle, Color.White);
+
+            bool blocked = Session.GetInstance().AnubisAISystem.powerupsBlockedEvent;
+            if(blocked)
+            {
+                int plankWidth = (int)(blockedTexture.Width * blockedPlankScale);
+                int plankHeight = (int)(blockedTexture.Height * blockedPlankScale);
+
+                Vector2 plankPositionOffSet = new Vector2((slotWidth - plankWidth) / 2 + displacement, (frameHeight - plankHeight) / 2);
+                Vector2 plankDisplayPosition = new Vector2(framePositionX, framePositionY) + plankPositionOffSet;
+
+                DestinationRectangle = new Rectangle((int)plankDisplayPosition.X, (int)plankDisplayPosition.Y, plankWidth, plankHeight);
+                session.SpriteSystem.SpriteBatch.Draw(blockedTexture, DestinationRectangle, Color.White);
+            }
         }
 
         /// <summary>

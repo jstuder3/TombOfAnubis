@@ -61,12 +61,6 @@ namespace TombOfAnubis
         private readonly int animationDuration = 200;
         private double animationStart;
 
-        /// <summary>
-        /// Stores whether this entry was the most recently selected MenuEntry
-        /// </summary>
-        private bool prevSelected = false;
-        private double prevSelectedTime;
-
         #endregion
 
 
@@ -239,9 +233,6 @@ namespace TombOfAnubis
                         spriteBatch.Draw(barTexture, topBar, Color.White);
                         spriteBatch.Draw(barTexture, bottomBar, Color.White);
                     }
-
-                    Debug.WriteLine("Animation start: " + animationStart);
-                    Debug.WriteLine("Elapsed time: " + elapsedTimeAfterSelect);
                 }
             }
             else if ((spriteFont != null) && !String.IsNullOrEmpty(text))
