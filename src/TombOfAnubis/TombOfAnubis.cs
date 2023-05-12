@@ -25,7 +25,7 @@ namespace TombOfAnubis
         {
             // TODO: Add your initialization logic here
             base.Initialize();
-            ResolutionController.Initialize(graphics);
+            ResolutionController.Initialize(graphics, base.Window);
 
             screenManager.AddScreen(new IntroScreen(0));
 

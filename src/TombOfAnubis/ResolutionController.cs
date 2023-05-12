@@ -13,8 +13,11 @@ namespace TombOfAnubis
         public static Viewport TargetViewport { get; set; }
         private static GraphicsDeviceManager graphics;
 
-        public static void Initialize(GraphicsDeviceManager _graphics)
+        private static GameWindow window;
+
+        public static void Initialize(GraphicsDeviceManager _graphics, GameWindow _window)
         {
+            window = _window;
             graphics = _graphics;
             graphics.HardwareModeSwitch = false;
             graphics.PreferredBackBufferWidth = TargetResolution.X;
@@ -46,6 +49,8 @@ namespace TombOfAnubis
             {
                 graphics.PreferredBackBufferWidth = TargetResolution.X;
                 graphics.PreferredBackBufferHeight = TargetResolution.Y;
+                window.BeginScreenDeviceChange(false);
+                window.EndScreenDeviceChange(window.ScreenDeviceName, TargetResolution.X, TargetResolution.Y);
             }
             graphics.IsFullScreen = !graphics.IsFullScreen;
             graphics.ApplyChanges();
