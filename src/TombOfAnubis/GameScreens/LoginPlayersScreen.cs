@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 
 namespace TombOfAnubis.GameScreens
 {
+
+    public enum Mode
+    {
+        Easy,
+        Normal,
+    }
+
     class LoginPlayersScreen : GameScreen
     {
         private GameStartDescription gameStartDescription;
@@ -29,6 +36,11 @@ namespace TombOfAnubis.GameScreens
 
         private string startDescription;
         private Texture2D startBackground;
+        private string modeEasy = "Easy";
+        private Texture2D easyButton;
+        private string modeNormal = "Normal";
+        private Texture2D normalButton;
+
 
         private Texture2D lineTexture;
         private Rectangle verticalLinePos, horizontalLinePos;
@@ -39,6 +51,8 @@ namespace TombOfAnubis.GameScreens
         // Constants
         private Color lineColor = Color.White;
         private Color buttonColor = Color.LimeGreen;
+        private Color easyColor = Color.DarkGreen;
+        private Color normalColor = Color.OrangeRed;
 
         private SpriteFont descriptionFont = Fonts.CascadiaFont;
 
@@ -49,12 +63,25 @@ namespace TombOfAnubis.GameScreens
         private float keyboardScale = 0.5f, controllerScale = 0.5f;
         private float instructionScale = 0.6f;
         private float playerNumberScale = 1.4f;
-        private float startButtonScale = 0.3f;
+        private float startButtonScale = 0.25f;
+        private float startTextScale = 0.85f;
+        private float modeTextScale = 0.7f;
 
         // Relative to playerFrame size
-        private float marginStartButton = 0.03f;
+        private float marginStartButton = 0.1f;
         private float marginY = 0.03f;
-        private float startBarHeightScale = 0.1f;
+        private float startBarHeightScale = 0.2f;
+
+        // Relative to startButton size
+        private float modeButtonWidth = 0.35f, modeButtonHeight = 0.45f;
+        private float modeButtonGap = 0.1f;
+
+        // Set default to normal
+        private Mode selectedMode = Mode.Normal;
+
+        private bool buttonCooldown;
+        private bool buttonPressed;
+        private double lastPressed;
 
 
         public LoginPlayersScreen() : base()
@@ -65,6 +92,9 @@ namespace TombOfAnubis.GameScreens
 
             joinedPlayers = InputController.GetActiveInputs();
             startCoolDown = 250;
+
+            buttonCooldown = false;
+            buttonPressed = false;
         }
 
         public override void LoadContent()
@@ -118,6 +148,11 @@ namespace TombOfAnubis.GameScreens
 
             startBackground = new Texture2D(GameScreenManager.GraphicsDevice, 1,1);
             startBackground.SetData(new[] { buttonColor });
+            easyButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+            easyButton.SetData(new[] { easyColor });
+            normalButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+            normalButton.SetData(new[] { normalColor });
+
             startDescription = "Start With 1 Player";
         }
 
@@ -161,12 +196,41 @@ namespace TombOfAnubis.GameScreens
                 AudioController.StopSong();
                 LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
             }
+
+            if(!buttonCooldown)
+            {
+                int numModes = Enum.GetNames(typeof(Mode)).Length;
+                if (joinedPlayers[0].LeftTriggered() && !InputController.KeyCooldowns.ContainsKey(joinedPlayers[0].LeftKey))
+                {
+                    buttonPressed = true;
+                    selectedMode = (selectedMode == 0) ? (Mode)(numModes - 1) : (selectedMode - 1);
+                }
+                if (joinedPlayers[0].RightTriggered() && !InputController.KeyCooldowns.ContainsKey(joinedPlayers[0].RightKey))
+                {
+                    buttonPressed = true;
+                    selectedMode = (selectedMode == (Mode)(numModes - 1)) ? 0 : (selectedMode + 1);
+                }
+            }
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
             startCoolDown -= gameTime.ElapsedGameTime.Milliseconds;
+            if (buttonPressed)
+            {
+                buttonPressed = false;
+                buttonCooldown = true;
+                lastPressed = gameTime.TotalGameTime.TotalMilliseconds;
+            }
+            if (buttonCooldown) // enough time elapsed since last pressed
+            {
+                double diff = gameTime.TotalGameTime.TotalMilliseconds - lastPressed;
+                if ((int)diff > 250)
+                {
+                    buttonCooldown = false;
+                }
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -272,21 +336,96 @@ namespace TombOfAnubis.GameScreens
             // Draw the start button only for player 1
             if(playerNumber.Equals("Player 1"))
             {
-                offsetY = (int)(playerFrame.Y + (1.0f - startBarHeightScale) * playerFrame.Height);
-                int startBarHeight = (int)(startBarHeightScale * playerFrame.Height);
-                Rectangle startBGPosition = new Rectangle(playerFrame.X, offsetY, playerFrame.Width, startBarHeight);
-                spriteBatch.Draw(startBackground, startBGPosition, Color.White);
-
-                textLength = descriptionFont.MeasureString(startDescription);
-                textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, offsetY + (startBarHeight - textLength.Y)/2);
-                spriteBatch.DrawString(descriptionFont, startDescription, textPosition, Color.White);
-
-                int rightMargin = (int)(playerFrame.Width * marginStartButton);
-                int offsetX = (int)(playerFrame.Width - (rightMargin + startButton.Width * startButtonScale));
-                offsetY += (int)((startBarHeight - startButton.Height * startButtonScale) / 2);
-                Vector2 startButtonPosition = new Vector2(offsetX, offsetY);
-                spriteBatch.Draw(startButton, startButtonPosition, null, Color.White, 0f, Vector2.Zero, startButtonScale, SpriteEffects.None, 0f);
+                DrawStartButton(playerFrame);
             }
+        }
+
+        private void DrawStartButton(Rectangle playerFrame)
+        {
+            SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
+
+            int offsetX, offsetY;
+            int startBarHeight = (int)(startBarHeightScale * playerFrame.Height);
+            int buttonWidth = (int)(modeButtonWidth * playerFrame.Width);
+            int buttonHeight = (int)(modeButtonHeight * startBarHeight);
+
+            // Start Bar
+            offsetY = (int)(playerFrame.Y + (1.0f - startBarHeightScale) * playerFrame.Height);
+            Rectangle startBGPosition = new Rectangle(playerFrame.X, offsetY, playerFrame.Width, startBarHeight);
+            spriteBatch.Draw(startBackground, startBGPosition, Color.White);
+
+            // Start description with number of players
+            Vector2 textLength = descriptionFont.MeasureString(startDescription) * startTextScale;
+            Vector2 textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, offsetY);
+            spriteBatch.DrawString(descriptionFont, startDescription, textPosition, Color.White, 0f, Vector2.Zero, startTextScale, SpriteEffects.None, 0f);
+
+            // Easy mode button
+            offsetX = (int)((1 - 2 * modeButtonWidth - modeButtonGap) * playerFrame.Width / 2);
+            offsetY = (int)((startBarHeight - buttonHeight - textLength.Y) / 2 + textLength.Y);
+            Rectangle easyButtonPosition = new Rectangle(startBGPosition.X + offsetX, startBGPosition.Y + offsetY, buttonWidth, buttonHeight);
+            spriteBatch.Draw(easyButton, easyButtonPosition, Color.White);
+
+            Vector2 modetextLength = descriptionFont.MeasureString(modeEasy) * modeTextScale;
+            textPosition = new Vector2(easyButtonPosition.X, easyButtonPosition.Y) +  new Vector2((easyButtonPosition.Width - modetextLength.X) / 2, (easyButtonPosition.Height - modetextLength.Y) / 2);
+            spriteBatch.DrawString(descriptionFont, modeEasy, textPosition, Color.White, 0f, Vector2.Zero, modeTextScale, SpriteEffects.None, 0f);
+
+            // Normal mode button
+            offsetX = (int)((1 - 2 * modeButtonWidth - modeButtonGap) * playerFrame.Width / 2 + (modeButtonGap + modeButtonWidth) * playerFrame.Width);
+            offsetY = (int)((startBarHeight - buttonHeight - textLength.Y) / 2 + textLength.Y);
+            Rectangle normalButtonPosition = new Rectangle(startBGPosition.X + offsetX, startBGPosition.Y + offsetY, buttonWidth, buttonHeight);
+            spriteBatch.Draw(normalButton, normalButtonPosition, Color.White);
+
+            modetextLength = descriptionFont.MeasureString(modeNormal) * modeTextScale;
+            textPosition = new Vector2(normalButtonPosition.X, normalButtonPosition.Y) + new Vector2((normalButtonPosition.Width - modetextLength.X) / 2, (normalButtonPosition.Height - modetextLength.Y) / 2);
+            spriteBatch.DrawString(descriptionFont, modeNormal, textPosition, Color.White, 0f, Vector2.Zero, modeTextScale, SpriteEffects.None, 0f);
+
+            // Draw indicator for selected mode
+            switch (selectedMode)
+            {
+                case Mode.Easy: DrawSelectedMode(easyButtonPosition); break;
+
+                case Mode.Normal: DrawSelectedMode(normalButtonPosition); break;
+
+                default: break;
+            }
+            
+        }
+
+        private void DrawSelectedMode(Rectangle modeButton)
+        {
+            SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
+
+            // Start button
+            int rightMargin = (int)(modeButton.Width * marginStartButton);
+            int offsetX = (int)(modeButton.Width - (rightMargin + startButton.Width * startButtonScale));
+            int offsetY = (int)((modeButton.Height - startButton.Height * startButtonScale) / 2);
+            Vector2 startButtonPosition = new Vector2(modeButton.X + offsetX, modeButton.Y + offsetY);
+            spriteBatch.Draw(startButton, startButtonPosition, null, Color.White, 0f, Vector2.Zero, startButtonScale, SpriteEffects.None, 1f);
+
+            //Frame around selected button
+            int frameThickness = 2;
+            Rectangle frame = new Rectangle(modeButton.X - frameThickness, modeButton.Y - frameThickness, modeButton.Width + 2 * frameThickness, modeButton.Height + 2 * frameThickness);
+
+            Texture2D frameTexture = new Texture2D(GameScreenManager.GraphicsDevice,frame.Width,frame.Height);
+            Color[] framePixels = new Color[frame.Width * frame.Height];
+            for (int i = 0; i < frame.Width; i++)
+            {
+                for (int j = 0; j < frame.Height; j++)
+                {
+                    if (i <= frameThickness || i >= frame.Width - frameThickness -1 || j <= frameThickness || j >= frame.Height - frameThickness -1)
+                    {
+                        framePixels[j * frame.Width + i] = Color.White;
+                    }
+                    else
+                    {
+                        framePixels[j * frame.Width + i] = Color.Transparent;
+                    }
+                    
+                }
+            }
+            frameTexture.SetData(framePixels);
+
+            spriteBatch.Draw(frameTexture, frame, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }
