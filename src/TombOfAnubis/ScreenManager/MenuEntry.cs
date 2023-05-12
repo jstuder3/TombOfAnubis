@@ -56,7 +56,7 @@ namespace TombOfAnubis
         private readonly Rectangle textureSourceRectangle = new Rectangle(0,0,800, 400);
         private float textureScale = 1.0f;
 
-        private Color barColor = Color.Crimson;
+        private Color barColor = Color.Firebrick;
         private float barThickness = 0.02f, maxBarLength = 0.6f;
         private readonly int animationDuration = 200;
         private double animationStart;
