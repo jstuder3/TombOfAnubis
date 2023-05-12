@@ -44,6 +44,10 @@ namespace TombOfAnubis
             };
             MediaPlayer.IsRepeating = true;
 
+            Settings settings = Settings.Read();
+            SetMusicVolume(settings.VolumeSetting);
+            SetSoundeffectVolume(settings.SoundFXVolumeSetting);
+
         }
 
         public static void PlaySong(string song)
