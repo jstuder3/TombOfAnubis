@@ -123,15 +123,16 @@ namespace TombOfAnubis
                 int msIncreasage = (int)(this.timeAccumulatorMiliSec / 50.0);
 
                 //nerf tialingMSIncreasage if playing solo
-                int nPlayers = Session.GetInstance().World.GetChildrenOfType<Character>().Count();
-                if (nPlayers == 1)
+                if (Session.GetInstance().NumberOfPlayers == 1)
                 {
-                    msIncreasage /= 2;
+                    msIncreasage = (int)(msIncreasage/1.5);
                 }               
 
                 entity.GetComponent<Movement>().BaseMovementSpeed += msIncreasage;
+                entity.GetComponent<Movement>().UpdateMovementSpeed();
                 this.increaseMsoverTimeAccumulation += msIncreasage;
                 this.timeAccumulatorMiliSec = this.timeAccumulatorMiliSec % 50;
+
             }
         }
 
@@ -140,8 +141,11 @@ namespace TombOfAnubis
             if (this.increaseMsoverTimeAccumulation > 0)
             {
                 AI ai = GetComponents().First();
-                Entity entity = ai.Entity;
+                Entity entity = ai.Entity; 
+                //Debug.WriteLine("old MS: " + entity.GetComponent<Movement>().BaseMovementSpeed);
+                
                 entity.GetComponent<Movement>().BaseMovementSpeed -= this.increaseMsoverTimeAccumulation;
+                entity.GetComponent<Movement>().UpdateMovementSpeed();
                 Debug.WriteLine("AI: remove TailingMS, decreasedMs by: " + this.increaseMsoverTimeAccumulation + ", new Ms: " + entity.GetComponent<Movement>().BaseMovementSpeed);
 
                 this.increaseMsoverTimeAccumulation = 0;
