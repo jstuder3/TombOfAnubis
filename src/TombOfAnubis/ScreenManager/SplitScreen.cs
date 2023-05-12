@@ -173,17 +173,17 @@ namespace TombOfAnubis
             topRight.MinDepth = 0;
             topRight.MaxDepth = 1;
 
-            Viewport bottom = new Viewport();
-            bottom.X = x + w / 4;
-            bottom.Y = y + h / 2 + 1;
-            bottom.Width = w / 2 - 1;
-            bottom.Height = h / 2 - 1;
-            bottom.MinDepth = 0;
-            bottom.MaxDepth = 1;
+            Viewport bottomLeft = new Viewport();
+            bottomLeft.X = x;
+            bottomLeft.Y = y + h / 2 + 1;
+            bottomLeft.Width = w / 2 - 1;
+            bottomLeft.Height = h / 2 - 1;
+            bottomLeft.MinDepth = 0;
+            bottomLeft.MaxDepth = 1;
 
             playerViewports.Add(topLeft);
             playerViewports.Add(topRight);
-            playerViewports.Add(bottom);
+            playerViewports.Add(bottomLeft);
         }
     }
 }

@@ -474,11 +474,19 @@ namespace TombOfAnubis
             singleton.viewport.Y + mapSize.Y / 2 + 20
                 );
 
-            if (singleton.NumberOfPlayers > 1)
+            Vector2 bottomRightMapCenter = new Vector2(
+                singleton.viewport.X + singleton.viewport.Width / 2 + 1 + (singleton.viewport.Width / 2 - 1) / 2,
+                singleton.viewport.Y + singleton.viewport.Height /2 + 1 + (singleton.viewport.Height / 2 - 1) / 2
+
+                );
+            if (singleton.NumberOfPlayers == 1)
             {
                 MoveMapCenterTo(viewportCenter);
             }
-            else
+            else if(singleton.NumberOfPlayers == 3)
+            {
+                MoveMapCenterTo(bottomRightMapCenter);
+            }else
             {
                 MoveMapCenterTo(topRightMapCenter);
             }
