@@ -91,7 +91,7 @@ namespace TombOfAnubis
 
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("Textures/Menu/main_menu_bg");
+            backgroundTexture = content.Load<Texture2D>("Textures/Menu/PauseScreenBG");
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
             titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 

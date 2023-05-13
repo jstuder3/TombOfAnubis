@@ -59,8 +59,8 @@ namespace TombOfAnubis.GameScreens
         private int lineThickness = 2;
 
         // Sprite & Font Scales
-        private float spriteScale = 1.0f;
-        private float keyboardScale = 0.5f, controllerScale = 0.5f;
+        private float spriteScale = 0.9f;
+        private float keyboardScale = 0.5f, controllerScale = 0.4f;
         private float instructionScale = 0.6f;
         private float playerNumberScale = 1.4f;
         private float startButtonScale = 0.25f;
@@ -68,7 +68,7 @@ namespace TombOfAnubis.GameScreens
         private float modeTextScale = 0.7f;
 
         // Relative to playerFrame size
-        private float marginStartButton = 0.1f;
+        private float marginStartButton = 0.06f;
         private float marginY = 0.03f;
         private float startBarHeightScale = 0.2f;
 

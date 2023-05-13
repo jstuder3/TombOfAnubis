@@ -844,6 +844,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/MenuTile.png
 
+#begin Textures/Menu/PauseScreenBG.jpeg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/PauseScreenBG.jpeg
+
 #begin Textures/Menu/Scroll.png
 /importer:TextureImporter
 /processor:TextureProcessor

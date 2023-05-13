@@ -211,6 +211,8 @@ namespace TombOfAnubis
                 // Fill up item slot with a filler string
                 DrawFillerString(itemSlotFiller, textureWidth, textureHeight, positionX[0], positionY[0], 1, statusColor);
             }
+
+            DrawBlockedItemSlot(textureWidth, textureHeight, positionX[0], positionY[0]);
         }
 
         /// <summary>
@@ -252,19 +254,6 @@ namespace TombOfAnubis
             Rectangle DestinationRectangle = new Rectangle((int)itemDisplayPosition.X, (int)itemDisplayPosition.Y, itemWidth, itemHeight);
 
             session.SpriteSystem.SpriteBatch.Draw(itemTexture, DestinationRectangle, Color.White);
-
-            bool blocked = Session.GetInstance().AnubisAISystem.powerupsBlockedEvent;
-            if(blocked)
-            {
-                int plankWidth = (int)(blockedTexture.Width * blockedPlankScale);
-                int plankHeight = (int)(blockedTexture.Height * blockedPlankScale);
-
-                Vector2 plankPositionOffSet = new Vector2((slotWidth - plankWidth) / 2 + displacement, (frameHeight - plankHeight) / 2);
-                Vector2 plankDisplayPosition = new Vector2(framePositionX, framePositionY) + plankPositionOffSet;
-
-                DestinationRectangle = new Rectangle((int)plankDisplayPosition.X, (int)plankDisplayPosition.Y, plankWidth, plankHeight);
-                session.SpriteSystem.SpriteBatch.Draw(blockedTexture, DestinationRectangle, Color.White);
-            }
         }
 
         /// <summary>
@@ -292,6 +281,26 @@ namespace TombOfAnubis
 
             session.SpriteSystem.SpriteBatch.DrawString(statusFont, statusText, displayPosition, color,
             0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
+        }
+
+        private void DrawBlockedItemSlot(int frameWidth, int frameHeight, int framePositionX, int framePositionY)
+        {
+            int slotWidth = (int)((itemSlotRightMargin - itemSlotLeftMargin) * frameWidth);
+            int displacement = (int)(itemSlotLeftMargin * frameWidth);
+
+            bool blocked = Session.GetInstance().AnubisAISystem.powerupsBlockedEvent;
+
+            if (blocked)
+            {
+                int plankWidth = (int)(blockedTexture.Width * blockedPlankScale);
+                int plankHeight = (int)(blockedTexture.Height * blockedPlankScale);
+
+                Vector2 plankPositionOffSet = new Vector2((slotWidth - plankWidth) / 2 + displacement, (frameHeight - plankHeight) / 2);
+                Vector2 plankDisplayPosition = new Vector2(framePositionX, framePositionY) + plankPositionOffSet;
+
+                Rectangle DestinationRectangle = new Rectangle((int)plankDisplayPosition.X, (int)plankDisplayPosition.Y, plankWidth, plankHeight);
+                session.SpriteSystem.SpriteBatch.Draw(blockedTexture, DestinationRectangle, Color.White);
+            }
         }
     }
 }

@@ -328,7 +328,7 @@ namespace TombOfAnubis
                         Vector2 textPosition = new Vector2(viewport.Width - margin * viewport.Height - textDimension.X, (1 - margin) * viewport.Height - textDimension.Y);
 
                         spriteBatch.Begin();
-                        spriteBatch.DrawString(font, readyText, textPosition, Color.Red, 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
+                        spriteBatch.DrawString(font, readyText, textPosition, Color.Firebrick, 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
                         spriteBatch.End();
                     }
                 }
@@ -340,7 +340,7 @@ namespace TombOfAnubis
 
                     spriteBatch.Begin();
                     spriteBatch.Draw(loadingTexture, loadingPosition, Color.White);
-                    spriteBatch.DrawString(font, readyText, textPosition, Color.Red, 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(font, readyText, textPosition, Color.Firebrick, 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);
                     spriteBatch.End();
                 }
 
