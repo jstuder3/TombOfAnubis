@@ -33,6 +33,7 @@ namespace TombOfAnubis
         public Buttons DropButton { get; set; }
         public Buttons PauseButton { get; set; }
         public Buttons BackButton { get; set; }
+        public float VibrationDuration { get; set; }
 
 
         public PlayerInput(Keys up, Keys down, Keys left, Keys right, Keys use, Keys pause, Keys dropKey, Keys backKey)
@@ -55,9 +56,10 @@ namespace TombOfAnubis
             PauseButton = Buttons.Start;
             DropButton = Buttons.B;
             BackButton = Buttons.B;
+            VibrationDuration = 0;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             if (IsActive && IsKeyboard)
             {
@@ -133,6 +135,15 @@ namespace TombOfAnubis
                 if (gamePadState.IsButtonDown(BackButton) && !InputController.ButtonCooldowns.ContainsKey(BackButton))
                 {
                     InputController.PlayerActions[PlayerID].Add(PlayerAction.Back);
+                }
+
+                if (VibrationDuration > 0)
+                {
+                    VibrationDuration -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (VibrationDuration <= 0)
+                    {
+                        GamePad.SetVibration(ControllerID, 0.0f, 0.0f);
+                    }
                 }
             }
         }
@@ -214,7 +225,7 @@ namespace TombOfAnubis
             UpdateCooldowns(gameTime);
             foreach(PlayerInput playerInput in PlayerInputs)
             {
-                playerInput.Update();
+                playerInput.Update(gameTime);
             }
         }
         public static void Clear()
@@ -327,6 +338,29 @@ namespace TombOfAnubis
             return res;
         }
 
+
+        public static void VibrateGamepad(int controllerID, float duration)
+        {
+            foreach (PlayerInput input in PlayerInputs)
+            {
+                if (input.IsActive && !input.IsKeyboard && input.ControllerID == controllerID)
+                {
+                    input.VibrationDuration = duration;
+                    GamePad.SetVibration(controllerID, 1.0f, 1.0f);
+                }
+            }
+        }
+
+        public static void VibrateGamepads(float duration)
+        {
+            foreach(PlayerInput input in PlayerInputs)
+            {
+                if(input.IsActive && !input.IsKeyboard)
+                {
+                    VibrateGamepad(input.ControllerID, duration);
+                }
+            }
+        }
         public static void AddCooldown(Keys keys, Buttons button, int timeInMs)
         {
             KeyCooldowns.Add(keys, timeInMs);

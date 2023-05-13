@@ -17,8 +17,7 @@ namespace TombOfAnubis {
         Hidden,
         OnCooldown,
         DelayedFollow,
-        TeleportPreview,
-        Vibrate
+        TeleportPreview
     }
 
     /**
@@ -264,10 +263,6 @@ namespace TombOfAnubis {
                     }
 
                     break;
-
-                case EffectType.Vibrate:
-                    GamePad.SetVibration(Entity.GetComponent<Player>().PlayerID, 1.0f, 1.0f);
-                    break;
                     
             }
 
@@ -333,9 +328,6 @@ namespace TombOfAnubis {
                     {
                         teleportPreviewEmitter.EndEmitter();
                     }
-                    break;
-                case EffectType.Vibrate:
-                    GamePad.SetVibration(Entity.GetComponent<Player>().PlayerID, 0.0f, 0.0f);
                     break;
             }
 

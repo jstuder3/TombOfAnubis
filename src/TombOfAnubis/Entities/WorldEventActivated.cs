@@ -32,10 +32,7 @@ namespace TombOfAnubis
             GameplayEffect selfDestroy = new GameplayEffect(EffectType.Lifetime, 3, Visibility.Both);
             AddComponent(selfDestroy);
 
-            foreach(Character character in Session.GetInstance().World.GetChildrenOfType<Character>())
-            {
-                character.AddComponent(new GameplayEffect(EffectType.Vibrate, 1.5f, Visibility.Both));
-            }
+            InputController.VibrateGamepads(1.5f);
 
         }
     }
