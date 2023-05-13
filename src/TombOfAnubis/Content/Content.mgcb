@@ -32,6 +32,12 @@
 /processorParam:Quality=Best
 /build:Audio/SoundFX/ArtefactPlaced.mp3
 
+#begin Audio/SoundFX/ButtonPress.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/ButtonPress.mp3
+
 #begin Audio/SoundFX/IntroSound.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -91,6 +97,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/SoundFX/TrapButtonClick.mp3
+
+#begin Audio/SoundFX/TrapButtonRelease.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/TrapButtonRelease.mp3
 
 #begin Audio/SoundFX/TrapdoorOpen.mp3
 /importer:Mp3Importer

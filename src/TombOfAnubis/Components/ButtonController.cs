@@ -111,12 +111,21 @@ namespace TombOfAnubis
         public void UpdateVisuals()
         {
             if (isPressed)
-            {
+            {   if(Entity.GetComponent<Animation>().ActiveClip.Type != AnimationClipType.Pressed)
+                {
+                    AudioController.PlaySoundEffect("trapButtonPressed");
+                }
                 Entity.GetComponent<Animation>().SetActiveClip(AnimationClipType.Pressed);
+                
             }
             else
             {
+                if (Entity.GetComponent<Animation>().ActiveClip.Type != AnimationClipType.NotPressed)
+                {
+                    AudioController.PlaySoundEffect("trapButtonReleased");
+                }
                 Entity.GetComponent<Animation>().SetActiveClip(AnimationClipType.NotPressed);
+
             }
 
             foreach (Trap connectedTrap in ConnectedTraps)
