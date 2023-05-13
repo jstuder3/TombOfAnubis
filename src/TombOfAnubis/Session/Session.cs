@@ -485,14 +485,14 @@ namespace TombOfAnubis
                 );
             if (singleton.NumberOfPlayers == 1)
             {
-                MoveMapCenterTo(viewportCenter);
+                MoveMapCenterTo(topRightMapCenter);
             }
             else if(singleton.NumberOfPlayers == 3)
             {
                 MoveMapCenterTo(bottomRightMapCenter);
             }else
             {
-                MoveMapCenterTo(topRightMapCenter);
+                MoveMapCenterTo(viewportCenter);
             }
             singleton.AnimationSystem.Update(gameTime);
         }
