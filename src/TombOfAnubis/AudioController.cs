@@ -42,6 +42,10 @@ namespace TombOfAnubis
                 { "trapButtonPressed", content.Load<SoundEffect>(@"Audio\SoundFX\TrapButtonClick") },
                 { "trapButtonReleased", content.Load<SoundEffect>(@"Audio\SoundFX\TrapButtonRelease") },
                 { "trapDeactivated", content.Load<SoundEffect>(@"Audio\SoundFX\TrapdoorOpen") },
+                { "Speedup", content.Load<SoundEffect>(@"Audio\SoundFX\Speedup") },
+                { "LocationReveal", content.Load<SoundEffect>(@"Audio\SoundFX\LocationReveal") },
+                { "Cloak", content.Load<SoundEffect>(@"Audio\SoundFX\Cloak") },
+                { "FistThrow", content.Load<SoundEffect>(@"Audio\SoundFX\FistThrow") },
             };
             MediaPlayer.IsRepeating = true;
 

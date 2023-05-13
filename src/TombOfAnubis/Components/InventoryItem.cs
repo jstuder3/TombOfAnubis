@@ -147,6 +147,8 @@ namespace TombOfAnubis
 
                     Entity.AddComponent(new ParticleEmitter(pec));
 
+                    AudioController.PlaySoundEffect("Speedup");
+
                     Debug.WriteLine("Speedup applied!");
                     return true;
                 case ItemType.Fist:
@@ -182,6 +184,8 @@ namespace TombOfAnubis
                     pec5.Drag = 0.5f;
 
                     fist.AddComponent(new ParticleEmitter(pec5));
+
+                    AudioController.PlaySoundEffect("FistThrow");
 
                     ItemType = ItemType.None;
                     Debug.WriteLine("Fist spawned!");
@@ -245,6 +249,7 @@ namespace TombOfAnubis
                     Entity.AddChild(hidingCloak);
                     hidingCloak.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
 
+                    AudioController.PlaySoundEffect("Cloak");
 
                     ItemType = ItemType.None;
                     Debug.WriteLine("Used HidingCloak!");
@@ -260,7 +265,7 @@ namespace TombOfAnubis
                         anubisLocator.AddComponent(new GameplayEffect(EffectType.Lifetime, 5f, Visibility.Both));
                         anubisLocator.AddComponent(new GameplayEffect(EffectType.DelayedFollow, 5f, 0.1f, anubis, Visibility.Both));
                     }
-                    
+                    AudioController.PlaySoundEffect("LocationReveal");
 
                     ItemType = ItemType.None;
                     Debug.WriteLine("Used LocationReveal!");

@@ -246,6 +246,8 @@ namespace TombOfAnubis
                 gameplayEffect.EndGameplayEffect();
             }
 
+            AudioController.PlaySoundEffect("punch");
+
         }
 
         public static void OnCollision(Character character, Dispenser dispenser)

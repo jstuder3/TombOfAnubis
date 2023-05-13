@@ -38,6 +38,18 @@
 /processorParam:Quality=Best
 /build:Audio/SoundFX/ButtonPress.mp3
 
+#begin Audio/SoundFX/Cloak.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/Cloak.mp3
+
+#begin Audio/SoundFX/FistThrow.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/FistThrow.mp3
+
 #begin Audio/SoundFX/IntroSound.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -62,6 +74,12 @@
 /processorParam:Quality=Best
 /build:Audio/SoundFX/ItemPickup.mp3
 
+#begin Audio/SoundFX/LocationReveal.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/LocationReveal.mp3
+
 #begin Audio/SoundFX/MenuAccept.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -85,6 +103,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/SoundFX/Revival.mp3
+
+#begin Audio/SoundFX/Speedup.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SoundFX/Speedup.mp3
 
 #begin Audio/SoundFX/Teleport.mp3
 /importer:Mp3Importer
