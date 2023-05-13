@@ -64,6 +64,10 @@ namespace TombOfAnubis
             }
             else
             {
+                if(GetComponent<Animation>().ActiveClip.Type != AnimationClipType.ObjectInactive)
+                {
+                    AudioController.PlaySoundEffect("trapDeactivated");
+                }
                 GetComponent<Animation>().SetActiveClip(AnimationClipType.ObjectInactive);
                 return false;
             }

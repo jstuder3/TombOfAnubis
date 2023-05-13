@@ -39,7 +39,8 @@ namespace TombOfAnubis
                 { "revival", content.Load<SoundEffect>(@"Audio\SoundFX\Revival") },
                 { "teleport", content.Load<SoundEffect>(@"Audio\SoundFX\Teleport") },
                 { "punch", content.Load<SoundEffect>(@"Audio\SoundFX\Punch") },
-                { "trapButtonActivated", content.Load<SoundEffect>(@"Audio\SoundFX\TrapButtonClick") },
+                { "trapButtonPressed", content.Load<SoundEffect>(@"Audio\SoundFX\TrapButtonClick") },
+                { "trapButtonReleased", content.Load<SoundEffect>(@"Audio\SoundFX\TrapButtonRelease") },
                 { "trapDeactivated", content.Load<SoundEffect>(@"Audio\SoundFX\TrapdoorOpen") },
             };
             MediaPlayer.IsRepeating = true;
