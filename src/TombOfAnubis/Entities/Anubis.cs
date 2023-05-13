@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace TombOfAnubis
 {
@@ -72,6 +73,15 @@ namespace TombOfAnubis
             //slow anubis down at the start of the game
             AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 5f, 0.001f, Visibility.Both));
             AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 10f, 0.5f, Visibility.Both));
+
+            Debug.WriteLine("GameMode: " + Session.GetInstance().GameMode.ToString());
+
+            if(Session.GetInstance().GameMode == GameScreens.Mode.Easy)
+            {
+                //decrease Anubis MS for 80MS
+                //AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, -80f, Visibility.Both));
+                GetComponent<Movement>().BaseMovementSpeed -= 80;
+            }
 
         }
     }
