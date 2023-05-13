@@ -194,6 +194,7 @@ namespace TombOfAnubis.GameScreens
             if (joinedPlayers[0].UseTriggered() && startCoolDown <= 0)
             {
                 AudioController.StopSong();
+                gameStartDescription.GameMode = selectedMode;
                 LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
             }
 
