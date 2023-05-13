@@ -57,7 +57,7 @@ namespace TombOfAnubis
                 if (ValidateMap())
                 {
                     MapGraph mapGraph = new MapGraph(map);
-                    if (mapGraph.ConnectLevelBlocks())
+                    if (mapGraph.ConnectLevelBlocks() && ValidateMapBorder())
                     {
                         break;
                     }
@@ -475,6 +475,25 @@ namespace TombOfAnubis
             bool trappedArtefactsAppear = numTrappedArtefacts > 0;
 
             return validMapBlockDescs && trappedArtefactsAppear;
+        }
+
+        private bool ValidateMapBorder()
+        {
+            for (int y = 0; y < MapDimensions.Y; y += MapBlock.Empty.Dimensions.Y)
+            {
+                for (int x = 0; x < MapDimensions.X; x += MapBlock.Empty.Dimensions.X)
+                {
+                    if (x == 0 || x == MapDimensions.X - MapBlock.Wall.Dimensions.X || y == 0 || y == MapDimensions.Y - MapBlock.Wall.Dimensions.Y)
+                    {
+                        if (map.GetCollisionLayerValue(new Point(x, y)) != MapBlock.WallValue)
+                        {
+                            return false;
+                        }
+                    }
+
+                }
+            }
+            return true;
         }
         private bool ValidateMapBlockDescriptions()
         {
