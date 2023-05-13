@@ -10,11 +10,7 @@ namespace TombOfAnubis.Components
 {
     public class ChangeMapEvent : WorldEvent
     {
-        Altar oldAltar;
-        List<Character> oldCharacters;
-        List<Ghost> oldGhosts;
-        List<Artefact> oldArtefacts;
-
+        bool turnedBlack = false;
 
         public ChangeMapEvent() : base(3)
         {
@@ -22,10 +18,6 @@ namespace TombOfAnubis.Components
         public override void Start()
         {
             base.Start();
-            oldAltar = Session.GetInstance().World.GetChildrenOfType<Altar>()[0];
-            oldCharacters = Session.GetInstance().World.GetChildrenOfType<Character>();
-            oldGhosts = Session.GetInstance().World.GetChildrenOfType<Ghost>();
-            oldArtefacts = Session.GetInstance().World.GetChildrenOfType<Artefact>();
             Session.GetInstance().IsEarthquake = true;
 
         }
@@ -34,16 +26,19 @@ namespace TombOfAnubis.Components
             base.Stop();
             Session.RegenerateMap();
             Session.GetInstance().PauseDrawing = false;
+            turnedBlack = false;
 
 
         }
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (Progress > 0.8f)
+            if (Progress > 0.8f && !turnedBlack)
             {
                 Session.GetInstance().IsEarthquake = false;
                 Session.GetInstance().PauseDrawing = true;
+                Session.GetInstance().World.GetChildrenOfType<Anubis>()[0].AddComponent(new GameplayEffect(EffectType.MultiplicativeSpeedModification, 3f, 0.001f, Visibility.Game));
+                turnedBlack = true;
             }
         }
     }
