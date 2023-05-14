@@ -37,6 +37,7 @@ namespace TombOfAnubis
             {
                 // delete handles effect disabling ("reverts" effects of applying, if necessary)
                 Entity ent = effectToRemove.Entity;
+                effectToRemove.Stop();
                 //effectToRemove.Delete();
                 ent.RemoveComponent(effectToRemove);
             }
