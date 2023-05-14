@@ -50,9 +50,9 @@ namespace TombOfAnubis.GameScreens
 
         // Constants
         private Color lineColor = Color.White;
-        private Color buttonColor = Color.LimeGreen;
-        private Color easyColor = Color.DarkGreen;
-        private Color normalColor = Color.OrangeRed;
+        private Color buttonColor = Color.ForestGreen;
+        private Color inactiveModeColor = Color.DarkGreen;
+        private Color activeModeColor = Color.YellowGreen;
 
         private SpriteFont descriptionFont = Fonts.CascadiaFont;
 
@@ -71,9 +71,10 @@ namespace TombOfAnubis.GameScreens
         private float marginStartButton = 0.06f;
         private float marginY = 0.03f;
         private float startBarHeightScale = 0.2f;
+        private float startBarMargin = 0.05f;
 
         // Relative to startButton size
-        private float modeButtonWidth = 0.35f, modeButtonHeight = 0.45f;
+        private float modeButtonWidth = 0.31f, modeButtonHeight = 0.42f;
         private float modeButtonGap = 0.1f;
 
         // Set default to normal
@@ -148,10 +149,6 @@ namespace TombOfAnubis.GameScreens
 
             startBackground = new Texture2D(GameScreenManager.GraphicsDevice, 1,1);
             startBackground.SetData(new[] { buttonColor });
-            easyButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
-            easyButton.SetData(new[] { easyColor });
-            normalButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
-            normalButton.SetData(new[] { normalColor });
 
             startDescription = "Start With 1 Player";
         }
@@ -350,6 +347,21 @@ namespace TombOfAnubis.GameScreens
             int buttonWidth = (int)(modeButtonWidth * playerFrame.Width);
             int buttonHeight = (int)(modeButtonHeight * startBarHeight);
 
+            if (selectedMode == Mode.Easy)
+            {
+                easyButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+                easyButton.SetData(new[] { activeModeColor });
+                normalButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+                normalButton.SetData(new[] { inactiveModeColor });
+            }
+            else
+            {
+                easyButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+                easyButton.SetData(new[] { inactiveModeColor });
+                normalButton = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+                normalButton.SetData(new[] { activeModeColor });
+            }
+
             // Start Bar
             offsetY = (int)(playerFrame.Y + (1.0f - startBarHeightScale) * playerFrame.Height);
             Rectangle startBGPosition = new Rectangle(playerFrame.X, offsetY, playerFrame.Width, startBarHeight);
@@ -357,7 +369,7 @@ namespace TombOfAnubis.GameScreens
 
             // Start description with number of players
             Vector2 textLength = descriptionFont.MeasureString(startDescription) * startTextScale;
-            Vector2 textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, offsetY);
+            Vector2 textPosition = new Vector2(playerFrame.X + (playerFrame.Width - textLength.X) / 2, offsetY + 5);
             spriteBatch.DrawString(descriptionFont, startDescription, textPosition, Color.White, 0f, Vector2.Zero, startTextScale, SpriteEffects.None, 0f);
 
             // Easy mode button
