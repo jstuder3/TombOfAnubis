@@ -18,6 +18,7 @@ namespace TombOfAnubis
 
         private Texture2D backgroundTexture;
         private Rectangle backgroundPosition;
+        private SpriteFont menuFont;
 
         private Texture2D scrollTexture;
         private float scrollTextureScale = 0.5f;
@@ -52,13 +53,11 @@ namespace TombOfAnubis
 
             // Add the New Game entry
             restartMenuEntry = new MenuEntry("Restart");
-            restartMenuEntry.Font = Fonts.DisneyHeroicFont;
             restartMenuEntry.Selected += RestartMenuEntrySelected;
             MenuEntries.Add(restartMenuEntry);
 
             // Create the Exit menu entry
             endGameMenuEntry = new MenuEntry("Main Menu");
-            endGameMenuEntry.Font = Fonts.DisneyHeroicFont;
             endGameMenuEntry.Selected += EndGameMenuEntrySelected;
             MenuEntries.Add(endGameMenuEntry);
         }
@@ -74,11 +73,20 @@ namespace TombOfAnubis
 
             // Load the textures
             ContentManager content = GameScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("Textures/Menu/GameOverBG");
+            if(InputController.GetActiveInputs().Count == 1)
+            {
+                backgroundTexture = content.Load<Texture2D>("Textures/Menu/GameOverBG_1Player");
+            }
+            else
+            {
+                backgroundTexture = content.Load<Texture2D>("Textures/Menu/GameOverBG");
+            }
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
 
+            menuFont = Fonts.DisneyHeroicFont;
             foreach (MenuEntry entry in MenuEntries)
             {
+                entry.Font = menuFont;
                 entry.Texture = scrollTexture;
                 entry.TextureScale = scrollTextureScale;
             }

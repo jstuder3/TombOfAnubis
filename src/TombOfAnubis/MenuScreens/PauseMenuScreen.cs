@@ -30,7 +30,29 @@ namespace TombOfAnubis
         private float scrollTextureScale = 0.4f;
         private int scrollTextureWidth = 800, scrollTextureHeight = 400;
 
+        private SpriteFont menuFont;
+
         private float marginX = 0.25f, marginY = 0.04f;
+
+        #endregion
+
+        #region QuitConfirmationDialog
+
+        private bool quit;
+        private bool dialogVisible = false;
+        private bool confirmationStatus = false;
+        private Color activeColor = Color.Red;
+        private Color inactiveColor = Color.White;
+
+        private Texture2D dialogTexture;
+        private float dialogTransparency = 1.0f;
+        private Rectangle dialogDimension;
+
+        private Texture2D buttonTexture;
+        private float buttonTransparency = 0.0f;
+        private int dialogWidth = 800, dialogHeight = 400;
+        private float marginTop = 0.35f, marginBottom = 0.3f, buttonSpacing = 0.15f;
+        private int buttonOptionWidth = 150, buttonOptionHeight = 50;
 
         #endregion
 
@@ -57,25 +79,21 @@ namespace TombOfAnubis
 
             // Add the Resume entry
             resumeMenuEntry = new MenuEntry("Resume");
-            resumeMenuEntry.Font = Fonts.DisneyHeroicFont;
             resumeMenuEntry.Selected += ResumeMenuEntrySelected;
             MenuEntries.Add(resumeMenuEntry);
 
             // Add the New Game entry
             restartMenuEntry = new MenuEntry("Restart");
-            restartMenuEntry.Font = Fonts.DisneyHeroicFont;
             restartMenuEntry.Selected += RestartMenuEntrySelected;
             MenuEntries.Add(restartMenuEntry);
 
             // Create the  Instructions entry
             instructionsMenuEntry = new MenuEntry("Instructions");
-            instructionsMenuEntry.Font = Fonts.DisneyHeroicFont;
             instructionsMenuEntry.Selected += InstructionsMenuEntrySelected;
             MenuEntries.Add(instructionsMenuEntry);
 
             // Create the Exit menu entry
             endGameMenuEntry = new MenuEntry("Main Menu");
-            endGameMenuEntry.Font = Fonts.DisneyHeroicFont;
             endGameMenuEntry.Selected += EndGameMenuEntrySelected;
             MenuEntries.Add(endGameMenuEntry);
         }
@@ -95,8 +113,11 @@ namespace TombOfAnubis
             scrollTexture = content.Load<Texture2D>("Textures/Menu/Scroll");
             titleTexture = content.Load<Texture2D>("Textures/Menu/Title_advanced");
 
-            foreach(MenuEntry entry in MenuEntries)
+            menuFont = Fonts.DisneyHeroicFont;
+
+            foreach (MenuEntry entry in MenuEntries)
             {
+                entry.Font = menuFont;
                 entry.Texture = scrollTexture;
                 entry.TextureScale = scrollTextureScale;
             }
@@ -104,6 +125,11 @@ namespace TombOfAnubis
             Viewport viewport = ResolutionController.TargetViewport;
             // Now that they have textures, set the proper positions on the menu entries
             SetElementPosition(viewport);
+
+            // Dialog Content
+            dialogTexture = scrollTexture;
+            buttonTexture = new Texture2D(GameScreenManager.GraphicsDevice, 1, 1);
+            buttonTexture.SetData(new[] { Color.Gray });
 
             base.LoadContent();
         }
@@ -140,6 +166,12 @@ namespace TombOfAnubis
 
                 MenuEntries[i].Position = GetRelativePosition(viewport, marginX, offsetY);
             }
+
+            // Quit Confirmation Dialog
+
+            int posOffsetX = (int)(screenWidth - dialogWidth) / 2;
+            int posOffsetY = (int)(screenHeight - dialogHeight) / 2;
+            dialogDimension = new Rectangle(posOffsetX, posOffsetY, dialogWidth, dialogHeight);
         }
 
         /// <summary>
@@ -194,27 +226,82 @@ namespace TombOfAnubis
         /// </summary>
         void EndGameMenuEntrySelected(object sender, EventArgs e)
         {
+            //if (Session.IsActive)
+            //{
+            //    ExitScreen();
+            //}
+            ////LoadingScreen.Load(GameScreenManager, true, new IntroScreen());
+            //RemoveSecondaryInputs();
+            //GameScreenManager.AddScreen(new MainMenuScreen());
+            dialogVisible = true;
+        }
+
+        void ReturnToMainMenu()
+        {
             if (Session.IsActive)
             {
                 ExitScreen();
             }
-            //LoadingScreen.Load(GameScreenManager, true, new IntroScreen());
             RemoveSecondaryInputs();
             GameScreenManager.AddScreen(new MainMenuScreen());
         }
 
-        /// <summary>
-        /// Event handler for when the user selects Yes 
-        /// on the "Are you sure?" message box.
-        /// </summary>
-        void ConfirmExitMessageBoxAccepted(object sender, EventArgs e)
-        {
-            //GameScreenManager.Game.Exit();
-        }
-
-
         #endregion
 
+        #region HandleInput
+
+        public override void HandleInput()
+        {
+            if (dialogVisible && !quit)
+            {
+                HandleQuitDialogInput();
+            }
+            else if (!quit)
+            {
+                base.HandleInput();
+            }
+            else { }
+        }
+
+        private void HandleQuitDialogInput()
+        {
+            if (!buttonCooldown && !quit)
+            {
+                if (InputController.IsleftTriggered())
+                {
+                    if (!confirmationStatus) { AudioController.PlaySoundEffect("menuSelect"); }
+                    buttonPressed = true;
+                    confirmationStatus = true;
+
+                }
+
+                if (InputController.IsRightTriggered())
+                {
+                    if (confirmationStatus) { AudioController.PlaySoundEffect("menuSelect"); }
+                    buttonPressed = true;
+                    confirmationStatus = false;
+                }
+
+                if (InputController.IsUseTriggered())
+                {
+                    AudioController.PlaySoundEffect("menuAccept");
+                    if (confirmationStatus)
+                    {
+                        AudioController.StopSong();
+                        quit = true;
+                        ReturnToMainMenu();
+                    }
+                    else
+                    {
+                        dialogVisible = false;
+                        buttonPressed = true;
+                        confirmationStatus = false;
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region Drawing
 
@@ -241,7 +328,51 @@ namespace TombOfAnubis
                 menuEntry.Draw(this, isSelected, gameTime);
             }
 
+            if (dialogVisible) DrawDialog();
+
             spriteBatch.End();
+        }
+
+        public void DrawDialog()
+        {
+            SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
+            //spriteBatch.Draw(dialogTexture, dialogDimension, Color.White * dialogTransparency);
+            Rectangle sourceRectangle = new Rectangle(0, 800, 800, 400);
+            spriteBatch.Draw(dialogTexture, dialogDimension, sourceRectangle, Color.White * dialogTransparency);
+
+            string confirmationMessage = "Are you sure you want to quit?";
+            string positive = "Yes", negative = "No";
+
+            // Draw Confirmation message
+            Vector2 textDim = menuFont.MeasureString(confirmationMessage);
+            int posOffsetX = (int)(dialogDimension.X + (dialogWidth - textDim.X) / 2);
+            //int posOffsetY = (int)(dialogDimension.Y + (dialogHeight - textDim.Y) / 2);
+            int posOffsetY = (int)(dialogDimension.Y + marginTop * dialogHeight);
+            Vector2 textPosition = new Vector2(posOffsetX, posOffsetY);
+            spriteBatch.DrawString(menuFont, confirmationMessage, textPosition, Color.White);
+
+            // Draw Yes Button
+            int buttonOffsetX = (int)(dialogDimension.X + ((1 - buttonSpacing) * dialogWidth - 2 * buttonOptionWidth) / 2);
+            int buttonOffsetY = (int)(dialogDimension.Y + (1 - marginBottom) * dialogHeight - buttonOptionHeight);
+            Rectangle yesButtonPosition = new Rectangle(buttonOffsetX, buttonOffsetY, buttonOptionWidth, buttonOptionHeight);
+            textDim = menuFont.MeasureString(positive);
+            posOffsetX = (int)(buttonOffsetX + (buttonOptionWidth - textDim.X) / 2);
+            posOffsetY = (int)(buttonOffsetY + (buttonOptionHeight - textDim.Y) / 2);
+            textPosition = new Vector2(posOffsetX, posOffsetY);
+            spriteBatch.Draw(buttonTexture, yesButtonPosition, Color.White * buttonTransparency);
+            Color textColor = confirmationStatus ? activeColor : inactiveColor;
+            spriteBatch.DrawString(menuFont, positive, textPosition, textColor);
+
+            // Draw No Button
+            buttonOffsetX = (int)(buttonOffsetX + buttonOptionWidth + buttonSpacing * dialogWidth);
+            Rectangle noButtonPosition = new Rectangle(buttonOffsetX, buttonOffsetY, buttonOptionWidth, buttonOptionHeight);
+            textDim = menuFont.MeasureString(negative);
+            posOffsetX = (int)(buttonOffsetX + (buttonOptionWidth - textDim.X) / 2);
+            posOffsetY = (int)(buttonOffsetY + (buttonOptionHeight - textDim.Y) / 2);
+            textPosition = new Vector2(posOffsetX, posOffsetY);
+            spriteBatch.Draw(buttonTexture, noButtonPosition, Color.White * buttonTransparency);
+            textColor = !confirmationStatus ? activeColor : inactiveColor;
+            spriteBatch.DrawString(menuFont, negative, textPosition, textColor);
         }
 
         #endregion

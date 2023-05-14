@@ -14,9 +14,9 @@ namespace TombOfAnubis
     {
         private SpriteBatch spriteBatch;
 
-        private SpriteFont statusFont = Fonts.DisneyHeroicFont;
+        private SpriteFont statusFont = Fonts.SettingsTitleFont;
         private Color statusColor = Color.Gold;
-        private float fontScale = 1f;
+        private float fontScale = 0.6f;
 
         // In milliseconds
         private int cooldownPeriod = 6750;
@@ -26,6 +26,9 @@ namespace TombOfAnubis
 
         private List<PlayerInput> activeInputs;
         private string playerUseButton;
+
+        // Relative to Viewport height
+        private float margin = 0.08f;
 
         public GameWonScreen()
             : base()
@@ -105,7 +108,7 @@ namespace TombOfAnubis
                 string statusText = "Press " + playerUseButton;
                 Vector2 textLength = statusFont.MeasureString(statusText) * fontScale;
 
-                Vector2 displayPosition = new Vector2(viewport.X + viewport.Width * 4f / 5f, viewport.Y + viewport.Height * 4f / 5f);
+                Vector2 displayPosition = new Vector2(viewport.Width - margin * viewport.Height - textLength.X, (1 - margin) * viewport.Height - textLength.Y);
                 spriteBatch.Begin();
                 spriteBatch.DrawString(statusFont, statusText, displayPosition, statusColor,
                 0f, Vector2.Zero, fontScale, SpriteEffects.None, 0f);

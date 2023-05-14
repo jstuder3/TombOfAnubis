@@ -355,7 +355,7 @@ namespace TombOfAnubis
             }
         }
 
-        void DrawDialog()
+        public void DrawDialog()
         {
             SpriteBatch spriteBatch = GameScreenManager.SpriteBatch;
             //spriteBatch.Draw(dialogTexture, dialogDimension, Color.White * dialogTransparency);

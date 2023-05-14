@@ -190,6 +190,7 @@ namespace TombOfAnubis.GameScreens
             // Start the game if the first player pressed the use button
             if (joinedPlayers[0].UseTriggered() && startCoolDown <= 0)
             {
+                AudioController.PlaySoundEffect("menuAccept");
                 AudioController.StopSong();
                 gameStartDescription.GameMode = selectedMode;
                 LoadingScreen.Load(GameScreenManager, true, new GameplayScreen(gameStartDescription));
@@ -200,11 +201,13 @@ namespace TombOfAnubis.GameScreens
                 int numModes = Enum.GetNames(typeof(Mode)).Length;
                 if (joinedPlayers[0].LeftTriggered() && !InputController.KeyCooldowns.ContainsKey(joinedPlayers[0].LeftKey))
                 {
+                    AudioController.PlaySoundEffect("menuSelect");
                     buttonPressed = true;
                     selectedMode = (selectedMode == 0) ? (Mode)(numModes - 1) : (selectedMode - 1);
                 }
                 if (joinedPlayers[0].RightTriggered() && !InputController.KeyCooldowns.ContainsKey(joinedPlayers[0].RightKey))
                 {
+                    AudioController.PlaySoundEffect("menuSelect");
                     buttonPressed = true;
                     selectedMode = (selectedMode == (Mode)(numModes - 1)) ? 0 : (selectedMode + 1);
                 }
