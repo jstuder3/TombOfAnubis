@@ -37,9 +37,8 @@ namespace TombOfAnubis {
     public class GameplayEffect : Component
     {
         private bool started;
-        private readonly float duration;
-        private float startTime;
-        private float endTime;
+        public float TimeAlive;
+        public float Duration = -1;
 
         private bool applied;
 
@@ -69,7 +68,7 @@ namespace TombOfAnubis {
         public GameplayEffect(EffectType type, float duration, List<float> effectFloatParameters, List<Vector2> effectVectorParameters, Visibility visibility)
         {
             Type = type;
-            this.duration = duration;
+            this.Duration = duration;
             started = false;
 
             this.effectFloatParameters = effectFloatParameters;
@@ -79,12 +78,13 @@ namespace TombOfAnubis {
         }
         public void Start(GameTime gameTime)
         {
-            startTime = (float)gameTime.TotalGameTime.TotalSeconds;
-            if (duration > 0)
-            { endTime = startTime + duration; }
+            if (Duration > 0)
+            {
+                //do nothing
+            }
             else
             {
-                endTime = float.MaxValue;
+                Duration = float.MaxValue;
             }
             started = true;
         }
@@ -94,12 +94,12 @@ namespace TombOfAnubis {
         }
         public bool IsActive(GameTime gameTime)
         {
-            return (float)gameTime.TotalGameTime.TotalSeconds < endTime;
+            return TimeAlive < Duration;
         }
 
         public bool HasEnded()
         {
-            return startTime == endTime;
+            return TimeAlive >= Duration;
         }
 
         public bool HasBeenApplied()
@@ -109,6 +109,9 @@ namespace TombOfAnubis {
 
         public void Update(GameTime gameTime)
         {
+            //update local time
+            TimeAlive += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             // apply effect-dependent effect
             Movement movement;
             switch (Type)
@@ -296,7 +299,7 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.Lifetime:
                     // destroy the parent entity once this effect runs out. Notably, we have to remote the gameplayeffect manually first because otherwise Delete() is infinitely recursed
-                    if (startTime < endTime)
+                    if (TimeAlive < Duration)
                     { //this means that the effect was terminated prematurely, in which case we don't forcefully delete this because we are iterating over the very list this effect would manipulate 
                         //do nothing
                     }
@@ -318,7 +321,7 @@ namespace TombOfAnubis {
                     break;
                 case EffectType.OnCooldown:
                     // if the effect is deleted ahead of time, we don't want to add or remove other components to the entity (Which endCooldown does). This can cause errors when deleting the entity.
-                    if (startTime >= endTime)
+                    if (TimeAlive >= Duration)
                     {
                         ((ICooldown)Entity).EndCooldown();
                     }
@@ -361,7 +364,7 @@ namespace TombOfAnubis {
         public void EndGameplayEffect()
         {
             //"mark" GameplayEffect for deletion on the next update
-            endTime = startTime;
+            Duration = 0;
         }
 
 

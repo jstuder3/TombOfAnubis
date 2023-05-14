@@ -118,7 +118,7 @@ namespace TombOfAnubis
 
         public ParticleEmitterConfiguration EmitterConfiguration;
 
-        public float AliveUntil = -1;
+        public float Duration = -1;
         public bool HasEnded = false;
 
         public List<Particle> ParticleList;
@@ -158,7 +158,7 @@ namespace TombOfAnubis
         public void EndEmitter()
         {
             //the particles that remain shouldn't just be destroyed. We keep updating until they have all ran out, and only then the ParticleEmitter and all the particles get destroyed
-            AliveUntil = 0;
+            Duration = 0;
             HasEnded = true;
         }
 
@@ -175,15 +175,15 @@ namespace TombOfAnubis
             EntityPosition = Entity.TopLeftCornerPosition();
 
             //check that the overall particle effect hasn't timed out. if it has, deregister, but leave the particles that exist alive until they all run out as to not make them all disappear all at once in an ugly fashion
-            if (AliveUntil == -1)
+            if (Duration == -1)
             {
                 if (EmitterConfiguration.EmitterDuration > 0)
                 {
-                    AliveUntil = EmitterConfiguration.EmitterDuration;
+                    Duration = EmitterConfiguration.EmitterDuration;
                 }
                 else
                 {
-                    AliveUntil = float.MaxValue;
+                    Duration = float.MaxValue;
                 }
                 TimeAlive = 0;
                 LastBurstTime = 0;
@@ -193,7 +193,7 @@ namespace TombOfAnubis
             //update local time
             TimeAlive += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if(TimeAlive > AliveUntil)
+            if(TimeAlive > Duration)
             {
                 HasEnded = true;
             }
