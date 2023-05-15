@@ -26,7 +26,7 @@ namespace TombOfAnubis
 
         private float buttonSpacing = 0.1f, buttonOffsetY = 0.6f;
 
-        private float marginY = 0.04f;
+        private bool firstEntry;
 
         #endregion
 
@@ -47,6 +47,10 @@ namespace TombOfAnubis
         /// </summary>
         public GameOverScreen() : base()
         {
+            buttonPressed = true;
+            buttonCooldown = true;
+            firstEntry = true;
+
             gameStartDescription = new GameStartDescription();
             gameStartDescription.MapContentName = "Map001";
             gameStartDescription.NumberOfPlayers = InputController.GetActiveInputs().Count;
@@ -177,6 +181,43 @@ namespace TombOfAnubis
             }
         }
 
+        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
+                                               bool coveredByOtherScreen)
+        {
+            if (ScreenState == ScreenState.Hidden)
+            {
+                buttonPressed = true;
+            }
+
+            // Update button cooldown.
+            if (buttonPressed)
+            {
+                buttonPressed = false;
+                buttonCooldown = true;
+                lastPressed = gameTime.TotalGameTime;
+            }
+            if (buttonCooldown) // enough time elapsed since last pressed
+            {
+                int cooldownPeriod;
+                if (firstEntry) { cooldownPeriod = 750; }
+                else { cooldownPeriod = 250; }
+
+                TimeSpan diff = gameTime.TotalGameTime - lastPressed;
+                if (diff.TotalMilliseconds > cooldownPeriod)
+                {
+                    firstEntry = false;
+                    buttonCooldown = false;
+                }
+            }
+
+            // Update each nested MenuEntry object.
+            for (int i = 0; i < MenuEntries.Count; i++)
+            {
+                bool isSelected = IsActive && (i == selectedEntry);
+                //Debug.WriteLine("isActive: " + IsActive);
+                MenuEntries[i].Update(this, isSelected, gameTime);
+            }
+        }
 
         #region Updating
 
@@ -189,6 +230,7 @@ namespace TombOfAnubis
             {
                 ExitScreen();
             }
+            GameScreenManager.RemoveScreen(this);
             LoadingScreen.LoadAtRestart(GameScreenManager, true, new GameplayScreen(gameStartDescription));
         }
 
@@ -203,6 +245,7 @@ namespace TombOfAnubis
             }
             //LoadingScreen.Load(GameScreenManager, true, new IntroScreen());
             RemoveSecondaryInputs();
+            GameScreenManager.RemoveScreen(this);
             GameScreenManager.AddScreen(new MainMenuScreen());
         }
 

@@ -244,6 +244,7 @@ namespace TombOfAnubis
             }
             RemoveSecondaryInputs();
             GameScreenManager.AddScreen(new MainMenuScreen());
+            GameScreenManager.RemoveScreen(this);
         }
 
         #endregion
