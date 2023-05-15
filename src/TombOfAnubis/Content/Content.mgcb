@@ -532,7 +532,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Maps/Torches.png
 
-#begin Textures/Menu/GameOverBG_1Player.jpg
+#begin Textures/Menu/GameOverBG_1Player.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -542,7 +542,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Menu/GameOverBG_1Player.jpg
+/build:Textures/Menu/GameOverBG_1Player.png
 
 #begin Textures/Menu/GameOverBG.png
 /importer:TextureImporter
