@@ -66,6 +66,10 @@ namespace TombOfAnubis
         }
 
         public bool IsEarthquake { get; set; } = false;
+
+        private float shakeCooldown;
+        private bool shakedLeft;
+        private Vector2 earthQuakeOffset;
         public bool PauseDrawing { get; set; } = false;
 
         /// <summary>
@@ -181,6 +185,27 @@ namespace TombOfAnubis
             singleton.ParticleEmitterSystem.Update(gameTime);
 
             singleton.WorldEventSystem.Update(gameTime);
+
+            if (singleton.IsEarthquake)
+            {
+                if (singleton.shakeCooldown <= 0)
+                {
+                    singleton.shakeCooldown = 0.05f;
+                    if (singleton.shakedLeft)
+                    {
+                        singleton.earthQuakeOffset = 5 * Vector2.One;
+                    }
+                    else
+                    {
+                        singleton.earthQuakeOffset = -5 * Vector2.One;
+                    }
+                    singleton.shakedLeft = !singleton.shakedLeft;
+                }
+                else
+                {
+                    singleton.shakeCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+            }
         }
 
         /// <summary>
@@ -188,19 +213,11 @@ namespace TombOfAnubis
         /// </summary>
         public static void Draw(GameTime gameTime)
         {
+            singleton.SpriteSystem.Viewport = singleton.Viewport;
             if (singleton.IsEarthquake)
             {
-                if (gameTime.TotalGameTime.Milliseconds % 2 == 0)
-                {
-                    singleton.World.Origin += 5 * Vector2.One;
-                }
-                else
-                {
-                    singleton.World.Origin -= 5 * Vector2.One;
-                }
+                singleton.World.Origin += singleton.earthQuakeOffset;
             }
-            singleton.SpriteSystem.Viewport = singleton.Viewport;
-
             if (!singleton.PauseDrawing)
             {
                 singleton.SpriteSystem.Draw(gameTime);

@@ -204,7 +204,7 @@
 			</Item>
 			<Item>
 				<ClassName>TombOfAnubis.Anubis</ClassName>
-				<SpawnTileCoordinate> 2 3</SpawnTileCoordinate>
+				<SpawnTileCoordinate> 2 2</SpawnTileCoordinate>
 				<Scale>1.05 1.05</Scale>
 				<SpriteTextureName>anubis</SpriteTextureName>
 				<Animation>
