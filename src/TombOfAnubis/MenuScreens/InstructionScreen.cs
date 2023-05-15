@@ -76,7 +76,10 @@ namespace TombOfAnubis.MenuScreens
                     foreach (PlayerInput playerInput in InputController.GetActiveInputs())
                     {
                         if (playerInput.IsKeyboard) InputController.KeyCooldowns.Add(playerInput.UseKey, 250);
-                        else InputController.ButtonCooldowns.Add(playerInput.UseButton, 250);
+                        else
+                        {
+                            if (!InputController.ButtonCooldowns.ContainsKey(playerInput.UseButton)) InputController.ButtonCooldowns.Add(playerInput.UseButton, 250);
+                        }
                     }
 
                     AudioController.PlaySoundEffect("menuAccept");
