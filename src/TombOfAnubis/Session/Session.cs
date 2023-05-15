@@ -69,6 +69,7 @@ namespace TombOfAnubis
 
         private float shakeCooldown;
         private bool shakedLeft;
+        private Vector2 earthQuakeOffset;
         public bool PauseDrawing { get; set; } = false;
 
         /// <summary>
@@ -184,25 +185,19 @@ namespace TombOfAnubis
             singleton.ParticleEmitterSystem.Update(gameTime);
 
             singleton.WorldEventSystem.Update(gameTime);
-        }
 
-        /// <summary>
-        /// Draws the session environment to the screen
-        /// </summary>
-        public static void Draw(GameTime gameTime)
-        {
             if (singleton.IsEarthquake)
             {
                 if (singleton.shakeCooldown <= 0)
                 {
-                    singleton.shakeCooldown = 0.01f;
+                    singleton.shakeCooldown = 0.05f;
                     if (singleton.shakedLeft)
                     {
-                        singleton.World.Origin += 5 * Vector2.One;
+                        singleton.earthQuakeOffset = 5 * Vector2.One;
                     }
                     else
                     {
-                        singleton.World.Origin -= 5 * Vector2.One;
+                        singleton.earthQuakeOffset = -5 * Vector2.One;
                     }
                     singleton.shakedLeft = !singleton.shakedLeft;
                 }
@@ -211,8 +206,18 @@ namespace TombOfAnubis
                     singleton.shakeCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
-            singleton.SpriteSystem.Viewport = singleton.Viewport;
+        }
 
+        /// <summary>
+        /// Draws the session environment to the screen
+        /// </summary>
+        public static void Draw(GameTime gameTime)
+        {
+            singleton.SpriteSystem.Viewport = singleton.Viewport;
+            if (singleton.IsEarthquake)
+            {
+                singleton.World.Origin += singleton.earthQuakeOffset;
+            }
             if (!singleton.PauseDrawing)
             {
                 singleton.SpriteSystem.Draw(gameTime);
