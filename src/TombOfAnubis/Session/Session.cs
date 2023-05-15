@@ -306,7 +306,7 @@ namespace TombOfAnubis
         public static void RegenerateMap()
         {
             singleton.Map.Reset();
-            List<Type> notRegeneratedEntities = new List<Type>() { typeof(Character), typeof(Ghost), typeof(Anubis) };
+            List<Type> notRegeneratedEntities = new List<Type>() { typeof(Character), typeof(Ghost), typeof(Anubis), typeof(HidingCloak) };
             EntityGenerator.DoNotSpawnTypes = notRegeneratedEntities;
             List<Entity> entities = singleton.GenerateMap();
             EntityGenerator.DoNotSpawnTypes = new List<Type>();

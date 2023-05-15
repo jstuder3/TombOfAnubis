@@ -15,8 +15,10 @@ namespace TombOfAnubis
 
         public void AddComponent(Component component)
         {
-            components.Add(component);
-            component.Entity = this;
+            if(components != null){
+                components.Add(component);
+                component.Entity = this;
+            }
         }
 
         public void RemoveComponentWithoutDeleting(Component component)
