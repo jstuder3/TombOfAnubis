@@ -123,10 +123,8 @@ namespace TombOfAnubis
 
                     foreach (PlayerInput playerInput in InputController.GetActiveInputs())
                     {
-                        if (playerInput.UseTriggered())
-                        {
-                            InputController.AddCooldown(playerInput.UseKey, playerInput.UseButton, 250);
-                        }
+                        if (playerInput.IsKeyboard) InputController.KeyCooldowns.Add(playerInput.UseKey, 250);
+                        else InputController.ButtonCooldowns.Add(playerInput.UseButton, 250);
                     }
 
                     OnSelectEntry(selectedEntry);
