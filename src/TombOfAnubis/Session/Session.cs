@@ -66,6 +66,9 @@ namespace TombOfAnubis
         }
 
         public bool IsEarthquake { get; set; } = false;
+
+        private float shakeCooldown;
+        private bool shakedLeft;
         public bool PauseDrawing { get; set; } = false;
 
         /// <summary>
@@ -190,13 +193,22 @@ namespace TombOfAnubis
         {
             if (singleton.IsEarthquake)
             {
-                if (gameTime.TotalGameTime.Milliseconds % 2 == 0)
+                if (singleton.shakeCooldown <= 0)
                 {
-                    singleton.World.Origin += 5 * Vector2.One;
+                    singleton.shakeCooldown = 0.01f;
+                    if (singleton.shakedLeft)
+                    {
+                        singleton.World.Origin += 5 * Vector2.One;
+                    }
+                    else
+                    {
+                        singleton.World.Origin -= 5 * Vector2.One;
+                    }
+                    singleton.shakedLeft = !singleton.shakedLeft;
                 }
                 else
                 {
-                    singleton.World.Origin -= 5 * Vector2.One;
+                    singleton.shakeCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
             singleton.SpriteSystem.Viewport = singleton.Viewport;
