@@ -299,7 +299,7 @@ namespace TombOfAnubis {
                         // stop auto move, so no effect
                         break;
                     case EffectType.Lifetime:
-                        Entity.RemoveComponentWithoutDeleting(this);
+                        //Entity.RemoveComponentWithoutDeleting(this);
                         Entity.Delete();
                         break;
                     case EffectType.Stunned:

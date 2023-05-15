@@ -78,9 +78,9 @@ namespace TombOfAnubis
 
             if(Session.GetInstance().GameMode == GameScreens.Mode.Easy)
             {
-                //decrease Anubis MS for 80MS
+                //decrease Anubis MS
                 //AddComponent(new GameplayEffect(EffectType.AdditiveSpeedModification, 0f, -80f, Visibility.Both));
-                GetComponent<Movement>().BaseMovementSpeed -= 80;
+                GetComponent<Movement>().BaseMovementSpeed -= 120;
             }
 
         }
