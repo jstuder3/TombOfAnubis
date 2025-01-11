@@ -19,4 +19,4 @@ Clone the project and open the solution file src/TombOfAnubis.sln with Visual St
 
 `dotnet publish -c Release -r win-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false --self-contained`
 
-A prebuilt 64-bit x86 executable for Windows can be found under \src\TombOfAnubis\bin\Release\net6.0\win-x64\publish. Select everything in the directory and add to zip file.
+A prebuilt 64-bit x86 executable for Windows can conveniently be downloaded from https://mytombstone.itch.io/toa, or you can find the same files under \src\TombOfAnubis\bin\Release\net6.0\win-x64\publish which can be obtained by cloning the repo or downloading that directory as a zip file.
